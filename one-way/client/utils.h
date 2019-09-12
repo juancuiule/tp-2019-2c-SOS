@@ -37,4 +37,6 @@ void* serializar_paquete(t_paquete* paquete, int bytes);
 void eliminar_paquete(t_paquete* paquete);
 void liberar_conexion(int socket_cliente);
 
+void clean(int conexion);
+
 #endif

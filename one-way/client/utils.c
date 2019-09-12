@@ -1,5 +1,11 @@
 #include "utils.h"
 
+void clean(int conexion) {
+	log_destroy(logger);
+	config_destroy(config);
+	liberar_conexion(conexion);
+}
+
 int crear_conexion(char *IP, char* PORT) {
 	struct addrinfo hints, *server_info;
 
