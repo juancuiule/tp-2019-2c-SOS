@@ -18,8 +18,6 @@ int main(void) {
 		return EXIT_FAILURE;
 	}
 
-	log_info(logger, "Mi socket es: %i", conexion);
-
 	enviar_mensaje("Hola me conecte!", conexion);
 
 	clean(conexion);

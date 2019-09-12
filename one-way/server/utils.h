@@ -1,14 +1,14 @@
-#ifndef CONEXIONES_H_
-#define CONEXIONES_H_
+#ifndef UTILS_H_
+#define UTILS_H_
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/socket.h>
+#include <signal.h>
 #include <unistd.h>
+#include <sys/socket.h>
 #include <netdb.h>
 #include <string.h>
 #include <commons/log.h>
-#include <commons/collections/list.h>
 #include <commons/config.h>
 
 typedef enum {
@@ -20,10 +20,10 @@ typedef enum {
 t_log* logger;
 t_config* config;
 
-int iniciar_servidor(char*, char*, t_log*);
-int esperar_cliente(int, void(*log)(char*));
+int iniciar_servidor(char*);
+int esperar_cliente(int);
 
-int respond_to_client(int, t_log*);
+int respond_to_client(int);
 
 char* recibir_buffer(int);
 int recibir_operacion(int);
