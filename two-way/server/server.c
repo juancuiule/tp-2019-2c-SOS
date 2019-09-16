@@ -13,9 +13,12 @@ int main(void) {
 		return EXIT_FAILURE;
 	}
 
-	for (;;) {
-		int cliente_fd = esperar_cliente(server_fd);
-		respond_to_client(cliente_fd);
+
+	pthread_t hilo;
+	int r1;
+	while (1) {
+		int cliente_fd = recibir_cliente(server_fd);
+	    r1 = pthread_create(&hilo, NULL, (void*) respond_to_client, (void*) cliente_fd);
 	}
 	return EXIT_SUCCESS;
 }

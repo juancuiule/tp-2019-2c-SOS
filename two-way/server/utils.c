@@ -48,7 +48,7 @@ int iniciar_servidor(char* IP, char* PORT) {
     return socket_servidor;
 }
 
-int esperar_cliente(int socket_servidor) {
+int recibir_cliente(int socket_servidor) {
 	struct sockaddr_in dir_cliente;
 	int tam_direccion = sizeof(struct sockaddr_in);
 
@@ -109,13 +109,11 @@ void recibir_mensaje(int socket_cliente) {
 }
 
 int respond_to_client(int cliente_fd) {
-	char* respuesta = "1Que decis?";
 	while(1) {
 		int cod_op = recibir_operacion(cliente_fd);
 		switch(cod_op) {
 			case MENSAJE:
 				recibir_mensaje(cliente_fd);
-				send(cliente_fd, respuesta, strlen(respuesta) + 1, 0);
 				break;
 			case DESCONECTAR:
 				log_info(logger, "El cliente se desconecto.");

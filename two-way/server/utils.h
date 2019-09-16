@@ -22,7 +22,7 @@ t_log* logger;
 t_config* config;
 
 int iniciar_servidor(char* IP, char* PORT);
-int esperar_cliente(int);
+int recibir_cliente(int);
 
 int respond_to_client(int);
 
