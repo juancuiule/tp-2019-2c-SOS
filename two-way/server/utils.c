@@ -1,5 +1,42 @@
 #include "utils.h"
 
+// Cliente
+// - crear_conexion
+// - liberar_conexion
+
+int crear_conexion(char *IP, char* PORT) {
+	struct addrinfo hints, *server_info;
+
+	memset(&hints, 0, sizeof(hints));
+	hints.ai_family = PF_INET;
+	hints.ai_socktype = SOCK_STREAM;
+	hints.ai_flags = AI_PASSIVE;
+
+	getaddrinfo(IP, PORT, &hints, &server_info);
+
+	int socket_cliente = socket(server_info->ai_family, server_info->ai_socktype, server_info->ai_protocol);
+	int connect_result = connect(socket_cliente, server_info->ai_addr, server_info->ai_addrlen);
+
+	if(connect_result == -1) {
+		log_error(logger, "Error al conectar");
+		return -1;
+	}
+
+	freeaddrinfo(server_info);
+
+	return socket_cliente;
+}
+
+void liberar_conexion(int socket_cliente) {
+	close(socket_cliente);
+}
+
+// Server
+// - iniciar_servidor
+// - recibir_cliente
+// - recibir_operacion
+// - recibir_buffer
+
 int iniciar_servidor(char* IP, char* PORT) {
 	int socket_servidor;
 
@@ -66,7 +103,6 @@ int recibir_cliente(int socket_servidor) {
 int recibir_operacion(int socket_cliente) {
 	int cod_op;
 
-	// recibir codigo de operacion, un entero que tenemos como enum
 	int recv_result = recv(
 		socket_cliente,
 		&cod_op,
@@ -88,40 +124,64 @@ void* recibir_buffer(int* size, int socket_cliente) {
 
 	// recibir tamaño del buffer y ponerlo en "size"
 	recv(socket_cliente, size, sizeof(int), MSG_WAITALL);
-	log_info(logger, "size: %i", *size);
 
 	buffer = malloc(*size);
 
 	// recibir buffer
 	recv(socket_cliente, buffer, *size, MSG_WAITALL);
-	log_info(logger, "buffer: %s", buffer);
 
 	return buffer;
 }
 
-void recibir_mensaje(int socket_cliente) {
-	int size;
+// Cliente - Servidor - Paquetes/Serializacion
 
-	char* buffer = recibir_buffer(&size, socket_cliente);
-
-	log_info(logger, "Me llego el mensaje: %s", buffer);
-	free(buffer);
+t_paquete* crear_paquete(op_code codigo_operacion, int size, void* buffer) {
+	t_paquete* paquete = malloc(sizeof(t_paquete));
+	paquete->codigo_operacion = codigo_operacion;
+	crear_buffer(paquete, size, buffer);
+	return paquete;
 }
 
-int respond_to_client(int cliente_fd) {
-	while(1) {
-		int cod_op = recibir_operacion(cliente_fd);
-		switch(cod_op) {
-			case MENSAJE:
-				recibir_mensaje(cliente_fd);
-				break;
-			case DESCONECTAR:
-				log_info(logger, "El cliente se desconecto.");
-				return EXIT_FAILURE;
-				break;
-			default:
-				log_warning(logger, "Operacion desconocida. No quieras meter la pata");
-				break;
-		}
-	}
+void eliminar_paquete(t_paquete* paquete) {
+	free(paquete->buffer->stream);
+	free(paquete->buffer);
+	free(paquete);
+}
+
+void crear_buffer(t_paquete* paquete, int size, void* buffer) {
+	paquete->buffer = malloc(sizeof(t_buffer));
+	paquete->buffer->size = size;
+	paquete->buffer->stream = malloc(size);
+	memcpy(paquete->buffer->stream, buffer, size);
+}
+
+void* serializar_paquete(t_paquete* paquete, int bytes) {
+	void * magic = malloc(bytes);
+	int desplazamiento = 0;
+
+	memcpy(magic + desplazamiento, &(paquete->codigo_operacion), sizeof(int));
+	desplazamiento += sizeof(int);
+	memcpy(magic + desplazamiento, &(paquete->buffer->size), sizeof(int));
+	desplazamiento += sizeof(int);
+	memcpy(magic + desplazamiento, paquete->buffer->stream, paquete->buffer->size);
+	desplazamiento += paquete->buffer->size;
+
+	return magic;
+}
+
+void enviar_paquete(t_paquete* paquete, int socket_cliente) {
+	int bytes = paquete->buffer->size + 2 * sizeof(int);
+	void* a_enviar = serializar_paquete(paquete, bytes);
+	send(socket_cliente, a_enviar, bytes, 0);
+	free(a_enviar);
+}
+
+void enviar_mensaje(char* mensaje, int socket_cliente) {
+	t_paquete* paquete = crear_paquete(
+		MENSAJE,
+		strlen(mensaje)	+ 1,
+		mensaje
+	);
+	enviar_paquete(paquete, socket_cliente);
+	eliminar_paquete(paquete);
 }

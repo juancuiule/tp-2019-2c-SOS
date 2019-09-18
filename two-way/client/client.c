@@ -1,9 +1,8 @@
 #include "client.h"
 
-void enviar_algo(char* IP, char* PORT, char* algo) {
-	int conexion = crear_conexion(IP, PORT);
-
+void enviar_algo(char* algo, int conexion) {
 	enviar_mensaje(algo, conexion);
+	
 	int cod_op;
 	int size;
 
@@ -32,7 +31,6 @@ void enviar_algo(char* IP, char* PORT, char* algo) {
 	// recibir buffer
 	recv(conexion, buffer, size, MSG_WAITALL);
 	log_info(logger, "buffer: %s", buffer);
-	liberar_conexion(conexion);
 }
 
 int main(void) {
@@ -42,12 +40,14 @@ int main(void) {
 	char* IP = config_get_string_value(config, "IP");
 	char* PORT = config_get_string_value(config, "PORT");
 
+	int conexion = crear_conexion(IP, PORT);
+
 	log_info(logger, "Conectandome a %s:%s", IP, PORT);
 
-	enviar_algo(IP, PORT, "Hola, me conecte!");
-	enviar_algo(IP, PORT, "Hola, estoy acá de nuevo!");
+	enviar_algo("Hola, me conecte!", conexion);
 
 	log_destroy(logger);
 	config_destroy(config);
+	liberar_conexion(conexion);
 	return 0;
 }
