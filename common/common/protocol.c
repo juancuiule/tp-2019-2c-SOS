@@ -127,33 +127,172 @@ bool paquete_enviar(int socket, package_t paquete)
 
 
 /*
- * Protocolo Operaciones
+ * ------------ Protocolo Operaciones SAC CLI ------------ *
  */
 
-//Desc: serializa operacion readdir. sac cli
-package_t slz_cod_readdir(const char *path)
+//OK
+package_t slz_cod_readdir(const char *path, intptr_t dir)
+{
+	log_msje_info("ENVIO READDIR POINTER ADRESS DIR: [ %p ]", dir);
+	package_t paquete;
+	int tam_path = strlen(path);
+	int tam_payload = sizeof(int) + tam_path + sizeof(intptr_t);
+
+	paquete.header = header_get('C', COD_READDIR, tam_payload);
+	paquete.payload = malloc(tam_payload);
+
+	memcpy(paquete.payload              		,&tam_path  ,sizeof(int));
+	memcpy(paquete.payload+sizeof(int)			,path		,tam_path);
+	memcpy(paquete.payload+sizeof(int)+tam_path	,&dir		,sizeof(intptr_t));
+
+	return paquete;
+}
+
+//Desc: arma un paquete para la operacion opendir con su corresp path
+package_t slz_cod_opendir(const char *path)
 {
 	package_t paquete;
 	int tam_path = strlen(path);
 	int tam_payload = sizeof(int) + tam_path;
 
-	paquete.header = header_get('C', COD_READDIR, tam_payload);
+	paquete.header = header_get('C', COD_OPENDIR, tam_payload);
 	paquete.payload = malloc(tam_payload);
 
-	memcpy(paquete.payload                     	,&tam_path     	        ,sizeof(int));
-	memcpy(paquete.payload+sizeof(int)			,path					,tam_path);
+	memcpy(paquete.payload              ,&tam_path  ,sizeof(int));
+	memcpy(paquete.payload+sizeof(int)	,path		,tam_path);
 
 	return paquete;
 }
 
-//Desc: deserializa el payload, guarda el contenido en path
-void dslz_cod_readdir(void *buffer, char**path)
+//desc: dslz el payload respuesta de server, guarda la direccion del DIR
+void dslz_res_opendir(void *buffer, intptr_t* dir)
+{
+	memcpy(dir, buffer, sizeof(intptr_t));
+}
+
+//dlsz_res_readdir
+void dslz_res_readdir(void *buffer, t_list** filenames)
+{
+	int numfiles;
+	memcpy(&numfiles, buffer, sizeof(int));
+	int offset = sizeof(int);
+
+	int c=0;
+	do{
+		int size;
+		memcpy(&size, buffer+offset, sizeof(int));
+		offset+=sizeof(int);
+
+		char *name = malloc(size+1);
+		memcpy(name, buffer+offset, size);
+		name[size]='\0';
+		offset+=size;
+
+		list_add(*filenames, name);
+		c++;
+	}while(c != numfiles);
+
+}
+
+/*
+ * ------------- Protocolo Operaciones SAC Server ----------- *
+ */
+
+//desc: dslz op readdir, recibe path y dir *
+void dslz_cod_readdir(void *buffer, char**path, intptr_t *dir)
 {
 	int tam_path;
-	memcpy(&tam_path,	buffer, 				sizeof(int));
+	memcpy(&tam_path, buffer, sizeof(int));
 
 	char *ruta = malloc(tam_path+1);
-	memcpy(ruta,		buffer+sizeof(int), 	tam_path);
+	memcpy(ruta, buffer+sizeof(int), tam_path);
 	ruta[tam_path]='\0';
 	*path = ruta;
+
+	memcpy(dir,	buffer+sizeof(int)+tam_path, sizeof(intptr_t));
+	log_msje_info("RECIBO READDIR POINTER ADRESS DIR: [ %p ]", *dir);
+
+}
+
+//desc: deserializa el payload, guarda el contenido en path
+void dslz_cod_opendir(void *buffer, char**path)
+{
+	int tam_path;
+	memcpy(&tam_path, buffer, sizeof(int));
+
+	char *ruta = malloc(tam_path+1);
+	memcpy(ruta, buffer+sizeof(int), tam_path);
+	ruta[tam_path]='\0';
+	*path = ruta;
+}
+
+//desc: arma paquete con el pointer adress de DIR
+package_t slz_res_opendir(DIR *dp, bool error)
+{
+	package_t paquete;
+
+	log_msje_info("POINTER ADRESS : [ %p ]", dp);
+	log_msje_info("POINTER size : [ %d ]", sizeof(dp));
+	log_msje_info("INTPTR size : [ %d ]", sizeof(intptr_t));
+
+	if (error){
+		paquete.header = header_get('S', COD_ERROR, 0);
+	}else{
+		int tam_payload = sizeof(intptr_t);
+		paquete.header = header_get('S', COD_OPENDIR, tam_payload);
+		paquete.payload = malloc(tam_payload);
+		memcpy(paquete.payload, &dp, sizeof(intptr_t));//ACÁ LE ESTOY PASANDO POINTER ADRESS DE DIR
+	}
+
+	return paquete;
+}
+
+static int get_fullsize(t_list *filenames)
+{
+	int filesizes = 0;
+	t_list * files = list_duplicate(filenames);
+
+	t_link_element *element = files->head;
+	t_link_element *aux = NULL;
+	do{
+		aux = element->next;
+		filesizes += strlen(element->data);
+		log_msje_info("element data list: [ %s ]", element->data);
+		element = aux;
+
+	}while(element != NULL);
+
+	return filesizes;
+}
+
+package_t slz_res_readdir(t_list * filenames, bool error)
+{
+	package_t paquete;
+	int numfiles = list_size(filenames);
+
+	if (error){
+		paquete.header = header_get('S', COD_ERROR, 0);
+
+	} else {
+		int tam_payload = sizeof(int) + sizeof(int)*numfiles + get_fullsize(filenames);
+		paquete.header = header_get('S', COD_READDIR, tam_payload);
+		paquete.payload = malloc(tam_payload);
+
+		memcpy(paquete.payload, &numfiles, sizeof(int));
+
+		t_link_element *element = filenames->head;
+		t_link_element *aux = NULL;
+		int bytes = sizeof(int);
+		do{
+			aux = element->next;
+			int filesize = strlen(element->data);
+			memcpy(paquete.payload + bytes, 			&filesize,				sizeof(int));
+			memcpy(paquete.payload +sizeof(int)+ bytes, &(element->data[0]), 	filesize);
+			bytes += filesize+sizeof(int);
+			element=aux;
+
+		}while (element != NULL);
+
+	}
+	return paquete;
 }

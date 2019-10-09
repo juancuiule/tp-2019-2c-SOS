@@ -7,11 +7,15 @@
 #include <errno.h>
 #include <sys/socket.h>
 #include "socket.h"
+#include <dirent.h>
+
+#include <commons/collections/list.h>
 
 #define TAM_HEADER 9
 
 typedef enum{
     COD_HANDSHAKE,
+	COD_OPENDIR,
 	COD_READDIR,
 	COD_ERROR
 }cod_operation;
@@ -38,7 +42,20 @@ void handshake_enviar(int socket, char cod_proc);
 package_t paquete_recibir(int socket);
 bool paquete_enviar(int socket, package_t paquete);
 
-package_t slz_cod_readdir(const char *path);
-void dslz_cod_readdir(void *buffer, char** path);
+
+//---Protocolo operaciones sac cli---
+
+package_t slz_cod_readdir(const char *path, intptr_t dir);
+package_t slz_cod_opendir(const char *path);
+void dslz_res_opendir(void *buffer, intptr_t* dir);
+void dslz_res_readdir(void *buffer, t_list** filenames);
+
+
+//---Protocolo operaciones sac server---
+
+void dslz_cod_readdir(void *buffer, char**path, intptr_t *dir);
+void dslz_cod_opendir(void *buffer, char**path);
+package_t slz_res_opendir(DIR *dp, bool error);
+package_t slz_res_readdir(t_list * filenames, bool error);
 
 #endif /* COMMON_PROTOCOL_H_ */
