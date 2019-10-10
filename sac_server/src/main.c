@@ -7,6 +7,7 @@ void* atender_conexiones(void* data){
 
 	package_t paquete;
 	char *path;
+	intptr_t dir;
 
 	while(true){
 		paquete = paquete_recibir(cliente_fd);
@@ -14,10 +15,15 @@ void* atender_conexiones(void* data){
 			case COD_HANDSHAKE:
 				handshake_enviar(cliente_fd, COD_PROCESO);
 				break;
+			case COD_OPENDIR:
+				log_msje_info("Me llego operacion opendir");
+				dslz_cod_opendir(paquete.payload, &path);
+				sac_opendir(path, cliente_fd);
+				break;
 			case COD_READDIR:
 				log_msje_info("Me llego operacion readdir");
-				dslz_cod_readdir(paquete.payload, &path);
-				log_msje_info("Path: %s", path);
+				dslz_cod_readdir(paquete.payload, &path, &dir);
+				sac_readdir(path, dir, cliente_fd);
 				break;
 			default:
 				log_msje_error("Codigo de operacion erroneo");
