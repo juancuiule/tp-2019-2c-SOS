@@ -4,13 +4,19 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../SUSE.c 
+../SUSE.c \
+../configuracion.c \
+../server.c 
 
 OBJS += \
-./SUSE.o 
+./SUSE.o \
+./configuracion.o \
+./server.o 
 
 C_DEPS += \
-./SUSE.d 
+./SUSE.d \
+./configuracion.d \
+./server.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
