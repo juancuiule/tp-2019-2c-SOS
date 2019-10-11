@@ -1,4 +1,0 @@
-client/client
-**/*.o
-**/*.log
-server/server
