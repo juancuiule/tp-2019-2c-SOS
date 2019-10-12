@@ -20,6 +20,7 @@
 
     #include <stdint.h>
     #include <stddef.h>
+	#include <client.h>
 
     /**
      * Inicializa la biblioteca de MUSE.
