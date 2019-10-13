@@ -25,6 +25,11 @@ void* atender_conexiones(void* data){
 				dslz_cod_readdir(paquete.payload, &path, &dir);
 				sac_readdir(path, dir, cliente_fd);
 				break;
+			case COD_RELEASEDIR:
+				log_msje_info("Me llego operacion releasedir");
+				dslz_cod_releasedir(paquete.payload, &path, &dir);
+				sac_releasedir(path, dir, cliente_fd);
+				break;
 			default:
 				log_msje_error("Codigo de operacion erroneo");
 				break;

@@ -64,3 +64,27 @@ void sac_readdir(char *path, intptr_t dir, int cliente_fd)
 
     paquete_enviar(cliente_fd, paquete);
 }
+
+void sac_releasedir(char *path, intptr_t dir, int cliente_fd)
+{
+	log_msje_info("SAC CLOSEDIR Path = [ %s ]", path);
+	package_t paquete;
+	DIR *dp;
+	dp = (DIR *) dir;
+
+	int res;
+	//ejecuto operacion
+	res = closedir(dp);
+
+    if (res == -1) {
+    	log_msje_error("closedir: [ %s ]", strerror(errno));
+    	paquete = slz_res_releasedir(true);
+    }
+    else {//todo ok
+    	log_msje_info("Exito operacion closedir sobre fs local");
+    	paquete = slz_res_releasedir(false);
+    }
+
+    paquete_enviar(cliente_fd, paquete);
+
+}

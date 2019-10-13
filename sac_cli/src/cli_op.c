@@ -96,6 +96,33 @@ int cli_readdir(const char *path, void *buf, fuse_fill_dir_t filler, off_t offse
 	return 0;
 }
 
+//equivalente al closedir, solo que fuse no reconoce closedir
+int cli_releasedir(const char *path, struct fuse_file_info *fi)
+{
+	log_msje_info("Operacion RELEASEDIR sobre path [ %s ]", path);
+
+	package_t paquete, respuesta;
+	paquete = slz_cod_releasedir(path, (intptr_t)fi->fh);
+
+	if(!paquete_enviar(sac_server.fd, paquete))
+		log_msje_error("No se pudo enviar el paquete cod realesedir");
+	else
+		log_msje_info("Se envio operacion releasedir al server");
+
+	//...espero respuesta de server
+	respuesta = paquete_recibir(sac_server.fd);
+
+	if(respuesta.header.cod_operacion == COD_ERROR){
+		log_msje_error("releasedir me llego cod error");
+		return -1;
+	}
+
+	if(respuesta.header.cod_operacion == COD_RELEASEDIR)
+		log_msje_info("releasedir al server todo ok");
+	//no recibo nada del server solo codrealesedir en señal de todo ok
+
+	return 0;
+}
 
 int cli_read(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi)
 {
@@ -120,6 +147,7 @@ struct fuse_operations cli_oper = {
 		.getattr = cli_getattr,
 		.opendir = cli_opendir,
 		.readdir = cli_readdir,
+		.releasedir = cli_releasedir,
 		.read = cli_read,
 		.mkdir = cli_mkdir,
 };

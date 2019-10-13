@@ -15,5 +15,6 @@
 
 void sac_opendir(char *path, int cliente_fd);
 void sac_readdir(char *path, intptr_t dir, int cliente_fd);
+void sac_releasedir(char *path, intptr_t dir, int cliente_fd);
 
 #endif /* SAC_OP_H_ */

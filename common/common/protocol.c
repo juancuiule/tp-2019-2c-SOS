@@ -164,6 +164,25 @@ package_t slz_cod_opendir(const char *path)
 	return paquete;
 }
 
+//desc: arma un paquete para la operacion releasedir ok?
+package_t slz_cod_releasedir(const char *path, intptr_t dir)
+{
+	log_msje_info("ENVIO REALESEDIR POINTER ADRESS DIR: [ %p ]", dir);
+
+	package_t paquete;
+	int tam_path = strlen(path);
+	int tam_payload = sizeof(int) + tam_path + sizeof(intptr_t);
+
+	paquete.header = header_get('C', COD_RELEASEDIR, tam_payload);
+	paquete.payload = malloc(tam_payload);
+
+	memcpy(paquete.payload              		,&tam_path  ,sizeof(int));
+	memcpy(paquete.payload+sizeof(int)			,path		,tam_path);
+	memcpy(paquete.payload+sizeof(int)+tam_path	,&dir		,sizeof(intptr_t));
+
+	return paquete;
+}
+
 //desc: dslz el payload respuesta de server, guarda la direccion del DIR
 void dslz_res_opendir(void *buffer, intptr_t* dir)
 {
@@ -224,6 +243,19 @@ void dslz_cod_opendir(void *buffer, char**path)
 	memcpy(ruta, buffer+sizeof(int), tam_path);
 	ruta[tam_path]='\0';
 	*path = ruta;
+}
+
+void dslz_cod_releasedir(void* buffer, char** path, intptr_t* dir){
+	int tam_path;
+	memcpy(&tam_path, buffer, sizeof(int));
+
+	char *ruta = malloc(tam_path+1);
+	memcpy(ruta, buffer+sizeof(int), tam_path);
+	ruta[tam_path]='\0';
+	*path = ruta;
+
+	memcpy(dir,	buffer+sizeof(int)+tam_path, sizeof(intptr_t));
+	log_msje_info("RECIBO RELEASEDIR POINTER ADRESS DIR: [ %p ]", *dir);
 }
 
 //desc: arma paquete con el pointer adress de DIR
@@ -294,5 +326,18 @@ package_t slz_res_readdir(t_list * filenames, bool error)
 		}while (element != NULL);
 
 	}
+	return paquete;
+}
+
+package_t slz_res_releasedir(bool error)
+{
+	package_t paquete;
+
+	if (error){
+		paquete.header = header_get('S', COD_ERROR, 0);
+	} else {
+		paquete.header = header_get('S', COD_RELEASEDIR, 0);
+	}
+
 	return paquete;
 }
