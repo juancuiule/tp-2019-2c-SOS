@@ -16,7 +16,7 @@ int server() {
 	 bzero((char *)&servidor, sizeof(servidor));
 	 servidor.sin_family = AF_INET;
 	 servidor.sin_port = htons(LISTEN_PORT);
-     servidor.sin_addr.s_addr = INADDR_ANY;
+     servidor.sin_addr.s_addr = inet_addr("127.0.0.1");
 
 	  if(bind(server_fd, (struct sockaddr *)&servidor, sizeof(servidor)) < 0)
 	  {
