@@ -22,6 +22,8 @@ int cli_readdir(const char *path, void *buf, fuse_fill_dir_t filler, off_t offse
 
 int cli_releasedir(const char *path, struct fuse_file_info *fi);
 
+int cli_open(const char *path, struct fuse_file_info *fi);
+
 int cli_read(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi);
 
 int cli_mkdir(const char *path, mode_t mode);

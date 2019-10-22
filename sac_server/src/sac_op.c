@@ -88,3 +88,54 @@ void sac_releasedir(char *path, intptr_t dir, int cliente_fd)
     paquete_enviar(cliente_fd, paquete);
 
 }
+
+void sac_open(char *path, int flags, int cliente_fd)
+{
+	log_msje_info("SAC OPEN Path = [ %s ]", path);
+	package_t paquete;
+
+	char fpath[PATH_MAX];
+	sac_fullpath(fpath, path);
+
+	int fd;
+	//ejecuto operacion
+	fd = open(fpath, flags);
+
+    if (fd == -1) {
+    	log_msje_error("open: [ %s ]", strerror(errno));
+    	paquete = slz_res_open(fd, true);
+    }
+    else {//todo ok
+    	log_msje_info("Exito operacion open sobre fs local");
+    	paquete = slz_res_open(fd, false);
+    }
+
+    paquete_enviar(cliente_fd, paquete);
+
+}
+
+void sac_getattr(char *path, int cliente_fd)
+{
+	log_msje_info("SAC GETATTR Path = [ %s ]", path);
+	package_t paquete;
+
+	char fpath[PATH_MAX];
+	sac_fullpath(fpath, path);
+
+	int res;
+	struct stat stbuf;
+	//ejecuto operacion
+	res = lstat(fpath, &stbuf);
+
+    if (res == -1) {
+    	log_msje_error("getattr: [ %s ]", strerror(errno));
+    	paquete = slz_res_getattr(stbuf.st_mode, stbuf.st_nlink, true);
+    }
+    else {
+    	log_msje_info("Exito operacion getattr sobre fs local");
+    	paquete = slz_res_getattr(stbuf.st_mode, stbuf.st_nlink, false);
+    }
+
+    paquete_enviar(cliente_fd, paquete);
+}
+

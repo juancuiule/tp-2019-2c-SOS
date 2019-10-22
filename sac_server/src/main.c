@@ -8,6 +8,7 @@ void* atender_conexiones(void* data){
 	package_t paquete;
 	char *path;
 	intptr_t dir;
+	int flags;
 
 	while(true){
 		paquete = paquete_recibir(cliente_fd);
@@ -29,6 +30,16 @@ void* atender_conexiones(void* data){
 				log_msje_info("Me llego operacion releasedir");
 				dslz_cod_releasedir(paquete.payload, &path, &dir);
 				sac_releasedir(path, dir, cliente_fd);
+				break;
+			case COD_OPEN:
+				log_msje_info("Me llego operacion open");
+				dslz_cod_open(paquete.payload, &path, &flags);
+				sac_open(path, flags, cliente_fd);
+				break;
+			case COD_GETATTR:
+				log_msje_info("Me llego operacion getattr");
+				dslz_cod_getattr(paquete.payload, &path);
+				sac_getattr(path, cliente_fd);
 				break;
 			default:
 				log_msje_error("Codigo de operacion erroneo");
