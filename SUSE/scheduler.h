@@ -17,10 +17,13 @@
 #include <netinet/in.h>
 #include <netdb.h>
 #include <commons/collections/queue.h>
+#include <pthread.h>
 
 t_queue* cola_new;
 t_queue* cola_blocked;
 t_queue* cola_exit;
+
+int PID;
 
 void inicializar_colas();
 void scheduler();
