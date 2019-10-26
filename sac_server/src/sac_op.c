@@ -129,13 +129,36 @@ void sac_getattr(char *path, int cliente_fd)
 
     if (res == -1) {
     	log_msje_error("getattr: [ %s ]", strerror(errno));
-    	paquete = slz_res_getattr(stbuf.st_mode, stbuf.st_nlink, true);
+    	paquete = slz_res_getattr(stbuf.st_mode, stbuf.st_nlink, stbuf.st_size ,true);
     }
     else {
     	log_msje_info("Exito operacion getattr sobre fs local");
-    	paquete = slz_res_getattr(stbuf.st_mode, stbuf.st_nlink, false);
+    	paquete = slz_res_getattr(stbuf.st_mode, stbuf.st_nlink, stbuf.st_size, false);
     }
 
     paquete_enviar(cliente_fd, paquete);
 }
 
+void sac_read(char *path, int fd, size_t size, off_t offset, int cliente_fd)
+{
+	log_msje_info("SAC READ Path = [ %s ]", path);
+	package_t paquete;
+
+	int leido;
+	char * buffer = malloc(size);
+
+	//ejecuto operacion
+	leido = pread(fd, buffer, size, offset);
+
+    if (leido == -1) {
+    	log_msje_error("pread: [ %s ]", strerror(errno));
+    	paquete = slz_res_read(buffer, leido, true);
+    }
+    else {
+    	log_msje_info("Exito operacion pread sobre fs local");
+    	paquete = slz_res_read(buffer, leido, false);
+    }
+
+    paquete_enviar(cliente_fd, paquete);
+    free(buffer);
+}

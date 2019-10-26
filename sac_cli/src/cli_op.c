@@ -1,6 +1,6 @@
 #include "cli_op.h"
 
-
+//OK
 int cli_getattr(const char *path, struct stat *statbuf)
 {
 	log_msje_info("Operacion GETATTR sobre path [ %s ]", path);
@@ -15,22 +15,25 @@ int cli_getattr(const char *path, struct stat *statbuf)
 		log_msje_info("Se envio operacion getattr al server");
 
 	//...espero respuesta de server
-	unsigned int mode;
-	unsigned int nlink;
+	uint32_t mode;
+	uint32_t nlink;
+	int size;
 	respuesta = paquete_recibir(sac_server.fd);
 
 	if(respuesta.header.cod_operacion == COD_ERROR){
-		log_msje_error("opendir me llego cod error");
+		log_msje_error("getattr me llego cod error");
 		return -1;
 	}
 
-	dslz_res_getattr(respuesta.payload, &mode, &nlink);
+	dslz_res_getattr(respuesta.payload, &mode, &nlink, &size);
 	statbuf->st_mode = mode;
 	statbuf->st_nlink = nlink;
+	statbuf->st_size = size;
 
 	return 0;
 }
 
+//OK
 int cli_opendir(const char *path, struct fuse_file_info *fi)
 {
 	log_msje_info("Operacion OPENDIR sobre path [ %s ]", path);
@@ -60,7 +63,8 @@ int cli_opendir(const char *path, struct fuse_file_info *fi)
 	return 0;
 
 }
-//esta op ya se esta conectando con el sac server
+
+//OK
 int cli_readdir(const char *path, void *buf, fuse_fill_dir_t filler, off_t offset, struct fuse_file_info *fi)
 {
 	log_msje_info("Operacion READDIR sobre path [ %s ]", path);
@@ -104,7 +108,7 @@ int cli_readdir(const char *path, void *buf, fuse_fill_dir_t filler, off_t offse
 	return 0;
 }
 
-//equivalente al closedir, solo que fuse no reconoce closedir
+//OK
 int cli_releasedir(const char *path, struct fuse_file_info *fi)
 {
 	log_msje_info("Operacion RELEASEDIR sobre path [ %s ]", path);
@@ -132,6 +136,7 @@ int cli_releasedir(const char *path, struct fuse_file_info *fi)
 	return 0;
 }
 
+//OK
 int cli_open(const char *path, struct fuse_file_info *fi)
 {
 	log_msje_info("Operacion OPEN sobre path [ %s ]", path);
@@ -156,16 +161,43 @@ int cli_open(const char *path, struct fuse_file_info *fi)
 	int fd;
 	dslz_res_open(respuesta.payload, &fd);
 
-	//lo guardo en fi
+	//Me guardo en fi el fd
 	fi->fh = fd;
 
 	return 0;
 }
 
+
+//OK
 int cli_read(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi)
 {
-	log_msje_info("Operacion read sobre path %s", path);
+	log_msje_info("Operacion READ sobre path [ %s ]", path);
 
+	package_t paquete, respuesta;
+	paquete = slz_cod_read(path, fi->fh, size, offset);
+
+	if(!paquete_enviar(sac_server.fd, paquete))
+		log_msje_error("No se pudo enviar el paquete cod read");
+	else
+		log_msje_info("Se envio operacion read al server");
+
+	//espero respuesta de server : un size y el buffer leido
+	respuesta = paquete_recibir(sac_server.fd);
+
+	if(respuesta.header.cod_operacion == COD_ERROR){
+		log_msje_error("read me llego cod error");
+		return -1;
+	}
+
+	int leido;
+	dslz_res_read(respuesta.payload, buf, &leido);
+
+	return leido;
+}
+
+int cli_flush(const char *path, struct fuse_file_info *fi)
+{
+	log_msje_info("Operacion FLUSH sobre path %s", path);
 	return 0;
 }
 
@@ -188,5 +220,6 @@ struct fuse_operations cli_oper = {
 		.releasedir = cli_releasedir,
 		.open = cli_open,
 		.read = cli_read,
+		.flush = cli_flush,
 		.mkdir = cli_mkdir,
 };

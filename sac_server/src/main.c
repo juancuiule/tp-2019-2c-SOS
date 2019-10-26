@@ -9,6 +9,9 @@ void* atender_conexiones(void* data){
 	char *path;
 	intptr_t dir;
 	int flags;
+	int fd;
+	size_t size;
+	off_t offset;
 
 	while(true){
 		paquete = paquete_recibir(cliente_fd);
@@ -40,6 +43,11 @@ void* atender_conexiones(void* data){
 				log_msje_info("Me llego operacion getattr");
 				dslz_cod_getattr(paquete.payload, &path);
 				sac_getattr(path, cliente_fd);
+				break;
+			case COD_READ:
+				log_msje_info("Me llego operacion read");
+				dslz_cod_read(paquete.payload, &path, &fd, &size, &offset);
+				sac_read(path,fd, size, offset, cliente_fd);
 				break;
 			default:
 				log_msje_error("Codigo de operacion erroneo");
