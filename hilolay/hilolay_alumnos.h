@@ -2,7 +2,7 @@
 	#define hilolay_alumnos_h__
 
 	/**
-	 * TODO: Interface for alumnos (what they should implement in orde to make this work)
+	 * TODO: Interface for alumnos (what they should implement in order to make this work)
 	 */
 	typedef struct hilolay_operations {
 		int (*suse_create) (int);
