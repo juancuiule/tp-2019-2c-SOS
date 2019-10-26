@@ -64,3 +64,33 @@ void sac_readdir(char *path, intptr_t dir, int cliente_fd)
 
     paquete_enviar(cliente_fd, paquete);
 }
+
+void sac_mknod(char * path,char * namefile, int mode, int cliente_fd){
+
+	log_msje_info("SAC MKNOD Path = [ %s ]", path);
+	package_t paquete;
+	int res_mknod;
+
+	//primero me ubico en el directorio
+	// ver si no uso directo opendir?
+	sac_opendir(path, cliente_fd);
+
+	//ejecuta la operacion crear un archivo
+	res_mknod = mknod(namefile, mode, 0);
+
+	//valido la respuesta de la operacion
+	if(res_mknod == -1){
+		log_msje_error("sac_mknod mknod");
+		log_msje_error("mknod: [ %s ]", strerror(errno));
+		paquete = slz_res_mknod(COD_ERROR);
+	}
+	else
+		paquete = slz_res_mknod(COD_MKNOD);
+
+	paquete_enviar(cliente_fd, paquete);
+
+
+}
+
+
+

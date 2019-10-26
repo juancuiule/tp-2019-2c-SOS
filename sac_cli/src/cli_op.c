@@ -111,6 +111,58 @@ int cli_mkdir(const char *path, mode_t mode)
     return 0;
 }
 
+int cli_mknod(const char *filename, mode_t mode, dev_t dev){
+	log_msje_info("Operacion MKNOD creando el archivo [ %s ]", filename);
+
+	//enviar paquete a sac server
+	package_t paquete, respuesta;
+	paquete = slz_cod_mknod(filename, mode, dev);
+
+	if(!paquete_enviar(sac_server.fd, paquete))
+		log_msje_error("No se pudo enviar el paquete");
+	else
+		log_msje_info("Se envio operacion mknod al server");
+
+	//...espero respuesta de server
+	respuesta = paquete_recibir(sac_server.fd);
+
+	if(respuesta.header.cod_operacion == COD_ERROR){
+		log_msje_error("mknod me llego cod error");
+		return -1;
+	}
+	dslz_res_mknode(respuesta.payload);
+	log_msje_info("CLI MKNOD  CREE UN ARCHIVO: [ %s ]", filename);
+
+
+	return 0;
+}
+
+int cli_write(int filedes, const void* buffer, size_t size_t){
+	log_msje_info("Operacion WRITE creando el archivo ");
+
+	//enviar paquete a sac server
+	package_t paquete, respuesta;
+	paquete = slz_cod_write(filedes, &buffer, size_t);
+
+	if(!paquete_enviar(sac_server.fd, paquete))
+			log_msje_error("No se pudo enviar el paquete");
+	else
+		log_msje_info("Se envio operacion write al server");
+
+	//...espero respuesta de server
+	respuesta = paquete_recibir(sac_server.fd);
+
+	if(respuesta.header.cod_operacion == COD_ERROR){
+		log_msje_error("write me llego cod error");
+		return -1;
+	}
+	dslz_res_write(respuesta.payload);
+	log_msje_info("CLI WRITE  ESCRIBI UN ARCHIVO");
+
+	//ver si no necesita el path del archivo? o el server lo conoce?
+	return 0;
+}
+
 void set_sac_fd(socket_t socket)
 {
 	sac_server = socket;
@@ -122,4 +174,6 @@ struct fuse_operations cli_oper = {
 		.readdir = cli_readdir,
 		.read = cli_read,
 		.mkdir = cli_mkdir,
+		.mknod = cli_mknod,
+		.write = cli_write
 };

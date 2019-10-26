@@ -164,6 +164,24 @@ package_t slz_cod_opendir(const char *path)
 	return paquete;
 }
 
+package_t slz_cod_mknod(const char *filename, mode_t mode, dev_t dev){
+	package_t package;
+	int size_filename = strlen(filename);
+	int size_mode = sizeof(int);
+	int size_dev = sizeof(int);
+	int size_payload = sizeof(int)+ size_filename + size_mode + size_dev;
+
+	package.header = header_get('N',COD_MKNOD,size_payload);
+	package.payload = malloc(size_payload);
+
+	memcpy(package.payload										, &size_filename, sizeof(int));
+	memcpy(package.payload+sizeof(int)							, filename		, size_filename);
+	memcpy(package.payload+sizeof(int)+size_filename			, mode			,size_mode);
+	memcpy(package.payload+sizeof(int)+size_filename+size_mode	, dev			, size_dev);
+
+	return package;
+}
+
 //desc: dslz el payload respuesta de server, guarda la direccion del DIR
 void dslz_res_opendir(void *buffer, intptr_t* dir)
 {
@@ -193,6 +211,11 @@ void dslz_res_readdir(void *buffer, t_list** filenames)
 	}while(c != numfiles);
 
 }
+
+void dslz_res_mknode(void *buffer){
+
+}
+
 
 /*
  * ------------- Protocolo Operaciones SAC Server ----------- *
@@ -296,3 +319,11 @@ package_t slz_res_readdir(t_list * filenames, bool error)
 	}
 	return paquete;
 }
+package_t slz_res_mknod(cod_operation code){
+	package_t package;
+
+	package.header = header_get('N', code, TAM_HEADER);
+
+	return package;
+}
+
