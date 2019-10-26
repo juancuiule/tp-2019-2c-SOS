@@ -1,11 +1,12 @@
 #include "hilolay_internal.h"
 
 #include <stdio.h>
+#include <string.h>
 #include "hilolay_alumnos.h"
 #include "hilolay.h"
 
 
-// TODO: Check what happens when a thread is closed
+// TODO: Check what happens when a thrad is closed
 
 /* Writes administrative info of a TCB */
 void set_tcb(struct TCB* tcb, int id, enum State state) {
@@ -72,6 +73,7 @@ int hilolay_create(hilolay_t *thread, const hilolay_attr_t *attr, void *(*start_
     /* Finds a free TCB */
 	struct TCB *new_ult = find_free_tcb();
     if (new_ult == NULL) { return ERROR_TOO_MANY_ULTS; }
+
     /* Creates the TCB */
     int tid = get_next_id();
     create_context(new_ult, start_routine, arg);
@@ -80,6 +82,7 @@ int hilolay_create(hilolay_t *thread, const hilolay_attr_t *attr, void *(*start_
 
     /* Calls selected operation */
     main_ops->suse_create(tid);
+
     return 0;
 }
 
@@ -118,4 +121,32 @@ int hilolay_get_tid(void) {
 int hilolay_join(hilolay_t *thread){
 	main_ops->suse_join(thread->tid);
 	return hilolay_yield();
+}
+
+hilolay_sem_t* hilolay_sem_open(char *name){
+    hilolay_sem_t* sem = malloc(sizeof(hilolay_sem_t));
+    sem->name = malloc(strlen(name));
+    stpcpy(sem->name, name);
+    return sem;
+}
+
+int hilolay_sem_close(hilolay_sem_t* sem){
+    free(sem->name);
+    free(sem);
+    return 0;
+}
+
+int hilolay_wait(hilolay_sem_t *sem){
+    main_ops->suse_wait(hilolay_get_tid(), sem->name);
+	return hilolay_yield();
+}
+
+int hilolay_signal(hilolay_sem_t *sem){
+    main_ops->suse_signal(hilolay_get_tid(), sem->name);
+	return hilolay_yield();
+}
+
+int hilolay_return(int val){
+    main_ops->suse_close(hilolay_get_tid());
+    return val;
 }

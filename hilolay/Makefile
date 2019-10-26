@@ -36,6 +36,5 @@ install:
 	cp $(NAME)_internal.h $(USR_PATH)/include/hilolay/internal.h
 	cp $(NAME).h $(USR_PATH)/include/hilolay/hilolay.h
 	cp $(NAME)_alumnos.h $(USR_PATH)/include/hilolay/alumnos.h
-	cp suse_operations.h $(USR_PATH)/include/hilolay/suse_operations.h
 	chmod 0755 $(USR_PATH)/include/hilolay/*
 	cp $(BUILD)/lib$(NAME).so $(USR_PATH)/lib/lib$(NAME).so

@@ -1,9 +1,10 @@
 #include "SUSE.h"
 
 int main() {
-	pthread_t server_thread;
+	pthread_t scheduler_thread;
 	configurar();
-	pthread_create(&server_thread, NULL, (void*)server, NULL);
-	pthread_join(&server_thread, NULL);
+	inicializar_colas();
+	pthread_create(&scheduler_thread, NULL, (void*)scheduler, NULL);
+	pthread_join(&scheduler_thread, NULL);
 	return 0;
 }
