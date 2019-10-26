@@ -49,6 +49,11 @@ void* atender_conexiones(void* data){
 				dslz_cod_read(paquete.payload, &path, &fd, &size, &offset);
 				sac_read(path,fd, size, offset, cliente_fd);
 				break;
+			case COD_RELEASE:
+				log_msje_info("Me llego operacion release");
+				dslz_cod_release(paquete.payload, &path, &fd);
+				sac_release(path,fd, cliente_fd);
+				break;
 			default:
 				log_msje_error("Codigo de operacion erroneo");
 				break;

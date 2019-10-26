@@ -239,6 +239,25 @@ package_t slz_cod_read(const char *path, int fd, size_t size, off_t offset)
 	return paquete;
 }
 
+package_t slz_cod_release(const char *path, int fd)
+{
+	package_t paquete;
+	int tam_path = strlen(path);
+	int tam_payload = sizeof(int) + tam_path + sizeof(int);
+
+	paquete.header = header_get('C', COD_RELEASE, tam_payload);
+	paquete.payload = malloc(tam_payload);
+
+	int offs=0;
+	memcpy(paquete.payload, &tam_path  ,sizeof(int));
+	offs+=sizeof(int);
+	memcpy(paquete.payload+offs, path, tam_path);
+	offs+=tam_path;
+	memcpy(paquete.payload+offs, &fd, sizeof(int));
+
+	return paquete;
+}
+
 //desc: dslz el payload respuesta de server, guarda la direccion del DIR
 void dslz_res_opendir(void *buffer, intptr_t* dir)
 {
@@ -383,6 +402,24 @@ void dslz_cod_read(void *buffer, char **path, int *fd, size_t *size, off_t *offs
 
 }
 
+void dslz_cod_release(void *buffer, char **path, int *fd)
+{
+	int offs = 0;
+
+	int tam_path;
+	memcpy(&tam_path, buffer, sizeof(int));
+	offs += sizeof(int);
+
+	char *ruta = malloc(tam_path+1);
+	memcpy(ruta, buffer+offs, tam_path);
+	offs += tam_path;
+
+	ruta[tam_path]='\0';
+	*path = ruta;
+
+	memcpy(fd, buffer+offs, sizeof(int));
+}
+
 //desc: arma paquete con el pointer adress de DIR
 package_t slz_res_opendir(DIR *dp, bool error)
 {
@@ -517,6 +554,19 @@ package_t slz_res_read(char *buf, ssize_t ssize, bool error)
 		memcpy(paquete.payload, &tam_buff, sizeof(int));
 		memcpy(paquete.payload+sizeof(int), buf, tam_buff);
 		memcpy(paquete.payload+sizeof(int)+tam_buff, &ssize, sizeof(ssize_t));
+	}
+
+	return paquete;
+}
+
+package_t slz_res_release(bool error)
+{
+	package_t paquete;
+
+	if (error){
+		paquete.header = header_get('S', COD_ERROR, 0);
+	} else {
+		paquete.header = header_get('S', COD_RELEASEDIR, 0);
 	}
 
 	return paquete;

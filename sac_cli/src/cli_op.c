@@ -195,6 +195,29 @@ int cli_read(const char *path, char *buf, size_t size, off_t offset, struct fuse
 	return leido;
 }
 
+int cli_release(const char *path, struct fuse_file_info *fi)
+{
+	log_msje_info("Operacion RELEASE sobre path [ %s ]", path);
+
+	package_t paquete, respuesta;
+	paquete = slz_cod_release(path, fi->fh);
+
+	if(!paquete_enviar(sac_server.fd, paquete))
+		log_msje_error("No se pudo enviar el paquete cod release");
+	else
+		log_msje_info("Se envio operacion release al server");
+
+	//espero respuesta de server
+	respuesta = paquete_recibir(sac_server.fd);
+
+	if(respuesta.header.cod_operacion == COD_ERROR){
+		log_msje_error("release me llego cod error");
+		return -1;
+	}
+
+	return 0;
+}
+
 int cli_flush(const char *path, struct fuse_file_info *fi)
 {
 	log_msje_info("Operacion FLUSH sobre path %s", path);
@@ -220,6 +243,7 @@ struct fuse_operations cli_oper = {
 		.releasedir = cli_releasedir,
 		.open = cli_open,
 		.read = cli_read,
+		.release = cli_release,
 		.flush = cli_flush,
 		.mkdir = cli_mkdir,
 };

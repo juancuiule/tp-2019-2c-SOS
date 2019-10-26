@@ -162,3 +162,24 @@ void sac_read(char *path, int fd, size_t size, off_t offset, int cliente_fd)
     paquete_enviar(cliente_fd, paquete);
     free(buffer);
 }
+
+void sac_release(char *path, int fd, int cliente_fd)
+{
+	log_msje_info("SAC RELEASE Path = [ %s ]", path);
+	package_t paquete;
+
+	int res;
+	//ejecuto operacion
+	res = close(fd);
+
+    if (res == -1) {
+    	log_msje_error("close: [ %s ]", strerror(errno));
+    	paquete = slz_res_release(true);
+    }
+    else {
+    	log_msje_info("Exito operacion close sobre fs local");
+    	paquete = slz_res_release(false);
+    }
+
+    paquete_enviar(cliente_fd, paquete);
+}

@@ -30,6 +30,8 @@ int cli_flush(const char *path, struct fuse_file_info *fi);
 
 int cli_mkdir(const char *path, mode_t mode);
 
+int cli_release(const char *path, struct fuse_file_info *fi);
+
 void set_sac_fd(socket_t socket);
 struct fuse_operations cli_oper;
 
