@@ -39,6 +39,8 @@ libmuse/logs/*.log
 *.i*86
 *.x86_64
 *.hex
+MUSE/MUSE
+libmuse/client
 
 # Debug files
 *.dSYM/
