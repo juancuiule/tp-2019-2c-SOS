@@ -34,8 +34,8 @@ void enviar_algo(char* algo, int conexion) {
 }
 
 int main(void) {
-	logger = log_create("../logs/client.log", "Cliente", 1, LOG_LEVEL_INFO);
-	config = config_create("../program.config");
+	logger = log_create("./logs/libMuse.log", "Cliente", 1, LOG_LEVEL_INFO);
+	config = config_create("./program.config");
 
 	char* IP = config_get_string_value(config, "IP");
 	char* PORT = config_get_string_value(config, "PORT");
@@ -45,6 +45,8 @@ int main(void) {
 	log_info(logger, "Conectandome a %s:%s", IP, PORT);
 
 	enviar_algo("Hola, me conecte!", conexion);
+
+	sleep(5);
 
 	log_destroy(logger);
 	config_destroy(config);

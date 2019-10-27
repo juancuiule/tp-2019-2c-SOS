@@ -1,15 +1,11 @@
-/*
- * MUSE.h
- *
- *  Created on: 12 oct. 2019
- *      Author: utnso
- */
-
 #ifndef MUSE_MUSE_H_
 #define MUSE_MUSE_H_
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <commons/string.h>
+#include <pthread.h>
 
+#include "utils.h"
 
-
-
-#endif /* MUSE_MUSE_H_ */
+#endif

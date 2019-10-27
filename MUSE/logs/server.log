@@ -1,0 +1,43 @@
+[INFO] 18:55:45:100 Servidor/(5546:5546): Servidor listo para recibir clientes
+[INFO] 18:59:54:134 Servidor/(6024:6024): Servidor listo para recibir clientes
+[INFO] 19:00:25:923 Servidor/(6050:6050): Servidor listo para recibir clientes
+[INFO] 19:00:27:869 Servidor/(6050:6050): Se conecto un cliente! 5
+[INFO] 19:00:27:869 Servidor/(6050:6052): cod_op: 0
+[INFO] 19:00:27:869 Servidor/(6050:6052): Me llego el mensaje: Hola, me conecte!
+[INFO] 19:00:27:870 Servidor/(6050:6052): El cliente se desconecto.
+[INFO] 19:00:47:527 Servidor/(6050:6050): Se conecto un cliente! 7
+[INFO] 19:00:47:528 Servidor/(6050:6054): cod_op: 0
+[INFO] 19:00:47:528 Servidor/(6050:6054): Me llego el mensaje: Hola, me conecte!
+[INFO] 19:00:47:529 Servidor/(6050:6054): El cliente se desconecto.
+[INFO] 19:00:48:24 Servidor/(6050:6050): Se conecto un cliente! 5
+[INFO] 19:00:48:24 Servidor/(6050:6056): cod_op: 0
+[INFO] 19:00:48:24 Servidor/(6050:6056): Me llego el mensaje: Hola, me conecte!
+[INFO] 19:00:48:26 Servidor/(6050:6056): El cliente se desconecto.
+[INFO] 19:00:48:396 Servidor/(6050:6050): Se conecto un cliente! 7
+[INFO] 19:00:48:396 Servidor/(6050:6058): cod_op: 0
+[INFO] 19:00:48:397 Servidor/(6050:6058): Me llego el mensaje: Hola, me conecte!
+[INFO] 19:00:48:398 Servidor/(6050:6058): El cliente se desconecto.
+[INFO] 19:00:48:758 Servidor/(6050:6050): Se conecto un cliente! 5
+[INFO] 19:00:48:759 Servidor/(6050:6060): cod_op: 0
+[INFO] 19:00:48:759 Servidor/(6050:6060): Me llego el mensaje: Hola, me conecte!
+[INFO] 19:00:48:760 Servidor/(6050:6060): El cliente se desconecto.
+[INFO] 19:00:49:73 Servidor/(6050:6050): Se conecto un cliente! 7
+[INFO] 19:00:49:73 Servidor/(6050:6062): cod_op: 0
+[INFO] 19:00:49:73 Servidor/(6050:6062): Me llego el mensaje: Hola, me conecte!
+[INFO] 19:00:49:74 Servidor/(6050:6062): El cliente se desconecto.
+[INFO] 19:00:49:370 Servidor/(6050:6050): Se conecto un cliente! 5
+[INFO] 19:00:49:370 Servidor/(6050:6064): cod_op: 0
+[INFO] 19:00:49:370 Servidor/(6050:6064): Me llego el mensaje: Hola, me conecte!
+[INFO] 19:00:49:371 Servidor/(6050:6064): El cliente se desconecto.
+[INFO] 19:00:49:660 Servidor/(6050:6050): Se conecto un cliente! 7
+[INFO] 19:00:49:661 Servidor/(6050:6066): cod_op: 0
+[INFO] 19:00:49:661 Servidor/(6050:6066): Me llego el mensaje: Hola, me conecte!
+[INFO] 19:00:49:662 Servidor/(6050:6066): El cliente se desconecto.
+[INFO] 19:02:34:543 Servidor/(6050:6050): Se conecto un cliente! 5
+[INFO] 19:02:34:544 Servidor/(6050:6706): cod_op: 0
+[INFO] 19:02:34:544 Servidor/(6050:6706): Me llego el mensaje: Hola, me conecte!
+[INFO] 19:02:36:242 Servidor/(6050:6050): Se conecto un cliente! 7
+[INFO] 19:02:36:242 Servidor/(6050:6723): cod_op: 0
+[INFO] 19:02:36:242 Servidor/(6050:6723): Me llego el mensaje: Hola, me conecte!
+[INFO] 19:02:39:545 Servidor/(6050:6706): El cliente se desconecto.
+[INFO] 19:02:41:243 Servidor/(6050:6723): El cliente se desconecto.
