@@ -11,7 +11,7 @@
 int suse_create(int tid) {
 	  struct sockaddr_in cliente;
 	  struct hostent *servidor;
-	  servidor = gethostbyname("localhost");
+	  servidor = gethostbyname("127.0.0.1");
 	  int puerto, conexion;
 	  char buffer[100];
 	  conexion = socket(AF_INET, SOCK_STREAM, 0);

@@ -24,7 +24,7 @@ void scheduler() {
 	 bzero((char *)&servidor, sizeof(servidor));
 	 servidor.sin_family = AF_INET;
 	 servidor.sin_port = htons(LISTEN_PORT);
-     servidor.sin_addr.s_addr = inet_addr("localhost");
+     servidor.sin_addr.s_addr = inet_addr(LISTEN_IP);
 
 	 bind(conexion_servidor, (struct sockaddr*)&servidor, sizeof(servidor));
 	 listen(conexion_servidor, 3);
