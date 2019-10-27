@@ -16,7 +16,9 @@ void enviar_algo(char* algo, int conexion) {
 		MSG_WAITALL
 	);
 
-	if (recv_result == 0) {
+	if (recv_result != 0) {
+		log_info(logger, "cod_op: %i", cod_op);
+	} else {
 		close(conexion);
 	}
 
@@ -24,15 +26,23 @@ void enviar_algo(char* algo, int conexion) {
 
 	// recibir tamaño del buffer y ponerlo en "size"
 	recv(conexion, &size, sizeof(int), MSG_WAITALL);
+	log_info(logger, "size: %i", size);
 
 	buffer = malloc(size);
 
 	// recibir buffer
 	recv(conexion, buffer, size, MSG_WAITALL);
+	log_info(logger, "buffer: %s", buffer);
 }
 
 int muse_init(int id, char* ip, int puerto){
+	logger = log_create("./logs/libMuse.log", "Cliente", 1, LOG_LEVEL_INFO);
+
+
 	int conexion = crear_conexion(ip, puerto);
+
+	log_info(logger, "Conectandome a %s:%s", ip, puerto);
+
 	enviar_algo("Hola, me conecte!", conexion);
 
 	log_destroy(logger);
