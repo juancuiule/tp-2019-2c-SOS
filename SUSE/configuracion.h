@@ -11,7 +11,7 @@
 #include <stdio.h>
 #include <commons/config.h>
 
-int LISTEN_IP;
+char* LISTEN_IP;
 int LISTEN_PORT;
 int METRICS_TIMER;
 int MAX_MULTIPROG;
