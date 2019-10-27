@@ -32,7 +32,7 @@ int respond_to_client(int cliente_fd) {
 }
 
 int main(void) {
-	logger = log_create("./logs/server.log", "Servidor", 1, LOG_LEVEL_DEBUG);
+	logger = log_create("./logs/MUSE.log", "Servidor", 1, LOG_LEVEL_DEBUG);
 	config = config_create("./program.config");
 
 	char* IP = "127.0.0.1";
