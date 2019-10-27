@@ -44,15 +44,19 @@ int conexion;
 int muse_init(int id, char* ip, int puerto){
 	logger = log_create("./logs/libMuse.log", "Cliente", 1, LOG_LEVEL_INFO);
 
+	log_info(logger, "Conectandome a %s:%s", ip, puerto);
 
 	conexion = crear_conexion(ip, puerto);
 
-	log_info(logger, "Conectandome a %s:%s", ip, puerto);
-
-	return 0;
+	if (conexion != -1) {
+		return 0;
+	} else {
+		return -1;
+	}
 }
 
 void muse_close(){
+	log_info(logger, "libMuse close");
 	log_destroy(logger);
 	config_destroy(config);
 	liberar_conexion(conexion);
