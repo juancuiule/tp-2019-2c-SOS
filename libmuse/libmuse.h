@@ -20,7 +20,11 @@
 
     #include <stdint.h>
     #include <stddef.h>
-	#include <client.h>
+	#include <stdio.h>
+	#include <stdlib.h>
+	#include <commons/string.h>
+	#include <pthread.h>
+	#include "utils.h"
 
     /**
      * Inicializa la biblioteca de MUSE.
@@ -102,4 +106,5 @@
      * @return Si pasa un error, retorna -1. Si la operación se realizó correctamente, retorna 0.
      */
     int muse_unmap(uint32_t dir);
+
 #endif

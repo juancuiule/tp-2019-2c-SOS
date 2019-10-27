@@ -1,9 +1,44 @@
-#include "../src/libmuse.h"
+#include "libmuse.h"
 #include <stdlib.h>
 #include <string.h>
 
+void enviar_algo(char* algo, int conexion) {
+	enviar_mensaje(algo, conexion);
+
+	int cod_op;
+	int size;
+
+	// recibir codigo de operacion, un entero que tenemos como enum
+	int recv_result = recv(
+		conexion,
+		&cod_op,
+		sizeof(int),
+		MSG_WAITALL
+	);
+
+	if (recv_result == 0) {
+		close(conexion);
+	}
+
+	void * buffer;
+
+	// recibir tamaño del buffer y ponerlo en "size"
+	recv(conexion, &size, sizeof(int), MSG_WAITALL);
+
+	buffer = malloc(size);
+
+	// recibir buffer
+	recv(conexion, buffer, size, MSG_WAITALL);
+}
+
 int muse_init(int id, char* ip, int puerto){
-    return 0;
+	int conexion = crear_conexion(ip, puerto);
+	enviar_algo("Hola, me conecte!", conexion);
+
+	log_destroy(logger);
+	config_destroy(config);
+	liberar_conexion(conexion);
+	return 0;
 }
 
 void muse_close(){ /* Does nothing :) */ }
