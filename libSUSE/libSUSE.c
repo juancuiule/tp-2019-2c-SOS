@@ -46,6 +46,7 @@ int suse_signal(int tid, char* semaforo) {
 }
 
 void hilolay_init() {
+	printf("ejecuta hilolay_init()\n");
 	hilolay_operations hilo_ops = {
 			.suse_create = &suse_create,
 			.suse_schedule_next = &suse_schedule_next,
