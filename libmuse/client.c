@@ -8,5 +8,9 @@ int main(void) {
 
 	muse_init(1, IP, PORT);
 
+	muse_alloc(10);
+
+	muse_close();
+
 	return 0;
 }

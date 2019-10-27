@@ -1,6 +1,10 @@
 #include "libmuse.h"
-#include <stdlib.h>
+
+#include <commons/config.h>
+#include <commons/log.h>
 #include <string.h>
+#include <sys/socket.h>
+#include <unistd.h>
 
 void enviar_algo(char* algo, int conexion) {
 	enviar_mensaje(algo, conexion);
@@ -35,26 +39,30 @@ void enviar_algo(char* algo, int conexion) {
 	log_info(logger, "buffer: %s", buffer);
 }
 
+int conexion;
+
 int muse_init(int id, char* ip, int puerto){
 	logger = log_create("./logs/libMuse.log", "Cliente", 1, LOG_LEVEL_INFO);
 
 
-	int conexion = crear_conexion(ip, puerto);
+	conexion = crear_conexion(ip, puerto);
 
 	log_info(logger, "Conectandome a %s:%s", ip, puerto);
 
-	enviar_algo("Hola, me conecte!", conexion);
-
-	log_destroy(logger);
-	config_destroy(config);
-	liberar_conexion(conexion);
 	return 0;
 }
 
-void muse_close(){ /* Does nothing :) */ }
+void muse_close(){
+	log_destroy(logger);
+	config_destroy(config);
+	liberar_conexion(conexion);
+}
 
 uint32_t muse_alloc(uint32_t tam){
-    return (uint32_t) malloc(tam);
+	// TODO: cambiar enviar_algo por una función que serialice alloc
+	enviar_algo("muse_alloc", conexion);
+	return 0;
+    // return (uint32_t) malloc(tam);
 }
 
 void muse_free(uint32_t dir) {
