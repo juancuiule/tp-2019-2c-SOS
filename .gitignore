@@ -1,6 +1,10 @@
 # Prerequisites
 *.d
 
+# Logs
+MUSE/logs/*.log
+libmuse/logs/*.log
+
 # Object files
 *.o
 *.ko
