@@ -36,7 +36,7 @@ void scheduler() {
 
 	 while(1) {
 		 recv(conexion_cliente, tid, sizeof(tid), 0);
-		 printf("Se ha iniciado el hilo %s\n", tid);
+		 printf("Se ha iniciado el hilo %i\n", tid);
 		 pthread_create(dispatcher_thread, NULL, (void*)dispatcher, NULL);
 	 }
 
