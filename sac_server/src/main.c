@@ -12,6 +12,7 @@ void* atender_conexiones(void* data){
 	int fd;
 	size_t size;
 	off_t offset;
+	uint32_t mode;
 
 	while(true){
 		paquete = paquete_recibir(cliente_fd);
@@ -53,6 +54,11 @@ void* atender_conexiones(void* data){
 				log_msje_info("Me llego operacion release");
 				dslz_cod_release(paquete.payload, &path, &fd);
 				sac_release(path,fd, cliente_fd);
+				break;
+			case COD_MKDIR:
+				log_msje_info("Me llego operacion mkdir");
+				dslz_cod_mkdir(paquete.payload, &path, &mode);
+				sac_mkdir(path,mode, cliente_fd);
 				break;
 			default:
 				log_msje_error("Codigo de operacion erroneo");

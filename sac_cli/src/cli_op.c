@@ -1,6 +1,6 @@
 #include "cli_op.h"
 
-//OK
+//OK Primer funcion que maneja errores!
 int cli_getattr(const char *path, struct stat *statbuf)
 {
 	log_msje_info("Operacion GETATTR sobre path [ %s ]", path);
@@ -17,12 +17,13 @@ int cli_getattr(const char *path, struct stat *statbuf)
 	//...espero respuesta de server
 	uint32_t mode;
 	uint32_t nlink;
-	int size;
+	int size, errnum;
 	respuesta = paquete_recibir(sac_server.fd);
 
 	if(respuesta.header.cod_operacion == COD_ERROR){
 		log_msje_error("getattr me llego cod error");
-		return -1;
+		dslz_res_error(respuesta.payload, &errnum);
+		return -errnum;
 	}
 
 	dslz_res_getattr(respuesta.payload, &mode, &nlink, &size);
@@ -220,15 +221,31 @@ int cli_release(const char *path, struct fuse_file_info *fi)
 
 int cli_flush(const char *path, struct fuse_file_info *fi)
 {
-	log_msje_info("Operacion FLUSH sobre path %s", path);
+	log_msje_info("Operacion FLUSH sobre path [ %s ]", path);
 	return 0;
 }
 
 int cli_mkdir(const char *path, mode_t mode)
 {
-	log_msje_info("mkdir");
+	log_msje_info("Operacion MKDIR sobre path [ %s ]", path);
 
-    return 0;
+	package_t paquete, respuesta;
+	paquete = slz_cod_mkdir(path, mode);
+
+	if(!paquete_enviar(sac_server.fd, paquete))
+		log_msje_error("No se pudo enviar el paquete cod mkdir");
+	else
+		log_msje_info("Se envio operacion mkdir al server");
+
+	//espero respuesta del server
+	respuesta = paquete_recibir(sac_server.fd);
+
+	if(respuesta.header.cod_operacion == COD_ERROR){
+		log_msje_error("mkdir me llego cod error");
+		return -1;
+	}
+
+	return 0;
 }
 
 void set_sac_fd(socket_t socket)

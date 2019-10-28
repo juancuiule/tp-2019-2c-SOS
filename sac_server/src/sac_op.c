@@ -122,18 +122,22 @@ void sac_getattr(char *path, int cliente_fd)
 	char fpath[PATH_MAX];
 	sac_fullpath(fpath, path);
 
-	int res;
+	int res, err;
 	struct stat stbuf;
 	//ejecuto operacion
 	res = lstat(fpath, &stbuf);
 
     if (res == -1) {
     	log_msje_error("getattr: [ %s ]", strerror(errno));
-    	paquete = slz_res_getattr(stbuf.st_mode, stbuf.st_nlink, stbuf.st_size ,true);
+    	err = errno;
+    	if (err == ENOENT){
+    		log_msje_error("ENOENT");
+    	}
+    	paquete = slz_res_error(err);
     }
     else {
     	log_msje_info("Exito operacion getattr sobre fs local");
-    	paquete = slz_res_getattr(stbuf.st_mode, stbuf.st_nlink, stbuf.st_size, false);
+    	paquete = slz_res_getattr(stbuf.st_mode, stbuf.st_nlink, stbuf.st_size);
     }
 
     paquete_enviar(cliente_fd, paquete);
@@ -179,6 +183,31 @@ void sac_release(char *path, int fd, int cliente_fd)
     else {
     	log_msje_info("Exito operacion close sobre fs local");
     	paquete = slz_res_release(false);
+    }
+
+    paquete_enviar(cliente_fd, paquete);
+}
+
+void sac_mkdir(char *path, uint32_t mode, int cliente_fd)
+{
+	log_msje_info("SAC MKDIR Path = [ %s ]", path);
+
+	package_t paquete;
+
+	char fpath[PATH_MAX];
+	sac_fullpath(fpath, path);
+
+	int res;
+	//ejecuto operacion
+	res = mkdir(fpath, mode);
+
+    if (res == -1) {
+    	log_msje_error("mkdir: [ %s ]", strerror(errno));
+    	paquete = slz_res_mkdir(true);
+    }
+    else {
+    	log_msje_info("Exito operacion mkdir sobre fs local");
+    	paquete = slz_res_mkdir(false);
     }
 
     paquete_enviar(cliente_fd, paquete);

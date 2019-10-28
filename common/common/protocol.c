@@ -126,6 +126,24 @@ bool paquete_enviar(int socket, package_t paquete)
 }
 
 
+//errno especifico
+package_t slz_res_error(int errnum)
+{
+	package_t paquete;
+
+	int tam_payload = sizeof(int);
+	paquete.header = header_get('S', COD_ERROR, tam_payload);
+	paquete.payload = malloc(tam_payload);
+	memcpy(paquete.payload, &errnum, sizeof(int));
+
+	return paquete;
+}
+
+void dslz_res_error(void *buffer, int *errnum)
+{
+	memcpy(errnum, buffer, sizeof(int));
+}
+
 /*
  * ------------ Protocolo Operaciones SAC CLI ------------ *
  */
@@ -257,6 +275,27 @@ package_t slz_cod_release(const char *path, int fd)
 
 	return paquete;
 }
+
+package_t slz_cod_mkdir(const char *path, uint32_t mode)
+{
+	package_t paquete;
+	int tam_path = strlen(path);
+	int tam_payload = sizeof(int) + tam_path + sizeof(uint32_t);
+
+	paquete.header = header_get('C', COD_MKDIR, tam_payload);
+	paquete.payload = malloc(tam_payload);
+
+	int offs=0;
+	memcpy(paquete.payload, &tam_path  ,sizeof(int));
+	offs+=sizeof(int);
+	memcpy(paquete.payload+offs, path, tam_path);
+	offs+=tam_path;
+	memcpy(paquete.payload+offs, &mode, sizeof(uint32_t));
+
+	return paquete;
+
+}
+
 
 //desc: dslz el payload respuesta de server, guarda la direccion del DIR
 void dslz_res_opendir(void *buffer, intptr_t* dir)
@@ -420,6 +459,24 @@ void dslz_cod_release(void *buffer, char **path, int *fd)
 	memcpy(fd, buffer+offs, sizeof(int));
 }
 
+void dslz_cod_mkdir(void *buffer, char **path, uint32_t *mode)
+{
+	int offs = 0;
+
+	int tam_path;
+	memcpy(&tam_path, buffer, sizeof(int));
+	offs += sizeof(int);
+
+	char *ruta = malloc(tam_path+1);
+	memcpy(ruta, buffer+offs, tam_path);
+	offs += tam_path;
+
+	ruta[tam_path]='\0';
+	*path = ruta;
+
+	memcpy(mode, buffer+offs, sizeof(uint32_t));
+}
+
 //desc: arma paquete con el pointer adress de DIR
 package_t slz_res_opendir(DIR *dp, bool error)
 {
@@ -435,7 +492,7 @@ package_t slz_res_opendir(DIR *dp, bool error)
 		int tam_payload = sizeof(intptr_t);
 		paquete.header = header_get('S', COD_OPENDIR, tam_payload);
 		paquete.payload = malloc(tam_payload);
-		memcpy(paquete.payload, &dp, sizeof(intptr_t));//ACÁ LE ESTOY PASANDO POINTER ADRESS DE DIR
+		memcpy(paquete.payload, &dp, sizeof(intptr_t));
 	}
 
 	return paquete;
@@ -520,20 +577,16 @@ package_t slz_res_open(int fd, bool error)
 	return paquete;
 }
 
-package_t slz_res_getattr(uint32_t mode, uint32_t nlink, int size, bool error)
+package_t slz_res_getattr(uint32_t mode, uint32_t nlink, int size)
 {
 	package_t paquete;
 
-	if (error){
-		paquete.header = header_get('S', COD_ERROR, 0);
-	}else{
-		int tam_payload = sizeof(uint32_t) + sizeof(uint32_t) + sizeof(int);
-		paquete.header = header_get('S', COD_GETATTR, tam_payload);
-		paquete.payload = malloc(tam_payload);
-		memcpy(paquete.payload, &mode, sizeof(uint32_t));
-		memcpy(paquete.payload+sizeof(uint32_t), &nlink, sizeof(uint32_t));
-		memcpy(paquete.payload+sizeof(uint32_t)*2, &size, sizeof(int));
-	}
+	int tam_payload = sizeof(uint32_t) + sizeof(uint32_t) + sizeof(int);
+	paquete.header = header_get('S', COD_GETATTR, tam_payload);
+	paquete.payload = malloc(tam_payload);
+	memcpy(paquete.payload, &mode, sizeof(uint32_t));
+	memcpy(paquete.payload+sizeof(uint32_t), &nlink, sizeof(uint32_t));
+	memcpy(paquete.payload+sizeof(uint32_t)*2, &size, sizeof(int));
 
 	return paquete;
 }
@@ -571,3 +624,17 @@ package_t slz_res_release(bool error)
 
 	return paquete;
 }
+
+package_t slz_res_mkdir(bool error)
+{
+	package_t paquete;
+
+	if (error){
+		paquete.header = header_get('S', COD_ERROR, 0);
+	} else {
+		paquete.header = header_get('S', COD_MKDIR, 0);
+	}
+
+	return paquete;
+}
+
