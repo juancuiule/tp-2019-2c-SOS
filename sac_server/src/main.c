@@ -60,6 +60,11 @@ void* atender_conexiones(void* data){
 				dslz_cod_mkdir(paquete.payload, &path, &mode);
 				sac_mkdir(path,mode, cliente_fd);
 				break;
+			case COD_RMDIR:
+				log_msje_info("Me llego operacion rmdir");
+				dslz_cod_rmdir(paquete.payload, &path);
+				sac_rmdir(path,cliente_fd);
+				break;
 			default:
 				log_msje_error("Codigo de operacion erroneo");
 				break;

@@ -23,6 +23,7 @@ typedef enum{
 	COD_READ,
 	COD_RELEASE,
 	COD_MKDIR,
+	COD_RMDIR,
 	COD_ERROR
 }cod_operation;
 
@@ -59,15 +60,14 @@ package_t slz_cod_getattr(const char *path);
 package_t slz_cod_read(const char *path, int fd, size_t size, off_t offset);
 package_t slz_cod_release(const char *path, int fd);
 package_t slz_cod_mkdir(const char *path, uint32_t mode);
+package_t slz_cod_rmdir(const char *path);
 
 void dslz_res_opendir(void *buffer, intptr_t* dir);
 void dslz_res_readdir(void *buffer, t_list** filenames);
-//res_closedir ... no recibimos nada en el payload
 void dslz_res_open(void *buffer, int *fd);
 void dslz_res_getattr(void *buffer, uint32_t *mode, uint32_t *nlink, int *size);
 void dslz_res_read(void *buffer, char *buf, int *size);
-//res release ... solo cod op
-//res mkdir ... solo cod op
+
 
 //---Protocolo operaciones sac server---
 
@@ -79,18 +79,19 @@ void dslz_cod_getattr(void *buffer, char**path);
 void dslz_cod_read(void *buffer, char **path, int *fd, size_t *size, off_t *offset);
 void dslz_cod_release(void *buffer, char **path, int *fd);
 void dslz_cod_mkdir(void *buffer, char **path, uint32_t *mode);
+void dslz_cod_rmdir(void *buffer, char**path);
 
-package_t slz_res_opendir(DIR *dp, bool error);
-package_t slz_res_readdir(t_list * filenames, bool error);
-package_t slz_res_releasedir(bool error);
-package_t slz_res_open(int fd, bool error);
+package_t slz_res_opendir(DIR *dp);
+package_t slz_res_readdir(t_list * filenames);
+package_t slz_res_open(int fd);
 package_t slz_res_getattr(uint32_t mode, uint32_t nlink, int size);
-package_t slz_res_read(char *buf, ssize_t ssize, bool error);
-package_t slz_res_release(bool error);
-package_t slz_res_mkdir(bool error);
+package_t slz_res_read(char *buf, ssize_t ssize);
 
 //Para los errores
 void dslz_res_error(void *buffer, int *errnum);
 package_t slz_res_error(int errnum);
+
+//Res simple
+package_t slz_simple_res(cod_operation cod);
 
 #endif /* COMMON_PROTOCOL_H_ */

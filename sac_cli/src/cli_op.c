@@ -1,6 +1,6 @@
 #include "cli_op.h"
 
-//OK Primer funcion que maneja errores!
+//OK
 int cli_getattr(const char *path, struct stat *statbuf)
 {
 	log_msje_info("Operacion GETATTR sobre path [ %s ]", path);
@@ -53,8 +53,10 @@ int cli_opendir(const char *path, struct fuse_file_info *fi)
 	respuesta = paquete_recibir(sac_server.fd);
 
 	if(respuesta.header.cod_operacion == COD_ERROR){
+		int err;
 		log_msje_error("opendir me llego cod error");
-		return -1;
+		dslz_res_error(respuesta.payload, &err);
+		return -err;
 	}
 
 	dslz_res_opendir(respuesta.payload, &dir);
@@ -84,8 +86,10 @@ int cli_readdir(const char *path, void *buf, fuse_fill_dir_t filler, off_t offse
 	respuesta = paquete_recibir(sac_server.fd);
 
 	if(respuesta.header.cod_operacion == COD_ERROR){
+		int err;
 		log_msje_error("readdir me llego cod error");
-		return -1;
+		dslz_res_error(respuesta.payload, &err);
+		return -err;
 	}
 
 	dslz_res_readdir(respuesta.payload, &files);
@@ -126,13 +130,11 @@ int cli_releasedir(const char *path, struct fuse_file_info *fi)
 	respuesta = paquete_recibir(sac_server.fd);
 
 	if(respuesta.header.cod_operacion == COD_ERROR){
+		int err;
 		log_msje_error("releasedir me llego cod error");
-		return -1;
+		dslz_res_error(respuesta.payload, &err);
+		return -err;
 	}
-
-	if(respuesta.header.cod_operacion == COD_RELEASEDIR)
-		log_msje_info("releasedir al server todo ok");
-	//no recibo nada del server solo codrealesedir en señal de todo ok
 
 	return 0;
 }
@@ -155,8 +157,10 @@ int cli_open(const char *path, struct fuse_file_info *fi)
 	respuesta = paquete_recibir(sac_server.fd);
 
 	if(respuesta.header.cod_operacion == COD_ERROR){
-		log_msje_error("open me llego cod error");
-		return -1;
+		int err;
+		log_msje_error("opend me llego cod error");
+		dslz_res_error(respuesta.payload, &err);
+		return -err;
 	}
 
 	int fd;
@@ -186,8 +190,10 @@ int cli_read(const char *path, char *buf, size_t size, off_t offset, struct fuse
 	respuesta = paquete_recibir(sac_server.fd);
 
 	if(respuesta.header.cod_operacion == COD_ERROR){
+		int err;
 		log_msje_error("read me llego cod error");
-		return -1;
+		dslz_res_error(respuesta.payload, &err);
+		return -err;
 	}
 
 	int leido;
@@ -212,8 +218,10 @@ int cli_release(const char *path, struct fuse_file_info *fi)
 	respuesta = paquete_recibir(sac_server.fd);
 
 	if(respuesta.header.cod_operacion == COD_ERROR){
+		int err;
 		log_msje_error("release me llego cod error");
-		return -1;
+		dslz_res_error(respuesta.payload, &err);
+		return -err;
 	}
 
 	return 0;
@@ -241,8 +249,35 @@ int cli_mkdir(const char *path, mode_t mode)
 	respuesta = paquete_recibir(sac_server.fd);
 
 	if(respuesta.header.cod_operacion == COD_ERROR){
+		int err;
 		log_msje_error("mkdir me llego cod error");
-		return -1;
+		dslz_res_error(respuesta.payload, &err);
+		return -err;
+	}
+
+	return 0;
+}
+
+int cli_rmdir(const char *path)
+{
+	log_msje_info("Operacion RMDIR sobre path [ %s ]", path);
+
+	package_t paquete, respuesta;
+	paquete = slz_cod_rmdir(path);
+
+	if(!paquete_enviar(sac_server.fd, paquete))
+		log_msje_error("No se pudo enviar el paquete cod rmdir");
+	else
+		log_msje_info("Se envio operacion rmdir al server");
+
+	//espero respuesta del server
+	respuesta = paquete_recibir(sac_server.fd);
+
+	if(respuesta.header.cod_operacion == COD_ERROR){
+		int err;
+		log_msje_error("rmdir me llego cod error");
+		dslz_res_error(respuesta.payload, &err);
+		return -err;
 	}
 
 	return 0;
@@ -263,4 +298,5 @@ struct fuse_operations cli_oper = {
 		.release = cli_release,
 		.flush = cli_flush,
 		.mkdir = cli_mkdir,
+		.rmdir = cli_rmdir,
 };

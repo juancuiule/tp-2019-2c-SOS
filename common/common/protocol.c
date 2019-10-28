@@ -296,6 +296,20 @@ package_t slz_cod_mkdir(const char *path, uint32_t mode)
 
 }
 
+package_t slz_cod_rmdir(const char *path)
+{
+	package_t paquete;
+	int tam_path = strlen(path);
+	int tam_payload = sizeof(int) + tam_path;
+
+	paquete.header = header_get('C', COD_RMDIR, tam_payload);
+	paquete.payload = malloc(tam_payload);
+
+	memcpy(paquete.payload              ,&tam_path  ,sizeof(int));
+	memcpy(paquete.payload+sizeof(int)	,path		,tam_path);
+
+	return paquete;
+}
 
 //desc: dslz el payload respuesta de server, guarda la direccion del DIR
 void dslz_res_opendir(void *buffer, intptr_t* dir)
@@ -477,8 +491,19 @@ void dslz_cod_mkdir(void *buffer, char **path, uint32_t *mode)
 	memcpy(mode, buffer+offs, sizeof(uint32_t));
 }
 
+void dslz_cod_rmdir(void *buffer, char**path)
+{
+	int tam_path;
+	memcpy(&tam_path, buffer, sizeof(int));
+
+	char *ruta = malloc(tam_path+1);
+	memcpy(ruta, buffer+sizeof(int), tam_path);
+	ruta[tam_path]='\0';
+	*path = ruta;
+}
+
 //desc: arma paquete con el pointer adress de DIR
-package_t slz_res_opendir(DIR *dp, bool error)
+package_t slz_res_opendir(DIR *dp)
 {
 	package_t paquete;
 
@@ -486,14 +511,10 @@ package_t slz_res_opendir(DIR *dp, bool error)
 	log_msje_info("POINTER size : [ %d ]", sizeof(dp));
 	log_msje_info("INTPTR size : [ %d ]", sizeof(intptr_t));
 
-	if (error){
-		paquete.header = header_get('S', COD_ERROR, 0);
-	}else{
-		int tam_payload = sizeof(intptr_t);
-		paquete.header = header_get('S', COD_OPENDIR, tam_payload);
-		paquete.payload = malloc(tam_payload);
-		memcpy(paquete.payload, &dp, sizeof(intptr_t));
-	}
+	int tam_payload = sizeof(intptr_t);
+	paquete.header = header_get('S', COD_OPENDIR, tam_payload);
+	paquete.payload = malloc(tam_payload);
+	memcpy(paquete.payload, &dp, sizeof(intptr_t));
 
 	return paquete;
 }
@@ -516,63 +537,42 @@ static int get_fullsize(t_list *filenames)
 	return filesizes;
 }
 
-package_t slz_res_readdir(t_list * filenames, bool error)
+package_t slz_res_readdir(t_list * filenames)
 {
 	package_t paquete;
 	int numfiles = list_size(filenames);
 
-	if (error){
-		paquete.header = header_get('S', COD_ERROR, 0);
+	int tam_payload = sizeof(int) + sizeof(int)*numfiles + get_fullsize(filenames);
+	paquete.header = header_get('S', COD_READDIR, tam_payload);
+	paquete.payload = malloc(tam_payload);
 
-	} else {
-		int tam_payload = sizeof(int) + sizeof(int)*numfiles + get_fullsize(filenames);
-		paquete.header = header_get('S', COD_READDIR, tam_payload);
-		paquete.payload = malloc(tam_payload);
+	memcpy(paquete.payload, &numfiles, sizeof(int));
 
-		memcpy(paquete.payload, &numfiles, sizeof(int));
+	t_link_element *element = filenames->head;
+	t_link_element *aux = NULL;
+	int bytes = sizeof(int);
+	do{
+		aux = element->next;
+		int filesize = strlen(element->data);
+		memcpy(paquete.payload + bytes, 			&filesize,				sizeof(int));
+		memcpy(paquete.payload +sizeof(int)+ bytes, &(element->data[0]), 	filesize);
+		bytes += filesize+sizeof(int);
+		element=aux;
 
-		t_link_element *element = filenames->head;
-		t_link_element *aux = NULL;
-		int bytes = sizeof(int);
-		do{
-			aux = element->next;
-			int filesize = strlen(element->data);
-			memcpy(paquete.payload + bytes, 			&filesize,				sizeof(int));
-			memcpy(paquete.payload +sizeof(int)+ bytes, &(element->data[0]), 	filesize);
-			bytes += filesize+sizeof(int);
-			element=aux;
+	}while (element != NULL);
 
-		}while (element != NULL);
-
-	}
-	return paquete;
-}
-
-package_t slz_res_releasedir(bool error)
-{
-	package_t paquete;
-
-	if (error){
-		paquete.header = header_get('S', COD_ERROR, 0);
-	} else {
-		paquete.header = header_get('S', COD_RELEASEDIR, 0);
-	}
 
 	return paquete;
 }
 
-package_t slz_res_open(int fd, bool error)
+package_t slz_res_open(int fd)
 {
 	package_t paquete;
 
-	if (error){
-		paquete.header = header_get('S', COD_ERROR, 0);
-	}else{
-		int tam_payload = sizeof(int);
-		paquete.header = header_get('S', COD_OPEN, tam_payload);
-		paquete.payload = malloc(tam_payload);
-		memcpy(paquete.payload, &fd, sizeof(int));
-	}
+	int tam_payload = sizeof(int);
+	paquete.header = header_get('S', COD_OPEN, tam_payload);
+	paquete.payload = malloc(tam_payload);
+	memcpy(paquete.payload, &fd, sizeof(int));
 
 	return paquete;
 }
@@ -591,50 +591,26 @@ package_t slz_res_getattr(uint32_t mode, uint32_t nlink, int size)
 	return paquete;
 }
 
-package_t slz_res_read(char *buf, ssize_t ssize, bool error)
+package_t slz_res_read(char *buf, ssize_t ssize)
 {
 	package_t paquete;
 
-	if (error){
-		paquete.header = header_get('S', COD_ERROR, 0);
-	}else{
-		int tam_buff = strlen(buf);
-		int tam_payload = sizeof(int) + tam_buff +sizeof(ssize_t);
+	int tam_buff = strlen(buf);
+	int tam_payload = sizeof(int) + tam_buff +sizeof(ssize_t);
 
-		paquete.header = header_get('S', COD_READ, tam_payload);
-		paquete.payload = malloc(tam_payload);
+	paquete.header = header_get('S', COD_READ, tam_payload);
+	paquete.payload = malloc(tam_payload);
 
-		memcpy(paquete.payload, &tam_buff, sizeof(int));
-		memcpy(paquete.payload+sizeof(int), buf, tam_buff);
-		memcpy(paquete.payload+sizeof(int)+tam_buff, &ssize, sizeof(ssize_t));
-	}
+	memcpy(paquete.payload, &tam_buff, sizeof(int));
+	memcpy(paquete.payload+sizeof(int), buf, tam_buff);
+	memcpy(paquete.payload+sizeof(int)+tam_buff, &ssize, sizeof(ssize_t));
 
 	return paquete;
 }
 
-package_t slz_res_release(bool error)
+package_t slz_simple_res(cod_operation cod)
 {
 	package_t paquete;
-
-	if (error){
-		paquete.header = header_get('S', COD_ERROR, 0);
-	} else {
-		paquete.header = header_get('S', COD_RELEASEDIR, 0);
-	}
-
+	paquete.header = header_get('S', cod, 0);
 	return paquete;
 }
-
-package_t slz_res_mkdir(bool error)
-{
-	package_t paquete;
-
-	if (error){
-		paquete.header = header_get('S', COD_ERROR, 0);
-	} else {
-		paquete.header = header_get('S', COD_MKDIR, 0);
-	}
-
-	return paquete;
-}
-
