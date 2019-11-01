@@ -21,8 +21,12 @@ int suse_create(int tid) {
 	  bcopy((char *)servidor->h_addr, (char *)&cliente.sin_addr.s_addr, sizeof(servidor->h_length));
 	  connect(conexion,(struct sockaddr *)&cliente, sizeof(cliente));
 	  printf("Conectado con %s:%d\n",inet_ntoa(cliente.sin_addr),htons(cliente.sin_port));
-	  send(conexion, tid, sizeof(tid), 0);
-	  return 0;
+	  printf("Escribe un mensaje: ");
+	  fgets(buffer, 100, stdin);
+	  send(conexion, buffer, 100, 0);
+	  bzero(buffer, 100);
+	  recv(conexion, buffer, 100, 0);
+	  printf("%s", buffer);
 }
 
 int suse_schedule_next() {

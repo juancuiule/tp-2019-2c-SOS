@@ -11,6 +11,8 @@
 #include <stdio.h>
 #include <commons/collections/queue.h>
 
+int PID;
+
 t_queue* cola_ready;
 t_queue* cola_exec;
 

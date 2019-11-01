@@ -16,31 +16,50 @@ void inicializar_colas() {
 }
 
 void scheduler() {
-	 int conexion_servidor, conexion_cliente, tid;
-	 struct sockaddr_in servidor, cliente;
-	 pthread_t dispatcher_thread;
+	  int conexion_servidor, conexion_cliente;
+	  socklen_t longc;
+	  struct sockaddr_in servidor, cliente;
+	  char buffer[100];
+	  conexion_servidor = socket(AF_INET, SOCK_STREAM, 0);
+	  bzero((char *)&servidor, sizeof(servidor));
+	  servidor.sin_family = AF_INET;
+	  servidor.sin_port = htons(LISTEN_PORT);
+	  servidor.sin_addr.s_addr = inet_addr(LISTEN_IP);
 
-	 conexion_servidor = socket(AF_INET, SOCK_STREAM, 0);
-	 bzero((char *)&servidor, sizeof(servidor));
-	 servidor.sin_family = AF_INET;
-	 servidor.sin_port = htons(LISTEN_PORT);
-     servidor.sin_addr.s_addr = inet_addr(LISTEN_IP);
+	  if(bind(conexion_servidor, (struct sockaddr *)&servidor, sizeof(servidor)) < 0)
+	  {
+	    printf("Error al asociar el puerto a la conexion\n");
+	    close(conexion_servidor);
+	    return;
+	  }
 
-	 bind(conexion_servidor, (struct sockaddr*)&servidor, sizeof(servidor));
-	 listen(conexion_servidor, 3);
-	 printf("A la escucha en el puerto %d\n", ntohs(servidor.sin_port));
-	 socklen_t longc = sizeof(cliente);
-	 conexion_cliente = accept(conexion_servidor, (struct sockaddr *)&cliente, &longc);
+	  listen(conexion_servidor, 3);
+	  printf("A la escucha en el puerto %d\n", ntohs(servidor.sin_port));
+	  longc = sizeof(cliente);
+	  conexion_cliente = accept(conexion_servidor, (struct sockaddr *)&cliente, &longc);
 
-	 printf("Conectando con %s:%d\n", inet_ntoa(cliente.sin_addr),htons(cliente.sin_port));
+	  if(conexion_cliente<0)
+	  {
+	    printf("Error al aceptar trafico\n");
+	    close(conexion_servidor);
+	    return;
+	  }
 
-	 while(1) {
-		 recv(conexion_cliente, tid, sizeof(tid), 0);
-		 printf("El hilo %i ha ingresado al planificador.\n", tid);
-		 pthread_create(dispatcher_thread, NULL, (void*)dispatcher, tid);
-	 }
-
-	 close(conexion_servidor);
+	  printf("Conectando con %s:%d\n", inet_ntoa(cliente.sin_addr),htons(cliente.sin_port));
+	  if(recv(conexion_cliente, buffer, 100, 0) < 0)
+	  {
+	    printf("Error al recibir los datos\n");
+	    close(conexion_servidor);
+	    return;
+	  }
+	  else
+	  {
+	    printf("%s\n", buffer);
+	    bzero((char *)&buffer, sizeof(buffer));
+	    send(conexion_cliente, "Recibido\n", 13, 0);
+	  }
+	  close(conexion_servidor);
+	  return;
 }
 
 
