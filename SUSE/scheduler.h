@@ -24,6 +24,6 @@ t_queue* cola_blocked;
 t_queue* cola_exit;
 
 void inicializar_colas();
-void scheduler();
+int scheduler();
 
 #endif /* SCHEDULER_H_ */
