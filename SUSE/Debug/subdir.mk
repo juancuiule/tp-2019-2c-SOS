@@ -7,19 +7,19 @@ C_SRCS += \
 ../SUSE.c \
 ../configuracion.c \
 ../dispatcher.c \
-../scheduler.c 
+../servidor.c 
 
 OBJS += \
 ./SUSE.o \
 ./configuracion.o \
 ./dispatcher.o \
-./scheduler.o 
+./servidor.o 
 
 C_DEPS += \
 ./SUSE.d \
 ./configuracion.d \
 ./dispatcher.d \
-./scheduler.d 
+./servidor.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

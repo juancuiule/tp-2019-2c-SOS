@@ -12,6 +12,7 @@ void inicializar_colas_d() {
 	cola_exec = queue_create();
 }
 
-void dispatcher() {
+void dispatcher(int tid) {
 	inicializar_colas();
+	printf("Ha ingresado al planificador el ULT con el TID %i\n", tid);
 }

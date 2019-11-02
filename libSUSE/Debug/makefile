@@ -36,7 +36,7 @@ liblibSUSE.so: $(OBJS) $(USER_OBJS)
 clean:
 	-$(RM) $(LIBRARIES)$(OBJS)$(C_DEPS) liblibSUSE.so
 	-@echo ' '
-
+	
 install: all
 	sudo cp liblibSUSE.so /usr/lib
 
