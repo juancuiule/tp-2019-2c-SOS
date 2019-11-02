@@ -13,6 +13,9 @@ void recibir_mensaje(int socket_cliente) {
 	free(buffer);
 }
 
+
+
+
 int respond_to_client(int cliente_fd) {
 	while(1) {
 		int cod_op = recv_muse_op_code(cliente_fd);
@@ -20,6 +23,34 @@ int respond_to_client(int cliente_fd) {
 		switch(cod_op) {
 			case INIT_MUSE:
 				recibir_mensaje(cliente_fd);
+				break;
+			case ALLOC:
+				log_info(logger, "muse_alloc");
+				//realizar cod_op
+				break;
+			case FREE:
+				log_info(logger, "muse_free.");
+				//realizar cod_op
+				break;
+			case GET:
+				log_info(logger, "muse_get");
+				//realizar cod_op
+				break;
+			case CPY:
+				log_info(logger, "muse_copy.");
+				//realizar cod_op
+				break;
+			case MAP:
+				log_info(logger, "muse_map");
+				//realizar cod_op
+				break;
+			case SYNC:
+				log_info(logger, "muse_sync");
+				//realizar cod_op
+				break;
+			case UNMAP:
+				log_info(logger, "muse_unmap");
+				//realizar cod_op
 				break;
 			case DISCONNECT_MUSE:
 				log_info(logger, "El cliente se desconecto.");
