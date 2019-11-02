@@ -7,9 +7,6 @@ void recibir_mensaje(int socket_cliente) {
 
 	log_info(logger, "Me llego el mensaje: %s", buffer);
 
-//	char* respuesta = "Hola, ya te escuche!";
-//
-//	enviar_mensaje(respuesta, socket_cliente);
 	free(buffer);
 }
 
@@ -20,6 +17,7 @@ void respond_alloc(int socket_cliente, char* id) {
 
 	int tam_pedido = atoi(buffer);
 	void* dir = malloc(tam_pedido);
+	memcpy(dir, "hola", 5);
 
 	log_info(logger, "El cliente con id: %s hizo muse_malloc con %i", id, tam_pedido);
 	
@@ -27,6 +25,19 @@ void respond_alloc(int socket_cliente, char* id) {
 	snprintf(str, sizeof str, "%u", dir);
 
 	send_something(socket_cliente, ALLOC, str);
+}
+
+void respond_get(int socket_cliente, char* id) {
+	int size;
+
+	char* buffer = recv_buffer(&size, socket_cliente);
+
+	char* x;
+	int dir = strtoul(buffer, &x, 10);
+
+	log_info(logger, "El cliente con id: %s hizo get a la dir: %u", id, dir);
+	log_info(logger, "en dir hay: %s", dir);
+	send_something(socket_cliente, ALLOC, dir);
 }
 
 int respond_to_client(int cliente_fd) {
@@ -40,7 +51,6 @@ int respond_to_client(int cliente_fd) {
 			case ALLOC:
 				log_info(logger, "muse_alloc");
 				respond_alloc(cliente_fd, id);
-				//realizar cod_op
 				break;
 			case FREE:
 				log_info(logger, "muse_free.");
@@ -48,7 +58,7 @@ int respond_to_client(int cliente_fd) {
 				break;
 			case GET:
 				log_info(logger, "muse_get");
-				//realizar cod_op
+				respond_get(cliente_fd, id);
 				break;
 			case CPY:
 				log_info(logger, "muse_copy.");

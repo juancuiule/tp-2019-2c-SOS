@@ -59,7 +59,7 @@ void send_package(muse_package* package, int socket_cliente);
 void send_something(int socket_cliente, muse_op_code op_code, char* something);
 void send_connect(int socket_cliente);
 void send_disconnet(int socket_cliente);
-void send_alloc(int socket_cliente, uint32_t tam);
+int send_alloc(int socket_cliente, uint32_t tam);
 
 int init_server(char* IP, char* PORT);
 int recibir_cliente(int socket_servidor);

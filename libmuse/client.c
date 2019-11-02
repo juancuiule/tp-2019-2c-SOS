@@ -9,7 +9,12 @@ int main(void) {
 
 	muse_init((int) getpid(), IP, PORT);
 
-	muse_alloc(10);
+	void* algo = muse_alloc(5);
+	void* otro = malloc(5);
+	log_info(logger, "algo: %u", algo);
+	log_info(logger, "otro: %s", otro);
+	muse_get(otro, algo, 5);
+	log_info(logger, "otro despues de copy: %s", otro);
 
 	muse_close();
 

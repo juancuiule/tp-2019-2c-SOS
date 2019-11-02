@@ -33,8 +33,8 @@ void muse_close(){
 
 uint32_t muse_alloc(uint32_t tam){
 	log_info(logger, "muse_alloc: tam = %i", tam);
-	send_alloc(conexion, tam);
-    return (uint32_t) malloc(tam);
+	return send_alloc(conexion, tam);
+    // return (uint32_t) malloc(tam);
 }
 
 void muse_free(uint32_t dir) {
@@ -42,7 +42,9 @@ void muse_free(uint32_t dir) {
 }
 
 int muse_get(void* dst, uint32_t src, size_t n){
-    memcpy(dst, (void*) src, n);
+	log_info(logger, "muse_get: desde %u", src);
+	void* data = send_get(conexion, src, n);
+	memcpy(dst, data, 5);
     return 0;
 }
 

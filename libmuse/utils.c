@@ -109,16 +109,31 @@ void send_disconnet(int socket_cliente) {
 	send_something(socket_cliente, DISCONNECT_MUSE, "Disconnect");
 }
 
-void send_alloc(int socket_cliente, uint32_t tam) {
+int send_alloc(int socket_cliente, uint32_t tam) {
 	char str[11];
 	snprintf(str, sizeof str, "%u", tam);
 	send_something(socket_cliente, ALLOC, str);
 
 	int cod_op = recv_muse_op_code(socket_cliente);
-	recv_muse_id(socket_cliente);
+	recv_muse_id(socket_cliente); // esto no le debería llegar al cliente (libmuse)
 	int size;
 	char* buffer = recv_buffer(&size, socket_cliente);
 	log_info(logger, "dir: %s", buffer);
+	char* x;
+	return strtoul(buffer, &x, 10);
+}
+
+void* send_get(int socket_cliente, uint32_t src, size_t n) {
+	char str[11];
+	snprintf(str, sizeof str, "%u", src);
+	send_something(socket_cliente, GET, str);
+
+	int cod_op = recv_muse_op_code(socket_cliente);
+	recv_muse_id(socket_cliente); // esto no le debería llegar al cliente (libmuse)
+	int size;
+	char* buffer = recv_buffer(&size, socket_cliente);
+	log_info(logger, "data: %s", buffer);
+	return buffer;
 }
 
 int init_server(char* IP, char* PORT) {
@@ -228,7 +243,6 @@ char* recv_muse_id(int socket_cliente) {
 	memcpy(id, pid_str, len1);
     memcpy(id + len1, separador, len2);
 	memcpy(id + len1 + len2, ip, len3 + 1);
-	log_info(logger, "id: %s", id);
 	return id;
 }
 
