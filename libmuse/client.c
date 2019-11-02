@@ -10,9 +10,9 @@ int main(void) {
 	muse_init((int) getpid(), IP, PORT);
 
 	void* mem_muse = muse_alloc(5);
+	log_info(logger, "dir de mem_muse: %u", mem_muse);
 	void* x = malloc(5);
 	void* y = malloc(5);
-	log_info(logger, "dir de mem_muse: %u", mem_muse);
 
 	muse_get(x, mem_muse, 5);
 	log_info(logger, "x es: %s", x);

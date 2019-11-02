@@ -57,6 +57,32 @@ muse_body* create_body(int content_size, void* content) {
 	return body;
 }
 
+muse_response* create_response(response_status status, muse_body* body) {
+	muse_response* response = malloc(sizeof(muse_response));
+	response->status = status;
+	response->body = body;
+	return response;
+}
+
+response_status recv_response_status(int socket_cliente) {
+	response_status status;
+
+	int recv_result = recv(
+		socket_cliente,
+		&status,
+		sizeof(int),
+		MSG_WAITALL
+	);
+
+	if (recv_result != 0) {
+		log_info(logger, "status: %i", status);
+		return status;
+	} else {
+		close(socket_cliente);
+		return -1;
+	}
+}
+
 void free_package(muse_package* package) {
 	free(package->body->content);
 	free(package->body);
@@ -84,12 +110,34 @@ void* serialize_package(muse_package* package, int bytes) {
 	return magic;
 }
 
+void* serialize_response(muse_response* response, int bytes) {
+	void* magic = malloc(bytes);
+	int offset = 0;
+
+	memcpy(magic + offset, &(response->status), sizeof(int));
+	offset += sizeof(int);
+
+	memcpy(magic + offset, &(response->body->content_size), sizeof(int));
+	offset += sizeof(int);
+	memcpy(magic + offset, response->body->content, response->body->content_size);
+	offset += response->body->content_size;
+	
+	return magic;
+}
+
 void send_package(muse_package* package, int socket_cliente) {
 	int bytes =
 		package->header->id->ip_size +
 		package->body->content_size +
 		4 * sizeof(int);
 	void* to_send = serialize_package(package, bytes);
+	send(socket_cliente, to_send, bytes, 0);
+	free(to_send);
+}
+
+void send_response(muse_response* response, int socket_cliente) {
+	int bytes = response->body->content_size + 2 * sizeof(int);
+	void* to_send = serialize_response(response, bytes);
 	send(socket_cliente, to_send, bytes, 0);
 	free(to_send);
 }
@@ -115,8 +163,7 @@ int send_alloc(int socket_cliente, uint32_t tam) {
 	snprintf(str, sizeof str, "%u", tam);
 	send_something(socket_cliente, ALLOC, str);
 
-	int cod_op = recv_muse_op_code(socket_cliente);
-	recv_muse_id(socket_cliente); // esto no le debería llegar al cliente (libmuse)
+	int status = recv_response_status(socket_cliente);
 	int size;
 	char* buffer = recv_buffer(&size, socket_cliente);
 	log_info(logger, "dir: %s", buffer);

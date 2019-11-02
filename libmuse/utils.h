@@ -44,6 +44,16 @@ typedef struct {
 	muse_body* body;
 } muse_package;
 
+typedef enum {
+	SUCCESS,
+	ERROR
+} response_status;
+
+typedef struct {
+	response_status status;
+	muse_body* body;
+} muse_response;
+
 t_log* logger;
 t_config* config;
 

@@ -17,14 +17,20 @@ void respond_alloc(int socket_cliente, char* id) {
 
 	int tam_pedido = atoi(buffer);
     void* dir = malloc(tam_pedido);
-	memcpy(dir, "hola", 5);
+	
+	memcpy(dir, "hola", 5); // demo porque todavía no tenemos muse_cpy
 
 	log_info(logger, "El cliente con id: %s hizo muse_malloc con %i", id, tam_pedido);
 	
 	char str[11];
 	snprintf(str, sizeof str, "%u", dir);
-
-	send_something(socket_cliente, ALLOC, str);
+	
+	muse_response* response = create_response(
+		SUCCESS,
+		create_body(11, str)
+	);
+	send_response(response, socket_cliente);
+	log_info(logger, "reponse sent");
 }
 
 void respond_get(int socket_cliente, char* id) {
