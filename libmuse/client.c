@@ -9,17 +9,18 @@ int main(void) {
 
 	muse_init((int) getpid(), IP, PORT);
 
-	void* algo = muse_alloc(5);
-	void* otro = malloc(5);
-	void* prueba_free = malloc(5);
-	log_info(logger, "algo: %u", algo);
-	log_info(logger, "otro: %s", otro);
-	muse_get(otro, algo, 5);
-	muse_free(algo);
-	log_info(logger, "otro despues de copy: %s", otro);
-	log_info(logger, "algo es: %u", algo);
-	muse_get(prueba_free, algo, 5);
-	log_info(logger, "prueba_free despues de free & copy: %s", prueba_free);
+	void* mem_muse = muse_alloc(5);
+	void* x = malloc(5);
+	void* y = malloc(5);
+	log_info(logger, "dir de mem_muse: %u", mem_muse);
+
+	muse_get(x, mem_muse, 5);
+	log_info(logger, "x es: %s", x);
+
+	muse_free(mem_muse);
+
+	muse_get(y, mem_muse, 5);
+	log_info(logger, "y es: %s", y);
 
 	muse_close();
 
