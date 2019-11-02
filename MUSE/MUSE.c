@@ -13,19 +13,33 @@ void recibir_mensaje(int socket_cliente) {
 	free(buffer);
 }
 
+void respond_alloc(int socket_cliente, char* id) {
+	int size;
 
+	char* buffer = recv_buffer(&size, socket_cliente);
 
+	int tam_pedido = atoi(buffer);
+	void* dir = malloc(tam_pedido);
+
+	log_info(logger, "El cliente con id: %s hizo muse_malloc con %i", id, tam_pedido);
+	
+	char str[11];
+	snprintf(str, sizeof str, "%u", dir);
+
+	send_something(socket_cliente, ALLOC, str);
+}
 
 int respond_to_client(int cliente_fd) {
 	while(1) {
 		int cod_op = recv_muse_op_code(cliente_fd);
-		recv_muse_id(cliente_fd);
+		char* id = recv_muse_id(cliente_fd);
 		switch(cod_op) {
 			case INIT_MUSE:
 				recibir_mensaje(cliente_fd);
 				break;
 			case ALLOC:
 				log_info(logger, "muse_alloc");
+				respond_alloc(cliente_fd, id);
 				//realizar cod_op
 				break;
 			case FREE:

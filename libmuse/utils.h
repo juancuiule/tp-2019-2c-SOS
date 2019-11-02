@@ -56,13 +56,15 @@ muse_body* create_body(int content_size, void* content);
 void free_package(muse_package* package);
 void* serialize_package(muse_package* package, int bytes);
 void send_package(muse_package* package, int socket_cliente);
+void send_something(int socket_cliente, muse_op_code op_code, char* something);
 void send_connect(int socket_cliente);
 void send_disconnet(int socket_cliente);
+void send_alloc(int socket_cliente, uint32_t tam);
 
 int init_server(char* IP, char* PORT);
 int recibir_cliente(int socket_servidor);
 muse_op_code recv_muse_op_code(int socket_cliente);
-void recv_muse_id(int socket_cliente);
+char* recv_muse_id(int socket_cliente);
 void* recv_buffer(int* size, int socket_cliente);
 
 #endif

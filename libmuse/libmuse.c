@@ -24,7 +24,7 @@ int muse_init(int id, char* ip, int puerto){
 }
 
 void muse_close(){
-	log_info(logger, "libMuse close");
+	log_info(logger, "muse_close");
 	log_destroy(logger);
 	config_destroy(config);
 	send_disconnet(conexion);
@@ -32,6 +32,8 @@ void muse_close(){
 }
 
 uint32_t muse_alloc(uint32_t tam){
+	log_info(logger, "muse_alloc: tam = %i", tam);
+	send_alloc(conexion, tam);
     return (uint32_t) malloc(tam);
 }
 

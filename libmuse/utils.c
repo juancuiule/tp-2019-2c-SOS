@@ -79,8 +79,7 @@ void* serialize_package(muse_package* package, int bytes) {
 	offset += sizeof(int);
 	memcpy(magic + offset, package->body->content, package->body->content_size);
 	offset += package->body->content_size;
-
-	log_info(logger, "offset %i", offset);
+	
 	return magic;
 }
 
@@ -94,22 +93,32 @@ void send_package(muse_package* package, int socket_cliente) {
 	free(to_send);
 }
 
-void send_connect(int socket_cliente) {
-	muse_header* header = create_header(INIT_MUSE);
-	char* message = "Connect";
-	muse_body* body = create_body(strlen(message) + 1, message);
+void send_something(int socket_cliente, muse_op_code op_code, char* something){
+	muse_header* header = create_header(op_code);
+	muse_body* body = create_body(strlen(something) + 1, something);
 	muse_package* package = create_package(header, body);
 	send_package(package, socket_cliente);
 	free_package(package);
 }
 
+void send_connect(int socket_cliente) {
+	send_something(socket_cliente, INIT_MUSE, "Connect");
+}
+
 void send_disconnet(int socket_cliente) {
-	muse_header* header = create_header(DISCONNECT_MUSE);
-	char* message = "Disconnect";
-	muse_body* body = create_body(strlen(message) + 1, message);
-	muse_package* package = create_package(header, body);
-	send_package(package, socket_cliente);
-	free_package(package);
+	send_something(socket_cliente, DISCONNECT_MUSE, "Disconnect");
+}
+
+void send_alloc(int socket_cliente, uint32_t tam) {
+	char str[11];
+	snprintf(str, sizeof str, "%u", tam);
+	send_something(socket_cliente, ALLOC, str);
+
+	int cod_op = recv_muse_op_code(socket_cliente);
+	recv_muse_id(socket_cliente);
+	int size;
+	char* buffer = recv_buffer(&size, socket_cliente);
+	log_info(logger, "dir: %s", buffer);
 }
 
 int init_server(char* IP, char* PORT) {
@@ -194,22 +203,33 @@ muse_op_code recv_muse_op_code(int socket_cliente) {
 	}
 }
 
-void recv_muse_id(int socket_cliente) {
+char* recv_muse_id(int socket_cliente) {
 	int pid;
 	int ip_size;
 
-	int recv_result = recv(
+	recv(
 		socket_cliente,
 		&pid,
 		sizeof(int),
 		MSG_WAITALL
 	);
 
-	char* ip = recv_buffer(&ip_size, socket_cliente);
+	char pid_str[11];
+	snprintf(pid_str, sizeof pid_str, "%i", pid);
+	int len1 = strlen(pid_str);
 
-	log_info(logger, "pid: %i", pid);
-	log_info(logger, "ip_size: %i", ip_size);
-	log_info(logger, "ip: %s", ip);
+	char* separador = "/";
+	int len2 = strlen(separador);
+
+	char* ip = recv_buffer(&ip_size, socket_cliente);
+	int len3 = strlen(ip);
+
+	char *id = malloc(len1 + len2 + len3 + 1);
+	memcpy(id, pid_str, len1);
+    memcpy(id + len1, separador, len2);
+	memcpy(id + len1 + len2, ip, len3 + 1);
+	log_info(logger, "id: %s", id);
+	return id;
 }
 
 void* recv_buffer(int* size, int socket_cliente) {
