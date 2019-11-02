@@ -37,6 +37,7 @@ uint32_t muse_alloc(uint32_t tam){
 }
 
 void muse_free(uint32_t dir) {
+	log_info(logger, "muse_free: a %u", dir);
     send_free(conexion, dir);
 }
 
