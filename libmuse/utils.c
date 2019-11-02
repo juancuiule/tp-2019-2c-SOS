@@ -35,15 +35,16 @@ muse_package* create_package(muse_header* header, muse_body* body) {
 }
 
 muse_header* create_header(muse_op_code code) {
-	int ip_size = strlen("192.168.0.1") + 1;
+	char* ip = "127.0.0.1";
+	int ip_size = strlen(ip) + 1;
 
 	muse_header* header = malloc(sizeof(muse_header));
 	header->code = code;
 	header->id = malloc(sizeof(muse_id));
 	header->id->ip_size = ip_size;
 	header->id->ip = malloc(ip_size);
-	memcpy(header->id->ip, "192.168.0.1", ip_size);
-	header->id->ip = "192.168.0.1";
+	memcpy(header->id->ip, ip, ip_size);
+	header->id->ip = ip;
 	header->id->pid = 1;
 	return header;
 }
@@ -121,6 +122,14 @@ int send_alloc(int socket_cliente, uint32_t tam) {
 	log_info(logger, "dir: %s", buffer);
 	char* x;
 	return strtoul(buffer, &x, 10);
+}
+
+void send_free(int socket_cliente, uint32_t dir) {
+	char str[11];
+	snprintf(str, sizeof str, "%u", dir);
+	log_info(logger, "pido free a: %u", dir);
+	send_something(socket_cliente, FREE, str);
+	return;
 }
 
 void* send_get(int socket_cliente, uint32_t src, size_t n) {

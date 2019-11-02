@@ -16,7 +16,7 @@ void respond_alloc(int socket_cliente, char* id) {
 	char* buffer = recv_buffer(&size, socket_cliente);
 
 	int tam_pedido = atoi(buffer);
-	void* dir = malloc(tam_pedido);
+    void* dir = malloc(tam_pedido);
 	memcpy(dir, "hola", 5);
 
 	log_info(logger, "El cliente con id: %s hizo muse_malloc con %i", id, tam_pedido);
@@ -33,11 +33,22 @@ void respond_get(int socket_cliente, char* id) {
 	char* buffer = recv_buffer(&size, socket_cliente);
 
 	char* x;
-	int dir = strtoul(buffer, &x, 10);
+	void* dir = strtoul(buffer, &x, 10);
 
 	log_info(logger, "El cliente con id: %s hizo get a la dir: %u", id, dir);
-	log_info(logger, "en dir hay: %s", dir);
 	send_something(socket_cliente, ALLOC, dir);
+}
+
+void respond_free(int socket_cliente, char* id) {
+	int size;
+
+	char* buffer = recv_buffer(&size, socket_cliente);
+
+	char* x;
+	void* dir = strtoul(buffer, &x, 10);
+
+	log_info(logger, "El cliente con id: %s hizo free a la dir: %u", id, dir);
+	free(dir);
 }
 
 int respond_to_client(int cliente_fd) {
@@ -54,7 +65,7 @@ int respond_to_client(int cliente_fd) {
 				break;
 			case FREE:
 				log_info(logger, "muse_free.");
-				//realizar cod_op
+				respond_free(cliente_fd, id);
 				break;
 			case GET:
 				log_info(logger, "muse_get");
