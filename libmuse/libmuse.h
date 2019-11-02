@@ -26,34 +26,6 @@
 	#include <pthread.h>
 	#include "utils.h"
 
-	typedef enum {
-		DESCONECTAR_MUSE = -1,
-		INIT_MUSE,
-		ALLOC,
-		FREE,
-		GET,
-		CPY,
-		MAP,
-		SYNC,
-		UNMAP
-	} muse_op_code;
-
-	typedef struct {
-		muse_op_code codigo;
-		pid_t pid;
-		char* ip;
-		int tam_body;
-	} muse_header;
-
-	typedef struct {
-		void* body;
-	} muse_body;
-
-	typedef struct {
-		muse_header header;
-		muse_body body; // void* body;
-	} muse_package;
-
     /**
      * Inicializa la biblioteca de MUSE.
      * @param id El Process (o Thread) ID para identificar el caller en MUSE.

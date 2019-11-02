@@ -12,37 +12,57 @@
 #include <commons/config.h>
 
 typedef enum {
-	DESCONECTAR = -1,
-	MENSAJE,
-	PAQUETE,
-} op_code;
+	DISCONNECT_MUSE = -1,
+	INIT_MUSE,
+	ALLOC,
+	FREE,
+	GET,
+	CPY,
+	MAP,
+	SYNC,
+	UNMAP
+} muse_op_code;
 
 typedef struct {
-	int size;
-	void* stream;
-} t_buffer;
+	int pid;
+	int ip_size;
+	char* ip;
+} muse_id;
 
 typedef struct {
-	op_code codigo_operacion;
-	t_buffer* buffer;
-} t_paquete;
+	muse_op_code code;
+	muse_id* id;
+} muse_header;
+
+typedef struct {
+	int content_size;
+	void* content;
+} muse_body;
+
+typedef struct {
+	muse_header* header;
+	muse_body* body;
+} muse_package;
 
 t_log* logger;
 t_config* config;
 
-int crear_conexion(char *IP, char* PORT);
-void liberar_conexion(int socket_cliente);
+int create_connection(char *IP, char* PORT);
+void free_connection(int socket_cliente);
 
-int iniciar_servidor(char* IP, char* PORT);
+muse_package* create_package(muse_header* header, muse_body* body);
+muse_header* create_header(muse_op_code code);
+muse_body* create_body(int content_size, void* content);
+void free_package(muse_package* package);
+void* serialize_package(muse_package* package, int bytes);
+void send_package(muse_package* package, int socket_cliente);
+void send_connect(int socket_cliente);
+void send_disconnet(int socket_cliente);
+
+int init_server(char* IP, char* PORT);
 int recibir_cliente(int socket_servidor);
-int recibir_operacion(int socket_cliente);
-void* recibir_buffer(int* size, int socket_cliente);
-
-t_paquete* crear_paquete(op_code codigo_operacion, int size, void* buffer);
-void eliminar_paquete(t_paquete* paquete);
-void crear_buffer(t_paquete* paquete, int size, void* buffer);
-void* serializar_paquete(t_paquete* paquete, int bytes);
-void enviar_paquete(t_paquete* paquete, int socket_cliente);
-void enviar_mensaje(char* mensaje, int socket_cliente);
+muse_op_code recv_muse_op_code(int socket_cliente);
+void recv_muse_id(int socket_cliente);
+void* recv_buffer(int* size, int socket_cliente);
 
 #endif

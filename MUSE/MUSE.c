@@ -3,24 +3,25 @@
 void recibir_mensaje(int socket_cliente) {
 	int size;
 
-	char* buffer = recibir_buffer(&size, socket_cliente);
+	char* buffer = recv_buffer(&size, socket_cliente);
 
 	log_info(logger, "Me llego el mensaje: %s", buffer);
 
-	char* respuesta = "Hola, ya te escuche!";
-
-	enviar_mensaje(respuesta, socket_cliente);
+//	char* respuesta = "Hola, ya te escuche!";
+//
+//	enviar_mensaje(respuesta, socket_cliente);
 	free(buffer);
 }
 
 int respond_to_client(int cliente_fd) {
 	while(1) {
-		int cod_op = recibir_operacion(cliente_fd);
+		int cod_op = recv_muse_op_code(cliente_fd);
+		recv_muse_id(cliente_fd);
 		switch(cod_op) {
-			case MENSAJE:
+			case INIT_MUSE:
 				recibir_mensaje(cliente_fd);
 				break;
-			case DESCONECTAR:
+			case DISCONNECT_MUSE:
 				log_info(logger, "El cliente se desconecto.");
 				return EXIT_FAILURE;
 				break;
@@ -38,7 +39,7 @@ int main(void) {
 	char* IP = "127.0.0.1";
 	char* PORT = config_get_string_value(config, "LISTEN_PORT");
 
-	int server_fd = iniciar_servidor(IP, PORT);
+	int server_fd = init_server(IP, PORT);
 	
 	if (server_fd == -1) {
 		return EXIT_FAILURE;

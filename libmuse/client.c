@@ -1,4 +1,5 @@
 #include "client.h"
+#include "unistd.h"
 
 int main(void) {
 	config = config_create("./program.config");
@@ -6,8 +7,7 @@ int main(void) {
 	char* IP = config_get_string_value(config, "IP");
 	char* PORT = config_get_string_value(config, "PORT");
 
-	// TODO: change 1 -> pid
-	muse_init(1, IP, PORT);
+	muse_init((int) getpid(), IP, PORT);
 
 	muse_alloc(10);
 

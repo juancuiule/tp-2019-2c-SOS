@@ -6,6 +6,6 @@
 #include <commons/string.h>
 #include <pthread.h>
 
-#include "utils.h"
+#include "../libmuse/utils.h"
 
 #endif
