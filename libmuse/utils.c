@@ -184,8 +184,7 @@ void* send_get(int socket_cliente, uint32_t src, size_t n) {
 	snprintf(str, sizeof str, "%u", src);
 	send_something(socket_cliente, GET, str);
 
-	int cod_op = recv_muse_op_code(socket_cliente);
-	recv_muse_id(socket_cliente); // esto no le debería llegar al cliente (libmuse)
+	int status = recv_response_status(socket_cliente);
 	int size;
 	char* buffer = recv_buffer(&size, socket_cliente);
 	log_info(logger, "data: %s", buffer);

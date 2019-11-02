@@ -30,7 +30,6 @@ void respond_alloc(int socket_cliente, char* id) {
 		create_body(11, str)
 	);
 	send_response(response, socket_cliente);
-	log_info(logger, "reponse sent");
 }
 
 void respond_get(int socket_cliente, char* id) {
@@ -42,7 +41,12 @@ void respond_get(int socket_cliente, char* id) {
 	void* dir = strtoul(buffer, &x, 10);
 
 	log_info(logger, "El cliente con id: %s hizo get a la dir: %u", id, dir);
-	send_something(socket_cliente, ALLOC, dir);
+	
+	muse_response* response = create_response(
+		SUCCESS,
+		create_body(5, dir)
+	);
+	send_response(response, socket_cliente);
 }
 
 void respond_free(int socket_cliente, char* id) {
