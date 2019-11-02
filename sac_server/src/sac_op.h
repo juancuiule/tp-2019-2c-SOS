@@ -11,6 +11,7 @@
 #include <sys/stat.h>//lstat
 #include <unistd.h>//read pread
 #include <commons/collections/list.h>
+#include <sys/types.h>
 
 #define FS_PATH "/home/utnso/workspace/tp-2019-2c-SOS/sac_server/Debug/SAC"
 #define PATH_MAX 4096 //256
@@ -24,5 +25,7 @@ void sac_read(char *path, int fd, size_t size, off_t offset, int cliente_fd);
 void sac_release(char *path, int fd, int cliente_fd);
 void sac_mkdir(char *path, uint32_t mode, int cliente_fd);
 void sac_rmdir(char *path, int cliente_fd);
+void sac_mknod(char *path, mode_t mode, dev_t dev, int cliente_fd);
+void sac_write(char *path, char *buffer, int fd, size_t size, off_t offset, int cliente_fd);
 
 #endif /* SAC_OP_H_ */

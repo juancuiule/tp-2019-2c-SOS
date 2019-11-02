@@ -311,6 +311,52 @@ package_t slz_cod_rmdir(const char *path)
 	return paquete;
 }
 
+package_t slz_cod_mknod(const char *filename, mode_t mode, dev_t dev){
+	package_t package;
+	int size_filename = strlen(filename);
+	int size_mode = sizeof(mode_t);
+	int size_dev = sizeof(dev_t);
+	int size_payload = sizeof(int)+ size_filename + size_mode + size_dev;
+
+	package.header = header_get('N',COD_MKNOD,size_payload);
+	package.payload = malloc(size_payload);
+
+	memcpy(package.payload										, &size_filename, sizeof(int));
+	memcpy(package.payload+sizeof(int)							, filename		, size_filename);
+	memcpy(package.payload+sizeof(int)+size_filename			, &mode			, size_mode);
+	memcpy(package.payload+sizeof(int)+size_filename+size_mode	, &dev			, size_dev);
+
+	return package;
+}
+
+package_t slz_cod_write(const char *path, const char *buffer, int fd, size_t size, off_t offset)
+{
+	package_t paquete;
+	int tam_path = strlen(path);
+	int tam_buff = strlen(buffer);
+	int tam_payload = sizeof(int) + tam_path +sizeof(int) + tam_buff + sizeof(int) + sizeof(size_t) + sizeof(off_t);
+
+	paquete.header = header_get('C', COD_WRITE, tam_payload);
+	paquete.payload = malloc(tam_payload);
+
+	int offs=0;
+	memcpy(paquete.payload, &tam_path  ,sizeof(int));
+	offs+=sizeof(int);
+	memcpy(paquete.payload+offs, path, tam_path);
+	offs+=tam_path;
+	memcpy(paquete.payload+offs, &tam_buff, sizeof(int));
+	offs+=sizeof(int);
+	memcpy(paquete.payload+offs, buffer, tam_buff);
+	offs+=tam_buff;
+	memcpy(paquete.payload+offs, &fd, sizeof(int));
+	offs+=sizeof(int);
+	memcpy(paquete.payload+offs, &size, sizeof(size_t));
+	offs+=sizeof(size_t);
+	memcpy(paquete.payload+offs, &offset, sizeof(off_t));
+
+	return paquete;
+}
+
 //desc: dslz el payload respuesta de server, guarda la direccion del DIR
 void dslz_res_opendir(void *buffer, intptr_t* dir)
 {
@@ -358,6 +404,11 @@ void dslz_res_read(void *buffer, char *buf, int *size)
 	memcpy(&buff_size, buffer, sizeof(int));
 	memcpy(buf, buffer+sizeof(int), buff_size);
 	memcpy(size, buffer+sizeof(int)+buff_size, sizeof(int));
+}
+
+void dslz_res_write(void *buffer, int *size)
+{
+	memcpy(size, buffer, sizeof(int));
 }
 
 /*
@@ -502,6 +553,61 @@ void dslz_cod_rmdir(void *buffer, char**path)
 	*path = ruta;
 }
 
+void dslz_cod_mknod(void *buffer, char **filename, mode_t *mode, dev_t *dev)
+{
+	int offs = 0;
+
+	int tam_path;
+	memcpy(&tam_path, buffer, sizeof(int));
+	offs += sizeof(int);
+
+	char *ruta = malloc(tam_path+1);
+	memcpy(ruta, buffer+offs, tam_path);
+	offs += tam_path;
+
+	ruta[tam_path]='\0';
+	*filename = ruta;
+
+	memcpy(mode, buffer+offs, sizeof(mode_t));
+	offs += sizeof(mode_t);
+	memcpy(dev, buffer+offs, sizeof(dev_t));
+}
+
+
+void dslz_cod_write(void *payload, char **path, char **buffer, int *fd, size_t *size, off_t *offset)
+{
+	int offs = 0;
+
+	int tam_path;
+	memcpy(&tam_path, payload, sizeof(int));
+	offs += sizeof(int);
+
+	char *ruta = malloc(tam_path+1);
+	memcpy(ruta, payload+offs, tam_path);
+	offs += tam_path;
+
+	ruta[tam_path]='\0';
+	*path = ruta;
+
+	int tam_buffer;
+	memcpy(&tam_buffer, payload+offs, sizeof(int));
+	offs += sizeof(int);
+
+	char *ruta2 = malloc(tam_buffer+1);
+	memcpy(ruta2, payload+offs, tam_buffer);
+	offs += tam_buffer;
+
+	ruta2[tam_buffer]='\0';
+	*buffer = ruta2;
+
+	memcpy(fd, payload+offs, sizeof(int));
+	offs += sizeof(int);
+
+	memcpy(size, payload+offs, sizeof(size_t));
+	offs += sizeof(int);
+
+	memcpy(offset, payload+offs, sizeof(off_t));
+}
 //desc: arma paquete con el pointer adress de DIR
 package_t slz_res_opendir(DIR *dp)
 {
@@ -608,9 +714,29 @@ package_t slz_res_read(char *buf, ssize_t ssize)
 	return paquete;
 }
 
+package_t slz_res_write(int size)
+{
+	package_t paquete;
+
+	int tam_payload = sizeof(int);
+	paquete.header = header_get('S', COD_WRITE, tam_payload);
+	paquete.payload = malloc(tam_payload);
+	memcpy(paquete.payload, &size, sizeof(int));
+
+	return paquete;
+}
+
 package_t slz_simple_res(cod_operation cod)
 {
 	package_t paquete;
 	paquete.header = header_get('S', cod, 0);
 	return paquete;
 }
+package_t slz_res_mknod(cod_operation code){
+	package_t package;
+
+	package.header = header_get('N', code, TAM_HEADER);
+
+	return package;
+}
+

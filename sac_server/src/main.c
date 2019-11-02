@@ -7,12 +7,14 @@ void* atender_conexiones(void* data){
 
 	package_t paquete;
 	char *path;
+	char *buffer;
 	intptr_t dir;
 	int flags;
 	int fd;
 	size_t size;
 	off_t offset;
 	uint32_t mode;
+	dev_t dev;
 
 	while(true){
 		paquete = paquete_recibir(cliente_fd);
@@ -64,6 +66,16 @@ void* atender_conexiones(void* data){
 				log_msje_info("Me llego operacion rmdir");
 				dslz_cod_rmdir(paquete.payload, &path);
 				sac_rmdir(path,cliente_fd);
+				break;
+			case COD_MKNOD:
+				log_msje_info("Me llego operacion mknod");
+				dslz_cod_mknod(paquete.payload, &path, &mode, &dev);
+				sac_mknod(path, mode, dev, cliente_fd);
+				break;
+			case COD_WRITE:
+				log_msje_info("Me llego operacion write");
+				dslz_cod_write(paquete.payload, &path, &buffer, &fd, &size, &offset);
+				sac_write(path, buffer, fd, size, offset, cliente_fd);
 				break;
 			default:
 				log_msje_error("Codigo de operacion erroneo");

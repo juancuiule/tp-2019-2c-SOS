@@ -1,35 +1,85 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <unistd.h>
 
-#define PATHNAME "/home/utnso/workspace/tp-2019-2c-SOS/sac_cli/Debug/tmp/prueba.txt"
-#define SIZE 23
+#include <sys/types.h>
+#include <sys/stat.h>
 
-/*
- * PRUEBA OPEN READ Y CLOSE
- */
+#include <dirent.h>
+
+#define TMP "/home/utnso/workspace/tp-2019-2c-SOS/sac_cli/Debug/tmp"
+#define PATHNAME "/home/utnso/workspace/tp-2019-2c-SOS/sac_cli/Debug/tmp/prueba.txt"
+#define FILENAME "/home/utnso/workspace/tp-2019-2c-SOS/sac_cli/Debug/tmp/hola.txt"
+#define FILEDIR "/home/utnso/workspace/tp-2019-2c-SOS/sac_cli/Debug/tmp/PRUEBADIR"
+#define BUFFER "123456789"
+#define SIZE 15
+#define BSIZE 30
 
 int main(void)
 {
-   char cadena[SIZE];
-   int leidos;
+	/*
+	 * PRUEBA OPEN READ WRITE Y CLOSE
+	 */	
+	/*
+	char buffer[BSIZE];
+	int leidos;
 
-   int fichero = open (PATHNAME, O_RDONLY);
+	int fd = open (PATHNAME, O_RDWR | O_APPEND);
 
-   if (fichero==-1)
-   {
-        perror("Error al abrir fichero:");
-        exit(1);
-   }
+	if (fd==-1)
+	{
+		perror("Error al abrir fichero:");
+		exit(1);
+	}
 
-   leidos = read(fichero, cadena, SIZE);
+	printf("\nOperacion lectura de [ %d ] bytes", BSIZE);
+	leidos = read(fd, buffer, BSIZE);
+	
+	buffer[strlen(buffer)]='\0';
+	printf ("\nSe leyeron [ %d ] bytes. La cadena leída es [ %s ]", leidos, buffer );
 
-   close(fichero);
+	printf("\nOperacion escritura de [ %d ] bytes", strlen(BUFFER));
+	leidos = write(fd, BUFFER, strlen(BUFFER));
+	printf ("\nSe escribio [ %d ] bytes.\n", leidos);
+	
+	close(fd);*/
+	
+	/*
+	 * PRUEBA MKNOD
+	 */
+	/*
+	int result;
+	result = mknod (FILENAME, S_IFREG, (dev_t)0);
+	if (result < 0) {
+	   perror ("mknod");
+	   exit(1);
+	}*/
 
-   cadena[SIZE]='\0';
+	/*
+	 * PRUEBA OPENDIR READDIR MKDIR CLOSEDIR
+	 */
+	/*
+	*/
+    DIR *mydir;
+    struct dirent *myfile;
 
-   printf ( "Se leyeron [ %d ] bytes. La cadena leída es [ %s ]\n", leidos, cadena );
+    mydir = opendir(TMP);
 
-   return 0;
+	printf("\nListo el directorio \n");
+    while((myfile = readdir(mydir)) != NULL)
+    {
+        printf("- %s\n", myfile->d_name);
+    }
+
+	printf("Creo nuevo directorio ..\n");
+	int result;
+	result = mkdir (FILEDIR, 0777);
+	if (result < 0) {
+	   perror ("mknod");
+	   exit(1);
+	}
+	
+	return 0;
 }

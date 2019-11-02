@@ -241,3 +241,56 @@ void sac_rmdir(char *path, int cliente_fd)
     paquete_enviar(cliente_fd, paquete);
 
 }
+
+void sac_mknod(char *path, mode_t mode, dev_t dev, int cliente_fd){
+
+	log_msje_info("SAC MKNOD Path = [ %s ]", path);
+	package_t paquete;
+	int res_mknod, err;
+
+	char fpath[PATH_MAX];
+	sac_fullpath(fpath, path);
+	//primero me ubico en el directorio
+	// ver si no uso directo opendir?
+	//sac_opendir(path, cliente_fd);
+
+	//ejecuta la operacion crear un archivo
+	res_mknod = mknod(fpath, mode, dev);
+
+	//valido la respuesta de la operacion
+	if(res_mknod == -1){
+		log_msje_error("mknod: [ %s ]", strerror(errno));
+		err = errno;
+		paquete = slz_res_error(err);
+	}
+	else
+		paquete = slz_simple_res(COD_MKNOD);
+
+	paquete_enviar(cliente_fd, paquete);
+
+
+}
+
+void sac_write(char *path, char *buffer, int fd, size_t size, off_t offset, int cliente_fd)
+{
+	log_msje_info("SAC WRITE Path = [ %s ]", path);
+	package_t paquete;
+
+	int leido;
+
+	//ejecuto operacion
+	leido = write(fd, buffer, size);
+
+    if (leido == -1) {
+    	log_msje_error("pwrite: [ %s ]", strerror(errno));
+    	int err=errno;
+    	paquete = slz_res_error(err);
+    }
+    else {
+    	log_msje_info("Exito operacion pwrite sobre fs local");
+    	paquete = slz_res_write(leido);
+    }
+
+    paquete_enviar(cliente_fd, paquete);
+}
+
