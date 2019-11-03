@@ -17,4 +17,11 @@
 #include<netinet/in.h>
 #include<netdb.h>
 
+typedef struct {
+	int tid;
+	int pid;
+} ult_t;
+
+void* serializar(ult_t);
+
 #endif /* LIBSUSE_H_ */

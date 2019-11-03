@@ -39,6 +39,7 @@ clean:
 	
 install: all
 	sudo cp liblibSUSE.so /usr/lib
+	
 
 .PHONY: all clean dependents
 

@@ -14,5 +14,5 @@ void inicializar_colas_d() {
 
 void dispatcher(int tid) {
 	inicializar_colas();
-	printf("Ha ingresado al planificador el ULT con el TID %i\n", tid);
+	printf("SUSE: nuevo dispatcher creado (TID %i)\n", tid);
 }

@@ -3,3 +3,8 @@
 #include <pthread.h>
 
 #include "servidor.h"
+
+typedef struct {
+	void* data;
+	size_t size;
+} t_buffer;

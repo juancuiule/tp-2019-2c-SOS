@@ -20,6 +20,13 @@
 #include <pthread.h>
 #include "configuracion.h"
 
+typedef struct {
+	int tid;
+	int pid;
+} ult_t;
+
+ult_t* deserializar(void*);
+
 t_queue* cola_new;
 t_queue* cola_blocked;
 t_queue* cola_exit;
@@ -28,5 +35,6 @@ pthread_t nuevo_ult;
 
 void inicializar_colas();
 int servidor();
+void encolar_ult(int);
 
 #endif /* SERVIDOR_H_ */
