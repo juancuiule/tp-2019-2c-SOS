@@ -39,7 +39,7 @@ int suse_create(int tid){
 	  bzero((char *)&cliente, sizeof((char *)&cliente));
 
 	  cliente.sin_family = AF_INET;
-	  cliente.sin_port = htons(8000);
+	  cliente.sin_port = htons(8524);
 	  bcopy((char *)servidor->h_addr, (char *)&cliente.sin_addr.s_addr, sizeof(servidor->h_length));
 
 	  if(connect(conexion,(struct sockaddr *)&cliente, sizeof(cliente)) < 0)
