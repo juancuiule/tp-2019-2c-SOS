@@ -8,6 +8,7 @@
 #include "dispatcher.h"
 #include "configuracion.h"
 #include "servidor.h"
+#include "utils.h"
 
 void inicializar_colas() {
 	cola_new = queue_create();
@@ -15,45 +16,21 @@ void inicializar_colas() {
 	cola_exit = queue_create();
 }
 
+int servidor() {
+	int server_fd = init_server(LISTEN_IP, LISTEN_PORT);
+	pthread_t hilo;
+
+	while(1) {
+		int client_fd = recibir_cliente(server_fd);
+		pthread_create(&hilo, NULL, (void*)respond_to_client, (void*)client_fd);
+	}
+}
+
 ult_t* deserializar(void* buffer) {
 	ult_t *ult = malloc(1000);
 	memcpy(&(ult->pid), buffer, sizeof(ult->pid));
 	memcpy(&(ult->tid), buffer + 1, sizeof(ult->tid));
 	return ult;
-}
-
-int servidor() {
-	  int conexion_servidor, conexion_cliente, tid;
-	  socklen_t longc;
-	  struct sockaddr_in servidor, cliente;
-	  ult_t* ult;
-	  void* buffer = malloc(100);
-	  conexion_servidor = socket(AF_INET, SOCK_STREAM, 0);
-	  bzero((char *)&servidor, sizeof(servidor));
-	  servidor.sin_family = AF_INET;
-	  servidor.sin_port = htons(LISTEN_PORT);
-	  servidor.sin_addr.s_addr = inet_addr(LISTEN_IP);
-
-	  bind(conexion_servidor, (struct sockaddr *)&servidor, sizeof(servidor));
-
-	  listen(conexion_servidor, 3);
-	  //printf("A la escucha en el puerto %d\n", ntohs(servidor.sin_port));
-	  longc = sizeof(cliente);
-
-	  while(1) {
-		  conexion_cliente = accept(conexion_servidor, (struct sockaddr *)&cliente, &longc);
-		  //printf("Conectando con %s:%d\n", inet_ntoa(cliente.sin_addr),htons(cliente.sin_port));
-		  recv(conexion_cliente, buffer, 100, 0);
-		  ult = deserializar(buffer);
-		  printf("TID: %i PID: %i\n", ult->tid, ult->pid);
-		  encolar_ult(ult->tid);
-		  pthread_create(&nuevo_ult, NULL, (void*)dispatcher, tid);
-	      bzero((char *)&buffer, sizeof(buffer));
-	      send(conexion_cliente, "Recibido\n", 13, 0);
-	  }
-
-	  close(conexion_servidor);
-	  return 0;
 }
 
 void encolar_ult(int tid) {

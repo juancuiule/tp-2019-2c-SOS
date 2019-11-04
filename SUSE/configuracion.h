@@ -12,7 +12,7 @@
 #include <commons/config.h>
 
 char* LISTEN_IP;
-int LISTEN_PORT;
+char* LISTEN_PORT;
 int METRICS_TIMER;
 int MAX_MULTIPROG;
 char** SEM_IDS;

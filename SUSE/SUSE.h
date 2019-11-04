@@ -3,6 +3,7 @@
 #include <pthread.h>
 
 #include "servidor.h"
+#include "utils.h"
 
 typedef struct {
 	void* data;
