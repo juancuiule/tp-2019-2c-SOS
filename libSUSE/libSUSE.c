@@ -11,6 +11,7 @@ void* serializar(ult_t ult) {
 	void* buffer = malloc(sizeof(ult_t));
 	memcpy(buffer, &ult.pid, sizeof(int));
 	memcpy(buffer + sizeof(int), &ult.tid, sizeof(int));
+	return buffer;
 }
 
 void enviar_datos_ult(int tid, int pid, int socket) {
