@@ -33,18 +33,21 @@ int suse_create(int tid){
 	    return 1;
 	  }
 
-	  enviar_datos_ult(tid, getpid(), conexion);
-	  bzero(buffer, 100);
-	  recv(conexion, buffer, 100, 0);
+	  while(1) {
+		  enviar_datos_ult(tid, getpid(), conexion);
+		  bzero(buffer, 100);
+		  recv(conexion, buffer, 100, 0);
+	  }
+
 	  printf("%s", buffer);
 	  return 0;
 }
 
 int enviar_datos_ult(int tid, int pid, int conexion) {
 	ult_t* ult = malloc(sizeof(ult_t));
-	ult->pid = 25;
-	ult->tid = 35;
-	send(conexion, ult, sizeof(ult), 0);
+	ult->pid = pid;
+	ult->tid = tid;
+	send(conexion, (void*)ult, sizeof(ult), 0);
 }
 
 int suse_schedule_next(void){

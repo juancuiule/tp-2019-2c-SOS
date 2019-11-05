@@ -7,12 +7,12 @@
 
 #include "dispatcher.h"
 
-void inicializar_colas_d() {
+void inicializar_dispatcher() {
 	cola_ready = queue_create();
 	cola_exec = queue_create();
 }
 
 void dispatcher(int tid) {
-	inicializar_colas_d();
+	inicializar_dispatcher();
 	printf("SUSE: nuevo dispatcher creado (TID %i)\n", tid);
 }

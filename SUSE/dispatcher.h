@@ -16,7 +16,7 @@ int PID;
 t_queue* cola_ready;
 t_queue* cola_exec;
 
-void inicializar_colas_d();
+void inicializar_dispatcher();
 void dispatcher();
 
 

@@ -85,8 +85,8 @@ ult_t* recibir_paquete(int socket_cliente)
 	void* buffer = malloc(sizeof(ult_t));
 	recv(socket_cliente, buffer, sizeof(buffer), 0);
 	ult_t* ult = malloc(sizeof(ult_t));
-	memcpy(&(ult->pid), buffer, sizeof(int));
-	memcpy(&(ult->tid), buffer + sizeof(int), sizeof(int));
+	memcpy(&(ult->tid), buffer, sizeof(int));
+	memcpy(&(ult->pid), buffer + sizeof(int), sizeof(int));
 	return ult;
 }
 

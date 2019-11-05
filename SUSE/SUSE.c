@@ -17,8 +17,14 @@ int main() {
 	return EXIT_SUCCESS;
 }
 
+void inicializar() {
+	cola_new = queue_create();
+	cola_blocked = queue_create();
+	cola_exit = queue_create();
+}
+
 int atender_cliente(int cliente_fd) {
 	printf("Entro al hilo de atender cliente\n");
 	ult_t* ult = recibir_paquete(cliente_fd);
-	printf("SUSE: atiendo al ULT %i del proceso %i", ult->tid, ult->pid);
+	printf("SUSE: atiendo al ULT %i del proceso %i\n", ult->tid, ult->pid);
 }
