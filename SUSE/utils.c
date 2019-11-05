@@ -80,25 +80,26 @@ void recibir_mensaje(int socket_cliente)
 	free(buffer);
 }
 
-t_list* recibir_paquete(int socket_cliente)
+ult_t* recibir_paquete(int socket_cliente)
 {
-	printf("entro a recibir_paquete(int)\n");
-	int size;
-	int desplazamiento = 0;
-	void * buffer;
-	t_list* valores = list_create();
-	int tamanio;
-
-	buffer = recibir_buffer(&size, socket_cliente);
-	while(desplazamiento < size)
-	{
-		memcpy(&tamanio, buffer + desplazamiento, sizeof(int));
-		desplazamiento+=sizeof(int);
-		char* valor = malloc(tamanio);
-		memcpy(valor, buffer+desplazamiento, tamanio);
-		desplazamiento+=tamanio;
-		list_add(valores, valor);
-	}
-	free(buffer);
-	return valores;
+	void* buffer = malloc(sizeof(ult_t));
+	recv(socket_cliente, buffer, sizeof(buffer), 0);
+	ult_t* ult = malloc(sizeof(ult_t));
+	memcpy(&(ult->pid), buffer, sizeof(int));
+	memcpy(&(ult->tid), buffer + sizeof(int), sizeof(int));
+	return ult;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

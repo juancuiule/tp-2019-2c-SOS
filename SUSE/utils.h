@@ -35,7 +35,7 @@ t_log* logger;
 void* recibir_buffer(int*, int);
 int iniciar_servidor(void);
 int esperar_cliente(int);
-t_list* recibir_paquete(int);
+ult_t* recibir_paquete(int);
 void recibir_mensaje(int);
 int recibir_operacion(int);
 

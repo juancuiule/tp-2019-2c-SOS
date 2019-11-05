@@ -40,6 +40,13 @@ int suse_create(int tid){
 	  return 0;
 }
 
+int enviar_datos_ult(int tid, int pid, int conexion) {
+	ult_t* ult = malloc(sizeof(ult_t));
+	ult->pid = 25;
+	ult->tid = 35;
+	send(conexion, ult, sizeof(ult), 0);
+}
+
 int suse_schedule_next(void){
 	int next = max_tid;
 	printf("Scheduling next item %i...\n", next);
