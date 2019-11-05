@@ -4,13 +4,15 @@ int main() {
 	inicializar_colas();
 	configurar();
 
-	int server_fd = init_server(LISTEN_IP, LISTEN_PORT);
+	int servidor_fd = iniciar_servidor(LISTEN_IP, LISTEN_PORT);
+	log_info(logger, "Se ha iniciado el servidor.\n");
 	pthread_t hilo;
 
 	while(1) {
-		int client_fd = recibir_cliente(server_fd);
-		pthread_create(&hilo, NULL, (void*)respond_to_client, (void*)client_fd);
+		int cliente_fd = recibir_cliente(servidor_fd);
+		pthread_create(&hilo, NULL, (void*)atender_cliente, (void*)cliente_fd);
 	}
 
+	liberar();
 	return 0;
 }

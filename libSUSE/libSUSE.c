@@ -7,26 +7,10 @@
 
 int max_tid = 0;
 
-void* serializar(ult_t ult) {
-	void* buffer = malloc(sizeof(ult_t));
-	memcpy(buffer, &ult.pid, sizeof(int));
-	memcpy(buffer + sizeof(int), &ult.tid, sizeof(int));
-	return buffer;
-}
-
-void enviar_datos_ult(int tid, int pid, int socket) {
-	ult_t ult;
-	ult.tid = tid;
-	ult.pid = pid;
-	void* buffer = serializar(ult);
-	send(socket, buffer, 100, 0);
-}
-
 int suse_create(int tid){
-	  ult_t ult;
 	  struct sockaddr_in cliente;
 	  struct hostent *servidor;
-	  servidor = gethostbyname("localhost");
+	  servidor = gethostbyname("127.0.0.1");
 
 	  if(servidor == NULL)
 	  {
@@ -49,13 +33,11 @@ int suse_create(int tid){
 	    return 1;
 	  }
 
-	  //printf("ingresar TID: ");
-	  //fgets(buffer, 100, stdin);
 	  enviar_datos_ult(tid, getpid(), conexion);
-	  //send(conexion, buffer, 100, 0);
 	  bzero(buffer, 100);
 	  recv(conexion, buffer, 100, 0);
 	  printf("%s", buffer);
+	  return 0;
 }
 
 int suse_schedule_next(void){

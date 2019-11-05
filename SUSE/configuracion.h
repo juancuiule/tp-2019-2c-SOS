@@ -11,6 +11,8 @@
 #include <stdio.h>
 #include <commons/config.h>
 
+t_config* config;
+t_log* logger;
 char* LISTEN_IP;
 char* LISTEN_PORT;
 int METRICS_TIMER;
@@ -21,5 +23,6 @@ int* SEM_MAX;
 double ALPHA_SJF;
 
 void configurar();
+void liberar();
 
 #endif /* CONFIGURACION_H_ */
