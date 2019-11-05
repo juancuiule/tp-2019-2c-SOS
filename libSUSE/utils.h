@@ -1,19 +1,19 @@
 #ifndef UTILS_H_
 #define UTILS_H_
 
-#include<stdio.h>
-#include<stdlib.h>
-#include<signal.h>
-#include<unistd.h>
-#include<sys/socket.h>
-#include<netdb.h>
-#include<string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
+#include <unistd.h>
+#include <sys/socket.h>
+#include <netdb.h>
+#include <string.h>
 
 typedef enum
 {
 	MENSAJE,
 	PAQUETE
-}op_code;
+} op_code;
 
 typedef struct
 {

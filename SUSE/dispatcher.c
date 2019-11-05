@@ -13,6 +13,6 @@ void inicializar_colas_d() {
 }
 
 void dispatcher(int tid) {
-	inicializar_colas();
+	inicializar_colas_d();
 	printf("SUSE: nuevo dispatcher creado (TID %i)\n", tid);
 }

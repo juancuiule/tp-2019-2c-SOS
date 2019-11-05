@@ -1,18 +1,33 @@
 #include "SUSE.h"
 
 int main() {
-	inicializar_colas();
-	configurar();
-
-	int servidor_fd = iniciar_servidor(LISTEN_IP, LISTEN_PORT);
-	log_info(logger, "Se ha iniciado el servidor.\n");
+	int cliente_fd;
 	pthread_t hilo;
 
+	configurar();
+
+	int servidor_fd = iniciar_servidor();
+
 	while(1) {
-		int cliente_fd = recibir_cliente(servidor_fd);
+		cliente_fd = esperar_cliente(servidor_fd);
+		recibir_paquete(cliente_fd);
 		pthread_create(&hilo, NULL, (void*)atender_cliente, (void*)cliente_fd);
 	}
 
-	liberar();
-	return 0;
+
+
+
+
+
+
+
+
+
+
+
+	return EXIT_SUCCESS;
+}
+
+int atender_cliente(int cliente_fd) {
+	printf("SUSE: atiendo al cliente %i", cliente_fd);
 }

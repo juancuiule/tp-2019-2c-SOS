@@ -18,7 +18,7 @@ void configurar() {
 	SEM_MAX = config_get_array_value(config, "SEM_MAX");
 	ALPHA_SJF = config_get_double_value(config, "ALPHA_SJF");
 
-	logger = log_create("../SUSE.log");
+	logger = log_create("../SUSE.log", "SUSE", 1, LOG_LEVEL_DEBUG);
 }
 
 void liberar() {

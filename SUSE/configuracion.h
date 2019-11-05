@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 #include <commons/config.h>
+#include <commons/log.h>
 
 t_config* config;
 t_log* logger;

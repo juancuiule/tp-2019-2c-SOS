@@ -5,12 +5,11 @@
  *      Author: utnso
  */
 
-#include"utils.h"
+#include "utils.h"
 
 int iniciar_servidor(void)
 {
 	int socket_servidor;
-
     struct addrinfo hints, *servinfo, *p;
 
     memset(&hints, 0, sizeof(hints));
@@ -33,11 +32,8 @@ int iniciar_servidor(void)
     }
 
 	listen(socket_servidor, SOMAXCONN);
-
     freeaddrinfo(servinfo);
-
-    log_trace(logger, "Listo para escuchar a mi cliente");
-
+    log_info(logger, "Se ha iniciado el servidor.\n");
     return socket_servidor;
 }
 
@@ -84,9 +80,9 @@ void recibir_mensaje(int socket_cliente)
 	free(buffer);
 }
 
-//podemos usar la lista de valores para poder hablar del for y de como recorrer la lista
 t_list* recibir_paquete(int socket_cliente)
 {
+	printf("entro a recibir_paquete(int)\n");
 	int size;
 	int desplazamiento = 0;
 	void * buffer;
@@ -105,5 +101,4 @@ t_list* recibir_paquete(int socket_cliente)
 	}
 	free(buffer);
 	return valores;
-	return NULL;
 }
