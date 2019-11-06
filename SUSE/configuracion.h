@@ -14,10 +14,6 @@
 #include <commons/collections/dictionary.h>
 
 t_config* config;
-t_log* logger;
-t_dictionary* diccionario_procesos;
-t_dictionary* diccionario_ults;
-
 char* LISTEN_IP;
 char* LISTEN_PORT;
 int METRICS_TIMER;
@@ -26,6 +22,9 @@ char** SEM_IDS;
 int* SEM_INIT;
 int* SEM_MAX;
 double ALPHA_SJF;
+
+t_config* config_metricas_sistema;
+char* GRADO_MULTIPROGRAMACION;
 
 void configurar();
 

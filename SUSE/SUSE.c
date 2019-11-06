@@ -18,6 +18,10 @@ int main() {
 }
 
 void inicializar() {
+	logger = log_create("../SUSE.log", "SUSE", 1, LOG_LEVEL_DEBUG);
+	diccionario_procesos = dictionary_create();
+	diccionario_ults = dictionary_create();
+
 	cola_new = queue_create();
 	cola_blocked = queue_create();
 	cola_exit = queue_create();
@@ -81,6 +85,11 @@ void pasar_a_ready() {
 	int indice = dictionary_get(diccionario_ults, thread_id);
 	queue_push(colas_ready[indice], tid);
 	printf("El ULT %i paso a READY\n", tid);
+}
+
+int siguiente_ult_a_ejecutar(int pid) {
+	int* ults_de_proceso = malloc(sizeof(int));
+
 }
 
 void liberar() {

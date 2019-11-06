@@ -10,6 +10,7 @@
 int PID = 0;
 int TID = 0;
 
+t_log* logger;
 t_dictionary* diccionario_procesos;
 t_dictionary* diccionario_ults;
 
