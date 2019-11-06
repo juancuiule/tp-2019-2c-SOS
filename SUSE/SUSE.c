@@ -26,6 +26,9 @@ void inicializar() {
 		colas_ready[i] = queue_create();
 		colas_exec[i] = queue_create();
 	}
+
+	tid_inc_sem = malloc(sizeof(sem_t));
+	sem_init(tid_inc_sem, 1 , 1);
 }
 
 void atender_cliente(int cliente_fd) {
@@ -40,14 +43,8 @@ void llega_nuevo_hilo(int thread_id, int process_id) {
 	char* pid = malloc(10);
 	char* tid = malloc(10);
 
-	if (TID == MAX_MULTIPROG) {
-		log_error(logger, "Se ha alcanzado el grado máximo de multiprogramación.\n");
-		return;
-	}
-
 	queue_push(cola_new, thread_id);
 	log_info(logger, "El ULT %d ha llegado a la cola de NEW\n", TID);
-	TID++;
 
 	sprintf(pid, "%d", process_id);
 
@@ -56,6 +53,17 @@ void llega_nuevo_hilo(int thread_id, int process_id) {
 		dictionary_put(diccionario_ults, tid, PID);
 		PID++;
 	}
+
+	if (TID >= MAX_MULTIPROG)
+		log_warning(logger, "Se ha alcanzado el grado máximo de multiprogramación.\n");
+	else {
+		queue_push(colas_ready[PID], TID);
+		log_info(logger, "El ULT %d del proceso %d ha llegado a la cola de READY\n", TID, PID);
+	}
+
+	sem_wait(tid_inc_sem);
+	TID++;
+	sem_post(tid_inc_sem);
 }
 
 void pasar_a_ready() {
@@ -73,6 +81,14 @@ void pasar_a_ready() {
 	int indice = dictionary_get(diccionario_ults, thread_id);
 	queue_push(colas_ready[indice], tid);
 	printf("El ULT %i paso a READY\n", tid);
+}
+
+void liberar() {
+	config_destroy(config);
+	log_destroy(logger);
+	dictionary_destroy(diccionario_procesos);
+	dictionary_destroy(diccionario_ults);
+	sem_destroy(tid_inc_sem);
 }
 
 

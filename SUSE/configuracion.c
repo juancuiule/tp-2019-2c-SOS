@@ -22,10 +22,3 @@ void configurar() {
 	SEM_MAX = config_get_array_value(config, "SEM_MAX");
 	ALPHA_SJF = config_get_double_value(config, "ALPHA_SJF");
 }
-
-void liberar() {
-	config_destroy(config);
-	log_destroy(logger);
-	dictionary_destroy(diccionario_procesos);
-	dictionary_destroy(diccionario_ults);
-}

@@ -28,6 +28,5 @@ int* SEM_MAX;
 double ALPHA_SJF;
 
 void configurar();
-void liberar();
 
 #endif /* CONFIGURACION_H_ */
