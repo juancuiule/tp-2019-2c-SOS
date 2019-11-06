@@ -26,7 +26,8 @@ typedef enum{
 	COD_RMDIR,
 	COD_MKNOD,
 	COD_WRITE,
-	COD_ERROR
+	COD_ERROR,
+	COD_DESC
 }cod_operation;
 
 typedef struct{
@@ -63,7 +64,6 @@ package_t slz_cod_read(const char *path, int fd, size_t size, off_t offset);
 package_t slz_cod_release(const char *path, int fd);
 package_t slz_cod_mkdir(const char *path, uint32_t mode);
 package_t slz_cod_rmdir(const char *path);
-
 package_t slz_cod_mknod(const char *filename, mode_t mode, dev_t dev);
 package_t slz_cod_write(const char *path, const char *buffer, int fd, size_t size, off_t offset);
 
@@ -93,8 +93,6 @@ package_t slz_res_readdir(t_list * filenames);
 package_t slz_res_open(int fd);
 package_t slz_res_getattr(uint32_t mode, uint32_t nlink, int size);
 package_t slz_res_read(char *buf, ssize_t ssize);
-package_t slz_res_mknod(cod_operation );
-
 package_t slz_res_write(int size);
 
 //Para los errores

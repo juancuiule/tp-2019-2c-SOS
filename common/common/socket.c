@@ -128,5 +128,5 @@ void socket_liberar(int socket)
 	int res;
 	res = close(socket);
 	if(res!=-1)
-		log_msje_info("socket [ %d ] cerrado", socket);
+	log_msje_info("socket [ %d ] cerrado", socket);
 }

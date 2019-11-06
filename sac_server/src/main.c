@@ -1,6 +1,6 @@
 #include "main.h"
 
-void* atender_conexiones(void* data){
+int atender_conexiones(void* data){
 	pthread_data* data_thread = (pthread_data*) data;
 	int cliente_fd = data_thread->socket;
 	free(data_thread);
@@ -77,8 +77,12 @@ void* atender_conexiones(void* data){
 				dslz_cod_write(paquete.payload, &path, &buffer, &fd, &size, &offset);
 				sac_write(path, buffer, fd, size, offset, cliente_fd);
 				break;
+			case COD_DESC:
+				log_msje_info("El cliente en el socket [ %d ] se desconecto", cliente_fd);
+				return EXIT_FAILURE;
+				break;
 			default:
-				log_msje_error("Codigo de operacion erroneo");
+				log_msje_error("Codigo de operacion desconocido");
 				break;
 
 		}

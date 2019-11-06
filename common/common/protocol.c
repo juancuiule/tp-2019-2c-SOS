@@ -34,8 +34,8 @@ static header_t header_recibir(int socket)
 	size_t size = recv_bytes(socket, buffer, TAM_HEADER);
 	if(size > 0)
 		header_dslz(&header, buffer);
-	else
-		header.cod_operacion = COD_ERROR;
+	else //Se desconecto el cliente
+		header.cod_operacion = COD_DESC;
 
 	return header;
 }
