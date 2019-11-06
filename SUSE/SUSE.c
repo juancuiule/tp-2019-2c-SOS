@@ -4,11 +4,11 @@ int main() {
 	int cliente_fd;
 	pthread_t hilo;
 
+	inicializar();
 	configurar();
 	int servidor_fd = iniciar_servidor();
 
 	while(1) {
-		printf("Entro a while del main\n");
 		cliente_fd = esperar_cliente(servidor_fd);
 		pthread_create(&hilo, NULL, atender_cliente, cliente_fd);
 	}
@@ -21,13 +21,18 @@ void inicializar() {
 	cola_new = queue_create();
 	cola_blocked = queue_create();
 	cola_exit = queue_create();
+
+	for (int i = 0; i < 100; i++) {
+		colas_ready[i] = queue_create();
+		colas_exec[i] = queue_create();
+	}
 }
 
 void atender_cliente(int cliente_fd) {
-	printf("Entro al hilo de atender cliente\n");
-	//ult_t* ult = malloc(sizeof(ult_t));
-	ult_t* ult = recibir_paquete(cliente_fd);
-	printf("SUSE: atiendo al ULT %i del proceso %i\n", ult->tid, ult->pid);
+	ult_t* ult = malloc(sizeof(ult_t));
+	ult->tid = 0;
+	ult->pid = 0;
+	ult = recibir_paquete(cliente_fd);
 	llega_nuevo_hilo(ult->tid, ult->pid);
 }
 
@@ -35,16 +40,16 @@ void llega_nuevo_hilo(int thread_id, int process_id) {
 	char* pid = malloc(10);
 	char* tid = malloc(10);
 
-	if (CANT_ULTS == MAX_MULTIPROG) {
+	if (TID == MAX_MULTIPROG) {
 		log_error(logger, "Se ha alcanzado el grado máximo de multiprogramación.\n");
 		return;
 	}
 
 	queue_push(cola_new, thread_id);
-	printf("El ULT %i ha llegado a la cola de NEW\n", thread_id);
-	CANT_ULTS++;
+	log_info(logger, "El ULT %d ha llegado a la cola de NEW\n", TID);
+	TID++;
 
-	sprintf(process_id, pid);
+	sprintf(pid, "%d", process_id);
 
 	if(!dictionary_has_key(diccionario_procesos, pid)) {
 		dictionary_put(diccionario_procesos, pid, PID);
@@ -54,7 +59,8 @@ void llega_nuevo_hilo(int thread_id, int process_id) {
 }
 
 void pasar_a_ready() {
-	int tid = queue_pop(cola_new);
+	int tid = 0;
+	tid = queue_pop(cola_new);
 	/*
 	char* pid = malloc(3);
 	sprintf(pid, dictionary_get(diccionario_ults, tid));
@@ -62,7 +68,7 @@ void pasar_a_ready() {
 	queue_push(colas_ready[indice], ult->tid);
 	printf("El ULT %i paso a ready\n", ult->tid);
 	*/
-	char* thread_id = malloc(sizeof(int));
+	char* thread_id = malloc(10);
 	sprintf(tid, thread_id);
 	int indice = dictionary_get(diccionario_ults, thread_id);
 	queue_push(colas_ready[indice], tid);

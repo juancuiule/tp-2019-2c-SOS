@@ -7,7 +7,7 @@
 #include "configuracion.h"
 
 int PID = 0;
-int CANT_ULTS = 0;
+int TID = 0;
 
 t_dictionary* diccionario_procesos;
 t_dictionary* diccionario_ults;
