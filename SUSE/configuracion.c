@@ -19,9 +19,12 @@ void configurar() {
 	ALPHA_SJF = config_get_double_value(config, "ALPHA_SJF");
 
 	logger = log_create("../SUSE.log", "SUSE", 1, LOG_LEVEL_DEBUG);
+
+	diccionario_procesos = dictionary_create();
 }
 
 void liberar() {
 	config_destroy(config);
 	log_destroy(logger);
+	dictionary_destroy(diccionario_procesos);
 }

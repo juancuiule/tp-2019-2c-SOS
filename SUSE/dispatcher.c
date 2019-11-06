@@ -16,3 +16,7 @@ void dispatcher(int tid) {
 	inicializar_dispatcher();
 	printf("SUSE: nuevo dispatcher creado (TID %i)\n", tid);
 }
+
+void setear_pid(int pid) {
+	PID = pid;
+}

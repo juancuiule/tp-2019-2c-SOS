@@ -28,3 +28,38 @@ int atender_cliente(int cliente_fd) {
 	ult_t* ult = recibir_paquete(cliente_fd);
 	printf("SUSE: atiendo al ULT %i del proceso %i\n", ult->tid, ult->pid);
 }
+
+void planificar_nuevo_hilo(int tid, int pid) {
+	if (CANT_ULTS == MAX_MULTIPROG) {
+		log_error(logger, "No se puede planificar ULT. Máximo grado de multiprogramación alcanzado.\n");
+		return;
+	}
+
+	queue_push(cola_new, tid);
+
+	if (dictionary_has_key(diccionario_procesos, atoi(pid)))
+		dictionary_put(diccionario_procesos, atoi(pid), PID);
+
+	int process_id = dictionary_get(diccionario_procesos, atoi(pid));
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

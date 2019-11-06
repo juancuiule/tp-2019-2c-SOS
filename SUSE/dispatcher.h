@@ -18,6 +18,7 @@ t_queue* cola_exec;
 
 void inicializar_dispatcher();
 void dispatcher();
+void setear_PID();
 
 
 #endif /* DISPATCHER_H_ */

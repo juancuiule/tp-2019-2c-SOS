@@ -11,9 +11,12 @@
 #include <stdio.h>
 #include <commons/config.h>
 #include <commons/log.h>
+#include <commons/collections/dictionary.h>
 
 t_config* config;
 t_log* logger;
+t_dictionary* diccionario_procesos;
+
 char* LISTEN_IP;
 char* LISTEN_PORT;
 int METRICS_TIMER;
