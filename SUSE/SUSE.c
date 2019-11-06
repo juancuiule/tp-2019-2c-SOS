@@ -32,33 +32,36 @@ void inicializar() {
 	}
 
 	tid_inc_sem = malloc(sizeof(sem_t));
-	sem_init(tid_inc_sem, 1 , 1);
+	sem_init(tid_inc_sem, 0 , 1);
+
+	pid_inc_sem = malloc(sizeof(sem_t));
+	sem_init(pid_inc_sem, 0, 1);
 }
 
 void atender_cliente(int cliente_fd) {
 	ult_t* ult = malloc(sizeof(ult_t));
-	ult->tid = 0;
-	ult->pid = 0;
 	ult = recibir_paquete(cliente_fd);
-	llega_nuevo_hilo(ult->tid, ult->pid);
+	llega_nuevo_hilo(ult);
 }
 
-void llega_nuevo_hilo(int thread_id, int process_id) {
+void llega_nuevo_hilo(ult_t* ult) {
 	char* pid = malloc(10);
 	char* tid = malloc(10);
 
-	queue_push(cola_new, thread_id);
+	queue_push(cola_new, ult->tid);
 	log_info(logger, "El ULT %d ha llegado a la cola de NEW\n", TID);
 
-	sprintf(pid, "%d", process_id);
+	sprintf(pid, "%d", ult->pid);
 
 	if(!dictionary_has_key(diccionario_procesos, pid)) {
 		dictionary_put(diccionario_procesos, pid, PID);
 		dictionary_put(diccionario_ults, tid, PID);
+		sem_wait(pid_inc_sem);
 		PID++;
+		sem_post(pid_inc_sem);
 	}
 
-	if (TID >= MAX_MULTIPROG)
+	if (GRADO_MULTIPROGRAMACION >= MAX_MULTIPROG)
 		log_warning(logger, "Se ha alcanzado el grado máximo de multiprogramación.\n");
 	else {
 		queue_push(colas_ready[PID], TID);
@@ -67,6 +70,7 @@ void llega_nuevo_hilo(int thread_id, int process_id) {
 
 	sem_wait(tid_inc_sem);
 	TID++;
+	GRADO_MULTIPROGRAMACION++;
 	sem_post(tid_inc_sem);
 }
 
@@ -98,6 +102,7 @@ void liberar() {
 	dictionary_destroy(diccionario_procesos);
 	dictionary_destroy(diccionario_ults);
 	sem_destroy(tid_inc_sem);
+	sem_destroy(pid_inc_sem);
 }
 
 

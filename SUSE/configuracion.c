@@ -19,5 +19,4 @@ void configurar() {
 	ALPHA_SJF = config_get_double_value(config, "ALPHA_SJF");
 
 	config_metricas_sistema = config_create("../METRICAS_SISTEMA");
-	GRADO_MULTIPROGRAMACION = config_get_string_value(config_metricas_sistema, "GRADO_MULTIPROGRAMACION");
 }

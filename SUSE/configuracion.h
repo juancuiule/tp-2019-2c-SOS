@@ -24,7 +24,6 @@ int* SEM_MAX;
 double ALPHA_SJF;
 
 t_config* config_metricas_sistema;
-char* GRADO_MULTIPROGRAMACION;
 
 void configurar();
 

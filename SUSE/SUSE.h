@@ -9,6 +9,7 @@
 
 int PID = 0;
 int TID = 0;
+int GRADO_MULTIPROGRAMACION = 0;
 
 t_log* logger;
 t_dictionary* diccionario_procesos;
@@ -21,9 +22,10 @@ t_queue* colas_ready[100];
 t_queue* colas_exec[100];
 
 sem_t* tid_inc_sem;
+sem_t* pid_inc_sem;
 
 void inicializar();
 void atender_cliente(int);
-void llega_nuevo_hilo(int, int);
+void llega_nuevo_hilo(ult_t*);
 void pasar_a_ready();
 void liberar();
