@@ -1,65 +1,67 @@
-[INFO] 01:09:40:858 SUSE/(8444:8444): Se ha iniciado el servidor.
+[INFO] 15:02:27:786 SUSE/(18472:18472): Se ha iniciado el servidor.
 
-[INFO] 01:09:43:939 SUSE/(8444:8444): Se conecto un cliente!
-[INFO] 01:10:09:654 SUSE/(8454:8454): Se ha iniciado el servidor.
+[INFO] 15:02:31:195 SUSE/(18472:18472): Se conecto un cliente!
+[INFO] 15:02:31:195 SUSE/(18472:18472): Se conecto un cliente!
+[INFO] 15:02:31:195 SUSE/(18472:18472): Se conecto un cliente!
+[INFO] 15:02:31:195 SUSE/(18472:18476): El ULT 0 ha llegado a la cola de NEW
 
-[INFO] 01:10:12:126 SUSE/(8454:8454): Se conecto un cliente!
-[INFO] 01:13:07:577 SUSE/(8642:8642): Se ha iniciado el servidor.
+[INFO] 15:02:31:196 SUSE/(18472:18475): El ULT 1 ha llegado a la cola de NEW
 
-[INFO] 01:13:11:820 SUSE/(8642:8642): Se conecto un cliente!
-[INFO] 01:13:16:277 SUSE/(8667:8667): Se ha iniciado el servidor.
+[INFO] 15:02:31:196 SUSE/(18472:18474): El ULT 2 ha llegado a la cola de NEW
 
-[INFO] 01:13:22:608 SUSE/(8667:8667): Se conecto un cliente!
-[INFO] 01:19:28:21 SUSE/(8880:8880): Se ha iniciado el servidor.
+[INFO] 15:02:45:9 SUSE/(18472:18472): Se conecto un cliente!
+[INFO] 15:02:45:9 SUSE/(18472:18472): Se conecto un cliente!
+[INFO] 15:02:45:9 SUSE/(18472:18472): Se conecto un cliente!
+[INFO] 15:02:45:9 SUSE/(18472:18480): El ULT 3 ha llegado a la cola de NEW
 
-[INFO] 01:19:31:349 SUSE/(8880:8880): Se conecto un cliente!
-[INFO] 01:19:51:810 SUSE/(8892:8892): Se ha iniciado el servidor.
+[INFO] 15:02:45:10 SUSE/(18472:18479): El ULT 4 ha llegado a la cola de NEW
 
-[INFO] 01:19:54:761 SUSE/(8892:8892): Se conecto un cliente!
-[INFO] 01:31:22:196 SUSE/(9034:9034): Se ha iniciado el servidor.
+[INFO] 15:02:45:10 SUSE/(18472:18478): El ULT 5 ha llegado a la cola de NEW
 
-[INFO] 01:31:24:984 SUSE/(9034:9034): Se conecto un cliente!
-[INFO] 01:31:31:867 SUSE/(9039:9039): Se ha iniciado el servidor.
+[INFO] 15:02:49:308 SUSE/(18472:18472): Se conecto un cliente!
+[INFO] 15:02:49:308 SUSE/(18472:18472): Se conecto un cliente!
+[INFO] 15:02:49:308 SUSE/(18472:18472): Se conecto un cliente!
+[INFO] 15:02:49:308 SUSE/(18472:18484): El ULT 6 ha llegado a la cola de NEW
 
-[INFO] 01:31:37:230 SUSE/(9039:9039): Se conecto un cliente!
-[INFO] 01:35:35:578 SUSE/(9175:9175): Se ha iniciado el servidor.
+[INFO] 15:02:49:308 SUSE/(18472:18483): El ULT 7 ha llegado a la cola de NEW
 
-[INFO] 01:35:39:791 SUSE/(9175:9175): Se conecto un cliente!
-[INFO] 01:35:45:679 SUSE/(9182:9182): Se ha iniciado el servidor.
+[INFO] 15:02:49:308 SUSE/(18472:18482): El ULT 8 ha llegado a la cola de NEW
 
-[INFO] 01:35:48:30 SUSE/(9182:9182): Se conecto un cliente!
-[INFO] 01:40:30:125 SUSE/(9332:9332): Se ha iniciado el servidor.
+[INFO] 15:06:07:597 SUSE/(18694:18694): Se ha iniciado el servidor.
 
-[INFO] 01:40:33:142 SUSE/(9332:9332): Se conecto un cliente!
-[INFO] 01:40:39:159 SUSE/(9338:9338): Se ha iniciado el servidor.
+[INFO] 15:06:16:480 SUSE/(18694:18694): Se conecto un cliente!
+[INFO] 15:06:16:481 SUSE/(18694:18694): Se conecto un cliente!
+[INFO] 15:06:16:481 SUSE/(18694:18694): Se conecto un cliente!
+[INFO] 15:06:16:481 SUSE/(18694:18718): El ULT 0 ha llegado a la cola de NEW
 
-[INFO] 01:40:40:963 SUSE/(9338:9338): Se conecto un cliente!
-[INFO] 01:41:42:113 SUSE/(9414:9414): Se ha iniciado el servidor.
+[INFO] 15:06:16:481 SUSE/(18694:18717): El ULT 1 ha llegado a la cola de NEW
 
-[INFO] 01:41:44:812 SUSE/(9414:9414): Se conecto un cliente!
-[INFO] 01:42:14:802 SUSE/(9414:9414): Se conecto un cliente!
-[INFO] 01:47:44:867 SUSE/(9552:9552): Se ha iniciado el servidor.
+[INFO] 15:06:16:481 SUSE/(18694:18716): El ULT 2 ha llegado a la cola de NEW
 
-[INFO] 01:47:48:33 SUSE/(9552:9552): Se conecto un cliente!
-[INFO] 01:47:53:703 SUSE/(9552:9552): Se conecto un cliente!
-[INFO] 01:50:12:20 SUSE/(9640:9640): Se ha iniciado el servidor.
+[INFO] 15:06:31:927 SUSE/(18694:18694): Se conecto un cliente!
+[INFO] 15:06:31:928 SUSE/(18694:18694): Se conecto un cliente!
+[INFO] 15:06:31:928 SUSE/(18694:18694): Se conecto un cliente!
+[INFO] 15:06:31:928 SUSE/(18694:18722): El ULT 3 ha llegado a la cola de NEW
 
-[INFO] 01:50:14:411 SUSE/(9640:9640): Se conecto un cliente!
-[INFO] 01:50:21:106 SUSE/(9640:9640): Se conecto un cliente!
-[INFO] 01:50:37:419 SUSE/(9640:9640): Se conecto un cliente!
-[INFO] 01:51:18:917 SUSE/(9729:9729): Se ha iniciado el servidor.
+[INFO] 15:06:31:928 SUSE/(18694:18721): El ULT 4 ha llegado a la cola de NEW
 
-[INFO] 01:51:22:525 SUSE/(9729:9729): Se conecto un cliente!
-[INFO] 01:51:27:149 SUSE/(9729:9729): Se conecto un cliente!
-[INFO] 01:51:29:490 SUSE/(9729:9729): Se conecto un cliente!
-[INFO] 01:54:13:354 SUSE/(9854:9854): Se ha iniciado el servidor.
+[INFO] 15:06:31:928 SUSE/(18694:18720): El ULT 4 ha llegado a la cola de NEW
 
-[INFO] 01:54:16:679 SUSE/(9854:9854): Se conecto un cliente!
-[INFO] 01:54:16:679 SUSE/(9854:9856): El ULT 0 ha llegado a la cola de NEW
+[INFO] 15:06:35:724 SUSE/(18694:18694): Se conecto un cliente!
+[INFO] 15:06:35:725 SUSE/(18694:18694): Se conecto un cliente!
+[INFO] 15:06:35:725 SUSE/(18694:18694): Se conecto un cliente!
+[INFO] 15:06:35:725 SUSE/(18694:18724): El ULT 6 ha llegado a la cola de NEW
 
-[INFO] 01:54:22:823 SUSE/(9854:9854): Se conecto un cliente!
-[INFO] 01:54:22:823 SUSE/(9854:9858): El ULT 1 ha llegado a la cola de NEW
+[INFO] 15:06:35:725 SUSE/(18694:18726): El ULT 7 ha llegado a la cola de NEW
 
-[INFO] 01:54:29:909 SUSE/(9854:9854): Se conecto un cliente!
-[INFO] 01:54:29:909 SUSE/(9854:9860): El ULT 2 ha llegado a la cola de NEW
+[INFO] 15:06:35:725 SUSE/(18694:18725): El ULT 8 ha llegado a la cola de NEW
+
+[INFO] 15:06:52:771 SUSE/(18694:18694): Se conecto un cliente!
+[INFO] 15:06:52:771 SUSE/(18694:18694): Se conecto un cliente!
+[INFO] 15:06:52:771 SUSE/(18694:18694): Se conecto un cliente!
+[INFO] 15:06:52:771 SUSE/(18694:18753): El ULT 9 ha llegado a la cola de NEW
+
+[ERROR] 15:06:52:771 SUSE/(18694:18752): Se ha alcanzado el grado máximo de multiprogramación.
+
+[ERROR] 15:06:52:771 SUSE/(18694:18751): Se ha alcanzado el grado máximo de multiprogramación.
 

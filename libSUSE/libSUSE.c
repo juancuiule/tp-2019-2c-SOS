@@ -33,13 +33,8 @@ int suse_create(int tid){
 	    return 1;
 	  }
 
-	  while(1) {
-		  enviar_datos_ult(tid, getpid(), conexion);
-		  bzero(buffer, 100);
-		  recv(conexion, buffer, 100, 0);
-	  }
+	  enviar_datos_ult(tid, getpid(), conexion);
 
-	  printf("%s", buffer);
 	  return 0;
 }
 
