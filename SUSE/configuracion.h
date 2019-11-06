@@ -16,6 +16,7 @@
 t_config* config;
 t_log* logger;
 t_dictionary* diccionario_procesos;
+t_dictionary* diccionario_ults;
 
 char* LISTEN_IP;
 char* LISTEN_PORT;
