@@ -7,18 +7,21 @@ C_SRCS += \
 ../SUSE.c \
 ../configuracion.c \
 ../dispatcher.c \
+../semaforos.c \
 ../utils.c 
 
 OBJS += \
 ./SUSE.o \
 ./configuracion.o \
 ./dispatcher.o \
+./semaforos.o \
 ./utils.o 
 
 C_DEPS += \
 ./SUSE.d \
 ./configuracion.d \
 ./dispatcher.d \
+./semaforos.d \
 ./utils.d 
 
 

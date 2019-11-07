@@ -3,9 +3,10 @@
 #include <commons/collections/queue.h>
 #include <pthread.h>
 #include <semaphore.h>
-
 #include "utils.h"
 #include "configuracion.h"
+#include <libSUSE/libSUSE.h>
+#include <libSUSE/utils.h>
 
 int PID = 0;
 int TID = 0;
@@ -26,6 +27,7 @@ sem_t* pid_inc_sem;
 
 void inicializar();
 void atender_cliente(int);
+void atender_nuevo_cliente(int);
 void llega_nuevo_hilo(ult_t*);
 void pasar_a_ready();
 void liberar();

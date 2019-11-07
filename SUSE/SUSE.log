@@ -460,3 +460,341 @@
 
 [WARNING] 01:30:32:50 SUSE/(32147:32216): Se ha alcanzado el grado máximo de multiprogramación.
 
+[INFO] 01:46:10:188 SUSE/(32574:32574): Se ha iniciado el servidor.
+
+[INFO] 01:46:12:917 SUSE/(32574:32574): Se conecto un cliente!
+[INFO] 01:46:12:918 SUSE/(32574:32574): Se conecto un cliente!
+[INFO] 01:46:12:918 SUSE/(32574:32574): Se conecto un cliente!
+[INFO] 01:46:12:918 SUSE/(32574:32578): El ULT 0 ha llegado a la cola de NEW
+
+[INFO] 01:46:12:918 SUSE/(32574:32578): El ULT 0 del proceso 1 ha llegado a la cola de READY
+
+[INFO] 01:46:12:918 SUSE/(32574:32577): El ULT 1 ha llegado a la cola de NEW
+
+[INFO] 01:46:12:918 SUSE/(32574:32577): El ULT 1 del proceso 1 ha llegado a la cola de READY
+
+[INFO] 01:46:12:918 SUSE/(32574:32576): El ULT 2 ha llegado a la cola de NEW
+
+[INFO] 01:46:12:918 SUSE/(32574:32576): El ULT 2 del proceso 1 ha llegado a la cola de READY
+
+[INFO] 01:46:14:310 SUSE/(32574:32574): Se conecto un cliente!
+[INFO] 01:46:14:310 SUSE/(32574:32574): Se conecto un cliente!
+[INFO] 01:46:14:310 SUSE/(32574:32580): El ULT 3 ha llegado a la cola de NEW
+
+[INFO] 01:46:14:310 SUSE/(32574:32580): El ULT 3 del proceso 2 ha llegado a la cola de READY
+
+[INFO] 01:46:14:310 SUSE/(32574:32574): Se conecto un cliente!
+[INFO] 01:46:14:311 SUSE/(32574:32581): El ULT 4 ha llegado a la cola de NEW
+
+[INFO] 01:46:14:311 SUSE/(32574:32582): El ULT 4 ha llegado a la cola de NEW
+
+[INFO] 01:46:14:311 SUSE/(32574:32581): El ULT 4 del proceso 2 ha llegado a la cola de READY
+
+[INFO] 01:46:14:311 SUSE/(32574:32582): El ULT 5 del proceso 2 ha llegado a la cola de READY
+
+[INFO] 01:46:15:386 SUSE/(32574:32574): Se conecto un cliente!
+[INFO] 01:46:15:386 SUSE/(32574:32574): Se conecto un cliente!
+[INFO] 01:46:15:386 SUSE/(32574:32574): Se conecto un cliente!
+[INFO] 01:46:15:386 SUSE/(32574:32584): El ULT 6 ha llegado a la cola de NEW
+
+[INFO] 01:46:15:386 SUSE/(32574:32584): El ULT 6 del proceso 3 ha llegado a la cola de READY
+
+[INFO] 01:46:15:386 SUSE/(32574:32585): El ULT 7 ha llegado a la cola de NEW
+
+[INFO] 01:46:15:386 SUSE/(32574:32585): El ULT 7 del proceso 3 ha llegado a la cola de READY
+
+[INFO] 01:46:15:387 SUSE/(32574:32586): El ULT 8 ha llegado a la cola de NEW
+
+[INFO] 01:46:15:387 SUSE/(32574:32586): El ULT 8 del proceso 3 ha llegado a la cola de READY
+
+[INFO] 01:46:16:133 SUSE/(32574:32574): Se conecto un cliente!
+[INFO] 01:46:16:133 SUSE/(32574:32574): Se conecto un cliente!
+[INFO] 01:46:16:133 SUSE/(32574:32574): Se conecto un cliente!
+[INFO] 01:46:16:133 SUSE/(32574:32588): El ULT 9 ha llegado a la cola de NEW
+
+[INFO] 01:46:16:133 SUSE/(32574:32588): El ULT 9 del proceso 4 ha llegado a la cola de READY
+
+[INFO] 01:46:16:133 SUSE/(32574:32589): El ULT 10 ha llegado a la cola de NEW
+
+[WARNING] 01:46:16:133 SUSE/(32574:32589): Se ha alcanzado el grado máximo de multiprogramación.
+
+[INFO] 01:46:16:133 SUSE/(32574:32590): El ULT 11 ha llegado a la cola de NEW
+
+[WARNING] 01:46:16:133 SUSE/(32574:32590): Se ha alcanzado el grado máximo de multiprogramación.
+
+[INFO] 01:56:53:414 SUSE/(461:461): Se ha iniciado el servidor.
+
+[INFO] 01:56:56:119 SUSE/(461:461): Se conecto un cliente!
+[INFO] 01:56:56:119 SUSE/(461:461): Se conecto un cliente!
+[INFO] 01:56:56:119 SUSE/(461:461): Se conecto un cliente!
+[INFO] 01:56:56:120 SUSE/(461:465): El ULT 0 ha llegado a la cola de NEW
+
+[INFO] 01:56:56:120 SUSE/(461:465): El ULT 0 del proceso 1 ha llegado a la cola de READY
+
+[INFO] 01:56:56:120 SUSE/(461:463): El ULT 1 ha llegado a la cola de NEW
+
+[INFO] 01:56:56:120 SUSE/(461:463): El ULT 1 del proceso 1 ha llegado a la cola de READY
+
+[INFO] 01:56:56:120 SUSE/(461:464): El ULT 2 ha llegado a la cola de NEW
+
+[INFO] 01:56:56:120 SUSE/(461:464): El ULT 2 del proceso 1 ha llegado a la cola de READY
+
+[INFO] 01:56:56:695 SUSE/(461:461): Se conecto un cliente!
+[INFO] 01:56:56:695 SUSE/(461:461): Se conecto un cliente!
+[INFO] 01:56:56:695 SUSE/(461:461): Se conecto un cliente!
+[INFO] 01:56:56:695 SUSE/(461:469): El ULT 3 ha llegado a la cola de NEW
+
+[INFO] 01:56:56:695 SUSE/(461:469): El ULT 3 del proceso 2 ha llegado a la cola de READY
+
+[INFO] 01:56:56:695 SUSE/(461:467): El ULT 3 ha llegado a la cola de NEW
+
+[INFO] 01:56:56:695 SUSE/(461:467): El ULT 4 del proceso 2 ha llegado a la cola de READY
+
+[INFO] 01:56:56:695 SUSE/(461:468): El ULT 5 ha llegado a la cola de NEW
+
+[INFO] 01:56:56:695 SUSE/(461:468): El ULT 5 del proceso 2 ha llegado a la cola de READY
+
+[INFO] 01:56:57:263 SUSE/(461:461): Se conecto un cliente!
+[INFO] 01:56:57:263 SUSE/(461:461): Se conecto un cliente!
+[INFO] 01:56:57:263 SUSE/(461:461): Se conecto un cliente!
+[INFO] 01:56:57:263 SUSE/(461:473): El ULT 6 ha llegado a la cola de NEW
+
+[INFO] 01:56:57:263 SUSE/(461:473): El ULT 6 del proceso 3 ha llegado a la cola de READY
+
+[INFO] 01:56:57:263 SUSE/(461:471): El ULT 7 ha llegado a la cola de NEW
+
+[INFO] 01:56:57:263 SUSE/(461:471): El ULT 7 del proceso 3 ha llegado a la cola de READY
+
+[INFO] 01:56:57:264 SUSE/(461:472): El ULT 8 ha llegado a la cola de NEW
+
+[INFO] 01:56:57:264 SUSE/(461:472): El ULT 8 del proceso 3 ha llegado a la cola de READY
+
+[INFO] 01:56:57:712 SUSE/(461:461): Se conecto un cliente!
+[INFO] 01:56:57:712 SUSE/(461:461): Se conecto un cliente!
+[INFO] 01:56:57:712 SUSE/(461:461): Se conecto un cliente!
+[INFO] 01:56:57:712 SUSE/(461:477): El ULT 9 ha llegado a la cola de NEW
+
+[INFO] 01:56:57:712 SUSE/(461:477): El ULT 9 del proceso 4 ha llegado a la cola de READY
+
+[INFO] 01:56:57:712 SUSE/(461:476): El ULT 10 ha llegado a la cola de NEW
+
+[INFO] 01:56:57:712 SUSE/(461:475): El ULT 10 ha llegado a la cola de NEW
+
+[WARNING] 01:56:57:713 SUSE/(461:476): Se ha alcanzado el grado máximo de multiprogramación.
+
+[WARNING] 01:56:57:713 SUSE/(461:475): Se ha alcanzado el grado máximo de multiprogramación.
+
+[INFO] 02:10:36:365 SUSE/(939:939): Se ha iniciado el servidor.
+
+[INFO] 02:10:39:974 SUSE/(939:939): Se conecto un cliente!
+[INFO] 02:10:39:974 SUSE/(939:939): Se conecto un cliente!
+[INFO] 02:10:39:974 SUSE/(939:939): Se conecto un cliente!
+[INFO] 02:10:41:95 SUSE/(939:939): Se conecto un cliente!
+[INFO] 02:10:41:95 SUSE/(939:939): Se conecto un cliente!
+[INFO] 02:10:41:95 SUSE/(939:939): Se conecto un cliente!
+[INFO] 02:10:41:674 SUSE/(939:939): Se conecto un cliente!
+[INFO] 02:10:41:675 SUSE/(939:939): Se conecto un cliente!
+[INFO] 02:10:41:675 SUSE/(939:939): Se conecto un cliente!
+[INFO] 02:27:19:475 SUSE/(1801:1801): Se ha iniciado el servidor.
+
+[INFO] 02:27:24:448 SUSE/(1801:1801): Se conecto un cliente!
+[INFO] 02:27:24:448 SUSE/(1801:1801): Se conecto un cliente!
+[INFO] 02:27:24:448 SUSE/(1801:1801): Se conecto un cliente!
+[INFO] 02:27:30:286 SUSE/(1811:1811): Se ha iniciado el servidor.
+
+[INFO] 02:27:33:778 SUSE/(1811:1811): Se conecto un cliente!
+[INFO] 02:27:33:809 SUSE/(1811:1811): Se conecto un cliente!
+[INFO] 02:28:47:292 SUSE/(1934:1934): Se ha iniciado el servidor.
+
+[INFO] 02:28:50:182 SUSE/(1934:1934): Se conecto un cliente!
+[INFO] 02:28:50:183 SUSE/(1934:1934): Se conecto un cliente!
+[INFO] 02:28:50:183 SUSE/(1934:1934): Se conecto un cliente!
+[INFO] 02:28:54:598 SUSE/(1941:1941): Se ha iniciado el servidor.
+
+[INFO] 02:28:58:6 SUSE/(1941:1941): Se conecto un cliente!
+[INFO] 02:28:58:36 SUSE/(1941:1941): Se conecto un cliente!
+[INFO] 02:30:09:627 SUSE/(2024:2024): Se ha iniciado el servidor.
+
+[INFO] 02:30:12:631 SUSE/(2024:2024): Se conecto un cliente!
+[INFO] 02:30:12:631 SUSE/(2024:2024): Se conecto un cliente!
+[INFO] 02:30:12:631 SUSE/(2024:2024): Se conecto un cliente!
+[INFO] 02:30:16:820 SUSE/(2031:2031): Se ha iniciado el servidor.
+
+[INFO] 02:30:19:931 SUSE/(2031:2031): Se conecto un cliente!
+[INFO] 02:30:19:963 SUSE/(2031:2031): Se conecto un cliente!
+[INFO] 02:30:19:963 SUSE/(2031:2031): Se conecto un cliente!
+[INFO] 02:31:23:641 SUSE/(2105:2105): Se ha iniciado el servidor.
+
+[INFO] 02:31:28:49 SUSE/(2105:2105): Se conecto un cliente!
+[INFO] 02:31:28:49 SUSE/(2105:2105): Se conecto un cliente!
+[INFO] 02:31:28:49 SUSE/(2105:2105): Se conecto un cliente!
+[INFO] 02:31:32:346 SUSE/(2112:2112): Se ha iniciado el servidor.
+
+[INFO] 02:31:34:610 SUSE/(2112:2112): Se conecto un cliente!
+[INFO] 02:31:34:640 SUSE/(2112:2112): Se conecto un cliente!
+[INFO] 02:33:00:86 SUSE/(2198:2198): Se ha iniciado el servidor.
+
+[INFO] 02:33:02:817 SUSE/(2198:2198): Se conecto un cliente!
+[INFO] 02:33:02:817 SUSE/(2198:2198): Se conecto un cliente!
+[INFO] 02:33:02:817 SUSE/(2198:2198): Se conecto un cliente!
+[INFO] 02:33:08:295 SUSE/(2206:2206): Se ha iniciado el servidor.
+
+[INFO] 02:34:14:673 SUSE/(2206:2206): Se conecto un cliente!
+[INFO] 02:34:14:705 SUSE/(2206:2206): Se conecto un cliente!
+[INFO] 02:35:32:276 SUSE/(2288:2288): Se ha iniciado el servidor.
+
+[INFO] 02:35:35:200 SUSE/(2288:2288): Se conecto un cliente!
+[INFO] 02:35:35:200 SUSE/(2288:2288): Se conecto un cliente!
+[INFO] 02:35:35:200 SUSE/(2288:2288): Se conecto un cliente!
+[INFO] 02:35:44:825 SUSE/(2288:2288): Se conecto un cliente!
+[INFO] 02:35:44:825 SUSE/(2288:2288): Se conecto un cliente!
+[INFO] 02:35:44:825 SUSE/(2288:2288): Se conecto un cliente!
+[INFO] 02:35:45:277 SUSE/(2288:2288): Se conecto un cliente!
+[INFO] 02:35:45:277 SUSE/(2288:2288): Se conecto un cliente!
+[INFO] 02:35:45:277 SUSE/(2288:2288): Se conecto un cliente!
+[INFO] 02:35:45:732 SUSE/(2288:2288): Se conecto un cliente!
+[INFO] 02:35:45:732 SUSE/(2288:2288): Se conecto un cliente!
+[INFO] 02:35:45:732 SUSE/(2288:2288): Se conecto un cliente!
+[INFO] 02:35:46:133 SUSE/(2288:2288): Se conecto un cliente!
+[INFO] 02:35:46:133 SUSE/(2288:2288): Se conecto un cliente!
+[INFO] 02:35:46:133 SUSE/(2288:2288): Se conecto un cliente!
+[INFO] 02:38:41:73 SUSE/(2444:2444): Se ha iniciado el servidor.
+
+[INFO] 02:38:43:807 SUSE/(2444:2444): Se conecto un cliente!
+[INFO] 02:38:43:807 SUSE/(2444:2444): Se conecto un cliente!
+[INFO] 02:38:43:807 SUSE/(2444:2444): Se conecto un cliente!
+[INFO] 02:38:44:429 SUSE/(2444:2444): Se conecto un cliente!
+[INFO] 02:38:44:429 SUSE/(2444:2444): Se conecto un cliente!
+[INFO] 02:38:44:429 SUSE/(2444:2444): Se conecto un cliente!
+[INFO] 02:38:45:136 SUSE/(2444:2444): Se conecto un cliente!
+[INFO] 02:38:45:136 SUSE/(2444:2444): Se conecto un cliente!
+[INFO] 02:38:45:136 SUSE/(2444:2444): Se conecto un cliente!
+[INFO] 02:38:45:663 SUSE/(2444:2444): Se conecto un cliente!
+[INFO] 02:38:45:663 SUSE/(2444:2444): Se conecto un cliente!
+[INFO] 02:38:45:663 SUSE/(2444:2444): Se conecto un cliente!
+[INFO] 02:45:33:98 SUSE/(2772:2772): Se ha iniciado el servidor.
+
+[INFO] 02:45:36:4 SUSE/(2772:2772): Se conecto un cliente!
+[INFO] 02:45:36:4 SUSE/(2772:2772): Se conecto un cliente!
+[INFO] 02:45:36:4 SUSE/(2772:2772): Se conecto un cliente!
+[INFO] 02:45:47:225 SUSE/(2772:2772): Se conecto un cliente!
+[INFO] 02:45:47:225 SUSE/(2772:2772): Se conecto un cliente!
+[INFO] 02:45:47:225 SUSE/(2772:2772): Se conecto un cliente!
+[INFO] 02:45:48:182 SUSE/(2772:2772): Se conecto un cliente!
+[INFO] 02:45:48:182 SUSE/(2772:2772): Se conecto un cliente!
+[INFO] 02:45:48:182 SUSE/(2772:2772): Se conecto un cliente!
+[INFO] 02:45:48:713 SUSE/(2772:2772): Se conecto un cliente!
+[INFO] 02:45:48:713 SUSE/(2772:2772): Se conecto un cliente!
+[INFO] 02:45:48:713 SUSE/(2772:2772): Se conecto un cliente!
+[INFO] 02:45:49:249 SUSE/(2772:2772): Se conecto un cliente!
+[INFO] 02:45:49:249 SUSE/(2772:2772): Se conecto un cliente!
+[INFO] 02:45:49:249 SUSE/(2772:2772): Se conecto un cliente!
+[INFO] 02:49:08:96 SUSE/(2972:2972): Se ha iniciado el servidor.
+
+[INFO] 02:49:11:951 SUSE/(2972:2972): Se conecto un cliente!
+[INFO] 02:49:11:951 SUSE/(2972:2972): Se conecto un cliente!
+[INFO] 02:49:11:951 SUSE/(2972:2972): Se conecto un cliente!
+[INFO] 02:49:11:951 SUSE/(2972:2974): El ULT 0 ha llegado a la cola de NEW
+
+[INFO] 02:49:11:951 SUSE/(2972:2974): El ULT 0 del proceso 1 ha llegado a la cola de READY
+
+[INFO] 02:49:11:951 SUSE/(2972:2976): El ULT 1 ha llegado a la cola de NEW
+
+[INFO] 02:49:11:951 SUSE/(2972:2976): El ULT 1 del proceso 2 ha llegado a la cola de READY
+
+[INFO] 02:49:11:951 SUSE/(2972:2975): El ULT 2 ha llegado a la cola de NEW
+
+[INFO] 02:49:11:951 SUSE/(2972:2975): El ULT 2 del proceso 2 ha llegado a la cola de READY
+
+[INFO] 02:49:13:943 SUSE/(2972:2972): Se conecto un cliente!
+[INFO] 02:49:13:943 SUSE/(2972:2972): Se conecto un cliente!
+[INFO] 02:49:13:943 SUSE/(2972:2972): Se conecto un cliente!
+[INFO] 02:49:13:943 SUSE/(2972:2978): El ULT 3 ha llegado a la cola de NEW
+
+[INFO] 02:49:13:943 SUSE/(2972:2978): El ULT 3 del proceso 2 ha llegado a la cola de READY
+
+[INFO] 02:49:13:943 SUSE/(2972:2980): El ULT 4 ha llegado a la cola de NEW
+
+[INFO] 02:49:13:943 SUSE/(2972:2980): El ULT 4 del proceso 2 ha llegado a la cola de READY
+
+[INFO] 02:49:13:943 SUSE/(2972:2979): El ULT 5 ha llegado a la cola de NEW
+
+[INFO] 02:49:13:943 SUSE/(2972:2979): El ULT 5 del proceso 2 ha llegado a la cola de READY
+
+[INFO] 02:49:14:710 SUSE/(2972:2972): Se conecto un cliente!
+[INFO] 02:49:14:710 SUSE/(2972:2972): Se conecto un cliente!
+[INFO] 02:49:14:710 SUSE/(2972:2972): Se conecto un cliente!
+[INFO] 02:49:14:710 SUSE/(2972:2982): El ULT 6 ha llegado a la cola de NEW
+
+[INFO] 02:49:14:710 SUSE/(2972:2982): El ULT 6 del proceso 2 ha llegado a la cola de READY
+
+[INFO] 02:49:14:710 SUSE/(2972:2983): El ULT 7 ha llegado a la cola de NEW
+
+[INFO] 02:49:14:710 SUSE/(2972:2983): El ULT 7 del proceso 2 ha llegado a la cola de READY
+
+[INFO] 02:49:14:710 SUSE/(2972:2984): El ULT 8 ha llegado a la cola de NEW
+
+[INFO] 02:49:14:710 SUSE/(2972:2984): El ULT 8 del proceso 2 ha llegado a la cola de READY
+
+[INFO] 02:52:13:171 SUSE/(3081:3081): Se ha iniciado el servidor.
+
+[INFO] 02:52:17:9 SUSE/(3081:3081): Se conecto un cliente!
+[INFO] 02:52:17:10 SUSE/(3081:3081): Se conecto un cliente!
+[INFO] 02:52:17:10 SUSE/(3081:3081): Se conecto un cliente!
+[INFO] 02:52:17:10 SUSE/(3081:3083): El ULT 0 ha llegado a la cola de NEW
+
+[INFO] 02:52:17:10 SUSE/(3081:3083): El ULT 0 del proceso 1 ha llegado a la cola de READY
+
+[INFO] 02:52:17:10 SUSE/(3081:3084): El ULT 1 ha llegado a la cola de NEW
+
+[INFO] 02:52:17:10 SUSE/(3081:3084): El ULT 1 del proceso 2 ha llegado a la cola de READY
+
+[INFO] 02:52:17:10 SUSE/(3081:3085): El ULT 2 ha llegado a la cola de NEW
+
+[INFO] 02:52:17:10 SUSE/(3081:3085): El ULT 2 del proceso 2 ha llegado a la cola de READY
+
+[INFO] 02:52:17:575 SUSE/(3081:3081): Se conecto un cliente!
+[INFO] 02:52:17:575 SUSE/(3081:3081): Se conecto un cliente!
+[INFO] 02:52:17:576 SUSE/(3081:3081): Se conecto un cliente!
+[INFO] 02:52:17:576 SUSE/(3081:3087): El ULT 3 ha llegado a la cola de NEW
+
+[INFO] 02:52:17:576 SUSE/(3081:3087): El ULT 3 del proceso 2 ha llegado a la cola de READY
+
+[INFO] 02:52:17:576 SUSE/(3081:3088): El ULT 4 ha llegado a la cola de NEW
+
+[INFO] 02:52:17:576 SUSE/(3081:3088): El ULT 4 del proceso 2 ha llegado a la cola de READY
+
+[INFO] 02:52:17:576 SUSE/(3081:3089): El ULT 5 ha llegado a la cola de NEW
+
+[INFO] 02:52:17:576 SUSE/(3081:3089): El ULT 5 del proceso 2 ha llegado a la cola de READY
+
+[INFO] 02:52:18:121 SUSE/(3081:3081): Se conecto un cliente!
+[INFO] 02:52:18:121 SUSE/(3081:3081): Se conecto un cliente!
+[INFO] 02:52:18:121 SUSE/(3081:3081): Se conecto un cliente!
+[INFO] 02:52:18:121 SUSE/(3081:3093): El ULT 6 ha llegado a la cola de NEW
+
+[INFO] 02:52:18:121 SUSE/(3081:3093): El ULT 6 del proceso 2 ha llegado a la cola de READY
+
+[INFO] 02:52:18:121 SUSE/(3081:3092): El ULT 7 ha llegado a la cola de NEW
+
+[INFO] 02:52:18:121 SUSE/(3081:3092): El ULT 7 del proceso 2 ha llegado a la cola de READY
+
+[INFO] 02:52:18:121 SUSE/(3081:3091): El ULT 8 ha llegado a la cola de NEW
+
+[INFO] 02:52:18:121 SUSE/(3081:3091): El ULT 8 del proceso 2 ha llegado a la cola de READY
+
+[INFO] 02:52:18:651 SUSE/(3081:3081): Se conecto un cliente!
+[INFO] 02:52:18:651 SUSE/(3081:3081): Se conecto un cliente!
+[INFO] 02:52:18:651 SUSE/(3081:3081): Se conecto un cliente!
+[INFO] 02:52:18:651 SUSE/(3081:3095): El ULT 9 ha llegado a la cola de NEW
+
+[INFO] 02:52:18:651 SUSE/(3081:3095): El ULT 9 del proceso 2 ha llegado a la cola de READY
+
+[INFO] 02:52:18:651 SUSE/(3081:3097): El ULT 10 ha llegado a la cola de NEW
+
+[WARNING] 02:52:18:651 SUSE/(3081:3097): Se ha alcanzado el grado máximo de multiprogramación.
+
+[INFO] 02:52:18:651 SUSE/(3081:3096): El ULT 11 ha llegado a la cola de NEW
+
+[WARNING] 02:52:18:651 SUSE/(3081:3096): Se ha alcanzado el grado máximo de multiprogramación.
+

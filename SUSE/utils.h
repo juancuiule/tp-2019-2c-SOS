@@ -16,8 +16,9 @@
 #include <commons/log.h>
 #include <commons/collections/list.h>
 #include <string.h>
-
 #include "configuracion.h"
+#include <libSUSE/libSUSE.h>
+#include <libSUSE/utils.h>
 
 typedef enum
 {
@@ -25,17 +26,12 @@ typedef enum
 	PAQUETE
 } op_code;
 
-typedef struct {
-	int pid;
-	int tid;
-} ult_t;
-
 t_log* logger;
 
 void* recibir_buffer(int*, int);
 int iniciar_servidor(void);
 int esperar_cliente(int);
-ult_t* recibir_paquete(int);
+mensaje_t* recibir_paquete(int);
 void recibir_mensaje(int);
 int recibir_operacion(int);
 

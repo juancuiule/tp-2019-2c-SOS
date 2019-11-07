@@ -38,7 +38,31 @@ void inicializar() {
 	sem_init(pid_inc_sem, 0, 1);
 }
 
+int operacion_t_to_int(operacion_t operacion) {
+	switch (operacion) {
+		case CREATE: return 1;
+		case SCHEDULE_NEXT: return 2;
+		case JOIN: return 3;
+		case CLOSE: return 4;
+		case SIGNAL: return 5;
+		case WAIT: return 6;
+		default: return 7;
+	}
+}
+
 void atender_cliente(int cliente_fd) {
+	/*
+	ult_t* ult = malloc(sizeof(ult_t));
+	ult = recibir_paquete(cliente_fd);
+	*/
+	mensaje_t* mensaje = malloc(sizeof(mensaje_t));
+	mensaje = recibir_paquete(cliente_fd);
+
+	if (mensaje->operacion == 1)
+		llega_nuevo_hilo(mensaje->ult);
+}
+
+void atender_nuevo_cliente(int cliente_fd) {
 	ult_t* ult = malloc(sizeof(ult_t));
 	ult = recibir_paquete(cliente_fd);
 	llega_nuevo_hilo(ult);
@@ -77,18 +101,11 @@ void llega_nuevo_hilo(ult_t* ult) {
 void pasar_a_ready() {
 	int tid = 0;
 	tid = queue_pop(cola_new);
-	/*
-	char* pid = malloc(3);
-	sprintf(pid, dictionary_get(diccionario_ults, tid));
-	int indice = dictionary_get(diccionario_procesos, pid);
-	queue_push(colas_ready[indice], ult->tid);
-	printf("El ULT %i paso a ready\n", ult->tid);
-	*/
 	char* thread_id = malloc(10);
 	sprintf(tid, thread_id);
 	int indice = dictionary_get(diccionario_ults, thread_id);
 	queue_push(colas_ready[indice], tid);
-	printf("El ULT %i paso a READY\n", tid);
+	printf("El ULT %i pasó a READY\n", tid);
 }
 
 int siguiente_ult_a_ejecutar(int pid) {
