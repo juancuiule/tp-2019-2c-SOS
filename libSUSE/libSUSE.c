@@ -52,13 +52,20 @@ int suse_schedule_next(void){
 }
 
 int suse_join(int tid){
-	// Not supported
 	return 0;
 }
 
 int suse_close(int tid){
 	printf("Closed thread %i\n", tid);
 	max_tid--;
+	return 0;
+}
+
+int suse_wait(int tid, char *sem_name){
+	return 0;
+}
+
+int suse_signal(int tid, char *sem_name){
 	return 0;
 }
 

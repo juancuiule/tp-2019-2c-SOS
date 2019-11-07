@@ -100,6 +100,3 @@ ult_t* recibir_paquete(int socket_cliente)
 
 
 
-
-
-
