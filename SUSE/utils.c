@@ -33,7 +33,7 @@ int iniciar_servidor(void)
 
 	listen(socket_servidor, SOMAXCONN);
     freeaddrinfo(servinfo);
-    log_info(logger, "Se ha iniciado el servidor.\n");
+    log_info(logger, "Se ha iniciado el servidor.");
     return socket_servidor;
 }
 

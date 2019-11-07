@@ -7,14 +7,13 @@
 #include "configuracion.h"
 #include <libSUSE/libSUSE.h>
 #include <libSUSE/utils.h>
+#include <commons/string.h>
 
 int PID = 0;
 int TID = 0;
 int GRADO_MULTIPROGRAMACION = 0;
 
 t_log* logger;
-t_dictionary* diccionario_procesos;
-t_dictionary* diccionario_ults;
 
 t_queue* cola_new;
 t_queue* cola_blocked;

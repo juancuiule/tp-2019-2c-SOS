@@ -16,6 +16,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
+#include <commons/collections/dictionary.h>
 
 typedef struct {
 	int tid;
@@ -35,6 +36,10 @@ typedef struct {
 	int operacion;
 	ult_t* ult;
 } mensaje_t;
+
+t_dictionary* diccionario_procesos;
+t_dictionary* diccionario_tid_pid;
+t_dictionary* diccionario_tid;
 
 void* serializar(ult_t);
 
