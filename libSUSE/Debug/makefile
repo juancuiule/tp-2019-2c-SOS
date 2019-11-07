@@ -35,11 +35,14 @@ liblibSUSE.so: $(OBJS) $(USER_OBJS)
 # Other Targets
 clean:
 	-$(RM) $(LIBRARIES)$(OBJS)$(C_DEPS) liblibSUSE.so
+	sudo rm -rf /usr/include/libSUSE
 	-@echo ' '
 	
 install: all
 	sudo cp liblibSUSE.so /usr/lib
-	
+	sudo mkdir /usr/include/libSUSE
+	sudo cp ../libSUSE.h /usr/include/libSUSE
+	sudo cp ../utils.h /usr/include/libSUSE
 
 .PHONY: all clean dependents
 
