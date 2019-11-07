@@ -36,19 +36,19 @@ int conectarse_a_suse() {
 	return conexion;
 }
 
-int enviar_datos_ult(int tid, int pid, int conexion) {
+int enviar_datos_ult(int tid, int pid, int conexion, int operacion) {
 	mensaje_t* mensaje = malloc(sizeof(mensaje));
 	ult_t* ult = malloc(sizeof(ult_t));
 	ult->pid = pid;
 	ult->tid = tid;
-	mensaje->operacion = 1;
+	mensaje->operacion = operacion;
 	mensaje->ult = ult;
 	send(conexion, (void*)mensaje, sizeof(mensaje), 0);
 }
 
 int suse_create(int tid){
 	int conexion = conectarse_a_suse();
-	enviar_datos_ult(tid, getpid(), conexion);
+	enviar_datos_ult(tid, getpid(), conexion, 1);
 	return 0;
 }
 
@@ -64,7 +64,7 @@ int suse_join(int tid){
 
 int suse_close(int tid){
 	int conexion = conectarse_a_suse();
-
+	enviar_datos_ult(tid, getpid(), conexion, 4);
 	printf("Closed thread %i\n", tid);
 	max_tid--;
 	return 0;

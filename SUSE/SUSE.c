@@ -31,35 +31,28 @@ void inicializar() {
 		colas_exec[i] = queue_create();
 	}
 
-	tid_inc_sem = malloc(sizeof(sem_t));
-	sem_init(tid_inc_sem, 0 , 1);
+	tid_sem = malloc(sizeof(sem_t));
+	sem_init(tid_sem, 0 , 1);
 
-	pid_inc_sem = malloc(sizeof(sem_t));
-	sem_init(pid_inc_sem, 0, 1);
-}
+	pid_sem = malloc(sizeof(sem_t));
+	sem_init(pid_sem, 0, 1);
 
-int operacion_t_to_int(operacion_t operacion) {
-	switch (operacion) {
-		case CREATE: return 1;
-		case SCHEDULE_NEXT: return 2;
-		case JOIN: return 3;
-		case CLOSE: return 4;
-		case SIGNAL: return 5;
-		case WAIT: return 6;
-		default: return 7;
-	}
+	multiprogramacion_sem = malloc(sizeof(sem_t));
+	sem_init(multiprogramacion_sem, 0, 1);
 }
 
 void atender_cliente(int cliente_fd) {
-	/*
-	ult_t* ult = malloc(sizeof(ult_t));
-	ult = recibir_paquete(cliente_fd);
-	*/
 	mensaje_t* mensaje = malloc(sizeof(mensaje_t));
 	mensaje = recibir_paquete(cliente_fd);
 
 	if (mensaje->operacion == 1)
 		llega_nuevo_hilo(mensaje->ult);
+
+	if (mensaje->operacion == 4) {
+		cerrar_hilo(mensaje->ult);
+		printf("operacion cerrar hilo\n");
+	}
+
 }
 
 void atender_nuevo_cliente(int cliente_fd) {
@@ -72,7 +65,7 @@ void llega_nuevo_hilo(ult_t* ult) {
 	char* pid = malloc(10);
 	char* tid = malloc(10);
 
-	queue_push(cola_new, ult->tid);
+	queue_push(cola_new, ult);
 	log_info(logger, "El ULT %d ha llegado a la cola de NEW\n", TID);
 
 	sprintf(pid, "%d", ult->pid);
@@ -80,22 +73,33 @@ void llega_nuevo_hilo(ult_t* ult) {
 	if(!dictionary_has_key(diccionario_procesos, pid)) {
 		dictionary_put(diccionario_procesos, pid, PID);
 		dictionary_put(diccionario_ults, tid, PID);
-		sem_wait(pid_inc_sem);
+		sem_wait(pid_sem);
 		PID++;
-		sem_post(pid_inc_sem);
+		sem_post(pid_sem);
 	}
 
 	if (GRADO_MULTIPROGRAMACION >= MAX_MULTIPROG)
 		log_warning(logger, "Se ha alcanzado el grado máximo de multiprogramación.\n");
 	else {
-		queue_push(colas_ready[PID], TID);
+		ult = queue_pop(cola_new);
+		queue_push(colas_ready[PID], ult);
 		log_info(logger, "El ULT %d del proceso %d ha llegado a la cola de READY\n", TID, PID);
 	}
 
-	sem_wait(tid_inc_sem);
+	sem_wait(tid_sem);
 	TID++;
+	sem_post(tid_sem);
+	sem_wait(multiprogramacion_sem);
 	GRADO_MULTIPROGRAMACION++;
-	sem_post(tid_inc_sem);
+	sem_post(multiprogramacion_sem);
+}
+
+void cerrar_hilo(ult_t* ult) {
+	queue_push(cola_exit, ult);
+	log_info(logger, "El ULT %d ha llegado a la cola de EXIT\n", ult->tid);
+	sem_wait(multiprogramacion_sem);
+	GRADO_MULTIPROGRAMACION--;
+	sem_post(multiprogramacion_sem);
 }
 
 void pasar_a_ready() {
@@ -108,24 +112,15 @@ void pasar_a_ready() {
 	printf("El ULT %i pasó a READY\n", tid);
 }
 
-int siguiente_ult_a_ejecutar(int pid) {
-	int* ults_de_proceso = malloc(sizeof(int));
-
-}
-
 void liberar() {
 	config_destroy(config);
 	log_destroy(logger);
 	dictionary_destroy(diccionario_procesos);
 	dictionary_destroy(diccionario_ults);
-	sem_destroy(tid_inc_sem);
-	sem_destroy(pid_inc_sem);
+	sem_destroy(tid_sem);
+	sem_destroy(pid_sem);
+	sem_destroy(multiprogramacion_sem);
 }
-
-
-
-
-
 
 
 

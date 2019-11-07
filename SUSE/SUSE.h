@@ -22,8 +22,9 @@ t_queue* cola_exit;
 t_queue* colas_ready[100];
 t_queue* colas_exec[100];
 
-sem_t* tid_inc_sem;
-sem_t* pid_inc_sem;
+sem_t* tid_sem;
+sem_t* pid_sem;
+sem_t* multiprogramacion_sem;
 
 void inicializar();
 void atender_cliente(int);
