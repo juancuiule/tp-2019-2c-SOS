@@ -59,8 +59,8 @@ int suse_schedule_next(void){
 }
 
 int suse_join(int tid){
-	//int conexion = conectarse_a_suse();
-	//enviar_datos_ult(tid % 3, getpid(), conexion, 3);
+	int conexion = conectarse_a_suse();
+	enviar_datos_ult(tid, getpid(), conexion, 3);
 	return 0;
 }
 

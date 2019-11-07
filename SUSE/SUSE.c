@@ -2,15 +2,17 @@
 
 int main() {
 	int cliente_fd;
-	pthread_t hilo;
+	pthread_t hilo_clientes, hilo_metricas;
 
 	inicializar();
 	configurar();
 	int servidor_fd = iniciar_servidor();
 
+	pthread_create(&hilo_metricas, NULL, logear_metricas, NULL);
+
 	while(1) {
 		cliente_fd = esperar_cliente(servidor_fd);
-		pthread_create(&hilo, NULL, atender_cliente, cliente_fd);
+		pthread_create(&hilo_clientes, NULL, atender_cliente, cliente_fd);
 	}
 
 	liberar();
@@ -19,6 +21,7 @@ int main() {
 
 void inicializar() {
 	logger = log_create("../SUSE.log", "SUSE", 1, LOG_LEVEL_DEBUG);
+	logger_metricas = log_create("../METRICAS.log", "SUSE", 1, LOG_LEVEL_DEBUG);
 	diccionario_procesos = dictionary_create();
 	diccionario_tid_pid = dictionary_create();
 	diccionario_tid = dictionary_create();
@@ -40,6 +43,13 @@ void inicializar() {
 
 	multiprogramacion_sem = malloc(sizeof(sem_t));
 	sem_init(multiprogramacion_sem, 0, 1);
+}
+
+void logear_metricas() {
+	while (1) {
+		sleep(METRICS_TIMER);
+		log_info(logger_metricas, "Grado de multiprogramación: %d", GRADO_MULTIPROGRAMACION);
+	}
 }
 
 void atender_cliente(int cliente_fd) {
@@ -83,9 +93,8 @@ void llega_nuevo_hilo(ult_t* ult) {
 		sem_post(pid_sem);
 	}
 
-	if (GRADO_MULTIPROGRAMACION >= MAX_MULTIPROG) {
-		if (GRADO_MULTIPROGRAMACION == MAX_MULTIPROG)
-			log_warning(logger, "Se ha alcanzado el grado máximo de multiprogramación.");
+	if (GRADO_MULTIPROGRAMACION == MAX_MULTIPROG) {
+		log_warning(logger, "Se ha alcanzado el grado máximo de multiprogramación.");
 	}
 	else {
 		ult = queue_pop(cola_new);
@@ -96,9 +105,12 @@ void llega_nuevo_hilo(ult_t* ult) {
 	sem_wait(tid_sem);
 	TID++;
 	sem_post(tid_sem);
-	sem_wait(multiprogramacion_sem);
-	GRADO_MULTIPROGRAMACION++;
-	sem_post(multiprogramacion_sem);
+
+	if (GRADO_MULTIPROGRAMACION < 10) {
+		sem_wait(multiprogramacion_sem);
+		GRADO_MULTIPROGRAMACION++;
+		sem_post(multiprogramacion_sem);
+	}
 }
 
 void cerrar_hilo(ult_t* ult) {
@@ -124,12 +136,13 @@ void bloquear_hilo(ult_t* ult) {
 	int pid = dictionary_get(diccionario_tid_pid, thread_id);
 	ult_t* thread = queue_pop(colas_exec[pid]);
 	queue_push(cola_blocked, thread);
-	printf("El thread %d ha llegado a la cola de BLOCKED", dictionary_get(diccionario_tid, thread_id));
+	log_info(logger, "El thread %d ha llegado a la cola de BLOCKED", dictionary_get(diccionario_tid, thread_id));
 }
 
 void liberar() {
 	config_destroy(config);
 	log_destroy(logger);
+	log_destroy(logger_metricas);
 	dictionary_destroy(diccionario_procesos);
 	dictionary_destroy(diccionario_tid_pid);
 	dictionary_destroy(diccionario_tid);

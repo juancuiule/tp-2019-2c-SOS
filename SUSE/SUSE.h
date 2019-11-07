@@ -14,6 +14,7 @@ int TID = 0;
 int GRADO_MULTIPROGRAMACION = 0;
 
 t_log* logger;
+t_log* logger_metricas;
 
 t_queue* cola_new;
 t_queue* cola_blocked;
@@ -26,6 +27,7 @@ sem_t* pid_sem;
 sem_t* multiprogramacion_sem;
 
 void inicializar();
+void logear_metricas();
 void atender_cliente(int);
 void atender_nuevo_cliente(int);
 void llega_nuevo_hilo(ult_t*);
