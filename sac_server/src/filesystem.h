@@ -20,7 +20,7 @@ typedef uint32_t ptrGBloque;
 
 typedef struct sac_block_t{
 	unsigned char bytes[BLOCKSIZE];
-} GBLOCK;
+} GBlock;
 
 typedef struct sac_header_t { // un bloque
 	unsigned char sac[3];
@@ -41,12 +41,13 @@ typedef struct sac_file_t { // un cuarto de bloque (256 bytes)
 } GFile;
 
 
-GBLOCK* disk_addr;
+GBlock* disk_blk_pointer;
 void* disk;
+size_t disk_size;
 
 GHeader *sac_header;
-t_bitarray *sac_bitmap;
-GFile sac_node_table[GFILEBYTABLE];
+t_bitarray *sac_bitarray;
+GFile *sac_nodetable;//mi tabla de nodos
 
 
 bool map_disk_in_memory(char *disk_name);
