@@ -3,6 +3,11 @@
 
 #include <stdio.h>
 #include <stdint.h>
+#include <string.h>
+#include <sys/mman.h>
+#include <fcntl.h>//open
+#include <common/log.h>
+#include <commons/bitarray.h>
 
 #define BLOCKSIZE 4096
 #define GFILEBYTABLE 1024
@@ -36,6 +41,15 @@ typedef struct sac_file_t { // un cuarto de bloque (256 bytes)
 } GFile;
 
 
-size_t get_filesize(char *filename);
+GBLOCK* disk_addr;
+void* disk;
+
+GHeader *sac_header;
+t_bitarray *sac_bitmap;
+GFile sac_node_table[GFILEBYTABLE];
+
+
+bool map_disk_in_memory(char *disk_name);
+void filesystem_config();
 
 #endif /* FILESYSTEM_H_ */
