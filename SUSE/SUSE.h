@@ -11,6 +11,7 @@
 
 int PID = 0;
 int TID = 0;
+
 int GRADO_MULTIPROGRAMACION = 0;
 
 t_log* logger;

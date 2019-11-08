@@ -21,6 +21,9 @@
 typedef struct {
 	int tid;
 	int pid;
+	int tiempo_ejecucion;
+	int tiempo_espera;
+	int tiempo_cpu;
 } ult_t;
 
 typedef enum {

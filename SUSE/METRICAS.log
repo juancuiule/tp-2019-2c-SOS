@@ -1,14 +1,11 @@
-[INFO] 20:38:09:217 SUSE/(7675:7676): Grado de multiprogramación: 9
-[INFO] 20:38:14:218 SUSE/(7675:7676): Grado de multiprogramación: 9
-[INFO] 20:38:19:218 SUSE/(7675:7676): Grado de multiprogramación: 12
-[INFO] 20:38:24:219 SUSE/(7675:7676): Grado de multiprogramación: 15
-[INFO] 20:38:29:219 SUSE/(7675:7676): Grado de multiprogramación: 15
-[INFO] 20:38:34:221 SUSE/(7675:7676): Grado de multiprogramación: 15
-[INFO] 20:38:39:221 SUSE/(7675:7676): Grado de multiprogramación: 15
-[INFO] 20:38:44:221 SUSE/(7675:7676): Grado de multiprogramación: 15
-[INFO] 20:38:49:222 SUSE/(7675:7676): Grado de multiprogramación: 15
-[INFO] 20:45:15:32 SUSE/(7926:7927): Grado de multiprogramación: 0
-[INFO] 20:45:20:33 SUSE/(7926:7927): Grado de multiprogramación: 10
-[INFO] 20:45:25:34 SUSE/(7926:7927): Grado de multiprogramación: 10
-[INFO] 20:45:30:34 SUSE/(7926:7927): Grado de multiprogramación: 10
-[INFO] 20:45:35:35 SUSE/(7926:7927): Grado de multiprogramación: 10
+
+[INFO] 00:53:07:169 SUSE/(3260:3261): Grado de multiprogramación: 0
+[INFO] 00:53:12:170 SUSE/(3260:3261): Grado de multiprogramación: 3
+[INFO] 00:53:17:170 SUSE/(3260:3261): Grado de multiprogramación: 10
+[INFO] 00:53:22:171 SUSE/(3260:3261): Grado de multiprogramación: 10
+[INFO] 00:53:27:171 SUSE/(3260:3261): Grado de multiprogramación: 10
+[INFO] 00:53:32:177 SUSE/(3260:3261): Grado de multiprogramación: 10
+[INFO] 00:53:37:177 SUSE/(3260:3261): Grado de multiprogramación: 10
+[INFO] 00:53:42:181 SUSE/(3260:3261): Grado de multiprogramación: 10
+[INFO] 00:53:47:187 SUSE/(3260:3261): Grado de multiprogramación: 10
+[INFO] 00:53:52:208 SUSE/(3260:3261): Grado de multiprogramación: 10
