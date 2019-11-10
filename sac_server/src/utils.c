@@ -11,6 +11,13 @@ size_t get_filesize(char *filename)
 	return size;
 }
 
+int get_size_filenames(char **names)
+{
+	int name_length = -1;
+	while(names[++name_length] != NULL){/*do nothing*/};
+	return name_length;
+}
+
 //desc: invierto el orden del vector de strings. de ["home", "lala.txt", NULL] a ["lala.txt", "home", NULL]
 void reverse_string_vector(char ** strings)
 {

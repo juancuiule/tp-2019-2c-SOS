@@ -105,7 +105,7 @@ int fs_get_blk_by_fullpath(char *fullpath)
 
 	char **filenames = string_split(fullpath, "/"); //separo en ["home", "lala.txt", NULL]
 
-	int size_filenames = sizeof(filenames) - 1; //sin contar el null
+	int size_filenames = get_size_filenames(filenames);
 
 	if( size_filenames > 1){//Si tiene mas de 1 un argumento
 		reverse_string_vector(filenames);
