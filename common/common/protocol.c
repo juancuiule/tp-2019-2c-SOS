@@ -391,11 +391,10 @@ void dslz_res_open(void *buffer, int *fd)
 	memcpy(fd, buffer, sizeof(int));
 }
 
-void dslz_res_getattr(void *buffer, uint32_t *mode, uint32_t *nlink, int *size)
+void dslz_res_getattr(void *buffer, uint32_t *size, uint64_t *m_date)
 {
-	memcpy(mode, buffer, sizeof(uint32_t));
-	memcpy(nlink, buffer+sizeof(uint32_t), sizeof(uint32_t));
-	memcpy(size, buffer+sizeof(uint32_t)*2, sizeof(int));
+	memcpy(size, buffer, sizeof(uint32_t));
+	memcpy(m_date, buffer+sizeof(uint32_t), sizeof(uint64_t));
 }
 
 void dslz_res_read(void *buffer, char *buf, int *size)
@@ -683,16 +682,15 @@ package_t slz_res_open(int fd)
 	return paquete;
 }
 
-package_t slz_res_getattr(uint32_t mode, uint32_t nlink, int size)
+package_t slz_res_getattr(uint32_t size, uint64_t m_date)
 {
 	package_t paquete;
 
-	int tam_payload = sizeof(uint32_t) + sizeof(uint32_t) + sizeof(int);
+	int tam_payload = sizeof(uint32_t) + sizeof(uint64_t);
 	paquete.header = header_get('S', COD_GETATTR, tam_payload);
 	paquete.payload = malloc(tam_payload);
-	memcpy(paquete.payload, &mode, sizeof(uint32_t));
-	memcpy(paquete.payload+sizeof(uint32_t), &nlink, sizeof(uint32_t));
-	memcpy(paquete.payload+sizeof(uint32_t)*2, &size, sizeof(int));
+	memcpy(paquete.payload, &size, sizeof(uint32_t));
+	memcpy(paquete.payload+sizeof(uint32_t), &m_date, sizeof(uint64_t));
 
 	return paquete;
 }
