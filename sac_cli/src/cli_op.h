@@ -11,6 +11,7 @@
 
 #include <common/protocol.h>
 #include <commons/collections/list.h>
+#include "utils.h"
 
 socket_t sac_server;
 

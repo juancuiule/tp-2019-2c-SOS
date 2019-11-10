@@ -1,6 +1,6 @@
 #include "cli_op.h"
 
-//OK
+//Primer operacion consultando al disco binario!
 int cli_getattr(const char *path, struct stat *statbuf)
 {
 	log_msje_info("Operacion GETATTR sobre path [ %s ]", path);
@@ -15,9 +15,9 @@ int cli_getattr(const char *path, struct stat *statbuf)
 		log_msje_info("Se envio operacion getattr al server");
 
 	//...espero respuesta de server
-	uint32_t mode;
-	uint32_t nlink;
-	int size, errnum;
+	uint32_t size;
+	uint64_t m_date;
+	int errnum;
 	respuesta = paquete_recibir(sac_server.fd);
 
 	if(respuesta.header.cod_operacion == COD_ERROR){
@@ -26,10 +26,12 @@ int cli_getattr(const char *path, struct stat *statbuf)
 		return -errnum;
 	}
 
-	dslz_res_getattr(respuesta.payload, &mode, &nlink, &size);
-	statbuf->st_mode = mode;
-	statbuf->st_nlink = nlink;
+	dslz_res_getattr(respuesta.payload, &size, &m_date);
+	struct timespec ts_m_time;
+	convert_to_timespec(m_date, &ts_m_time);
 	statbuf->st_size = size;
+	statbuf->st_mtim = ts_m_time;
+	statbuf->st_mode = 0755; //harcodeo permiso
 
 	return 0;
 }
