@@ -27,5 +27,6 @@ void sac_mkdir(char *path, uint32_t mode, int cliente_fd);
 void sac_rmdir(char *path, int cliente_fd);
 void sac_mknod(char *path, mode_t mode, dev_t dev, int cliente_fd);
 void sac_write(char *path, char *buffer, int fd, size_t size, off_t offset, int cliente_fd);
+void sac_unlink(char *path, int cliente_fd);
 
 #endif /* SAC_OP_H_ */

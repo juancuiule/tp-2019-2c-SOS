@@ -26,6 +26,7 @@ int cli_mkdir(const char *path, mode_t mode);
 int cli_rmdir(const char *path);
 
 int cli_mknod(const char * filename,mode_t mode, dev_t dev);
+int cli_unlink(const char *path);
 
 //int cli_write(int filedes, const void* buffer, size_t size_t);
 
