@@ -16,8 +16,8 @@ int main(int argc, char *argv[]) {
 	log_msje_info("disk name : [ %s ]", disk_name);
 
 	//Mapeo el disco y seteo mis estructuras
-	if(map_disk_in_memory(disk_name)){
-		filesystem_config();
+	if(fs_map_disk_in_memory(disk_name)){
+		fs_set_config();
 	}
 	else{
 		log_msje_error("No se pudo mapear el disco a memoria");

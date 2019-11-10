@@ -26,7 +26,7 @@ static void set_sac_nodetable()
 	log_msje_info("Nodetable seteado");
 }
 
-void filesystem_config()
+void fs_set_config()
 {
 	log_msje_info("Seteo estructuras del filesystem");
 	set_sac_header();
@@ -34,18 +34,7 @@ void filesystem_config()
 	set_sac_nodetable();
 }
 
-static size_t get_filesize(char *filename)
-{
-	FILE* fd = fopen(filename, "r");
-
-	fseek(fd, 0L, SEEK_END);
-	size_t size = ftell(fd);
-
-	fclose(fd);
-	return size;
-}
-
-bool map_disk_in_memory(char *disk_name)
+bool fs_map_disk_in_memory(char *disk_name)
 {
 	disk_size = get_filesize(disk_name);
 	int disk_fd = open(disk_name, O_RDWR, 0);
@@ -53,3 +42,104 @@ bool map_disk_in_memory(char *disk_name)
 	disk_blk_pointer = disk;
 	return disk != MAP_FAILED;
 }
+
+//desc: busca dentro de los candidatos aquel que sea la raiz
+static void fs_find_root_father(t_list *blks_candidatos)
+{
+	for(int i=0; i < blks_candidatos->elements_count; i++)
+	{
+		GBlk_nominee *candidato =  list_get(blks_candidatos, i);
+		if(candidato->blk_father != 0){//El padre no es la raiz
+			list_remove(blks_candidatos, i);
+		}
+	}
+}
+
+//desc: actualiza la lista de bloques candidatos para un filename
+static int fs_find_blk_nominees_by_name(char *filename, t_list *blks_candidatos)
+{
+	if(list_is_empty(blks_candidatos))//Estamos buscando blks del ultimo argumento del path
+	{
+		for(int i=0; i < MAX_FILE_NUMBER; i++)//Recorro la tabla de nodos
+		{
+			if(strcmp( sac_nodetable[i].fname , filename) == 0)//Encontre el filename
+			{
+				GBlk_nominee *blk_candidato = malloc(sizeof(GBlk_nominee));
+				blk_candidato->the_blk = i; //nro de bloque dentro tabla de nodos
+				blk_candidato->blk_father = sac_nodetable[i].parent_dir_block;
+
+				list_add(blks_candidatos, blk_candidato);
+
+			}
+		}
+		if(list_is_empty(blks_candidatos))
+			return -1;
+	}
+	else //Estamos buscando dentro de blks padres candidatos == filename
+	{
+		for(int i=0; i < blks_candidatos->elements_count; i++)//Recorro candidatos
+		{
+			GBlk_nominee *candidato = list_get(blks_candidatos, i);
+			char *father_name =  sac_nodetable[candidato->blk_father].fname;
+
+			if(strcmp(filename, father_name) == 0)//Califica
+			{
+				//Me guardo el padre del padre, mantengo candidato blk
+				candidato->blk_father = sac_nodetable[candidato->blk_father].parent_dir_block;
+				list_replace(blks_candidatos, i, candidato);
+			}
+			else
+			{
+				//Saco del concurso al candidato
+				list_remove(blks_candidatos, i);
+			}
+		}
+	}
+	return 0;
+}
+
+//desc: devuelve el nro de bloque del archivo, o sino -1 por path invalido
+int fs_get_blk_by_fullpath(char *fullpath)
+{
+	log_msje_info("Buscando el bloque para path [%s]", fullpath);
+
+	char **filenames = string_split(fullpath, "/"); //separo en ["home", "lala.txt", NULL]
+
+	int size_filenames = sizeof(filenames) - 1; //sin contar el null
+
+	if( size_filenames > 1){//Si tiene mas de 1 un argumento
+		reverse_string_vector(filenames);
+	}
+
+	t_list *blks_candidatos = list_create();
+	while(*filenames != NULL)
+	{
+		int res = fs_find_blk_nominees_by_name(*filenames, blks_candidatos);
+		if(res == -1)
+			break;
+		filenames++;
+	}
+
+	if(size_filenames == 1)//Para rutas estilo /lala.txt de un solo nombre
+		fs_find_root_father(blks_candidatos);
+
+	GBlk_nominee *blk_nominado;
+
+	if(blks_candidatos->elements_count == 1)
+	{
+		blk_nominado = list_get(blks_candidatos, 0);
+		if(blk_nominado->blk_father == 0)//el padre es la raiz
+		{
+			log_msje_info("El bloque es [ %d ]", blk_nominado->the_blk);
+		}
+	}
+	else//blks_candidatos es cero
+	{
+		log_msje_error("No existe la ruta [ %s ]", fullpath);
+		return -1;
+	}
+
+	list_destroy(blks_candidatos);
+	return blk_nominado->the_blk;
+}
+
