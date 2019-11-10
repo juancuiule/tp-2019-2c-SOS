@@ -357,6 +357,21 @@ package_t slz_cod_write(const char *path, const char *buffer, int fd, size_t siz
 	return paquete;
 }
 
+package_t slz_cod_unlink(const char *path)
+{
+	package_t paquete;
+	int tam_path = strlen(path);
+	int tam_payload = sizeof(int)+tam_path;
+
+	paquete.header = header_get('U', COD_UNLINK, tam_payload);
+	paquete.payload = malloc(tam_payload);
+
+	memcpy(paquete.payload              ,&tam_path  ,sizeof(int));
+	memcpy(paquete.payload+sizeof(int)	,path		,tam_path);
+
+	return paquete;
+}
+
 //desc: dslz el payload respuesta de server, guarda la direccion del DIR
 void dslz_res_opendir(void *buffer, intptr_t* dir)
 {
@@ -606,6 +621,17 @@ void dslz_cod_write(void *payload, char **path, char **buffer, int *fd, size_t *
 	offs += sizeof(int);
 
 	memcpy(offset, payload+offs, sizeof(off_t));
+}
+
+void dslz_cod_unlink(void *buffer, char **path)
+{
+	int tam_path;
+	memcpy(&tam_path, buffer, sizeof(int));
+
+	char *ruta = malloc(tam_path+1);
+	memcpy(ruta, buffer+sizeof(int), tam_path);
+	ruta[tam_path]='\0';
+	*path = ruta;
 }
 //desc: arma paquete con el pointer adress de DIR
 package_t slz_res_opendir(DIR *dp)

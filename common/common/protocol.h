@@ -26,6 +26,7 @@ typedef enum{
 	COD_RMDIR,
 	COD_MKNOD,
 	COD_WRITE,
+	COD_UNLINK,
 	COD_ERROR,
 	COD_DESC
 }cod_operation;
@@ -66,6 +67,7 @@ package_t slz_cod_mkdir(const char *path, uint32_t mode);
 package_t slz_cod_rmdir(const char *path);
 package_t slz_cod_mknod(const char *filename, mode_t mode, dev_t dev);
 package_t slz_cod_write(const char *path, const char *buffer, int fd, size_t size, off_t offset);
+package_t slz_cod_unlink(const char *path);
 
 void dslz_res_opendir(void *buffer, intptr_t* dir);
 void dslz_res_readdir(void *buffer, t_list** filenames);
@@ -87,6 +89,7 @@ void dslz_cod_mkdir(void *buffer, char **path, uint32_t *mode);
 void dslz_cod_rmdir(void *buffer, char**path);
 void dslz_cod_mknod(void *buffer, char **filename, mode_t *mode, dev_t *dev);
 void dslz_cod_write(void *payload, char **path, char **buffer, int *fd, size_t *size, off_t *offset);
+void dslz_cod_unlink(void *buffer, char **path);
 
 package_t slz_res_opendir(DIR *dp);
 package_t slz_res_readdir(t_list * filenames);

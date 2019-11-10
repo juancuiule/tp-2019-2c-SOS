@@ -74,6 +74,11 @@ int atender_conexiones(int cliente_fd)
 				dslz_cod_write(paquete.payload, &path, &buffer, &fd, &size, &offset);
 				sac_write(path, buffer, fd, size, offset, cliente_fd);
 				break;
+			case COD_UNLINK:
+				log_msje_info("Me llego operacion unlink");
+				dslz_cod_unlink(paquete.payload, &path);
+				sac_unlink(path,cliente_fd);
+				break;
 			case COD_DESC:
 				log_msje_info("El cliente en el socket [ %d ] se desconecto", cliente_fd);
 				return EXIT_FAILURE;

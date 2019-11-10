@@ -341,6 +341,31 @@ int cli_write(const char *path, const char *buf, size_t size, off_t offset, stru
 	return leido;
 }
 
+int cli_unlink(const char *path)
+{
+	log_msje_info("Operacion UNLINK sobre path [ %s ]", path);
+
+	package_t paquete, respuesta;
+	paquete = slz_cod_unlink(path);
+
+	if(!paquete_enviar(sac_server.fd, paquete))
+		log_msje_error("No se pudo enviar el paquete cod unlink");
+	else
+		log_msje_info("Se envio operacion unlink al server");
+
+	//espero respuesta del server
+	respuesta = paquete_recibir(sac_server.fd);
+
+	if(respuesta.header.cod_operacion == COD_ERROR){
+		int err;
+		log_msje_error("unlink me llego cod error");
+		dslz_res_error(respuesta.payload, &err);
+		return -err;
+	}
+
+	return 0;
+}
+
 void set_sac_fd(socket_t socket)
 {
 	sac_server = socket;
@@ -358,5 +383,6 @@ struct fuse_operations cli_oper = {
 		.mkdir = cli_mkdir,
 		.rmdir = cli_rmdir,
 		.mknod = cli_mknod,
-		.write = cli_write
+		.write = cli_write,
+		.unlink = cli_unlink
 };

@@ -299,3 +299,28 @@ void sac_write(char *path, char *buffer, int fd, size_t size, off_t offset, int 
     paquete_enviar(cliente_fd, paquete);
 }
 
+void sac_unlink(char *path, int cliente_fd)
+{
+	log_msje_info("SAC UNLINCK = [ %s ]", path);
+	package_t paquete;
+	int res_unlink, err;
+
+	char full_path[PATH_MAX];
+	sac_fullpath(full_path, path);
+
+	res_unlink = unlink(path);
+
+	if(res_unlink == -1){
+		log_msje_error("mknod: [ %s ]", strerror(errno));
+		err = errno;
+		paquete = slz_res_error(err);
+	}
+	else {
+		log_msje_info("Exito operacion unlink sobre fs local");
+		paquete = slz_simple_res(COD_UNLINK);
+	}
+
+	paquete_enviar(cliente_fd, paquete);
+
+}
+
