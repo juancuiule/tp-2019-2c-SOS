@@ -330,7 +330,7 @@ int cli_write(const char *path, const char *buf, size_t size, off_t offset, stru
 
 	if(respuesta.header.cod_operacion == COD_ERROR){
 		int err;
-		log_msje_error("read me llego cod error");
+		log_msje_error("write me llego cod error");
 		dslz_res_error(respuesta.payload, &err);
 		return -err;
 	}

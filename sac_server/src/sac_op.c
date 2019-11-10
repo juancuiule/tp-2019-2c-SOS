@@ -311,7 +311,7 @@ void sac_unlink(char *path, int cliente_fd)
 	res_unlink = unlink(path);
 
 	if(res_unlink == -1){
-		log_msje_error("mknod: [ %s ]", strerror(errno));
+		log_msje_error("unlink: [ %s ]", strerror(errno));
 		err = errno;
 		paquete = slz_res_error(err);
 	}

@@ -363,7 +363,7 @@ package_t slz_cod_unlink(const char *path)
 	int tam_path = strlen(path);
 	int tam_payload = sizeof(int)+tam_path;
 
-	paquete.header = header_get('U', COD_UNLINK, tam_payload);
+	paquete.header = header_get('C', COD_UNLINK, tam_payload);
 	paquete.payload = malloc(tam_payload);
 
 	memcpy(paquete.payload              ,&tam_path  ,sizeof(int));
@@ -756,11 +756,5 @@ package_t slz_simple_res(cod_operation cod)
 	paquete.header = header_get('S', cod, 0);
 	return paquete;
 }
-package_t slz_res_mknod(cod_operation code){
-	package_t package;
 
-	package.header = header_get('N', code, TAM_HEADER);
-
-	return package;
-}
 
