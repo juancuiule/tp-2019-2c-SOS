@@ -116,27 +116,32 @@ void sac_open(char *path, int flags, int cliente_fd)
 
 }
 
+
+/*
+ * Primer operacion que va a consultar con nuestro disco binario sac!
+ *
+ * Mandamos size y modif time
+ */
 void sac_getattr(char *path, int cliente_fd)
 {
 	log_msje_info("SAC GETATTR Path = [ %s ]", path);
 	package_t paquete;
 
-	char fpath[PATH_MAX];
-	sac_fullpath(fpath, path);
+	int blk;
 
-	int res, err;
-	struct stat stbuf;
-	//ejecuto operacion
-	res = lstat(fpath, &stbuf);
+	//Buscamos el bloque que le corresponde al archivo
+	blk = fs_get_blk_by_fullpath(path);
 
-    if (res == -1) {
-    	log_msje_error("getattr: [ %s ]", strerror(errno));
-    	err = errno;
-    	paquete = slz_res_error(err);
+    if (blk == -1) {
+    	log_msje_error("getattr: no such file or directory");
+    	paquete = slz_res_error(ENOENT);
     }
     else {
-    	log_msje_info("Exito operacion getattr sobre fs local");
-    	paquete = slz_res_getattr(stbuf.st_mode, stbuf.st_nlink, stbuf.st_size);
+    	log_msje_info("Exito operacion getattr sobre disco binario");
+    	uint32_t size= sac_nodetable[blk].file_size;
+    	uint64_t modif_date = sac_nodetable[blk].m_date;
+
+    	paquete = slz_res_getattr(size, modif_date);
     }
 
     paquete_enviar(cliente_fd, paquete);

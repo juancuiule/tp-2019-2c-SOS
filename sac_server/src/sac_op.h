@@ -13,6 +13,10 @@
 #include <commons/collections/list.h>
 #include <sys/types.h>
 
+#include "filesystem.h"
+#include <stdint.h>
+
+
 #define FS_PATH "/home/utnso/workspace/tp-2019-2c-SOS/sac_server/Debug/SAC"
 #define PATH_MAX 4096 //256
 
