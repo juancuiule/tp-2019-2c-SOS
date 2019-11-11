@@ -194,10 +194,10 @@ void sac_release(char *path, int fd, int cliente_fd)
     paquete_enviar(cliente_fd, paquete);
 }
 
-void sac_mkdir(char *path, uint32_t mode, int cliente_fd)
+void sac_mkdir(char *path, int cliente_fd)
 {
 	log_msje_info("SAC MKDIR Path = [ %s ]", path);
-
+	/*
 	package_t paquete;
 
 	char fpath[PATH_MAX];
@@ -205,7 +205,7 @@ void sac_mkdir(char *path, uint32_t mode, int cliente_fd)
 
 	int res, err;
 	//ejecuto operacion
-	res = mkdir(fpath, mode);
+	//res = mkdir(fpath, mode);
 
     if (res == -1) {
     	log_msje_error("mkdir: [ %s ]", strerror(errno));
@@ -217,7 +217,7 @@ void sac_mkdir(char *path, uint32_t mode, int cliente_fd)
     	paquete = slz_simple_res(COD_MKDIR);
     }
 
-    paquete_enviar(cliente_fd, paquete);
+    paquete_enviar(cliente_fd, paquete);*/
 }
 
 void sac_rmdir(char *path, int cliente_fd)
@@ -247,7 +247,7 @@ void sac_rmdir(char *path, int cliente_fd)
 
 }
 
-void sac_mknod(char *path, mode_t mode, dev_t dev, int cliente_fd){
+void sac_mknod(char *path, int cliente_fd){
 
 	log_msje_info("SAC MKNOD Path = [ %s ]", path);
 	package_t paquete;
@@ -260,10 +260,11 @@ void sac_mknod(char *path, mode_t mode, dev_t dev, int cliente_fd){
 	//sac_opendir(path, cliente_fd);
 
 	//ejecuta la operacion crear un archivo
-	res_mknod = mknod(fpath, mode, dev);
+	//res_mknod = mknod(fpath, mode, dev);
 
 	//valido la respuesta de la operacion
-	if(res_mknod == -1){
+
+	/*if(res_mknod == -1){
 		log_msje_error("mknod: [ %s ]", strerror(errno));
 		err = errno;
 		paquete = slz_res_error(err);
@@ -271,7 +272,7 @@ void sac_mknod(char *path, mode_t mode, dev_t dev, int cliente_fd){
 	else
 		paquete = slz_simple_res(COD_MKNOD);
 
-	paquete_enviar(cliente_fd, paquete);
+	paquete_enviar(cliente_fd, paquete);*/
 
 
 }

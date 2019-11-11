@@ -10,8 +10,6 @@ int atender_conexiones(int cliente_fd)
 	int fd;
 	size_t size;
 	off_t offset;
-	uint32_t mode;
-	dev_t dev;
 
 	while(true){
 		paquete = paquete_recibir(cliente_fd);
@@ -21,7 +19,7 @@ int atender_conexiones(int cliente_fd)
 				break;
 			case COD_OPENDIR:
 				log_msje_info("Me llego operacion opendir");
-				dslz_cod_opendir(paquete.payload, &path);
+				dslz_payload_with_path(paquete.payload, &path);
 				sac_opendir(path, cliente_fd);
 				break;
 			case COD_READDIR:
@@ -41,7 +39,7 @@ int atender_conexiones(int cliente_fd)
 				break;
 			case COD_GETATTR:
 				log_msje_info("Me llego operacion getattr");
-				dslz_cod_getattr(paquete.payload, &path);
+				dslz_payload_with_path(paquete.payload, &path);
 				sac_getattr(path, cliente_fd);
 				break;
 			case COD_READ:
@@ -56,18 +54,18 @@ int atender_conexiones(int cliente_fd)
 				break;
 			case COD_MKDIR:
 				log_msje_info("Me llego operacion mkdir");
-				dslz_cod_mkdir(paquete.payload, &path, &mode);
-				sac_mkdir(path,mode, cliente_fd);
+				dslz_payload_with_path(paquete.payload, &path);
+				sac_mkdir(path, cliente_fd);
 				break;
 			case COD_RMDIR:
 				log_msje_info("Me llego operacion rmdir");
-				dslz_cod_rmdir(paquete.payload, &path);
+				dslz_payload_with_path(paquete.payload, &path);
 				sac_rmdir(path,cliente_fd);
 				break;
 			case COD_MKNOD:
 				log_msje_info("Me llego operacion mknod");
-				dslz_cod_mknod(paquete.payload, &path, &mode, &dev);
-				sac_mknod(path, mode, dev, cliente_fd);
+				dslz_payload_with_path(paquete.payload, &path);
+				sac_mknod(path, cliente_fd);
 				break;
 			case COD_WRITE:
 				log_msje_info("Me llego operacion write");
@@ -76,7 +74,7 @@ int atender_conexiones(int cliente_fd)
 				break;
 			case COD_UNLINK:
 				log_msje_info("Me llego operacion unlink");
-				dslz_cod_unlink(paquete.payload, &path);
+				dslz_payload_with_path(paquete.payload, &path);
 				sac_unlink(path,cliente_fd);
 				break;
 			case COD_DESC:

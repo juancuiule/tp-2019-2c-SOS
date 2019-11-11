@@ -7,7 +7,7 @@ int cli_getattr(const char *path, struct stat *statbuf)
 
 	//enviar paquete a sac server
 	package_t paquete, respuesta;
-	paquete = slz_cod_getattr(path);
+	paquete = slz_path_with_cod(path, COD_GETATTR);
 
 	if(!paquete_enviar(sac_server.fd, paquete))
 		log_msje_error("No se pudo enviar el paquete");
@@ -43,7 +43,7 @@ int cli_opendir(const char *path, struct fuse_file_info *fi)
 
 	//enviar paquete a sac server
 	package_t paquete, respuesta;
-	paquete = slz_cod_opendir(path);
+	paquete = slz_path_with_cod(path, COD_OPENDIR);
 
 	if(!paquete_enviar(sac_server.fd, paquete))
 		log_msje_error("No se pudo enviar el paquete");
@@ -240,7 +240,7 @@ int cli_mkdir(const char *path, mode_t mode)
 	log_msje_info("Operacion MKDIR sobre path [ %s ]", path);
 
 	package_t paquete, respuesta;
-	paquete = slz_cod_mkdir(path, mode);
+	paquete = slz_path_with_cod(path, COD_MKDIR);
 
 	if(!paquete_enviar(sac_server.fd, paquete))
 		log_msje_error("No se pudo enviar el paquete cod mkdir");
@@ -265,7 +265,7 @@ int cli_rmdir(const char *path)
 	log_msje_info("Operacion RMDIR sobre path [ %s ]", path);
 
 	package_t paquete, respuesta;
-	paquete = slz_cod_rmdir(path);
+	paquete = slz_path_with_cod(path, COD_RMDIR);
 
 	if(!paquete_enviar(sac_server.fd, paquete))
 		log_msje_error("No se pudo enviar el paquete cod rmdir");
@@ -291,7 +291,7 @@ int cli_mknod(const char *filename, mode_t mode, dev_t dev)
 
 	//enviar paquete a sac server
 	package_t paquete, respuesta;
-	paquete = slz_cod_mknod(filename, mode, dev);
+	paquete = slz_path_with_cod(filename, COD_MKNOD);
 
 	if(!paquete_enviar(sac_server.fd, paquete))
 		log_msje_error("No se pudo enviar el paquete");
@@ -346,7 +346,7 @@ int cli_unlink(const char *path)
 	log_msje_info("Operacion UNLINK sobre path [ %s ]", path);
 
 	package_t paquete, respuesta;
-	paquete = slz_cod_unlink(path);
+	paquete = slz_path_with_cod(path, COD_UNLINK);
 
 	if(!paquete_enviar(sac_server.fd, paquete))
 		log_msje_error("No se pudo enviar el paquete cod unlink");

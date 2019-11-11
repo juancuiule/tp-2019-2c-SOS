@@ -144,6 +144,41 @@ void dslz_res_error(void *buffer, int *errnum)
 	memcpy(errnum, buffer, sizeof(int));
 }
 
+
+package_t slz_simple_res(cod_operation cod)
+{
+	package_t paquete;
+	paquete.header = header_get('S', cod, 0);
+	return paquete;
+}
+
+package_t slz_path_with_cod(const char *path, cod_operation cod)
+{
+	package_t paquete;
+	int tam_path = strlen(path);
+	int tam_payload = sizeof(int) + tam_path;
+
+	paquete.header = header_get('C', cod, tam_payload);
+	paquete.payload = malloc(tam_payload);
+
+	memcpy(paquete.payload, &tam_path, sizeof(int));
+	memcpy(paquete.payload+sizeof(int), path, tam_path);
+
+	return paquete;
+}
+
+void dslz_payload_with_path(void *buffer, char**path)
+{
+	int tam_path;
+	memcpy(&tam_path, buffer, sizeof(int));
+
+	char *ruta = malloc(tam_path + 1);
+	memcpy(ruta, buffer+sizeof(int), tam_path);
+
+	ruta[tam_path]='\0';
+	*path = ruta;
+}
+
 /*
  * ------------ Protocolo Operaciones SAC CLI ------------ *
  */
@@ -162,22 +197,6 @@ package_t slz_cod_readdir(const char *path, intptr_t dir)
 	memcpy(paquete.payload              		,&tam_path  ,sizeof(int));
 	memcpy(paquete.payload+sizeof(int)			,path		,tam_path);
 	memcpy(paquete.payload+sizeof(int)+tam_path	,&dir		,sizeof(intptr_t));
-
-	return paquete;
-}
-
-//Desc: arma un paquete para la operacion opendir con su corresp path
-package_t slz_cod_opendir(const char *path)
-{
-	package_t paquete;
-	int tam_path = strlen(path);
-	int tam_payload = sizeof(int) + tam_path;
-
-	paquete.header = header_get('C', COD_OPENDIR, tam_payload);
-	paquete.payload = malloc(tam_payload);
-
-	memcpy(paquete.payload              ,&tam_path  ,sizeof(int));
-	memcpy(paquete.payload+sizeof(int)	,path		,tam_path);
 
 	return paquete;
 }
@@ -216,22 +235,6 @@ package_t slz_cod_open(const char *path, int flags)
 	memcpy(paquete.payload+sizeof(int)+tam_path	,&flags		,sizeof(int));
 
 	return paquete;
-}
-
-package_t slz_cod_getattr(const char *path)
-{
-	package_t paquete;
-	int tam_path = strlen(path);
-	int tam_payload = sizeof(int) + tam_path;
-
-	paquete.header = header_get('C', COD_GETATTR, tam_payload);
-	paquete.payload = malloc(tam_payload);
-
-	memcpy(paquete.payload              ,&tam_path  ,sizeof(int));
-	memcpy(paquete.payload+sizeof(int)	,path		,tam_path);
-
-	return paquete;
-
 }
 
 package_t slz_cod_read(const char *path, int fd, size_t size, off_t offset)
@@ -276,58 +279,6 @@ package_t slz_cod_release(const char *path, int fd)
 	return paquete;
 }
 
-package_t slz_cod_mkdir(const char *path, uint32_t mode)
-{
-	package_t paquete;
-	int tam_path = strlen(path);
-	int tam_payload = sizeof(int) + tam_path + sizeof(uint32_t);
-
-	paquete.header = header_get('C', COD_MKDIR, tam_payload);
-	paquete.payload = malloc(tam_payload);
-
-	int offs=0;
-	memcpy(paquete.payload, &tam_path  ,sizeof(int));
-	offs+=sizeof(int);
-	memcpy(paquete.payload+offs, path, tam_path);
-	offs+=tam_path;
-	memcpy(paquete.payload+offs, &mode, sizeof(uint32_t));
-
-	return paquete;
-
-}
-
-package_t slz_cod_rmdir(const char *path)
-{
-	package_t paquete;
-	int tam_path = strlen(path);
-	int tam_payload = sizeof(int) + tam_path;
-
-	paquete.header = header_get('C', COD_RMDIR, tam_payload);
-	paquete.payload = malloc(tam_payload);
-
-	memcpy(paquete.payload              ,&tam_path  ,sizeof(int));
-	memcpy(paquete.payload+sizeof(int)	,path		,tam_path);
-
-	return paquete;
-}
-
-package_t slz_cod_mknod(const char *filename, mode_t mode, dev_t dev){
-	package_t package;
-	int size_filename = strlen(filename);
-	int size_mode = sizeof(mode_t);
-	int size_dev = sizeof(dev_t);
-	int size_payload = sizeof(int)+ size_filename + size_mode + size_dev;
-
-	package.header = header_get('N',COD_MKNOD,size_payload);
-	package.payload = malloc(size_payload);
-
-	memcpy(package.payload										, &size_filename, sizeof(int));
-	memcpy(package.payload+sizeof(int)							, filename		, size_filename);
-	memcpy(package.payload+sizeof(int)+size_filename			, &mode			, size_mode);
-	memcpy(package.payload+sizeof(int)+size_filename+size_mode	, &dev			, size_dev);
-
-	return package;
-}
 
 package_t slz_cod_write(const char *path, const char *buffer, int fd, size_t size, off_t offset)
 {
@@ -353,21 +304,6 @@ package_t slz_cod_write(const char *path, const char *buffer, int fd, size_t siz
 	memcpy(paquete.payload+offs, &size, sizeof(size_t));
 	offs+=sizeof(size_t);
 	memcpy(paquete.payload+offs, &offset, sizeof(off_t));
-
-	return paquete;
-}
-
-package_t slz_cod_unlink(const char *path)
-{
-	package_t paquete;
-	int tam_path = strlen(path);
-	int tam_payload = sizeof(int)+tam_path;
-
-	paquete.header = header_get('C', COD_UNLINK, tam_payload);
-	paquete.payload = malloc(tam_payload);
-
-	memcpy(paquete.payload              ,&tam_path  ,sizeof(int));
-	memcpy(paquete.payload+sizeof(int)	,path		,tam_path);
 
 	return paquete;
 }
@@ -445,18 +381,6 @@ void dslz_cod_readdir(void *buffer, char**path, intptr_t *dir)
 
 }
 
-//desc: deserializa el payload, guarda el contenido en path
-void dslz_cod_opendir(void *buffer, char**path)
-{
-	int tam_path;
-	memcpy(&tam_path, buffer, sizeof(int));
-
-	char *ruta = malloc(tam_path+1);
-	memcpy(ruta, buffer+sizeof(int), tam_path);
-	ruta[tam_path]='\0';
-	*path = ruta;
-}
-
 void dslz_cod_releasedir(void* buffer, char** path, intptr_t* dir)
 {
 	int tam_path;
@@ -482,17 +406,6 @@ void dslz_cod_open(void *buffer, char **path, int *flags)
 	*path = ruta;
 
 	memcpy(flags,	buffer+sizeof(int)+tam_path, sizeof(int));
-}
-
-void dslz_cod_getattr(void *buffer, char**path)
-{
-	int tam_path;
-	memcpy(&tam_path, buffer, sizeof(int));
-
-	char *ruta = malloc(tam_path+1);
-	memcpy(ruta, buffer+sizeof(int), tam_path);
-	ruta[tam_path]='\0';
-	*path = ruta;
 }
 
 void dslz_cod_read(void *buffer, char **path, int *fd, size_t *size, off_t *offset)
@@ -538,56 +451,6 @@ void dslz_cod_release(void *buffer, char **path, int *fd)
 	memcpy(fd, buffer+offs, sizeof(int));
 }
 
-void dslz_cod_mkdir(void *buffer, char **path, uint32_t *mode)
-{
-	int offs = 0;
-
-	int tam_path;
-	memcpy(&tam_path, buffer, sizeof(int));
-	offs += sizeof(int);
-
-	char *ruta = malloc(tam_path+1);
-	memcpy(ruta, buffer+offs, tam_path);
-	offs += tam_path;
-
-	ruta[tam_path]='\0';
-	*path = ruta;
-
-	memcpy(mode, buffer+offs, sizeof(uint32_t));
-}
-
-void dslz_cod_rmdir(void *buffer, char**path)
-{
-	int tam_path;
-	memcpy(&tam_path, buffer, sizeof(int));
-
-	char *ruta = malloc(tam_path+1);
-	memcpy(ruta, buffer+sizeof(int), tam_path);
-	ruta[tam_path]='\0';
-	*path = ruta;
-}
-
-void dslz_cod_mknod(void *buffer, char **filename, mode_t *mode, dev_t *dev)
-{
-	int offs = 0;
-
-	int tam_path;
-	memcpy(&tam_path, buffer, sizeof(int));
-	offs += sizeof(int);
-
-	char *ruta = malloc(tam_path+1);
-	memcpy(ruta, buffer+offs, tam_path);
-	offs += tam_path;
-
-	ruta[tam_path]='\0';
-	*filename = ruta;
-
-	memcpy(mode, buffer+offs, sizeof(mode_t));
-	offs += sizeof(mode_t);
-	memcpy(dev, buffer+offs, sizeof(dev_t));
-}
-
-
 void dslz_cod_write(void *payload, char **path, char **buffer, int *fd, size_t *size, off_t *offset)
 {
 	int offs = 0;
@@ -623,16 +486,6 @@ void dslz_cod_write(void *payload, char **path, char **buffer, int *fd, size_t *
 	memcpy(offset, payload+offs, sizeof(off_t));
 }
 
-void dslz_cod_unlink(void *buffer, char **path)
-{
-	int tam_path;
-	memcpy(&tam_path, buffer, sizeof(int));
-
-	char *ruta = malloc(tam_path+1);
-	memcpy(ruta, buffer+sizeof(int), tam_path);
-	ruta[tam_path]='\0';
-	*path = ruta;
-}
 //desc: arma paquete con el pointer adress de DIR
 package_t slz_res_opendir(DIR *dp)
 {
@@ -749,12 +602,3 @@ package_t slz_res_write(int size)
 
 	return paquete;
 }
-
-package_t slz_simple_res(cod_operation cod)
-{
-	package_t paquete;
-	paquete.header = header_get('S', cod, 0);
-	return paquete;
-}
-
-
