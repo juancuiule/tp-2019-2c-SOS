@@ -12,10 +12,10 @@
 #include <libSUSE/libSUSE.h>
 #include <libSUSE/utils.h>
 
-semaforo_t** semaforos;
+semaforo_t* semaforos;
 
-void inicializar_semaforos(semaforo_t**);
-void semaforo_wait(semaforo_t*);
-void semaforo_signal(semaforo_t*);
+void inicializar_semaforos(semaforo_t*);
+void semaforo_wait(semaforo_t);
+void semaforo_signal(semaforo_t);
 
 #endif /* SEMAFOROS_H_ */

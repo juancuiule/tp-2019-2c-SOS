@@ -85,12 +85,12 @@ mensaje_t* recibir_paquete(int socket_cliente)
 	void* buffer = malloc(sizeof(mensaje_t));
 	recv(socket_cliente, buffer, sizeof(buffer), 0);
 	mensaje_t* mensaje = malloc(sizeof(mensaje_t));
-	mensaje->ult = malloc(sizeof(ult_t));
-	mensaje->ult->pid = 0;
-	mensaje->ult->tid = 0;
+	mensaje->hilo = malloc(sizeof(hilo_t));
+	//mensaje->hilo->pid = 0;
+	//mensaje->hilo->tid = 0;
+	memcpy(&(mensaje->hilo->tid), buffer + sizeof(operacion_t), sizeof(int));
+	memcpy(&(mensaje->hilo->pid), buffer + sizeof(operacion_t)+ sizeof(int), sizeof(int));
 	memcpy(&(mensaje->operacion), buffer, sizeof(operacion_t));
-	memcpy(&(mensaje->ult->tid), buffer + sizeof(operacion_t), sizeof(int));
-	memcpy(&(mensaje->ult->pid), buffer + sizeof(operacion_t)+ sizeof(int), sizeof(int));
 	return mensaje;
 }
 

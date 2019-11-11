@@ -1,66 +1,13 @@
-[INFO] 00:53:02:168 SUSE/(3260:3260): Se ha iniciado el servidor.
-[INFO] 00:53:10:914 SUSE/(3260:3260): Se conecto un cliente!
-[INFO] 00:53:10:914 SUSE/(3260:3260): Se conecto un cliente!
-[INFO] 00:53:10:915 SUSE/(3260:3260): Se conecto un cliente!
-[INFO] 00:53:10:915 SUSE/(3260:3260): Se conecto un cliente!
-[INFO] 00:53:10:915 SUSE/(3260:3260): Se conecto un cliente!
-[INFO] 00:53:10:915 SUSE/(3260:3287): El thread 0 ha llegado a la cola de BLOCKED
-[INFO] 00:53:10:915 SUSE/(3260:3286): El thread 0 ha llegado a la cola de BLOCKED
-[INFO] 00:53:10:915 SUSE/(3260:3285): El ULT 0 ha llegado a la cola de NEW
-[INFO] 00:53:10:915 SUSE/(3260:3285): El ULT 0 del proceso 1 ha llegado a la cola de READY.
-[INFO] 00:53:10:915 SUSE/(3260:3284): El ULT 1 ha llegado a la cola de NEW
-[INFO] 00:53:10:915 SUSE/(3260:3284): El ULT 1 del proceso 2 ha llegado a la cola de READY.
-[INFO] 00:53:10:915 SUSE/(3260:3283): El ULT 2 ha llegado a la cola de NEW
-[INFO] 00:53:10:915 SUSE/(3260:3283): El ULT 2 del proceso 2 ha llegado a la cola de READY.
-[INFO] 00:53:13:503 SUSE/(3260:3260): Se conecto un cliente!
-[INFO] 00:53:13:503 SUSE/(3260:3260): Se conecto un cliente!
-[INFO] 00:53:13:503 SUSE/(3260:3260): Se conecto un cliente!
-[INFO] 00:53:13:503 SUSE/(3260:3260): Se conecto un cliente!
-[INFO] 00:53:13:503 SUSE/(3260:3260): Se conecto un cliente!
-[INFO] 00:53:13:503 SUSE/(3260:3289): El ULT 3 ha llegado a la cola de NEW
-[INFO] 00:53:13:503 SUSE/(3260:3289): El ULT 3 del proceso 2 ha llegado a la cola de READY.
-[INFO] 00:53:13:503 SUSE/(3260:3293): El thread 0 ha llegado a la cola de BLOCKED
-[INFO] 00:53:13:503 SUSE/(3260:3292): El thread 0 ha llegado a la cola de BLOCKED
-[INFO] 00:53:13:503 SUSE/(3260:3291): El ULT 4 ha llegado a la cola de NEW
-[INFO] 00:53:13:503 SUSE/(3260:3291): El ULT 4 del proceso 2 ha llegado a la cola de READY.
-[INFO] 00:53:13:503 SUSE/(3260:3290): El ULT 5 ha llegado a la cola de NEW
-[INFO] 00:53:13:503 SUSE/(3260:3290): El ULT 5 del proceso 2 ha llegado a la cola de READY.
-[INFO] 00:53:13:887 SUSE/(3260:3260): Se conecto un cliente!
-[INFO] 00:53:13:887 SUSE/(3260:3260): Se conecto un cliente!
-[INFO] 00:53:13:887 SUSE/(3260:3260): Se conecto un cliente!
-[INFO] 00:53:13:887 SUSE/(3260:3260): Se conecto un cliente!
-[INFO] 00:53:13:887 SUSE/(3260:3260): Se conecto un cliente!
-[INFO] 00:53:13:887 SUSE/(3260:3299): El thread 0 ha llegado a la cola de BLOCKED
-[INFO] 00:53:13:887 SUSE/(3260:3298): El thread 0 ha llegado a la cola de BLOCKED
-[INFO] 00:53:13:887 SUSE/(3260:3297): El ULT 6 ha llegado a la cola de NEW
-[INFO] 00:53:13:887 SUSE/(3260:3297): El ULT 6 del proceso 2 ha llegado a la cola de READY.
-[INFO] 00:53:13:887 SUSE/(3260:3296): El ULT 7 ha llegado a la cola de NEW
-[INFO] 00:53:13:887 SUSE/(3260:3296): El ULT 7 del proceso 2 ha llegado a la cola de READY.
-[INFO] 00:53:13:887 SUSE/(3260:3295): El ULT 8 ha llegado a la cola de NEW
-[INFO] 00:53:13:887 SUSE/(3260:3295): El ULT 8 del proceso 2 ha llegado a la cola de READY.
-[INFO] 00:53:14:279 SUSE/(3260:3260): Se conecto un cliente!
-[INFO] 00:53:14:279 SUSE/(3260:3260): Se conecto un cliente!
-[INFO] 00:53:14:279 SUSE/(3260:3260): Se conecto un cliente!
-[INFO] 00:53:14:279 SUSE/(3260:3260): Se conecto un cliente!
-[INFO] 00:53:14:279 SUSE/(3260:3260): Se conecto un cliente!
-[INFO] 00:53:14:279 SUSE/(3260:3305): El thread 0 ha llegado a la cola de BLOCKED
-[INFO] 00:53:14:279 SUSE/(3260:3304): El thread 0 ha llegado a la cola de BLOCKED
-[INFO] 00:53:14:280 SUSE/(3260:3303): El ULT 9 ha llegado a la cola de NEW
-[INFO] 00:53:14:280 SUSE/(3260:3303): El ULT 9 del proceso 2 ha llegado a la cola de READY.
-[INFO] 00:53:14:280 SUSE/(3260:3302): El ULT 10 ha llegado a la cola de NEW
-[WARNING] 00:53:14:280 SUSE/(3260:3302): Se ha alcanzado el grado máximo de multiprogramación.
-[INFO] 00:53:14:280 SUSE/(3260:3301): El ULT 11 ha llegado a la cola de NEW
-[WARNING] 00:53:14:280 SUSE/(3260:3301): Se ha alcanzado el grado máximo de multiprogramación.
-[INFO] 00:53:14:638 SUSE/(3260:3260): Se conecto un cliente!
-[INFO] 00:53:14:638 SUSE/(3260:3260): Se conecto un cliente!
-[INFO] 00:53:14:638 SUSE/(3260:3260): Se conecto un cliente!
-[INFO] 00:53:14:639 SUSE/(3260:3260): Se conecto un cliente!
-[INFO] 00:53:14:639 SUSE/(3260:3260): Se conecto un cliente!
-[INFO] 00:53:14:639 SUSE/(3260:3311): El thread 0 ha llegado a la cola de BLOCKED
-[INFO] 00:53:14:639 SUSE/(3260:3310): El thread 0 ha llegado a la cola de BLOCKED
-[INFO] 00:53:14:639 SUSE/(3260:3309): El ULT 12 ha llegado a la cola de NEW
-[WARNING] 00:53:14:639 SUSE/(3260:3309): Se ha alcanzado el grado máximo de multiprogramación.
-[INFO] 00:53:14:639 SUSE/(3260:3308): El ULT 13 ha llegado a la cola de NEW
-[WARNING] 00:53:14:639 SUSE/(3260:3308): Se ha alcanzado el grado máximo de multiprogramación.
-[INFO] 00:53:14:639 SUSE/(3260:3307): El ULT 14 ha llegado a la cola de NEW
-[WARNING] 00:53:14:639 SUSE/(3260:3307): Se ha alcanzado el grado máximo de multiprogramación.
+[INFO] 20:53:19:644 SUSE/(11180:11180): Se ha iniciado el servidor.
+[INFO] 20:53:23:18 SUSE/(11180:11180): Se conecto un cliente!
+[INFO] 20:53:23:321 SUSE/(11180:11180): Se conecto un cliente!
+[INFO] 21:06:02:132 SUSE/(11842:11842): Se ha iniciado el servidor.
+[INFO] 21:06:07:293 SUSE/(11842:11842): Se conecto un cliente!
+[INFO] 21:06:15:62 SUSE/(11842:11842): Se conecto un cliente!
+[INFO] 21:08:36:369 SUSE/(11842:11842): Se conecto un cliente!
+[INFO] 21:08:39:39 SUSE/(11842:11842): Se conecto un cliente!
+[INFO] 21:13:55:202 SUSE/(11842:11842): Se conecto un cliente!
+[INFO] 21:13:58:875 SUSE/(11842:11842): Se conecto un cliente!
+[INFO] 21:18:50:659 SUSE/(11842:11842): Se conecto un cliente!
+[INFO] 21:18:53:565 SUSE/(11842:11842): Se conecto un cliente!
+[INFO] 21:19:08:219 SUSE/(11842:11842): Se conecto un cliente!

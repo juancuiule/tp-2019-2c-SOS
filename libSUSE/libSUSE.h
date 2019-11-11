@@ -16,6 +16,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
+#include <commons/collections/queue.h>
 #include <commons/collections/dictionary.h>
 
 typedef struct {
@@ -24,7 +25,13 @@ typedef struct {
 	int tiempo_ejecucion;
 	int tiempo_espera;
 	int tiempo_cpu;
-} ult_t;
+} hilo_t;
+
+typedef struct {
+	int pid;
+	t_queue* cola_ready;
+	t_queue* cola_exec;
+} programa_t;
 
 typedef enum {
 	CREATE, // 1
@@ -37,13 +44,18 @@ typedef enum {
 
 typedef struct {
 	int operacion;
-	ult_t* ult;
+	hilo_t* hilo;
 } mensaje_t;
 
-t_dictionary* diccionario_procesos;
+typedef struct {
+	char* id;
+	int valor;
+} semaforo_t;
+
+t_dictionary* diccionario_programas;
 t_dictionary* diccionario_tid_pid;
 t_dictionary* diccionario_tid;
 
-void* serializar(ult_t);
+void* serializar(hilo_t);
 
 #endif /* LIBSUSE_H_ */

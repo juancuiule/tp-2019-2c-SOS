@@ -8,7 +8,7 @@ int main() {
 	configurar();
 	int servidor_fd = iniciar_servidor();
 
-	pthread_create(&hilo_metricas, NULL, logear_metricas, NULL);
+	//pthread_create(&hilo_metricas, NULL, logear_metricas, NULL);
 
 	while(1) {
 		cliente_fd = esperar_cliente(servidor_fd);
@@ -22,17 +22,19 @@ int main() {
 void inicializar() {
 	logger = log_create("../SUSE.log", "SUSE", 1, LOG_LEVEL_DEBUG);
 	logger_metricas = log_create("../METRICAS.log", "SUSE", 1, LOG_LEVEL_DEBUG);
-	diccionario_procesos = dictionary_create();
+	diccionario_programas = dictionary_create();
 	diccionario_tid_pid = dictionary_create();
 	diccionario_tid = dictionary_create();
 
 	cola_new = queue_create();
 	cola_blocked = queue_create();
 	cola_exit = queue_create();
+	programas = malloc(100 * sizeof(programa_t));
 
 	for (int i = 0; i < 100; i++) {
-		colas_ready[i] = queue_create();
-		colas_exec[i] = queue_create();
+		programas[i].pid = -1;
+		programas[i].cola_ready = queue_create();
+		programas[i].cola_exec = queue_create();
 	}
 
 	tid_sem = malloc(sizeof(sem_t));
@@ -46,10 +48,36 @@ void inicializar() {
 }
 
 void logear_metricas() {
+	int hilos_new = 0;
+
 	while (1) {
 		sleep(METRICS_TIMER);
-		log_info(logger_metricas, "Grado de multiprogramación: %d", GRADO_MULTIPROGRAMACION);
+		log_info(logger_metricas, "Grado de multiprogramación: %i", GRADO_MULTIPROGRAMACION);
+
+		int i = 0;
+
+		while (programas[i].pid != -1) {
+			hilos_new = cantidad_de_hilos_en_new(programas[i]);
+			log_info(logger_metricas, "\nCantidad de hilos del programa %i: %i", programas[i].pid, hilos_new);
+			i++;
+		}
 	}
+}
+
+int cantidad_de_hilos_en_new(programa_t programa) {
+	int cant = 0;
+	int indice = obtener_indice_de_programa(programa.pid);
+	t_queue* aux = cola_new;
+	hilo_t* hilo = malloc(sizeof(hilo_t));
+
+	while (aux != NULL) {
+		hilo = queue_pop(cola_new);
+
+		if (hilo->pid == programa.pid)
+			cant++;
+	}
+
+	return cant;
 }
 
 void atender_cliente(int cliente_fd) {
@@ -58,83 +86,91 @@ void atender_cliente(int cliente_fd) {
 
 	switch (mensaje->operacion) {
 		case 1:
-			llega_nuevo_hilo(mensaje->ult);
+			encolar_hilo_en_new(mensaje->hilo);
+
+			if (programa_nuevo(mensaje->hilo))
+				agregar_programa(mensaje->hilo);
+
+			if (GRADO_MULTIPROGRAMACION < MAX_MULTIPROG)
+				encolar_hilo_en_ready(mensaje->hilo);
+
 			break;
 		case 3:
-			bloquear_hilo(mensaje->ult);
+			bloquear_hilo(mensaje->hilo);
 			break;
 		case 4:
-			cerrar_hilo(mensaje->ult);
+			cerrar_hilo(mensaje->hilo);
 			break;
 	}
+}
+
+void agregar_programa(hilo_t* hilo) {
+	programa_t programa;
+	programa.pid = hilo->pid;
+	programa.cola_ready = queue_create();
+	programa.cola_exec = queue_create();
+	programas[PID].pid = programa.pid;
+	programas[PID].cola_ready = programa.cola_ready;
+	programas[PID].cola_exec = programa.cola_exec;
+	dictionary_put(diccionario_programas, string_itoa(PID), programa.pid);
+	PID++;
 }
 
 void atender_nuevo_cliente(int cliente_fd) {
-	ult_t* ult = malloc(sizeof(ult_t));
-	ult = recibir_paquete(cliente_fd);
-	llega_nuevo_hilo(ult);
+	hilo_t* hilo = malloc(sizeof(hilo_t));
+	hilo = recibir_paquete(cliente_fd);
 }
 
-void llega_nuevo_hilo(ult_t* ult) {
-	char* pid = malloc(10);
-	char* tid = malloc(10);
+int programa_nuevo(hilo_t* hilo) {
+	int i = 0;
 
-	queue_push(cola_new, ult);
-	log_info(logger, "El ULT %d ha llegado a la cola de NEW", TID);
-
-	sprintf(pid, "%d", ult->pid);
-	sprintf(tid, "%d", ult->tid);
-
-	if(!dictionary_has_key(diccionario_procesos, pid)) {
-		dictionary_put(diccionario_procesos, pid, PID);
-		dictionary_put(diccionario_tid_pid, tid, PID);
-		sem_wait(pid_sem);
-		PID++;
-		sem_post(pid_sem);
+	while (programas[i].pid != -1) {
+		if (programas->pid != hilo->pid)
+			i++;
+		else
+			return 0;
 	}
 
-	if (GRADO_MULTIPROGRAMACION == MAX_MULTIPROG) {
-		log_warning(logger, "Se ha alcanzado el grado máximo de multiprogramación.");
-	}
-	else {
-		ult = queue_pop(cola_new);
-		queue_push(colas_ready[PID], ult);
-		log_info(logger, "El ULT %d del proceso %d ha llegado a la cola de READY.", TID, PID);
-	}
-
-	sem_wait(tid_sem);
-	TID++;
-	sem_post(tid_sem);
-
-	if (GRADO_MULTIPROGRAMACION < 10) {
-		sem_wait(multiprogramacion_sem);
-		GRADO_MULTIPROGRAMACION++;
-		sem_post(multiprogramacion_sem);
-	}
+	return 1;
 }
 
-void cerrar_hilo(ult_t* ult) {
-	queue_push(cola_exit, ult);
-	log_info(logger, "El ULT %i ha llegado a la cola de EXIT.", ult->tid);
+void encolar_hilo_en_new(hilo_t* hilo) {
+	queue_push(cola_new, hilo);
+	log_info(logger, "El hilo %i del programa %i llegó a NEW\n", hilo->tid, hilo->pid);
+}
+
+void cerrar_hilo(hilo_t* hilo) {
+	queue_push(cola_exit, hilo);
+	log_info(logger, "El ULT %i ha llegado a la cola de EXIT.", hilo->tid);
 	sem_wait(multiprogramacion_sem);
 	GRADO_MULTIPROGRAMACION--;
 	sem_post(multiprogramacion_sem);
 }
 
-void pasar_a_ready() {
-	int tid = 0;
-	tid = queue_pop(cola_new);
-	char* thread_id = malloc(10);
-	sprintf(tid, thread_id);
-	int indice = dictionary_get(diccionario_tid_pid, thread_id);
-	queue_push(colas_ready[indice], tid);
-	printf("El ULT %i pasó a READY\n", tid);
+int obtener_indice_de_programa(int pid) {
+	int i = 0;
+
+	while (programas[i].pid != pid)
+		i++;
+
+	return i;
 }
 
-void bloquear_hilo(ult_t* ult) {
-	char* thread_id = string_itoa(ult->tid);
+void encolar_hilo_en_ready() {
+	hilo_t* hilo = queue_pop(cola_new);
+	int indice = obtener_indice_de_programa(hilo->pid);
+	queue_push(programas[indice].cola_ready, hilo);
+	log_info(logger, "El hilo %d del programa %d está en READY\n", hilo->tid, hilo->pid);
+	GRADO_MULTIPROGRAMACION++;
+
+	if (GRADO_MULTIPROGRAMACION == MAX_MULTIPROG)
+		log_warning(logger, "Se ha alcanzado el grado máximo de multiprogramación\n");
+}
+
+void bloquear_hilo(hilo_t* hilo) {
+	char* thread_id = string_itoa(hilo->tid);
 	int pid = dictionary_get(diccionario_tid_pid, thread_id);
-	ult_t* thread = queue_pop(colas_exec[pid]);
+	hilo_t* thread = queue_pop(colas_exec[pid]);
 	queue_push(cola_blocked, thread);
 	log_info(logger, "El thread %d ha llegado a la cola de BLOCKED", dictionary_get(diccionario_tid, thread_id));
 }
@@ -143,7 +179,7 @@ void liberar() {
 	config_destroy(config);
 	log_destroy(logger);
 	log_destroy(logger_metricas);
-	dictionary_destroy(diccionario_procesos);
+	dictionary_destroy(diccionario_programas);
 	dictionary_destroy(diccionario_tid_pid);
 	dictionary_destroy(diccionario_tid);
 	sem_destroy(tid_sem);

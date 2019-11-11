@@ -11,7 +11,6 @@
 
 int PID = 0;
 int TID = 0;
-
 int GRADO_MULTIPROGRAMACION = 0;
 
 t_log* logger;
@@ -20,6 +19,7 @@ t_log* logger_metricas;
 t_queue* cola_new;
 t_queue* cola_blocked;
 t_queue* cola_exit;
+programa_t* programas;
 t_queue* colas_ready[100];
 t_queue* colas_exec[100];
 
@@ -31,6 +31,10 @@ void inicializar();
 void logear_metricas();
 void atender_cliente(int);
 void atender_nuevo_cliente(int);
-void llega_nuevo_hilo(ult_t*);
-void pasar_a_ready();
+void llega_nuevo_hilo(hilo_t*);
+void encolar_hilo_en_new(hilo_t*);
+void encolar_hilo_en_ready();
+int programa_nuevo(hilo_t*);
+void agregar_programa(hilo_t*);
+int obtener_indice_de_programa(int);
 void liberar();

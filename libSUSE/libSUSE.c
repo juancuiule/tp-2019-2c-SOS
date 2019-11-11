@@ -4,6 +4,7 @@
 #include <stdlib.h>
 
 #include "libSUSE.h"
+#include "utils.h"
 
 int max_tid = 0;
 
@@ -36,19 +37,26 @@ int conectarse_a_suse() {
 	return conexion;
 }
 
-int enviar_datos_ult(int tid, int pid, int conexion, int operacion) {
+int enviar_datos_hilo(int tid, int pid, int conexion, int operacion) {
+	/*
 	mensaje_t* mensaje = malloc(sizeof(mensaje));
-	ult_t* ult = malloc(sizeof(ult_t));
-	ult->pid = pid;
-	ult->tid = tid;
+	hilo_t* hilo = malloc(sizeof(hilo_t));
+	hilo->pid = pid;
+	hilo->tid = tid;
 	mensaje->operacion = operacion;
-	mensaje->ult = ult;
+	mensaje->hilo = hilo;
 	send(conexion, (void*)mensaje, sizeof(mensaje), 0);
+	*/
+	//enviar_mensaje();
 }
 
 int suse_create(int tid){
 	int conexion = conectarse_a_suse();
-	enviar_datos_ult(tid, getpid(), conexion, 1);
+	t_paquete* paquete = crear_paquete();
+	agregar_a_paquete(paquete, tid, sizeof(tid));
+	agregar_a_paquete(paquete, getpid(), sizeof(pid_t));
+	agregar_a_paquete(paquete, 1, sizeof(int));
+	enviar_paquete(paquete, conexion);
 	return 0;
 }
 
@@ -59,14 +67,14 @@ int suse_schedule_next(void){
 }
 
 int suse_join(int tid){
-	int conexion = conectarse_a_suse();
-	enviar_datos_ult(tid, getpid(), conexion, 3);
+	//int conexion = conectarse_a_suse();
+	//enviar_datos_ult(tid, getpid(), conexion, 3);
 	return 0;
 }
 
 int suse_close(int tid){
 	int conexion = conectarse_a_suse();
-	enviar_datos_ult(tid, getpid(), conexion, 4);
+	enviar_datos_hilo(tid, getpid(), conexion, 4);
 	printf("Closed thread %i\n", tid);
 	max_tid--;
 	return 0;
@@ -89,4 +97,54 @@ static struct hilolay_operations hiloops = {
 
 void hilolay_init(void){
 	init_internal(&hiloops);
+}
+
+void* serializar_paquete(t_paquete* paquete, int bytes)
+{
+	void * magic = malloc(bytes);
+	int desplazamiento = 0;
+
+	memcpy(magic + desplazamiento, &(paquete->codigo_operacion), sizeof(int));
+	desplazamiento+= sizeof(int);
+	memcpy(magic + desplazamiento, &(paquete->buffer->size), sizeof(int));
+	desplazamiento+= sizeof(int);
+	memcpy(magic + desplazamiento, paquete->buffer->stream, paquete->buffer->size);
+	desplazamiento+= paquete->buffer->size;
+
+	return magic;
+}
+
+t_paquete* crear_paquete(void)
+{
+	t_paquete* paquete = malloc(sizeof(t_paquete));
+	paquete->codigo_operacion = PAQUETE;
+	crear_buffer(paquete);
+	return paquete;
+}
+
+void agregar_a_paquete(t_paquete* paquete, void* valor, int tamanio)
+{
+	paquete->buffer->stream = realloc(paquete->buffer->stream, paquete->buffer->size + tamanio + sizeof(int));
+
+	memcpy(paquete->buffer->stream + paquete->buffer->size, &tamanio, sizeof(int));
+	memcpy(paquete->buffer->stream + paquete->buffer->size + sizeof(int), valor, tamanio);
+
+	paquete->buffer->size += tamanio + sizeof(int);
+}
+
+void enviar_paquete(t_paquete* paquete, int socket_cliente)
+{
+	int bytes = paquete->buffer->size + 2*sizeof(int);
+	void* a_enviar = serializar_paquete(paquete, bytes);
+
+	send(socket_cliente, a_enviar, bytes, 0);
+
+	free(a_enviar);
+}
+
+void crear_buffer(t_paquete* paquete)
+{
+	paquete->buffer = malloc(sizeof(t_buffer));
+	paquete->buffer->size = 0;
+	paquete->buffer->stream = NULL;
 }
