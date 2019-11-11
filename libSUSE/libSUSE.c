@@ -37,27 +37,13 @@ int conectarse_a_suse() {
 	return conexion;
 }
 
-int enviar_datos_hilo(int tid, int pid, int conexion, int operacion) {
-	/*
-	mensaje_t* mensaje = malloc(sizeof(mensaje));
-	hilo_t* hilo = malloc(sizeof(hilo_t));
-	hilo->pid = pid;
-	hilo->tid = tid;
-	mensaje->operacion = operacion;
-	mensaje->hilo = hilo;
-	send(conexion, (void*)mensaje, sizeof(mensaje), 0);
-	*/
-	//enviar_mensaje();
-}
-
 int suse_create(int tid){
 	int conexion = conectarse_a_suse();
 	int pid = getpid();
 	int operacion = 1;
 	t_paquete* paquete = crear_paquete();
-	agregar_a_paquete(paquete, &tid, sizeof(int));
-	agregar_a_paquete(paquete, &pid, sizeof(int));
 	agregar_a_paquete(paquete, &operacion, sizeof(int));
+	agregar_a_paquete(paquete, &tid, sizeof(int));
 	enviar_paquete(paquete, conexion);
 	return 0;
 }
@@ -69,14 +55,11 @@ int suse_schedule_next(void){
 }
 
 int suse_join(int tid){
-	//int conexion = conectarse_a_suse();
-	//enviar_datos_ult(tid, getpid(), conexion, 3);
 	return 0;
 }
 
 int suse_close(int tid){
 	int conexion = conectarse_a_suse();
-	enviar_datos_hilo(tid, getpid(), conexion, 4);
 	printf("Closed thread %i\n", tid);
 	max_tid--;
 	return 0;

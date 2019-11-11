@@ -88,7 +88,6 @@ mensaje_t* recibir_paquete(int socket_cliente)
 	mensaje->hilo = malloc(sizeof(hilo_t));
 	memcpy(&(mensaje->operacion), buffer, sizeof(operacion_t));
 	memcpy(&(mensaje->hilo->tid), buffer + sizeof(operacion_t), sizeof(int));
-	memcpy(&(mensaje->hilo->pid), buffer + sizeof(operacion_t)+ sizeof(int), sizeof(int));
 	return mensaje;
 }
 

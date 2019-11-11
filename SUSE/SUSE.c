@@ -32,9 +32,9 @@ void inicializar() {
 	programas = malloc(100 * sizeof(programa_t));
 
 	for (int i = 0; i < 100; i++) {
-		programas[i].pid = -1;
+		programas[i].pid = 0;
 		programas[i].cola_ready = queue_create();
-		programas[i].cola_exec = queue_create();
+		programas[i].exec = NULL;
 	}
 
 	tid_sem = malloc(sizeof(sem_t));
@@ -79,12 +79,12 @@ void atender_cliente(int cliente_fd) {
 	switch (mensaje->operacion) {
 		case 1:
 			encolar_hilo_en_new(mensaje->hilo);
-
-			if (programa_nuevo(mensaje->hilo))
-				agregar_programa(mensaje->hilo);
+			agregar_programa(mensaje->hilo);
 
 			if (GRADO_MULTIPROGRAMACION < MAX_MULTIPROG)
 				encolar_hilo_en_ready(mensaje->hilo);
+
+			//imprimir_programas();
 
 			break;
 		case 3:
@@ -96,15 +96,22 @@ void atender_cliente(int cliente_fd) {
 	}
 }
 
+void imprimir_programas() {
+	int pid = 0;
+
+	for(int i = 0; i < 10; i++) {
+		printf("programa %i\n", programas[i].pid);
+	}
+}
+
 void agregar_programa(hilo_t* hilo) {
 	programa_t programa;
-	programa.pid = hilo->pid;
+	programa.pid = 0;
 	programa.cola_ready = queue_create();
-	programa.cola_exec = queue_create();
-	programas[PID].pid = programa.pid;
+	programa.exec = 0;
+	programas[PID].pid = PID;
 	programas[PID].cola_ready = programa.cola_ready;
-	programas[PID].cola_exec = programa.cola_exec;
-	dictionary_put(diccionario_programas, string_itoa(PID), programa.pid);
+	programas[PID].exec = NULL;
 	PID++;
 }
 

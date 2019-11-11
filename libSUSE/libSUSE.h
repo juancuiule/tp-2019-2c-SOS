@@ -30,7 +30,7 @@ typedef struct {
 typedef struct {
 	int pid;
 	t_queue* cola_ready;
-	t_queue* cola_exec;
+	hilo_t* exec;
 } programa_t;
 
 typedef enum {
