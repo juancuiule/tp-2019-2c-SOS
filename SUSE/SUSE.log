@@ -1,0 +1,39 @@
+[INFO] 20:53:19:644 SUSE/(11180:11180): Se ha iniciado el servidor.
+[INFO] 20:53:23:18 SUSE/(11180:11180): Se conecto un cliente!
+[INFO] 20:53:23:321 SUSE/(11180:11180): Se conecto un cliente!
+[INFO] 21:06:02:132 SUSE/(11842:11842): Se ha iniciado el servidor.
+[INFO] 21:06:07:293 SUSE/(11842:11842): Se conecto un cliente!
+[INFO] 21:06:15:62 SUSE/(11842:11842): Se conecto un cliente!
+[INFO] 21:08:36:369 SUSE/(11842:11842): Se conecto un cliente!
+[INFO] 21:08:39:39 SUSE/(11842:11842): Se conecto un cliente!
+[INFO] 21:13:55:202 SUSE/(11842:11842): Se conecto un cliente!
+[INFO] 21:13:58:875 SUSE/(11842:11842): Se conecto un cliente!
+[INFO] 21:18:50:659 SUSE/(11842:11842): Se conecto un cliente!
+[INFO] 21:18:53:565 SUSE/(11842:11842): Se conecto un cliente!
+[INFO] 21:19:08:219 SUSE/(11842:11842): Se conecto un cliente!
+[INFO] 21:56:05:386 SUSE/(2324:2324): Se ha iniciado el servidor.
+[INFO] 21:56:17:364 SUSE/(2324:2324): Se conecto un cliente!
+[INFO] 21:56:22:796 SUSE/(2324:2324): Se conecto un cliente!
+[INFO] 21:58:41:372 SUSE/(2324:2324): Se conecto un cliente!
+[INFO] 21:58:51:991 SUSE/(2324:2324): Se conecto un cliente!
+[INFO] 22:05:44:412 SUSE/(2324:2324): Se conecto un cliente!
+[INFO] 22:05:47:708 SUSE/(2324:2324): Se conecto un cliente!
+[INFO] 22:06:37:153 SUSE/(2324:2324): Se conecto un cliente!
+[INFO] 22:06:39:975 SUSE/(2324:2324): Se conecto un cliente!
+[INFO] 22:09:32:411 SUSE/(2324:2324): Se conecto un cliente!
+[INFO] 22:09:36:157 SUSE/(2324:2324): Se conecto un cliente!
+[INFO] 22:12:00:828 SUSE/(2324:2324): Se conecto un cliente!
+[INFO] 22:12:00:828 SUSE/(2324:2324): Se conecto un cliente!
+[INFO] 22:12:00:829 SUSE/(2324:2324): Se conecto un cliente!
+[INFO] 22:12:00:829 SUSE/(2324:5302): El hilo 24 del programa 0 llegó a NEW
+
+[INFO] 22:12:00:829 SUSE/(2324:5302): El hilo 24 del programa 0 está en READY
+
+[INFO] 22:12:00:829 SUSE/(2324:5301): El hilo 24 del programa 0 llegó a NEW
+
+[INFO] 22:12:00:829 SUSE/(2324:5301): El hilo 24 del programa 0 está en READY
+
+[INFO] 22:12:00:830 SUSE/(2324:5300): El hilo 24 del programa 0 llegó a NEW
+
+[INFO] 22:12:00:830 SUSE/(2324:5300): El hilo 24 del programa 0 está en READY
+
