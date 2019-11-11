@@ -1,13 +1,98 @@
-[INFO] 20:53:19:644 SUSE/(11180:11180): Se ha iniciado el servidor.
-[INFO] 20:53:23:18 SUSE/(11180:11180): Se conecto un cliente!
-[INFO] 20:53:23:321 SUSE/(11180:11180): Se conecto un cliente!
-[INFO] 21:06:02:132 SUSE/(11842:11842): Se ha iniciado el servidor.
-[INFO] 21:06:07:293 SUSE/(11842:11842): Se conecto un cliente!
-[INFO] 21:06:15:62 SUSE/(11842:11842): Se conecto un cliente!
-[INFO] 21:08:36:369 SUSE/(11842:11842): Se conecto un cliente!
-[INFO] 21:08:39:39 SUSE/(11842:11842): Se conecto un cliente!
-[INFO] 21:13:55:202 SUSE/(11842:11842): Se conecto un cliente!
-[INFO] 21:13:58:875 SUSE/(11842:11842): Se conecto un cliente!
-[INFO] 21:18:50:659 SUSE/(11842:11842): Se conecto un cliente!
-[INFO] 21:18:53:565 SUSE/(11842:11842): Se conecto un cliente!
-[INFO] 21:19:08:219 SUSE/(11842:11842): Se conecto un cliente!
+[INFO] 23:32:19:983 SUSE/(8321:8321): Se ha iniciado el servidor.
+[INFO] 23:32:23:632 SUSE/(8321:8321): Se conecto un cliente!
+[INFO] 23:32:23:632 SUSE/(8321:8321): Se conecto un cliente!
+[INFO] 23:32:23:632 SUSE/(8321:8321): Se conecto un cliente!
+[INFO] 23:32:23:632 SUSE/(8321:8326): El hilo 24 del programa 0 llegó a NEW
+[INFO] 23:32:23:632 SUSE/(8321:8326): El hilo 24 del programa 0 está en READY
+[INFO] 23:32:23:632 SUSE/(8321:8325): El hilo 24 del programa 0 llegó a NEW
+[INFO] 23:32:23:633 SUSE/(8321:8325): El hilo 24 del programa 0 está en READY
+[INFO] 23:32:23:632 SUSE/(8321:8324): El hilo 24 del programa 0 llegó a NEW
+[INFO] 23:32:23:633 SUSE/(8321:8324): El hilo 24 del programa 0 está en READY
+[INFO] 23:32:24:305 SUSE/(8321:8321): Se conecto un cliente!
+[INFO] 23:32:24:305 SUSE/(8321:8321): Se conecto un cliente!
+[INFO] 23:32:24:305 SUSE/(8321:8321): Se conecto un cliente!
+[INFO] 23:32:24:305 SUSE/(8321:8330): El hilo 24 del programa 858994234 llegó a NEW
+[INFO] 23:32:24:305 SUSE/(8321:8330): El hilo 24 del programa 858994234 está en READY
+[INFO] 23:32:24:305 SUSE/(8321:8329): El hilo 24 del programa 0 llegó a NEW
+[INFO] 23:32:24:305 SUSE/(8321:8329): El hilo 24 del programa 0 está en READY
+[INFO] 23:32:24:305 SUSE/(8321:8328): El hilo 24 del programa 0 llegó a NEW
+[INFO] 23:32:24:305 SUSE/(8321:8328): El hilo 24 del programa 0 está en READY
+[INFO] 23:32:24:495 SUSE/(8321:8321): Se conecto un cliente!
+[INFO] 23:32:24:496 SUSE/(8321:8321): Se conecto un cliente!
+[INFO] 23:32:24:496 SUSE/(8321:8332): El hilo 24 del programa 0 llegó a NEW
+[INFO] 23:32:24:496 SUSE/(8321:8332): El hilo 24 del programa 0 está en READY
+[INFO] 23:32:24:496 SUSE/(8321:8321): Se conecto un cliente!
+[INFO] 23:32:24:496 SUSE/(8321:8333): El hilo 24 del programa 0 llegó a NEW
+[INFO] 23:32:24:496 SUSE/(8321:8333): El hilo 24 del programa 0 está en READY
+[INFO] 23:32:24:496 SUSE/(8321:8334): El hilo 24 del programa 0 llegó a NEW
+[INFO] 23:32:24:496 SUSE/(8321:8334): El hilo 24 del programa 0 está en READY
+[INFO] 23:32:24:800 SUSE/(8321:8321): Se conecto un cliente!
+[INFO] 23:32:24:800 SUSE/(8321:8321): Se conecto un cliente!
+[INFO] 23:32:24:800 SUSE/(8321:8321): Se conecto un cliente!
+[INFO] 23:32:24:800 SUSE/(8321:8338): El hilo 24 del programa 0 llegó a NEW
+[INFO] 23:32:24:800 SUSE/(8321:8338): El hilo 24 del programa 0 está en READY
+[WARNING] 23:32:24:800 SUSE/(8321:8338): Se ha alcanzado el grado máximo de multiprogramación
+
+[INFO] 23:32:24:800 SUSE/(8321:8337): El hilo 24 del programa 808466490 llegó a NEW
+[INFO] 23:32:24:800 SUSE/(8321:8336): El hilo 24 del programa 0 llegó a NEW
+[INFO] 23:32:25:43 SUSE/(8321:8321): Se conecto un cliente!
+[INFO] 23:32:25:43 SUSE/(8321:8321): Se conecto un cliente!
+[INFO] 23:32:25:43 SUSE/(8321:8321): Se conecto un cliente!
+[INFO] 23:32:25:44 SUSE/(8321:8340): El hilo 24 del programa 0 llegó a NEW
+[INFO] 23:32:25:44 SUSE/(8321:8341): El hilo 24 del programa 0 llegó a NEW
+[INFO] 23:32:25:45 SUSE/(8321:8342): El hilo 24 del programa 0 llegó a NEW
+[INFO] 23:32:25:299 SUSE/(8321:8321): Se conecto un cliente!
+[INFO] 23:32:25:299 SUSE/(8321:8321): Se conecto un cliente!
+[INFO] 23:32:25:299 SUSE/(8321:8321): Se conecto un cliente!
+[INFO] 23:32:25:299 SUSE/(8321:8346): El hilo 24 del programa 0 llegó a NEW
+[INFO] 23:32:25:299 SUSE/(8321:8345): El hilo 24 del programa 0 llegó a NEW
+[INFO] 23:32:25:299 SUSE/(8321:8344): El hilo 24 del programa 0 llegó a NEW
+[INFO] 23:32:25:485 SUSE/(8321:8321): Se conecto un cliente!
+[INFO] 23:32:25:485 SUSE/(8321:8321): Se conecto un cliente!
+[INFO] 23:32:25:485 SUSE/(8321:8321): Se conecto un cliente!
+[INFO] 23:32:25:486 SUSE/(8321:8350): El hilo 24 del programa 0 llegó a NEW
+[INFO] 23:32:25:486 SUSE/(8321:8349): El hilo 24 del programa 0 llegó a NEW
+[INFO] 23:32:25:486 SUSE/(8321:8348): El hilo 24 del programa 0 llegó a NEW
+[INFO] 23:32:25:714 SUSE/(8321:8321): Se conecto un cliente!
+[INFO] 23:32:25:714 SUSE/(8321:8321): Se conecto un cliente!
+[INFO] 23:32:25:714 SUSE/(8321:8321): Se conecto un cliente!
+[INFO] 23:32:25:714 SUSE/(8321:8352): El hilo 24 del programa 0 llegó a NEW
+[INFO] 23:32:25:715 SUSE/(8321:8353): El hilo 24 del programa 0 llegó a NEW
+[INFO] 23:32:25:715 SUSE/(8321:8354): El hilo 24 del programa 0 llegó a NEW
+[INFO] 23:33:59:938 SUSE/(8414:8414): Se ha iniciado el servidor.
+[INFO] 23:34:03:94 SUSE/(8414:8414): Se conecto un cliente!
+[INFO] 23:34:03:94 SUSE/(8414:8414): Se conecto un cliente!
+[INFO] 23:34:03:94 SUSE/(8414:8414): Se conecto un cliente!
+[INFO] 23:34:03:94 SUSE/(8414:8417): El hilo 24 del programa 0 llegó a NEW
+[INFO] 23:34:03:94 SUSE/(8414:8417): El hilo 24 del programa 0 está en READY
+[INFO] 23:34:03:94 SUSE/(8414:8419): El hilo 24 del programa 0 llegó a NEW
+[INFO] 23:34:03:94 SUSE/(8414:8419): El hilo 24 del programa 0 está en READY
+[INFO] 23:34:03:94 SUSE/(8414:8418): El hilo 24 del programa 3422522 llegó a NEW
+[INFO] 23:34:03:94 SUSE/(8414:8418): El hilo 24 del programa 3422522 está en READY
+[INFO] 23:34:12:316 SUSE/(8414:8414): Se conecto un cliente!
+[INFO] 23:34:12:316 SUSE/(8414:8414): Se conecto un cliente!
+[INFO] 23:34:12:316 SUSE/(8414:8414): Se conecto un cliente!
+[INFO] 23:34:12:316 SUSE/(8414:8423): El hilo 24 del programa 0 llegó a NEW
+[INFO] 23:34:12:316 SUSE/(8414:8423): El hilo 24 del programa 0 está en READY
+[INFO] 23:34:12:316 SUSE/(8414:8421): El hilo 24 del programa 0 llegó a NEW
+[INFO] 23:34:12:316 SUSE/(8414:8421): El hilo 24 del programa 0 está en READY
+[INFO] 23:34:12:317 SUSE/(8414:8422): El hilo 24 del programa 0 llegó a NEW
+[INFO] 23:34:12:317 SUSE/(8414:8422): El hilo 24 del programa 0 está en READY
+[INFO] 23:34:27:158 SUSE/(8414:8414): Se conecto un cliente!
+[INFO] 23:34:27:158 SUSE/(8414:8414): Se conecto un cliente!
+[INFO] 23:34:27:158 SUSE/(8414:8414): Se conecto un cliente!
+[INFO] 23:34:27:158 SUSE/(8414:8426): El hilo 24 del programa 0 llegó a NEW
+[INFO] 23:34:27:158 SUSE/(8414:8426): El hilo 24 del programa 0 está en READY
+[INFO] 23:34:27:160 SUSE/(8414:8427): El hilo 24 del programa 0 llegó a NEW
+[INFO] 23:34:27:160 SUSE/(8414:8427): El hilo 24 del programa 0 está en READY
+[INFO] 23:34:27:160 SUSE/(8414:8428): El hilo 24 del programa 0 llegó a NEW
+[INFO] 23:34:27:160 SUSE/(8414:8428): El hilo 24 del programa 0 está en READY
+[INFO] 23:34:30:557 SUSE/(8414:8414): Se conecto un cliente!
+[INFO] 23:34:30:557 SUSE/(8414:8414): Se conecto un cliente!
+[INFO] 23:34:30:557 SUSE/(8414:8414): Se conecto un cliente!
+[INFO] 23:34:30:557 SUSE/(8414:8430): El hilo 24 del programa 0 llegó a NEW
+[INFO] 23:34:30:557 SUSE/(8414:8430): El hilo 24 del programa 0 está en READY
+[WARNING] 23:34:30:557 SUSE/(8414:8430): Se ha alcanzado el grado máximo de multiprogramación
+
+[INFO] 23:34:30:557 SUSE/(8414:8431): El hilo 24 del programa 926233914 llegó a NEW
+[INFO] 23:34:30:558 SUSE/(8414:8432): El hilo 24 del programa 0 llegó a NEW

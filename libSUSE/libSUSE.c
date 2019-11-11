@@ -55,8 +55,8 @@ int suse_create(int tid){
 	int pid = getpid();
 	int operacion = 1;
 	t_paquete* paquete = crear_paquete();
-	agregar_a_paquete(paquete, &tid, sizeof(tid));
-	agregar_a_paquete(paquete, &pid, sizeof(pid_t));
+	agregar_a_paquete(paquete, &tid, sizeof(int));
+	agregar_a_paquete(paquete, &pid, sizeof(int));
 	agregar_a_paquete(paquete, &operacion, sizeof(int));
 	enviar_paquete(paquete, conexion);
 	return 0;
@@ -126,10 +126,8 @@ t_paquete* crear_paquete(void)
 void agregar_a_paquete(t_paquete* paquete, void* valor, int tamanio)
 {
 	paquete->buffer->stream = realloc(paquete->buffer->stream, paquete->buffer->size + tamanio + sizeof(int));
-
 	memcpy(paquete->buffer->stream + paquete->buffer->size, &tamanio, sizeof(int));
 	memcpy(paquete->buffer->stream + paquete->buffer->size + sizeof(int), valor, tamanio);
-
 	paquete->buffer->size += tamanio + sizeof(int);
 }
 

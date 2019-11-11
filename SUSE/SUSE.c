@@ -8,7 +8,7 @@ int main() {
 	configurar();
 	int servidor_fd = iniciar_servidor();
 
-	//pthread_create(&hilo_metricas, NULL, logear_metricas, NULL);
+	pthread_create(&hilo_metricas, NULL, logear_metricas, NULL);
 
 	while(1) {
 		cliente_fd = esperar_cliente(servidor_fd);
@@ -53,14 +53,6 @@ void logear_metricas() {
 	while (1) {
 		sleep(METRICS_TIMER);
 		log_info(logger_metricas, "Grado de multiprogramación: %i", GRADO_MULTIPROGRAMACION);
-
-		int i = 0;
-
-		while (programas[i].pid != -1) {
-			hilos_new = cantidad_de_hilos_en_new(programas[i]);
-			log_info(logger_metricas, "\nCantidad de hilos del programa %i: %i", programas[i].pid, hilos_new);
-			i++;
-		}
 	}
 }
 
@@ -136,7 +128,7 @@ int programa_nuevo(hilo_t* hilo) {
 
 void encolar_hilo_en_new(hilo_t* hilo) {
 	queue_push(cola_new, hilo);
-	log_info(logger, "El hilo %i del programa %i llegó a NEW\n", hilo->tid, hilo->pid);
+	log_info(logger, "El hilo %i del programa %i llegó a NEW", hilo->tid, hilo->pid);
 }
 
 void cerrar_hilo(hilo_t* hilo) {
@@ -160,11 +152,11 @@ void encolar_hilo_en_ready() {
 	hilo_t* hilo = queue_pop(cola_new);
 	int indice = obtener_indice_de_programa(hilo->pid);
 	queue_push(programas[indice].cola_ready, hilo);
-	log_info(logger, "El hilo %d del programa %d está en READY\n", hilo->tid, hilo->pid);
+	log_info(logger, "El hilo %d del programa %d está en READY", hilo->tid, hilo->pid);
 	GRADO_MULTIPROGRAMACION++;
 
 	if (GRADO_MULTIPROGRAMACION == MAX_MULTIPROG)
-		log_warning(logger, "Se ha alcanzado el grado máximo de multiprogramación\n");
+		log_warning(logger, "Se ha alcanzado el grado máximo de multiprogramación");
 }
 
 void bloquear_hilo(hilo_t* hilo) {
