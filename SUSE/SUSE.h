@@ -37,6 +37,5 @@ void encolar_hilo_en_ready();
 int programa_nuevo(hilo_t*);
 void agregar_programa(hilo_t*);
 int obtener_indice_de_programa(int);
-float siguiente_estimacion(hilo_t*);
 hilo_t* siguiente_hilo_a_ejecutar(programa_t*);
 void liberar();

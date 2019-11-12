@@ -180,10 +180,6 @@ void bloquear_hilo(hilo_t* hilo) {
 	log_info(logger, "El thread %d ha llegado a la cola de BLOCKED", dictionary_get(diccionario_tid, thread_id));
 }
 
-float siguiente_estimacion(hilo_t* hilo) {
-	return (1 - ALPHA_SJF) * hilo->estimacion_anterior + ALPHA_SJF * hilo->rafaga_anterior;
-}
-
 hilo_t* siguiente_hilo_a_ejecutar(programa_t* programa) {
 	float min = 9999;
 	float siguiente_est = 0;
@@ -194,7 +190,7 @@ hilo_t* siguiente_hilo_a_ejecutar(programa_t* programa) {
 
 	while (aux != NULL) {
 		hilo = queue_pop(aux);
-		siguiente_est = siguiente_estimacion(hilo);
+		siguiente_est = (1 - ALPHA_SJF) * hilo->estimacion_anterior + ALPHA_SJF * hilo->rafaga_anterior;
 
 		if (siguiente_est < min)
 			siguiente = hilo;
