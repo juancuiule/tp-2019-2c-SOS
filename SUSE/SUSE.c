@@ -34,7 +34,7 @@ void inicializar() {
 	for (int i = 0; i < 100; i++) {
 		programas[i].pid = 0;
 		programas[i].cola_ready = queue_create();
-		programas[i].exec = NULL;
+		programas[i].hilo_en_exec = NULL;
 	}
 
 	tid_sem = malloc(sizeof(sem_t));
@@ -72,6 +72,10 @@ int cantidad_de_hilos_en_new(programa_t programa) {
 	return cant;
 }
 
+void ejecutar_hilo(hilo_t* hilo) {
+	printf("Ejecuto hilo %i", hilo->tid);
+}
+
 void atender_cliente(int cliente_fd) {
 	mensaje_t* mensaje = malloc(sizeof(mensaje_t));
 	mensaje = recibir_paquete(cliente_fd);
@@ -87,6 +91,8 @@ void atender_cliente(int cliente_fd) {
 			//imprimir_programas();
 
 			break;
+		case 2:
+			ejecutar_hilo(mensaje->hilo);
 		case 3:
 			bloquear_hilo(mensaje->hilo);
 			break;
@@ -108,10 +114,10 @@ void agregar_programa(hilo_t* hilo) {
 	programa_t programa;
 	programa.pid = 0;
 	programa.cola_ready = queue_create();
-	programa.exec = 0;
+	programa.hilo_en_exec = 0;
 	programas[PID].pid = PID;
 	programas[PID].cola_ready = programa.cola_ready;
-	programas[PID].exec = NULL;
+	programas[PID].hilo_en_exec = NULL;
 	PID++;
 }
 
@@ -172,6 +178,29 @@ void bloquear_hilo(hilo_t* hilo) {
 	hilo_t* thread = queue_pop(colas_exec[pid]);
 	queue_push(cola_blocked, thread);
 	log_info(logger, "El thread %d ha llegado a la cola de BLOCKED", dictionary_get(diccionario_tid, thread_id));
+}
+
+float siguiente_estimacion(hilo_t* hilo) {
+	return (1 - ALPHA_SJF) * hilo->estimacion_anterior + ALPHA_SJF * hilo->rafaga_anterior;
+}
+
+hilo_t* siguiente_hilo_a_ejecutar(programa_t* programa) {
+	float min = 9999;
+	float siguiente_est = 0;
+	hilo_t* hilo = malloc(sizeof(hilo_t));
+	hilo_t* siguiente = malloc(sizeof(hilo_t));
+	t_queue* aux = queue_create();
+	aux = programa->cola_ready;
+
+	while (aux != NULL) {
+		hilo = queue_pop(aux);
+		siguiente_est = siguiente_estimacion(hilo);
+
+		if (siguiente_est < min)
+			siguiente = hilo;
+	}
+
+	return siguiente;
 }
 
 void liberar() {

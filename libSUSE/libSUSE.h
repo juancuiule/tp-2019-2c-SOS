@@ -25,12 +25,14 @@ typedef struct {
 	int tiempo_ejecucion;
 	int tiempo_espera;
 	int tiempo_cpu;
+	float estimacion_anterior;
+	float rafaga_anterior;
 } hilo_t;
 
 typedef struct {
 	int pid;
 	t_queue* cola_ready;
-	hilo_t* exec;
+	hilo_t* hilo_en_exec;
 } programa_t;
 
 typedef enum {

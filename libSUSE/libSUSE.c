@@ -49,9 +49,15 @@ int suse_create(int tid){
 }
 
 int suse_schedule_next(void){
-	int next = max_tid;
-	printf("Scheduling next item %i...\n", next);
-	return next;
+	int conexion = conectarse_a_suse();
+	int tid = 0;
+	int pid = getpid();
+	int operacion = 2;
+	t_paquete* paquete = crear_paquete();
+	agregar_a_paquete(paquete, &operacion, sizeof(int));
+	agregar_a_paquete(paquete, &tid, sizeof(int));
+	enviar_paquete(paquete, conexion);
+	return 0;
 }
 
 int suse_join(int tid){
