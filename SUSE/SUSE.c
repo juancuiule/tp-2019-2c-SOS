@@ -78,6 +78,7 @@ void ejecutar_hilo(hilo_t* hilo) {
 
 void atender_cliente(int cliente_fd) {
 	mensaje_t* mensaje = malloc(sizeof(mensaje_t));
+	mensaje->hilo = malloc(sizeof(hilo_t));
 	mensaje = recibir_paquete(cliente_fd);
 
 	switch (mensaje->operacion) {
@@ -93,6 +94,7 @@ void atender_cliente(int cliente_fd) {
 			break;
 		case 2:
 			ejecutar_hilo(mensaje->hilo);
+			break;
 		case 3:
 			bloquear_hilo(mensaje->hilo);
 			break;

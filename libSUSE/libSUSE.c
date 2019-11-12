@@ -49,14 +49,7 @@ int suse_create(int tid){
 }
 
 int suse_schedule_next(void){
-	int conexion = conectarse_a_suse();
-	int tid = 0;
-	int pid = getpid();
-	int operacion = 2;
-	t_paquete* paquete = crear_paquete();
-	agregar_a_paquete(paquete, &operacion, sizeof(int));
-	agregar_a_paquete(paquete, &tid, sizeof(int));
-	enviar_paquete(paquete, conexion);
+	printf("Obtengo el próximo hilo a ejecutar\n");
 	return 0;
 }
 
