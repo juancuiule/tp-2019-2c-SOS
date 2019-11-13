@@ -17,7 +17,8 @@ int cli_getattr(const char *path, struct stat *statbuf)
 	//...espero respuesta de server
 	uint32_t size;
 	uint64_t m_date;
-	int errnum;
+	int state, errnum;
+
 	respuesta = paquete_recibir(sac_server.fd);
 
 	if(respuesta.header.cod_operacion == COD_ERROR){
@@ -26,12 +27,18 @@ int cli_getattr(const char *path, struct stat *statbuf)
 		return -errnum;
 	}
 
-	dslz_res_getattr(respuesta.payload, &size, &m_date);
+	dslz_res_getattr(respuesta.payload, &size, &m_date, &state);
+
 	struct timespec ts_m_time;
 	convert_to_timespec(m_date, &ts_m_time);
+
 	statbuf->st_size = size;
 	statbuf->st_mtim = ts_m_time;
-	statbuf->st_mode = 0755; //harcodeo permiso
+
+	if(state == 1)
+		statbuf->st_mode = S_IFREG | 0777;
+	else//state solo puede ser 2
+		statbuf->st_mode = S_IFDIR | 0755;
 
 	return 0;
 }
@@ -51,7 +58,7 @@ int cli_opendir(const char *path, struct fuse_file_info *fi)
 		log_msje_info("Se envio operacion readdir al server");
 
 	//...espero respuesta de server
-	intptr_t dir;
+	uint32_t dir;
 	respuesta = paquete_recibir(sac_server.fd);
 
 	if(respuesta.header.cod_operacion == COD_ERROR){
@@ -62,7 +69,7 @@ int cli_opendir(const char *path, struct fuse_file_info *fi)
 	}
 
 	dslz_res_opendir(respuesta.payload, &dir);
-	log_msje_info("CLI OPENDIR  ME LLEGO DIR ADRESS: [ %p ]", dir);
+	log_msje_info("CLI OPENDIR  ME LLEGO BLK NUMBER: [ %d ]", dir);
 	fi->fh = dir;//la guardoo
 
 	return 0;
@@ -73,10 +80,14 @@ int cli_opendir(const char *path, struct fuse_file_info *fi)
 int cli_readdir(const char *path, void *buf, fuse_fill_dir_t filler, off_t offset, struct fuse_file_info *fi)
 {
 	log_msje_info("Operacion READDIR sobre path [ %s ]", path);
-
-	//enviar paquete a sac server
 	package_t paquete, respuesta;
-	paquete = slz_cod_readdir(path, (intptr_t)fi->fh);
+
+	/*
+	if((uint32_t)fi->fh == NULL)
+		return -EBADF;*/
+
+	log_msje_info("-- readdir bloquee nro [ %d ]", fi->fh);
+	paquete = slz_cod_readdir(path, fi->fh);
 
 	if(!paquete_enviar(sac_server.fd, paquete))
 		log_msje_error("No se pudo enviar el paquete");
@@ -84,34 +95,28 @@ int cli_readdir(const char *path, void *buf, fuse_fill_dir_t filler, off_t offse
 		log_msje_info("Se envio operacion readdir al server");
 
 	//..espero respuestaa server
-	t_list *files = list_create();
 	respuesta = paquete_recibir(sac_server.fd);
 
-	if(respuesta.header.cod_operacion == COD_ERROR){
-		int err;
-		log_msje_error("readdir me llego cod error");
-		dslz_res_error(respuesta.payload, &err);
-		return -err;
-	}
-
+	t_list *files = list_create();
 	dslz_res_readdir(respuesta.payload, &files);
 
-	t_link_element *element = files->head;
-	t_link_element *aux = NULL;
-	do{
-		aux = element->next;
+	if(!list_is_empty(files))
+	{
+		t_link_element *element = files->head;
+		t_link_element *aux = NULL;
+		do{
+			aux = element->next;
 
-		log_msje_info("calling filler with element data list: [ %s ]", element->data);
-		if (filler(buf, element->data, NULL, 0) != 0) {
-			log_msje_error("cli readdir filler:  buffer full");
-			return -ENOMEM;
-		}
+			log_msje_info("calling filler with element data list: [ %s ]", element->data);
+			if (filler(buf, element->data, NULL, 0) != 0) {
+				log_msje_error("cli readdir filler:  buffer full");
+				return -ENOMEM;
+			}
 
-		element = aux;
+			element = aux;
 
-	}while(element != NULL);
-
-
+		}while(element != NULL);
+	}
 	return 0;
 }
 
@@ -121,7 +126,7 @@ int cli_releasedir(const char *path, struct fuse_file_info *fi)
 	log_msje_info("Operacion RELEASEDIR sobre path [ %s ]", path);
 
 	package_t paquete, respuesta;
-	paquete = slz_cod_releasedir(path, (intptr_t)fi->fh);
+	paquete = slz_cod_releasedir(path, (uint32_t)fi->fh);
 
 	if(!paquete_enviar(sac_server.fd, paquete))
 		log_msje_error("No se pudo enviar el paquete cod realesedir");
@@ -375,7 +380,7 @@ struct fuse_operations cli_oper = {
 		.getattr = cli_getattr,
 		.opendir = cli_opendir,
 		.readdir = cli_readdir,
-		.releasedir = cli_releasedir,
+		//.releasedir = cli_releasedir,
 		.open = cli_open,
 		.read = cli_read,
 		.release = cli_release,
