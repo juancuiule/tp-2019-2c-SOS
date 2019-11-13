@@ -96,6 +96,7 @@ void atender_cliente(int cliente_fd) {
 			ejecutar_hilo(mensaje->hilo);
 			break;
 		case 3:
+			printf("recibo operacion 3\n");
 			bloquear_hilo(mensaje->hilo);
 			break;
 		case 4:

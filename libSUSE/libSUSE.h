@@ -59,5 +59,6 @@ t_dictionary* diccionario_tid_pid;
 t_dictionary* diccionario_tid;
 
 void* serializar(hilo_t);
+int ejecutar_operacion(int, int);
 
 #endif /* LIBSUSE_H_ */

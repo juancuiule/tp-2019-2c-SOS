@@ -8,6 +8,16 @@
 
 int max_tid = 0;
 
+int ejecutar_operacion(int tid, int operacion) {
+	int conexion = conectarse_a_suse();
+	int pid = getpid();
+	t_paquete* paquete = crear_paquete();
+	agregar_a_paquete(paquete, &operacion, sizeof(int));
+	agregar_a_paquete(paquete, &tid, sizeof(int));
+	enviar_paquete(paquete, conexion);
+	return 0;
+}
+
 int conectarse_a_suse() {
 	struct sockaddr_in cliente;
 	struct hostent *servidor;
@@ -38,29 +48,22 @@ int conectarse_a_suse() {
 }
 
 int suse_create(int tid){
-	int conexion = conectarse_a_suse();
-	int pid = getpid();
-	int operacion = 1;
-	t_paquete* paquete = crear_paquete();
-	agregar_a_paquete(paquete, &operacion, sizeof(int));
-	agregar_a_paquete(paquete, &tid, sizeof(int));
-	enviar_paquete(paquete, conexion);
-	return 0;
+	if (tid > max_tid) max_tid = tid;
+	return ejecutar_operacion(tid, 1);
 }
 
 int suse_schedule_next(void){
-	printf("Obtengo el próximo hilo a ejecutar\n");
-	return 0;
+	int next = max_tid;
+	printf("Scheduling next item %i...\n", next);
+	return next;
 }
 
 int suse_join(int tid){
-	return 0;
+	return ejecutar_operacion(tid, 3);
 }
 
 int suse_close(int tid){
-	int conexion = conectarse_a_suse();
-	printf("Closed thread %i\n", tid);
-	max_tid--;
+	printf("El hilo %i ha finalizado\n", tid);
 	return 0;
 }
 
