@@ -81,6 +81,8 @@ void atender_cliente(int cliente_fd) {
 	mensaje->hilo = malloc(sizeof(hilo_t));
 	mensaje = recibir_paquete(cliente_fd);
 
+	printf("recibo operacion %i\n", mensaje->operacion);
+
 	switch (mensaje->operacion) {
 		case 1:
 			encolar_hilo_en_new(mensaje->hilo);
@@ -88,18 +90,17 @@ void atender_cliente(int cliente_fd) {
 
 			if (GRADO_MULTIPROGRAMACION < MAX_MULTIPROG)
 				encolar_hilo_en_ready(mensaje->hilo);
-
-			//imprimir_programas();
-
 			break;
 		case 2:
+			printf("recibo operación 2\n");
 			ejecutar_hilo(mensaje->hilo);
 			break;
 		case 3:
-			printf("recibo operacion 3\n");
+			printf("recibo operación 3\n");
 			bloquear_hilo(mensaje->hilo);
 			break;
 		case 4:
+			printf("recibo operación 4\n");
 			cerrar_hilo(mensaje->hilo);
 			break;
 	}
@@ -148,6 +149,7 @@ void encolar_hilo_en_new(hilo_t* hilo) {
 }
 
 void cerrar_hilo(hilo_t* hilo) {
+	printf("se ejecuta cerrar_hilo\n");
 	queue_push(cola_exit, hilo);
 	log_info(logger, "El ULT %i ha llegado a la cola de EXIT.", hilo->tid);
 	sem_wait(multiprogramacion_sem);

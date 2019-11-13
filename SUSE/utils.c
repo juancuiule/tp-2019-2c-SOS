@@ -86,8 +86,9 @@ mensaje_t* recibir_paquete(int socket_cliente)
 	recv(socket_cliente, buffer, sizeof(buffer), 0);
 	mensaje_t* mensaje = malloc(sizeof(mensaje_t));
 	mensaje->hilo = malloc(sizeof(hilo_t));
-	memcpy(&(mensaje->operacion), buffer, sizeof(operacion_t));
-	memcpy(&(mensaje->hilo->tid), buffer + sizeof(operacion_t), sizeof(int));
+	memcpy(&(mensaje->operacion), buffer, sizeof(int));
+	printf("la operacion leida es %i\n", mensaje->operacion);
+	memcpy(&(mensaje->hilo->tid), buffer + sizeof(int), sizeof(int));
 	return mensaje;
 }
 

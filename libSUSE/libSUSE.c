@@ -12,8 +12,10 @@ int ejecutar_operacion(int tid, int operacion) {
 	int conexion = conectarse_a_suse();
 	int pid = getpid();
 	t_paquete* paquete = crear_paquete();
+	hilo_t* hilo = malloc(sizeof(hilo_t));
+	hilo->tid = tid;
 	agregar_a_paquete(paquete, &operacion, sizeof(int));
-	agregar_a_paquete(paquete, &tid, sizeof(int));
+	agregar_a_paquete(paquete, &hilo, sizeof(hilo_t));
 	enviar_paquete(paquete, conexion);
 	return 0;
 }
@@ -49,22 +51,24 @@ int conectarse_a_suse() {
 
 int suse_create(int tid){
 	if (tid > max_tid) max_tid = tid;
-	return ejecutar_operacion(tid, 1);
+	printf("suse_create(%i)\n", tid);
+	return ejecutar_operacion(tid, 8);
 }
 
 int suse_schedule_next(void){
 	int next = max_tid;
-	printf("Scheduling next item %i...\n", next);
+	printf("suse_schedule_next() (hilo %i)\n", next);
 	return next;
 }
 
 int suse_join(int tid){
+	printf("suse_join(%i)\n", tid);
 	return ejecutar_operacion(tid, 3);
 }
 
 int suse_close(int tid){
-	printf("El hilo %i ha finalizado\n", tid);
-	return 0;
+	printf("suse_close(%i)\n", tid);
+	return ejecutar_operacion(tid, 4);
 }
 
 int suse_wait(int tid, char *sem_name){
