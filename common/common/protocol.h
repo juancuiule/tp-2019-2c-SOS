@@ -56,33 +56,33 @@ bool paquete_enviar(int socket, package_t paquete);
 
 //---Protocolo operaciones sac cli---
 
-package_t slz_cod_readdir(const char *path, intptr_t dir);
+package_t slz_cod_readdir(const char *path, uint32_t dir);
 package_t slz_cod_releasedir(const char *path, intptr_t dir);
 package_t slz_cod_open(const char *path, int flags);
 package_t slz_cod_read(const char *path, int fd, size_t size, off_t offset);
 package_t slz_cod_release(const char *path, int fd);
 package_t slz_cod_write(const char *path, const char *buffer, int fd, size_t size, off_t offset);
 
-void dslz_res_opendir(void *buffer, intptr_t* dir);
+void dslz_res_opendir(void *buffer, uint32_t* dir);
 void dslz_res_readdir(void *buffer, t_list** filenames);
 void dslz_res_open(void *buffer, int *fd);
-void dslz_res_getattr(void *buffer, uint32_t *size, uint64_t *m_date);
+void dslz_res_getattr(void *buffer, uint32_t *size, uint64_t *m_date, int *state);
 void dslz_res_read(void *buffer, char *buf, int *size);
 void dslz_res_write(void *buffer, int *size);
 
 //---Protocolo operaciones sac server---
 
-void dslz_cod_readdir(void *buffer, char**path, intptr_t *dir);
-void dslz_cod_releasedir(void* buffer, char** path, intptr_t* dir);
+void dslz_cod_readdir(void *buffer, char**path, uint32_t *dir);
+void dslz_cod_releasedir(void* buffer, char** path, uint32_t* dir);
 void dslz_cod_open(void *buffer, char **path, int *flags);
 void dslz_cod_read(void *buffer, char **path, int *fd, size_t *size, off_t *offset);
 void dslz_cod_release(void *buffer, char **path, int *fd);
 void dslz_cod_write(void *payload, char **path, char **buffer, int *fd, size_t *size, off_t *offset);
 
-package_t slz_res_opendir(DIR *dp);
+package_t slz_res_opendir(uint32_t blk_number);
 package_t slz_res_readdir(t_list * filenames);
 package_t slz_res_open(int fd);
-package_t slz_res_getattr(uint32_t size, uint64_t m_date);
+package_t slz_res_getattr(uint32_t size, uint64_t m_date, int state);
 package_t slz_res_read(char *buf, ssize_t ssize);
 package_t slz_res_write(int size);
 
