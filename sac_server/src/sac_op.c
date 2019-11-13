@@ -8,84 +8,161 @@ static void sac_fullpath(char fpath[PATH_MAX], char *path)
 	 log_msje_info("full path : %s", fpath);
 }
 
-//desc: ejecuta op opendir en el fs local y envia respuesta a sac cli
-void sac_opendir(char *path, int cliente_fd)
+/*
+ * Primer operacion que va a consultar con nuestro disco binario sac!
+ *
+ * Mandamos size y modif time
+ */
+void sac_getattr(char *path, int cliente_fd)
 {
-	DIR *dp;
-	char fpath[PATH_MAX];
+	log_msje_info("SAC GETATTR Path = [ %s ]", path);
 	package_t paquete;
 
-	//completo path
-	sac_fullpath(fpath, path);
+	int blk;
 
-	//ejecuto operacion
-    dp = opendir(fpath);
+	//Buscamos el bloque que le corresponde al archivo
+	blk = fs_get_blk_by_fullpath(path);
 
-    if (dp == NULL)
-    {
-    	log_msje_error("opendir: [ %s ]", strerror(errno));
-    	int err = errno;
-    	paquete = slz_res_error(err);
-    }
-    else
-    	paquete = slz_res_opendir(dp);
-
-    paquete_enviar(cliente_fd, paquete);//funciona falta validar
-}
-
-//desc: ejecuta op readdir en el fs local y envia respuesta a sac cli
-void sac_readdir(char *path, intptr_t dir, int cliente_fd)
-{
-	log_msje_info("SAC READDIR Path = [ %s ]", path);
-	package_t paquete;
-	DIR *dp;
-	dp = (DIR *) dir;
-
-	struct dirent *de;
-
-	//ejecuto operacion
-	de = readdir(dp);//o mejor usar readdir_r
-
-    if (de == NULL) {
-    	log_msje_error("readdir: [ %s ]", strerror(errno));
-    	int err=errno;
-    	paquete = slz_res_error(err);
+    if (blk == -1) {
+    	log_msje_error("getattr: no such file or directory");
+    	paquete = slz_res_error(ENOENT);
     }
     else {
-    	log_msje_info("Exito operacion readdir sobre fs local");
+    	log_msje_info("Exito operacion getattr sobre disco binario");
+    	uint32_t size= sac_nodetable[blk].file_size;
+    	uint64_t modif_date = sac_nodetable[blk].m_date;
+    	int state = sac_nodetable[blk].state;
 
-    	t_list * filenames = list_create();
-    	do {
-			list_add(filenames, de->d_name);
-		} while ((de = readdir(dp)) != NULL);
+    	log_msje_info("getattr: size = [ %d ]", size);
+    	log_msje_info("getattr: modif time = [ %d ]", modif_date);
 
-    	paquete = slz_res_readdir(filenames);
+    	paquete = slz_res_getattr(size, modif_date, state);
     }
 
     paquete_enviar(cliente_fd, paquete);
 }
 
+//desc: ejecuta op opendir en el fs local y envia respuesta a sac cli
+void sac_opendir(char *path, int cliente_fd)
+{
+	package_t paquete;
+
+	int error;
+
+	int blk_number = fs_get_blk_by_fullpath(path);
+
+    if (blk_number == -1)
+    {
+    	error = ENOENT;
+    }
+    else
+    {
+    	if(sac_nodetable[blk_number].state != 2)
+    	{
+    		error = ENOTDIR;
+    	}
+    	else
+    	{
+    		//dir_blk = (intptr_t)sac_nodetable + blk_number;
+    		paquete = slz_res_opendir(blk_number);
+    		paquete_enviar(cliente_fd, paquete);
+    		return;
+    	}
+    }
+
+	paquete = slz_res_error(error);
+	paquete_enviar(cliente_fd, paquete);
+	return;
+}
+
+//desc: ejecuta op readdir en el fs local y envia respuesta a sac cli
+void sac_readdir(char *path, uint32_t blk_number, int cliente_fd)
+{
+	log_msje_info("SAC READDIR Path = [ %s ]", path);
+	package_t paquete;
+
+	t_list * filenames = list_create();
+	fs_get_child_filenames_of(blk_number, filenames);
+
+	paquete = slz_res_readdir(filenames);
+	paquete_enviar(cliente_fd, paquete);
+
+    log_msje_info("Exito operacion readdir sobre fs local");
+}
+
+void sac_mknod(char *path, int cliente_fd)
+{
+	log_msje_info("SAC MKNOD Path = [ %s ]", path);
+	package_t paquete;
+	int error;
+
+	if(fs_path_exist(path))
+	{
+		error = EEXIST; //Pathname already exists
+	}
+	else
+	{
+		char *filename = get_last_filename_from_path(path);
+
+		if(strlen(filename) > GFILENAMELENGTH)
+		{
+			error = ENAMETOOLONG; //Filename exceeds limit name length
+		}
+		else
+		{
+			char *prev_path = get_lastfile_previous_path(path);
+			int father_blk = fs_get_blk_by_fullpath(prev_path);
+
+			if (father_blk == -1)
+			{
+				error = ENOENT; //No such file or directory
+			}
+			else
+			{
+				if( sac_nodetable[father_blk].state != 2 )
+				{
+					error = ENOTDIR; //Component used as dir, is, in fact, not a dir
+				}
+				else
+				{
+					int node = fs_get_free_blk_node();
+
+					if(node == EDQUOT)
+					{
+						error = EDQUOT; //Disk quota exceeded
+					}
+					else{
+						log_msje_info("Encontre bloque libre, es el [ %d ]", node);
+						GFile *node_to_set = sac_nodetable + node;
+						node_to_set->state = 1;
+						strcpy(node_to_set->fname, filename);
+						node_to_set->parent_dir_block = father_blk;
+						node_to_set->file_size = 0;
+						node_to_set->c_date = get_current_time();
+						node_to_set->m_date = get_current_time();
+						//deberia asignarle un bloque de datos como minimo?
+
+						paquete = slz_simple_res(COD_MKNOD);
+						paquete_enviar(cliente_fd, paquete);
+						return;
+					}
+				}
+			}
+		}
+	}
+
+	log_msje_error("mknod: [ %s ]", strerror(error));
+	paquete = slz_res_error(error);
+	paquete_enviar(cliente_fd, paquete);
+	return;
+}
+
+
 void sac_releasedir(char *path, intptr_t dir, int cliente_fd)
 {
 	log_msje_info("SAC CLOSEDIR Path = [ %s ]", path);
-	package_t paquete;
-	DIR *dp;
-	dp = (DIR *) dir;
-
-	int res, err;
-	//ejecuto operacion
-	res = closedir(dp);
-
-    if (res == -1) {
-    	log_msje_error("closedir: [ %s ]", strerror(errno));
-		err = errno;
-		paquete = slz_res_error(err);
-    }
-    else {//todo ok
-    	log_msje_info("Exito operacion closedir sobre fs local");
-    	paquete = slz_simple_res(COD_RELEASEDIR);
-    }
-
+	package_t paquete = paquete = slz_simple_res(COD_RELEASEDIR);
+	//paquete = slz_res_error(ENOENT);
     paquete_enviar(cliente_fd, paquete);
 
 }
@@ -114,37 +191,6 @@ void sac_open(char *path, int flags, int cliente_fd)
 
     paquete_enviar(cliente_fd, paquete);
 
-}
-
-
-/*
- * Primer operacion que va a consultar con nuestro disco binario sac!
- *
- * Mandamos size y modif time
- */
-void sac_getattr(char *path, int cliente_fd)
-{
-	log_msje_info("SAC GETATTR Path = [ %s ]", path);
-	package_t paquete;
-
-	int blk;
-
-	//Buscamos el bloque que le corresponde al archivo
-	blk = fs_get_blk_by_fullpath(path);
-
-    if (blk == -1) {
-    	log_msje_error("getattr: no such file or directory");
-    	paquete = slz_res_error(ENOENT);
-    }
-    else {
-    	log_msje_info("Exito operacion getattr sobre disco binario");
-    	uint32_t size= sac_nodetable[blk].file_size;
-    	uint64_t modif_date = sac_nodetable[blk].m_date;
-
-    	paquete = slz_res_getattr(size, modif_date);
-    }
-
-    paquete_enviar(cliente_fd, paquete);
 }
 
 void sac_read(char *path, int fd, size_t size, off_t offset, int cliente_fd)
@@ -247,35 +293,6 @@ void sac_rmdir(char *path, int cliente_fd)
 
 }
 
-void sac_mknod(char *path, int cliente_fd){
-
-	log_msje_info("SAC MKNOD Path = [ %s ]", path);
-	package_t paquete;
-	int res_mknod, err;
-
-	char fpath[PATH_MAX];
-	sac_fullpath(fpath, path);
-	//primero me ubico en el directorio
-	// ver si no uso directo opendir?
-	//sac_opendir(path, cliente_fd);
-
-	//ejecuta la operacion crear un archivo
-	//res_mknod = mknod(fpath, mode, dev);
-
-	//valido la respuesta de la operacion
-
-	/*if(res_mknod == -1){
-		log_msje_error("mknod: [ %s ]", strerror(errno));
-		err = errno;
-		paquete = slz_res_error(err);
-	}
-	else
-		paquete = slz_simple_res(COD_MKNOD);
-
-	paquete_enviar(cliente_fd, paquete);*/
-
-
-}
 
 void sac_write(char *path, char *buffer, int fd, size_t size, off_t offset, int cliente_fd)
 {

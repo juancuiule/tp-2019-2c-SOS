@@ -5,7 +5,7 @@ int atender_conexiones(int cliente_fd)
 	package_t paquete;
 	char *path;
 	char *buffer;
-	intptr_t dir;
+	uint32_t blk;
 	int flags;
 	int fd;
 	size_t size;
@@ -24,13 +24,13 @@ int atender_conexiones(int cliente_fd)
 				break;
 			case COD_READDIR:
 				log_msje_info("Me llego operacion readdir");
-				dslz_cod_readdir(paquete.payload, &path, &dir);
-				sac_readdir(path, dir, cliente_fd);
+				dslz_cod_readdir(paquete.payload, &path, &blk);
+				sac_readdir(path, blk, cliente_fd);
 				break;
 			case COD_RELEASEDIR:
 				log_msje_info("Me llego operacion releasedir");
-				dslz_cod_releasedir(paquete.payload, &path, &dir);
-				sac_releasedir(path, dir, cliente_fd);
+				dslz_cod_releasedir(paquete.payload, &path, &blk);
+				sac_releasedir(path, blk, cliente_fd);
 				break;
 			case COD_OPEN:
 				log_msje_info("Me llego operacion open");

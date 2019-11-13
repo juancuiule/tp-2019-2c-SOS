@@ -12,6 +12,8 @@
 #include <commons/string.h>
 #include <commons/collections/list.h>
 #include "utils.h"
+#include <errno.h>
+
 
 #define BLOCKSIZE 4096
 #define GFILEBYTABLE 1024
@@ -61,8 +63,22 @@ typedef struct blk_candidato{
 } GBlk_nominee;
 
 
+//desc: Setea las estructuras que necesitamos para manipular el SAC filesystem
 void fs_set_config();
+
+//desc: Mapea en memoria el disco - archivo binario con la estructura del filesystem
 bool fs_map_disk_in_memory(char *disk_name);
+
+//desc: Obtiene el bloque de metadata del archivo. -1 si no existe el archivo.
 int fs_get_blk_by_fullpath(char *fullpath);
+
+//desc: Devuelve un blk nodo libre o EDQUOT si no hay mas nodos libres
+int fs_get_free_blk_node();
+
+//desc: Chequea que la ruta exista
+bool fs_path_exist(char *path);
+
+//desc: Obtiene todos los filenames de un directorio
+void fs_get_child_filenames_of(uint32_t blk_father, t_list *filenames);
 
 #endif /* FILESYSTEM_H_ */

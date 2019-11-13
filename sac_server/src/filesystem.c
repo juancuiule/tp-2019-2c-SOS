@@ -23,6 +23,10 @@ static void set_sac_nodetable()
 {
 	GBlock* node_blk_start = disk_blk_pointer + 1 + sac_header->size_bitmap;
 	sac_nodetable = (GFile*)node_blk_start;
+	sac_nodetable[0].state = 2;//el primer nodo es la raiz
+	sac_nodetable[0].parent_dir_block = 3;//la raiz no tiene padre
+	sac_nodetable[0].file_size = BLOCKSIZE;
+	sac_nodetable[0].m_date = get_current_time();
 	log_msje_info("Nodetable seteado");
 }
 
@@ -98,7 +102,7 @@ static int fs_find_blk_nominees_by_name(char *filename, t_list *blks_candidatos)
 	return 0;
 }
 
-//desc: devuelve el nro de bloque del archivo, o sino -1 por path invalido
+//Esta funcion de paso valida que la ruta existe
 int fs_get_blk_by_fullpath(char *fullpath)
 {
 	log_msje_info("Buscando el bloque para path [%s]", fullpath);
@@ -106,6 +110,8 @@ int fs_get_blk_by_fullpath(char *fullpath)
 	char **filenames = string_split(fullpath, "/"); //separo en ["home", "lala.txt", NULL]
 
 	int size_filenames = get_size_filenames(filenames);
+
+	if(size_filenames == 0) { return 0; } //Para la ruta -> /
 
 	if( size_filenames > 1){//Si tiene mas de 1 un argumento
 		reverse_string_vector(filenames);
@@ -142,4 +148,42 @@ int fs_get_blk_by_fullpath(char *fullpath)
 	list_destroy(blks_candidatos);
 	return blk_nominado->the_blk;
 }
+
+//desc: Devuelve un blk nodo libre o EDQUOT si no hay mas nodos libres
+int fs_get_free_blk_node()
+{
+	int node = 0;
+	while(sac_nodetable[node].state != 0 && node < MAX_FILE_NUMBER){
+		node++;
+	}
+
+	if(node >= MAX_FILE_NUMBER)
+		return EDQUOT; //Disc quota exceeded
+
+	return node;
+}
+
+//desc: chequea que la ruta exista
+bool fs_path_exist(char *path)
+{
+	int res = fs_get_blk_by_fullpath(path);
+	return res != -1;
+}
+
+void fs_get_child_filenames_of(uint32_t blk_father, t_list *filenames)
+{
+
+	for(int i=0; i < MAX_FILE_NUMBER; i++)
+	{
+		if(sac_nodetable[i].parent_dir_block == blk_father && sac_nodetable[i].state != 0)
+		{
+			list_add(filenames, sac_nodetable[i].fname);
+		}
+	}
+
+}
+
+
+
+
 
