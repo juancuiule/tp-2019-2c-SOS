@@ -507,44 +507,36 @@ package_t slz_res_opendir(uint32_t blk_number)
 	return paquete;
 }
 
-static int get_fullsize(t_list *filenames)
+static int sum_filenames_sizes(t_list *filenames)
 {
-	int filesizes = 0;
 
 	if(list_is_empty(filenames)) return 0;
 
-	t_list *files = list_duplicate(filenames);
-	t_link_element *element = files->head;
-	t_link_element *aux = NULL;
+	t_list *list_sizes = list_map(filenames, strlen);
 
-	while(element != NULL)
-	{
-		aux = element->next;
-
-		filesizes += strlen(element->data);
-		log_msje_info("element data list: [ %s ]", element->data);
-
-		element = aux;
+	int sumar_sizes(int s1, int s2){
+		return s1+s2;
 	}
 
-	return filesizes;
+	return list_fold(list_sizes, 0, (void *)sumar_sizes);
+
 }
 
-package_t slz_res_readdir(t_list * filenames)
+package_t slz_res_readdir(t_list *filenames)
 {
 	package_t paquete;
-	int numfiles = list_size(filenames);
 
-	int tam_payload = sizeof(int) + sizeof(int)*numfiles + get_fullsize(filenames);
+	int numfiles = list_size(filenames);
+	int tam_payload = sizeof(int) + sizeof(int) * numfiles + sum_filenames_sizes(filenames);
+
 	paquete.header = header_get('S', COD_READDIR, tam_payload);
 	paquete.payload = malloc(tam_payload);
 
 	memcpy(paquete.payload, &numfiles, sizeof(int));
+	int offs = sizeof(int);
 
 	t_link_element *element = filenames->head;
 	t_link_element *aux = NULL;
-
-	int offs = sizeof(int);
 	while(element != NULL)
 	{
 		aux = element->next;
