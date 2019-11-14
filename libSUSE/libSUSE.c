@@ -11,10 +11,11 @@ int max_tid = 0;
 int ejecutar_operacion(int tid, int operacion) {
 	int conexion = conectarse_a_suse();
 	int pid = getpid();
-	t_paquete* paquete = crear_paquete();
+	t_paquete* paquete = crear_paquete(operacion);
 	hilo_t* hilo = malloc(sizeof(hilo_t));
 	hilo->tid = tid;
-	agregar_a_paquete(paquete, &operacion, sizeof(int));
+	printf("hilo: %i\n", hilo->tid);
+	//agregar_a_paquete(paquete, &operacion, sizeof(int));
 	agregar_a_paquete(paquete, &hilo, sizeof(hilo_t));
 	enviar_paquete(paquete, conexion);
 	return 0;
@@ -52,7 +53,7 @@ int conectarse_a_suse() {
 int suse_create(int tid){
 	if (tid > max_tid) max_tid = tid;
 	printf("suse_create(%i)\n", tid);
-	return ejecutar_operacion(tid, 8);
+	return ejecutar_operacion(tid, 1);
 }
 
 int suse_schedule_next(void){
@@ -104,10 +105,10 @@ void* serializar_paquete(t_paquete* paquete, int bytes)
 	return magic;
 }
 
-t_paquete* crear_paquete(void)
+t_paquete* crear_paquete(int operacion)
 {
 	t_paquete* paquete = malloc(sizeof(t_paquete));
-	paquete->codigo_operacion = PAQUETE;
+	paquete->codigo_operacion = operacion;
 	crear_buffer(paquete);
 	return paquete;
 }
@@ -126,8 +127,6 @@ void enviar_paquete(t_paquete* paquete, int socket_cliente)
 	void* a_enviar = serializar_paquete(paquete, bytes);
 
 	send(socket_cliente, a_enviar, bytes, 0);
-
-	free(a_enviar);
 }
 
 void crear_buffer(t_paquete* paquete)

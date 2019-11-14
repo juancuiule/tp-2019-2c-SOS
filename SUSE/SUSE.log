@@ -498,3 +498,176 @@
 [INFO] 22:23:34:825 SUSE/(13988:14050): El ULT 4 ha llegado a la cola de EXIT.
 [INFO] 22:23:34:825 SUSE/(13988:14049): El ULT 8 ha llegado a la cola de EXIT.
 [INFO] 22:23:34:825 SUSE/(13988:14048): El ULT 8 ha llegado a la cola de EXIT.
+[INFO] 18:35:59:123 SUSE/(3907:3907): Se ha iniciado el servidor.
+[INFO] 18:36:09:137 SUSE/(3907:3907): Se conecto un cliente!
+[INFO] 18:36:09:137 SUSE/(3907:3907): Se conecto un cliente!
+[INFO] 18:36:09:137 SUSE/(3907:3907): Se conecto un cliente!
+[INFO] 18:36:09:137 SUSE/(3907:3907): Se conecto un cliente!
+[INFO] 18:36:09:137 SUSE/(3907:3933): El ULT 8 ha llegado a la cola de EXIT.
+[INFO] 18:36:09:137 SUSE/(3907:3936): El ULT 4 ha llegado a la cola de EXIT.
+[INFO] 18:36:09:138 SUSE/(3907:3935): El ULT 8 ha llegado a la cola de EXIT.
+[INFO] 18:36:09:138 SUSE/(3907:3934): El ULT 8 ha llegado a la cola de EXIT.
+[INFO] 19:30:43:952 SUSE/(5283:5283): Se ha iniciado el servidor.
+[INFO] 19:30:50:658 SUSE/(5283:5283): Se conecto un cliente!
+[INFO] 19:30:50:659 SUSE/(5283:5283): Se conecto un cliente!
+[INFO] 19:30:50:659 SUSE/(5283:5283): Se conecto un cliente!
+[INFO] 19:30:50:659 SUSE/(5283:5283): Se conecto un cliente!
+[INFO] 19:32:05:706 SUSE/(5360:5360): Se ha iniciado el servidor.
+[INFO] 19:32:08:832 SUSE/(5360:5360): Se conecto un cliente!
+[INFO] 19:32:08:832 SUSE/(5360:5360): Se conecto un cliente!
+[INFO] 19:32:08:832 SUSE/(5360:5360): Se conecto un cliente!
+[INFO] 19:32:08:832 SUSE/(5360:5360): Se conecto un cliente!
+[INFO] 19:33:24:39 SUSE/(5360:5360): Se conecto un cliente!
+[INFO] 19:33:24:39 SUSE/(5360:5360): Se conecto un cliente!
+[INFO] 19:33:24:39 SUSE/(5360:5360): Se conecto un cliente!
+[INFO] 19:33:24:39 SUSE/(5360:5360): Se conecto un cliente!
+[INFO] 19:34:12:179 SUSE/(5360:5360): Se conecto un cliente!
+[INFO] 19:34:12:180 SUSE/(5360:5360): Se conecto un cliente!
+[INFO] 19:34:12:180 SUSE/(5360:5360): Se conecto un cliente!
+[INFO] 19:34:12:180 SUSE/(5360:5360): Se conecto un cliente!
+[INFO] 19:34:12:223 SUSE/(5360:5360): Se conecto un cliente!
+[INFO] 19:34:34:636 SUSE/(5522:5522): Se ha iniciado el servidor.
+[INFO] 19:34:37:368 SUSE/(5522:5522): Se conecto un cliente!
+[INFO] 19:34:37:368 SUSE/(5522:5522): Se conecto un cliente!
+[INFO] 19:34:37:368 SUSE/(5522:5522): Se conecto un cliente!
+[INFO] 19:34:37:368 SUSE/(5522:5522): Se conecto un cliente!
+[INFO] 19:34:37:410 SUSE/(5522:5522): Se conecto un cliente!
+[INFO] 19:38:16:51 SUSE/(5679:5679): Se ha iniciado el servidor.
+[INFO] 19:38:20:413 SUSE/(5679:5679): Se conecto un cliente!
+[INFO] 19:38:20:413 SUSE/(5679:5679): Se conecto un cliente!
+[INFO] 19:38:20:413 SUSE/(5679:5679): Se conecto un cliente!
+[INFO] 19:38:20:413 SUSE/(5679:5679): Se conecto un cliente!
+[INFO] 19:38:28:204 SUSE/(5688:5688): Se ha iniciado el servidor.
+[INFO] 19:38:28:388 SUSE/(5688:5688): Se conecto un cliente!
+[INFO] 19:38:28:474 SUSE/(5688:5688): Se conecto un cliente!
+[INFO] 19:38:50:554 SUSE/(5742:5742): Se ha iniciado el servidor.
+[INFO] 19:38:52:707 SUSE/(5742:5742): Se conecto un cliente!
+[INFO] 19:38:52:707 SUSE/(5742:5742): Se conecto un cliente!
+[INFO] 19:38:52:707 SUSE/(5742:5742): Se conecto un cliente!
+[INFO] 19:38:52:707 SUSE/(5742:5742): Se conecto un cliente!
+[INFO] 19:38:52:753 SUSE/(5742:5742): Se conecto un cliente!
+[INFO] 19:41:04:792 SUSE/(5864:5864): Se ha iniciado el servidor.
+[INFO] 19:41:07:257 SUSE/(5864:5864): Se conecto un cliente!
+[INFO] 19:41:07:258 SUSE/(5864:5864): Se conecto un cliente!
+[INFO] 19:41:07:258 SUSE/(5864:5864): Se conecto un cliente!
+[INFO] 19:41:07:258 SUSE/(5864:5864): Se conecto un cliente!
+[INFO] 19:41:14:159 SUSE/(5874:5874): Se ha iniciado el servidor.
+[INFO] 19:41:18:293 SUSE/(5874:5874): Se conecto un cliente!
+[INFO] 19:41:18:359 SUSE/(5874:5874): Se conecto un cliente!
+[INFO] 19:42:53:778 SUSE/(5941:5941): Se ha iniciado el servidor.
+[INFO] 19:42:56:199 SUSE/(5941:5941): Se conecto un cliente!
+[INFO] 19:42:56:199 SUSE/(5941:5941): Se conecto un cliente!
+[INFO] 19:42:56:199 SUSE/(5941:5941): Se conecto un cliente!
+[INFO] 19:42:56:200 SUSE/(5941:5941): Se conecto un cliente!
+[INFO] 19:43:03:692 SUSE/(5994:5994): Se ha iniciado el servidor.
+[INFO] 19:43:05:11 SUSE/(5994:5994): Se conecto un cliente!
+[INFO] 19:43:05:81 SUSE/(5994:5994): Se conecto un cliente!
+[INFO] 19:44:39:560 SUSE/(6069:6069): Se ha iniciado el servidor.
+[INFO] 19:44:42:169 SUSE/(6069:6069): Se conecto un cliente!
+[INFO] 19:44:42:169 SUSE/(6069:6069): Se conecto un cliente!
+[INFO] 19:44:42:169 SUSE/(6069:6069): Se conecto un cliente!
+[INFO] 19:44:42:169 SUSE/(6069:6069): Se conecto un cliente!
+[INFO] 19:44:42:212 SUSE/(6069:6069): Se conecto un cliente!
+[INFO] 19:58:54:286 SUSE/(6276:6276): Se ha iniciado el servidor.
+[INFO] 19:58:56:388 SUSE/(6276:6276): Se conecto un cliente!
+[INFO] 19:58:56:388 SUSE/(6276:6276): Se conecto un cliente!
+[INFO] 19:58:56:388 SUSE/(6276:6276): Se conecto un cliente!
+[INFO] 19:58:56:388 SUSE/(6276:6276): Se conecto un cliente!
+[INFO] 19:58:56:433 SUSE/(6276:6276): Se conecto un cliente!
+[INFO] 20:00:06:940 SUSE/(6276:6276): Se conecto un cliente!
+[INFO] 20:00:06:940 SUSE/(6276:6276): Se conecto un cliente!
+[INFO] 20:00:06:940 SUSE/(6276:6276): Se conecto un cliente!
+[INFO] 20:00:06:940 SUSE/(6276:6276): Se conecto un cliente!
+[INFO] 20:00:06:986 SUSE/(6276:6276): Se conecto un cliente!
+[INFO] 20:00:07:232 SUSE/(6276:6276): Se conecto un cliente!
+[INFO] 20:00:07:232 SUSE/(6276:6276): Se conecto un cliente!
+[INFO] 20:00:07:232 SUSE/(6276:6276): Se conecto un cliente!
+[INFO] 20:00:07:232 SUSE/(6276:6276): Se conecto un cliente!
+[INFO] 20:00:07:275 SUSE/(6276:6276): Se conecto un cliente!
+[INFO] 20:00:07:484 SUSE/(6276:6276): Se conecto un cliente!
+[INFO] 20:00:07:484 SUSE/(6276:6276): Se conecto un cliente!
+[INFO] 20:00:07:484 SUSE/(6276:6276): Se conecto un cliente!
+[INFO] 20:00:07:484 SUSE/(6276:6276): Se conecto un cliente!
+[INFO] 20:00:07:527 SUSE/(6276:6276): Se conecto un cliente!
+[INFO] 20:00:07:761 SUSE/(6276:6276): Se conecto un cliente!
+[INFO] 20:00:07:761 SUSE/(6276:6276): Se conecto un cliente!
+[INFO] 20:00:07:761 SUSE/(6276:6276): Se conecto un cliente!
+[INFO] 20:00:07:761 SUSE/(6276:6276): Se conecto un cliente!
+[INFO] 20:00:07:804 SUSE/(6276:6276): Se conecto un cliente!
+[INFO] 20:00:07:958 SUSE/(6276:6276): Se conecto un cliente!
+[INFO] 20:00:07:958 SUSE/(6276:6276): Se conecto un cliente!
+[INFO] 20:00:07:958 SUSE/(6276:6276): Se conecto un cliente!
+[INFO] 20:00:07:958 SUSE/(6276:6276): Se conecto un cliente!
+[INFO] 20:00:07:2 SUSE/(6276:6276): Se conecto un cliente!
+[INFO] 20:01:30:274 SUSE/(6396:6396): Se ha iniciado el servidor.
+[INFO] 20:01:33:605 SUSE/(6396:6396): Se conecto un cliente!
+[INFO] 20:01:33:605 SUSE/(6396:6396): Se conecto un cliente!
+[INFO] 20:01:33:606 SUSE/(6396:6396): Se conecto un cliente!
+[INFO] 20:01:33:606 SUSE/(6396:6396): Se conecto un cliente!
+[INFO] 20:01:33:651 SUSE/(6396:6396): Se conecto un cliente!
+[INFO] 20:02:38:323 SUSE/(6474:6474): Se ha iniciado el servidor.
+[INFO] 20:02:40:635 SUSE/(6474:6474): Se conecto un cliente!
+[INFO] 20:02:40:635 SUSE/(6474:6474): Se conecto un cliente!
+[INFO] 20:02:40:635 SUSE/(6474:6474): Se conecto un cliente!
+[INFO] 20:02:40:635 SUSE/(6474:6474): Se conecto un cliente!
+[INFO] 20:02:40:679 SUSE/(6474:6474): Se conecto un cliente!
+[INFO] 20:05:17:446 SUSE/(6583:6583): Se ha iniciado el servidor.
+[INFO] 20:05:19:130 SUSE/(6583:6583): Se conecto un cliente!
+[INFO] 20:05:19:130 SUSE/(6583:6583): Se conecto un cliente!
+[INFO] 20:05:19:131 SUSE/(6583:6583): Se conecto un cliente!
+[INFO] 20:05:19:131 SUSE/(6583:6583): Se conecto un cliente!
+[INFO] 20:05:19:174 SUSE/(6583:6583): Se conecto un cliente!
+[INFO] 20:11:19:495 SUSE/(6737:6737): Se ha iniciado el servidor.
+[INFO] 20:11:53:845 SUSE/(6848:6848): Se ha iniciado el servidor.
+[INFO] 20:11:57:980 SUSE/(6848:6848): Se conecto un cliente!
+[INFO] 20:11:57:995 SUSE/(6848:6848): Se conecto un cliente!
+[INFO] 20:11:57:995 SUSE/(6848:6848): Se conecto un cliente!
+[INFO] 20:11:57:996 SUSE/(6848:6848): Se conecto un cliente!
+[INFO] 20:12:06:538 SUSE/(6858:6858): Se ha iniciado el servidor.
+[INFO] 20:12:09:80 SUSE/(6858:6858): Se conecto un cliente!
+[INFO] 20:12:09:145 SUSE/(6858:6858): Se conecto un cliente!
+[INFO] 20:13:03:308 SUSE/(6932:6932): Se ha iniciado el servidor.
+[INFO] 20:13:06:134 SUSE/(6932:6932): Se conecto un cliente!
+[INFO] 20:13:06:134 SUSE/(6932:6932): Se conecto un cliente!
+[INFO] 20:13:06:135 SUSE/(6932:6932): Se conecto un cliente!
+[INFO] 20:13:12:306 SUSE/(6939:6939): Se ha iniciado el servidor.
+[INFO] 20:13:14:308 SUSE/(6939:6939): Se conecto un cliente!
+[INFO] 20:13:14:381 SUSE/(6939:6939): Se conecto un cliente!
+[INFO] 20:13:14:381 SUSE/(6939:6939): Se conecto un cliente!
+[INFO] 20:14:30:100 SUSE/(7006:7006): Se ha iniciado el servidor.
+[INFO] 20:14:32:196 SUSE/(7006:7006): Se conecto un cliente!
+[INFO] 20:14:32:196 SUSE/(7006:7006): Se conecto un cliente!
+[INFO] 20:14:32:196 SUSE/(7006:7006): Se conecto un cliente!
+[INFO] 20:14:38:198 SUSE/(7015:7015): Se ha iniciado el servidor.
+[INFO] 20:14:39:953 SUSE/(7015:7015): Se conecto un cliente!
+[INFO] 20:14:40:27 SUSE/(7015:7015): Se conecto un cliente!
+[INFO] 20:16:43:975 SUSE/(7108:7108): Se ha iniciado el servidor.
+[INFO] 20:16:46:417 SUSE/(7108:7108): Se conecto un cliente!
+[INFO] 20:16:46:417 SUSE/(7108:7108): Se conecto un cliente!
+[INFO] 20:16:46:417 SUSE/(7108:7108): Se conecto un cliente!
+[INFO] 20:16:46:418 SUSE/(7108:7108): Se conecto un cliente!
+[INFO] 20:16:51:307 SUSE/(7116:7116): Se ha iniciado el servidor.
+[INFO] 20:16:52:807 SUSE/(7116:7116): Se conecto un cliente!
+[INFO] 20:16:52:883 SUSE/(7116:7116): Se conecto un cliente!
+[INFO] 20:18:22:297 SUSE/(7198:7198): Se ha iniciado el servidor.
+[INFO] 20:18:24:825 SUSE/(7198:7198): Se conecto un cliente!
+[INFO] 20:18:24:825 SUSE/(7198:7198): Se conecto un cliente!
+[INFO] 20:18:24:825 SUSE/(7198:7198): Se conecto un cliente!
+[INFO] 20:18:30:811 SUSE/(7205:7205): Se ha iniciado el servidor.
+[INFO] 20:18:31:843 SUSE/(7205:7205): Se conecto un cliente!
+[INFO] 20:18:31:912 SUSE/(7205:7205): Se conecto un cliente!
+[INFO] 20:19:29:768 SUSE/(7264:7264): Se ha iniciado el servidor.
+[INFO] 20:19:32:561 SUSE/(7264:7264): Se conecto un cliente!
+[INFO] 20:19:32:561 SUSE/(7264:7264): Se conecto un cliente!
+[INFO] 20:19:32:561 SUSE/(7264:7264): Se conecto un cliente!
+[INFO] 20:19:36:816 SUSE/(7273:7273): Se ha iniciado el servidor.
+[INFO] 20:19:38:339 SUSE/(7273:7273): Se conecto un cliente!
+[INFO] 20:19:38:399 SUSE/(7273:7273): Se conecto un cliente!
+[INFO] 20:22:20:924 SUSE/(7367:7367): Se ha iniciado el servidor.
+[INFO] 20:22:23:852 SUSE/(7367:7367): Se conecto un cliente!
+[INFO] 20:22:23:852 SUSE/(7367:7367): Se conecto un cliente!
+[INFO] 20:22:23:852 SUSE/(7367:7367): Se conecto un cliente!
+[INFO] 20:22:23:853 SUSE/(7367:7367): Se conecto un cliente!
+[INFO] 20:22:46:607 SUSE/(7378:7378): Se ha iniciado el servidor.
+[INFO] 20:22:51:244 SUSE/(7378:7378): Se conecto un cliente!
+[INFO] 20:22:51:316 SUSE/(7378:7378): Se conecto un cliente!

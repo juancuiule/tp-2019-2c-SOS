@@ -36,18 +36,13 @@ typedef struct {
 } programa_t;
 
 typedef enum {
-	CREATE, // 1
-	SCHEDULE_NEXT, // 2
-	JOIN, // 3
-	CLOSE, // 4
-	WAIT, // 5
-	SIGNAL // 6
-} operacion_t;
-
-typedef struct {
-	int accion;
-	hilo_t* hilo;
-} mensaje_t;
+	CREATE,
+	SCHEDULE_NEXT,
+	JOIN,
+	CLOSE,
+	WAIT,
+	SIGNAL
+} op_code;
 
 typedef struct {
 	char* id;

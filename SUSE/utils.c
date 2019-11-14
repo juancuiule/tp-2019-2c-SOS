@@ -49,9 +49,10 @@ int esperar_cliente(int socket_servidor)
 	return socket_cliente;
 }
 
-int recibir_operacion(int socket_cliente)
+int recibir_cod_op(int socket_cliente)
 {
 	int cod_op;
+
 	if (recv(socket_cliente, &cod_op, sizeof(int), MSG_WAITALL) != 0)
 		return cod_op;
 	else
@@ -80,15 +81,16 @@ void recibir_mensaje(int socket_cliente)
 	free(buffer);
 }
 
-mensaje_t* recibir_paquete(int socket_cliente)
+t_paquete* recibir_paquete(int socket_cliente)
 {
 	int size;
 	void* buffer = recibir_buffer(&size, socket_cliente);
-	mensaje_t* mensaje = malloc(sizeof(mensaje_t));
-	mensaje->hilo = malloc(sizeof(hilo_t));
-	memcpy(&(mensaje->accion), buffer, sizeof(int));
-	memcpy(&(mensaje->hilo->tid), buffer + sizeof(int), sizeof(int));
-	return mensaje;
+	t_paquete* paquete = malloc(sizeof(t_paquete));
+	paquete->buffer = malloc(sizeof(t_buffer));
+	paquete->buffer->stream = malloc(sizeof(t_buffer) + sizeof(int));
+	memcpy(&(paquete->buffer->size), buffer, sizeof(int));
+	memcpy(&(paquete->buffer->stream), buffer + sizeof(int), size);
+	return paquete;
 }
 
 

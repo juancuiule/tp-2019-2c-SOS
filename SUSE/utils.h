@@ -20,19 +20,24 @@
 #include <libSUSE/libSUSE.h>
 #include <libSUSE/utils.h>
 
-typedef enum
+typedef struct
 {
-	MENSAJE,
-	PAQUETE
-} op_code;
+	int size;
+	void* stream;
+} t_buffer;
+
+typedef struct {
+	op_code codigo_operacion;
+	t_buffer* buffer;
+} t_paquete;
 
 t_log* logger;
 
 void* recibir_buffer(int*, int);
 int iniciar_servidor(void);
 int esperar_cliente(int);
-mensaje_t* recibir_paquete(int);
+t_paquete* recibir_paquete(int);
 void recibir_mensaje(int);
-int recibir_operacion(int);
+int recibir_cod_op(int);
 
 #endif /* UTILS_H_ */

@@ -47,6 +47,41 @@ void inicializar() {
 	sem_init(multiprogramacion_sem, 0, 1);
 }
 
+void atender_cliente(int cliente_fd) {
+	int cod_op = recibir_cod_op(cliente_fd);
+	printf("código de operación recibido: %i\n", cod_op);
+	t_paquete* paquete = malloc(sizeof(t_paquete));
+	paquete->buffer = malloc(sizeof(t_buffer));
+	paquete->buffer->stream = malloc(sizeof(100));
+	paquete = recibir_paquete(cliente_fd);
+	hilo_t* hilo = malloc(sizeof(hilo_t));
+	memcpy(&(hilo->tid), paquete->buffer->stream, sizeof(int));
+	printf("hilo %i\n", hilo->tid);
+/*
+	switch (cod_op) {
+		case 1:
+			encolar_hilo_en_new(mensaje->hilo);
+			agregar_programa(mensaje->hilo);
+
+			if (GRADO_MULTIPROGRAMACION < MAX_MULTIPROG)
+				encolar_hilo_en_ready(mensaje->hilo);
+			break;
+		case 2:
+			printf("recibo acción 2\n");
+			ejecutar_hilo(mensaje->hilo);
+			break;
+		case 3:
+			printf("recibo acción 3\n");
+			bloquear_hilo(mensaje->hilo);
+			break;
+		case 4:
+			printf("recibo acción 4\n");
+			cerrar_hilo(mensaje->hilo);
+			break;
+	}
+*/
+}
+
 void logear_metricas() {
 	int hilos_new = 0;
 
@@ -74,35 +109,6 @@ int cantidad_de_hilos_en_new(programa_t programa) {
 
 void ejecutar_hilo(hilo_t* hilo) {
 	printf("Ejecuto hilo %i", hilo->tid);
-}
-
-void atender_cliente(int cliente_fd) {
-	mensaje_t* mensaje = malloc(sizeof(mensaje_t));
-	mensaje->hilo = malloc(sizeof(hilo_t));
-	int cod_op = recibir_operacion(cliente_fd);
-	mensaje = recibir_paquete(cliente_fd);
-
-	switch (mensaje->accion) {
-		case 1:
-			encolar_hilo_en_new(mensaje->hilo);
-			agregar_programa(mensaje->hilo);
-
-			if (GRADO_MULTIPROGRAMACION < MAX_MULTIPROG)
-				encolar_hilo_en_ready(mensaje->hilo);
-			break;
-		case 2:
-			printf("recibo acción 2\n");
-			ejecutar_hilo(mensaje->hilo);
-			break;
-		case 3:
-			printf("recibo acción 3\n");
-			bloquear_hilo(mensaje->hilo);
-			break;
-		case 4:
-			printf("recibo acción 4\n");
-			cerrar_hilo(mensaje->hilo);
-			break;
-	}
 }
 
 void imprimir_programas() {
