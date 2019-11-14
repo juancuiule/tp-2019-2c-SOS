@@ -17,7 +17,8 @@ int cli_getattr(const char *path, struct stat *statbuf)
 	//...espero respuesta de server
 	uint32_t size;
 	uint64_t m_date;
-	int state, errnum;
+	uint8_t state;
+	int errnum;
 
 	respuesta = paquete_recibir(sac_server.fd);
 

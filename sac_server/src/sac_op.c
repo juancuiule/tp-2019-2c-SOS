@@ -31,8 +31,9 @@ void sac_getattr(char *path, int cliente_fd)
     	log_msje_info("Exito operacion getattr sobre disco binario");
     	uint32_t size= sac_nodetable[blk].file_size;
     	uint64_t modif_date = sac_nodetable[blk].m_date;
-    	int state = sac_nodetable[blk].state;
+    	uint8_t state = sac_nodetable[blk].state;
 
+    	log_msje_info("getattr: state = [ %d ]", state);
     	log_msje_info("getattr: size = [ %d ]", size);
     	log_msje_info("getattr: modif time = [ %d ]", modif_date);
 

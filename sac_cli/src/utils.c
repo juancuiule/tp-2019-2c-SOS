@@ -1,8 +1,8 @@
 #include "utils.h"
 
-void convert_to_timespec(uint64_t microsecs, struct timespec* ts)
+void convert_to_timespec(uint64_t millsecs, struct timespec* ts)
 {
-	int secs = microsecs / 1000000;
+	int secs = millsecs / 1000;
 	int s = (int) secs;
 
 	ts->tv_sec = s;

@@ -66,7 +66,7 @@ package_t slz_cod_write(const char *path, const char *buffer, int fd, size_t siz
 void dslz_res_opendir(void *buffer, uint32_t* dir);
 void dslz_res_readdir(void *buffer, t_list** filenames);
 void dslz_res_open(void *buffer, int *fd);
-void dslz_res_getattr(void *buffer, uint32_t *size, uint64_t *m_date, int *state);
+void dslz_res_getattr(void *buffer, uint32_t *size, uint64_t *m_date, uint8_t *state);
 void dslz_res_read(void *buffer, char *buf, int *size);
 void dslz_res_write(void *buffer, int *size);
 
@@ -82,7 +82,7 @@ void dslz_cod_write(void *payload, char **path, char **buffer, int *fd, size_t *
 package_t slz_res_opendir(uint32_t blk_number);
 package_t slz_res_readdir(t_list * filenames);
 package_t slz_res_open(int fd);
-package_t slz_res_getattr(uint32_t size, uint64_t m_date, int state);
+package_t slz_res_getattr(uint32_t size, uint64_t m_date, uint8_t state);
 package_t slz_res_read(char *buf, ssize_t ssize);
 package_t slz_res_write(int size);
 
