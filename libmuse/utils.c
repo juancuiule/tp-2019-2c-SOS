@@ -145,7 +145,6 @@ void send_response(muse_response* response, int socket_cliente) {
 void send_int(int socket_cliente, muse_op_code op_code, uint32_t tam){
 	char str[11];
 	snprintf(str, sizeof str, "%u", tam);
-	log_info(logger, " asdfasdfasdfas %s", str);
 	send_something(socket_cliente, op_code, str);
 }
 
@@ -163,18 +162,6 @@ void send_code(int socket_cliente, muse_op_code op_code){
 	muse_package* package = create_package(header, body);
 	send_package(package, socket_cliente);
 	free_package(package);
-}
-
-void* send_get(int socket_cliente, uint32_t src, size_t n) {
-	char str[11];
-	snprintf(str, sizeof str, "%u", src);
-	send_something(socket_cliente, GET, str);
-
-	int status = recv_response_status(socket_cliente);
-	int size;
-	char* buffer = recv_buffer(&size, socket_cliente);
-	log_info(logger, "data: %s", buffer);
-	return buffer;
 }
 
 int init_server(char* IP, char* PORT) {

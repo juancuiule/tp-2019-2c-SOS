@@ -54,8 +54,16 @@ void muse_free(uint32_t dir) {
 }
 
 int muse_get(void* dst, uint32_t src, size_t n){
-	log_info(logger, "muse_get: desde %u", src);
-	void* data = send_get(conexion, src, n);
+	log_info(logger, "muse_get a: %u, de %i bytes", src, n);
+	send_int(conexion, GET, src);
+
+	int status = recv_response_status(conexion);
+
+	int size;
+	char* data = recv_buffer(&size, conexion);
+
+	log_info(logger, "data: %s", data);
+
 	memcpy(dst, data, 5);
     return 0;
 }
