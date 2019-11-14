@@ -291,3 +291,210 @@
 [INFO] 19:45:08:822 SUSE/(11166:11170): El hilo 40 del programa 0 está en READY
 [INFO] 19:45:08:822 SUSE/(11166:11169): El hilo 40 del programa 0 llegó a NEW
 [INFO] 19:45:08:822 SUSE/(11166:11169): El hilo 40 del programa 0 está en READY
+[INFO] 19:50:41:180 SUSE/(11601:11601): Se ha iniciado el servidor.
+[INFO] 19:50:59:183 SUSE/(11601:11601): Se conecto un cliente!
+[INFO] 19:50:59:183 SUSE/(11601:11601): Se conecto un cliente!
+[INFO] 19:50:59:183 SUSE/(11601:11601): Se conecto un cliente!
+[INFO] 19:50:59:183 SUSE/(11601:11601): Se conecto un cliente!
+[INFO] 19:50:59:183 SUSE/(11601:11632): El hilo 40 del programa 0 llegó a NEW
+[INFO] 19:50:59:183 SUSE/(11601:11632): El hilo 40 del programa 0 está en READY
+[INFO] 19:50:59:183 SUSE/(11601:11631): El hilo 40 del programa 0 llegó a NEW
+[INFO] 19:50:59:183 SUSE/(11601:11631): El hilo 40 del programa 0 está en READY
+[INFO] 19:50:59:183 SUSE/(11601:11630): El hilo 40 del programa 0 llegó a NEW
+[INFO] 19:50:59:183 SUSE/(11601:11630): El hilo 40 del programa 0 está en READY
+[INFO] 19:50:59:183 SUSE/(11601:11629): El hilo 40 del programa 0 llegó a NEW
+[INFO] 19:50:59:183 SUSE/(11601:11629): El hilo 40 del programa 0 está en READY
+[INFO] 19:56:20:649 SUSE/(11841:11841): Se ha iniciado el servidor.
+[INFO] 19:56:52:794 SUSE/(11841:11841): Se conecto un cliente!
+[INFO] 19:56:52:794 SUSE/(11841:11841): Se conecto un cliente!
+[INFO] 19:56:52:794 SUSE/(11841:11841): Se conecto un cliente!
+[INFO] 19:56:52:794 SUSE/(11841:11841): Se conecto un cliente!
+[INFO] 19:56:52:794 SUSE/(11841:11916): El hilo 40 del programa 0 llegó a NEW
+[INFO] 19:56:52:794 SUSE/(11841:11916): El hilo 40 del programa 0 está en READY
+[INFO] 19:56:52:794 SUSE/(11841:11915): El hilo 40 del programa 0 llegó a NEW
+[INFO] 19:56:52:794 SUSE/(11841:11915): El hilo 40 del programa 0 está en READY
+[INFO] 19:56:52:794 SUSE/(11841:11914): El hilo 40 del programa 0 llegó a NEW
+[INFO] 19:56:52:794 SUSE/(11841:11914): El hilo 40 del programa 0 está en READY
+[INFO] 19:56:52:794 SUSE/(11841:11913): El hilo 40 del programa 0 llegó a NEW
+[INFO] 19:56:52:794 SUSE/(11841:11913): El hilo 40 del programa 0 está en READY
+[INFO] 19:59:44:40 SUSE/(11979:11979): Se ha iniciado el servidor.
+[INFO] 19:59:46:744 SUSE/(11979:11979): Se conecto un cliente!
+[INFO] 19:59:46:744 SUSE/(11979:11979): Se conecto un cliente!
+[INFO] 19:59:46:744 SUSE/(11979:11979): Se conecto un cliente!
+[INFO] 19:59:46:744 SUSE/(11979:11979): Se conecto un cliente!
+[INFO] 19:59:46:744 SUSE/(11979:11985): El hilo 40 del programa 0 llegó a NEW
+[INFO] 19:59:46:744 SUSE/(11979:11985): El hilo 40 del programa 0 está en READY
+[INFO] 19:59:46:744 SUSE/(11979:11984): El hilo 40 del programa 0 llegó a NEW
+[INFO] 19:59:46:744 SUSE/(11979:11984): El hilo 40 del programa 0 está en READY
+[INFO] 19:59:46:744 SUSE/(11979:11983): El hilo 40 del programa 0 llegó a NEW
+[INFO] 19:59:46:744 SUSE/(11979:11983): El hilo 40 del programa 0 está en READY
+[INFO] 19:59:46:744 SUSE/(11979:11982): El hilo 40 del programa 0 llegó a NEW
+[INFO] 19:59:46:744 SUSE/(11979:11982): El hilo 40 del programa 0 está en READY
+[INFO] 20:01:37:438 SUSE/(12064:12064): Se ha iniciado el servidor.
+[INFO] 20:01:40:966 SUSE/(12064:12064): Se conecto un cliente!
+[INFO] 20:01:40:966 SUSE/(12064:12064): Se conecto un cliente!
+[INFO] 20:01:40:966 SUSE/(12064:12064): Se conecto un cliente!
+[INFO] 20:01:40:966 SUSE/(12064:12064): Se conecto un cliente!
+[INFO] 20:01:40:966 SUSE/(12064:12068): El hilo 40 del programa 0 llegó a NEW
+[INFO] 20:01:40:966 SUSE/(12064:12068): El hilo 40 del programa 0 está en READY
+[INFO] 20:01:40:966 SUSE/(12064:12069): El hilo 40 del programa 0 llegó a NEW
+[INFO] 20:01:40:966 SUSE/(12064:12069): El hilo 40 del programa 0 está en READY
+[INFO] 20:01:40:966 SUSE/(12064:12070): El hilo 40 del programa 0 llegó a NEW
+[INFO] 20:01:40:966 SUSE/(12064:12070): El hilo 40 del programa 0 está en READY
+[INFO] 20:01:40:966 SUSE/(12064:12071): El hilo 40 del programa 0 llegó a NEW
+[INFO] 20:01:40:966 SUSE/(12064:12071): El hilo 40 del programa 0 está en READY
+[INFO] 20:21:55:905 SUSE/(12345:12345): Se ha iniciado el servidor.
+[INFO] 20:22:08:159 SUSE/(12345:12345): Se conecto un cliente!
+[INFO] 20:22:08:159 SUSE/(12345:12345): Se conecto un cliente!
+[INFO] 20:22:08:159 SUSE/(12345:12345): Se conecto un cliente!
+[INFO] 20:22:08:159 SUSE/(12345:12345): Se conecto un cliente!
+[INFO] 20:22:49:152 SUSE/(12410:12410): Se ha iniciado el servidor.
+[INFO] 20:22:52:39 SUSE/(12410:12410): Se conecto un cliente!
+[INFO] 20:22:52:39 SUSE/(12410:12410): Se conecto un cliente!
+[INFO] 20:22:52:39 SUSE/(12410:12410): Se conecto un cliente!
+[INFO] 20:22:52:39 SUSE/(12410:12410): Se conecto un cliente!
+[INFO] 20:22:52:39 SUSE/(12410:12414): El hilo 40 del programa 0 llegó a NEW
+[INFO] 20:22:52:39 SUSE/(12410:12414): El hilo 40 del programa 0 está en READY
+[INFO] 20:22:52:39 SUSE/(12410:12413): El hilo 40 del programa 0 llegó a NEW
+[INFO] 20:22:52:39 SUSE/(12410:12413): El hilo 40 del programa 0 está en READY
+[INFO] 20:22:52:39 SUSE/(12410:12416): El hilo 40 del programa 0 llegó a NEW
+[INFO] 20:22:52:39 SUSE/(12410:12416): El hilo 40 del programa 0 está en READY
+[INFO] 20:22:52:40 SUSE/(12410:12415): El hilo 40 del programa 0 llegó a NEW
+[INFO] 20:22:52:40 SUSE/(12410:12415): El hilo 40 del programa 0 está en READY
+[INFO] 20:28:29:510 SUSE/(12500:12500): Se ha iniciado el servidor.
+[INFO] 20:28:34:286 SUSE/(12500:12500): Se conecto un cliente!
+[INFO] 20:28:34:286 SUSE/(12500:12500): Se conecto un cliente!
+[INFO] 20:28:34:286 SUSE/(12500:12500): Se conecto un cliente!
+[INFO] 20:28:34:286 SUSE/(12500:12500): Se conecto un cliente!
+[INFO] 20:28:34:286 SUSE/(12500:12504): El hilo 40 del programa 0 llegó a NEW
+[INFO] 20:28:34:286 SUSE/(12500:12504): El hilo 40 del programa 0 está en READY
+[INFO] 20:28:34:286 SUSE/(12500:12503): El hilo 40 del programa 0 llegó a NEW
+[INFO] 20:28:34:286 SUSE/(12500:12505): El hilo 40 del programa 0 llegó a NEW
+[INFO] 20:28:34:286 SUSE/(12500:12505): El hilo 40 del programa 0 está en READY
+[INFO] 20:28:34:286 SUSE/(12500:12506): El hilo 40 del programa 0 llegó a NEW
+[INFO] 20:28:34:286 SUSE/(12500:12506): El hilo 40 del programa 0 está en READY
+[INFO] 20:28:34:286 SUSE/(12500:12503): El hilo 40 del programa 0 está en READY
+[INFO] 20:37:05:918 SUSE/(12761:12761): Se ha iniciado el servidor.
+[INFO] 20:37:09:19 SUSE/(12761:12761): Se conecto un cliente!
+[INFO] 20:37:09:19 SUSE/(12761:12761): Se conecto un cliente!
+[INFO] 20:37:09:19 SUSE/(12761:12761): Se conecto un cliente!
+[INFO] 20:37:09:19 SUSE/(12761:12761): Se conecto un cliente!
+[INFO] 20:37:09:19 SUSE/(12761:12767): El hilo 40 del programa 0 llegó a NEW
+[INFO] 20:37:09:19 SUSE/(12761:12767): El hilo 40 del programa 0 está en READY
+[INFO] 20:37:09:19 SUSE/(12761:12765): El hilo 40 del programa 0 llegó a NEW
+[INFO] 20:37:09:19 SUSE/(12761:12765): El hilo 40 del programa 0 está en READY
+[INFO] 20:37:09:19 SUSE/(12761:12764): El hilo 40 del programa 0 llegó a NEW
+[INFO] 20:37:09:19 SUSE/(12761:12764): El hilo 40 del programa 0 está en READY
+[INFO] 20:37:09:19 SUSE/(12761:12766): El hilo 40 del programa 0 llegó a NEW
+[INFO] 20:37:09:19 SUSE/(12761:12766): El hilo 40 del programa 0 está en READY
+[INFO] 21:39:24:888 SUSE/(12972:12972): Se ha iniciado el servidor.
+[INFO] 21:39:27:357 SUSE/(12972:12972): Se conecto un cliente!
+[INFO] 21:39:27:357 SUSE/(12972:12972): Se conecto un cliente!
+[INFO] 21:39:27:357 SUSE/(12972:12972): Se conecto un cliente!
+[INFO] 21:39:27:357 SUSE/(12972:12972): Se conecto un cliente!
+[INFO] 21:39:45:130 SUSE/(12972:12972): Se conecto un cliente!
+[INFO] 21:39:45:130 SUSE/(12972:12972): Se conecto un cliente!
+[INFO] 21:39:45:130 SUSE/(12972:12972): Se conecto un cliente!
+[INFO] 21:39:45:130 SUSE/(12972:12972): Se conecto un cliente!
+[INFO] 21:39:45:402 SUSE/(12972:12972): Se conecto un cliente!
+[INFO] 21:39:45:402 SUSE/(12972:12972): Se conecto un cliente!
+[INFO] 21:39:45:402 SUSE/(12972:12972): Se conecto un cliente!
+[INFO] 21:39:45:402 SUSE/(12972:12972): Se conecto un cliente!
+[INFO] 21:39:45:652 SUSE/(12972:12972): Se conecto un cliente!
+[INFO] 21:39:45:652 SUSE/(12972:12972): Se conecto un cliente!
+[INFO] 21:39:45:652 SUSE/(12972:12972): Se conecto un cliente!
+[INFO] 21:39:45:652 SUSE/(12972:12972): Se conecto un cliente!
+[INFO] 21:39:45:842 SUSE/(12972:12972): Se conecto un cliente!
+[INFO] 21:39:45:842 SUSE/(12972:12972): Se conecto un cliente!
+[INFO] 21:39:45:842 SUSE/(12972:12972): Se conecto un cliente!
+[INFO] 21:39:45:842 SUSE/(12972:12972): Se conecto un cliente!
+[INFO] 21:39:46:202 SUSE/(12972:12972): Se conecto un cliente!
+[INFO] 21:39:46:202 SUSE/(12972:12972): Se conecto un cliente!
+[INFO] 21:39:46:202 SUSE/(12972:12972): Se conecto un cliente!
+[INFO] 21:39:46:203 SUSE/(12972:12972): Se conecto un cliente!
+[INFO] 21:43:26:261 SUSE/(13086:13086): Se ha iniciado el servidor.
+[INFO] 21:43:46:60 SUSE/(13086:13086): Se conecto un cliente!
+[INFO] 21:43:46:60 SUSE/(13086:13086): Se conecto un cliente!
+[INFO] 21:43:46:60 SUSE/(13086:13086): Se conecto un cliente!
+[INFO] 21:43:46:60 SUSE/(13086:13086): Se conecto un cliente!
+[INFO] 21:46:20:416 SUSE/(13226:13226): Se ha iniciado el servidor.
+[INFO] 21:46:22:325 SUSE/(13226:13226): Se conecto un cliente!
+[INFO] 21:46:22:325 SUSE/(13226:13226): Se conecto un cliente!
+[INFO] 21:46:22:325 SUSE/(13226:13226): Se conecto un cliente!
+[INFO] 21:46:22:325 SUSE/(13226:13226): Se conecto un cliente!
+[INFO] 21:46:47:1 SUSE/(13226:13226): Se conecto un cliente!
+[INFO] 21:46:47:1 SUSE/(13226:13226): Se conecto un cliente!
+[INFO] 21:46:47:1 SUSE/(13226:13226): Se conecto un cliente!
+[INFO] 21:46:47:1 SUSE/(13226:13226): Se conecto un cliente!
+[INFO] 21:46:48:263 SUSE/(13226:13226): Se conecto un cliente!
+[INFO] 21:46:48:264 SUSE/(13226:13226): Se conecto un cliente!
+[INFO] 21:46:48:264 SUSE/(13226:13226): Se conecto un cliente!
+[INFO] 21:46:48:264 SUSE/(13226:13226): Se conecto un cliente!
+[INFO] 21:46:48:503 SUSE/(13226:13226): Se conecto un cliente!
+[INFO] 21:46:48:503 SUSE/(13226:13226): Se conecto un cliente!
+[INFO] 21:46:48:503 SUSE/(13226:13226): Se conecto un cliente!
+[INFO] 21:46:48:503 SUSE/(13226:13226): Se conecto un cliente!
+[INFO] 22:09:15:973 SUSE/(13581:13581): Se ha iniciado el servidor.
+[INFO] 22:09:19:760 SUSE/(13581:13581): Se conecto un cliente!
+[INFO] 22:09:19:760 SUSE/(13581:13581): Se conecto un cliente!
+[INFO] 22:09:19:761 SUSE/(13581:13581): Se conecto un cliente!
+[INFO] 22:09:19:761 SUSE/(13581:13581): Se conecto un cliente!
+[INFO] 22:12:56:638 SUSE/(13665:13665): Se ha iniciado el servidor.
+[INFO] 22:12:59:253 SUSE/(13665:13665): Se conecto un cliente!
+[INFO] 22:12:59:253 SUSE/(13665:13665): Se conecto un cliente!
+[INFO] 22:12:59:253 SUSE/(13665:13665): Se conecto un cliente!
+[INFO] 22:12:59:253 SUSE/(13665:13665): Se conecto un cliente!
+[INFO] 22:12:59:253 SUSE/(13665:13669): El ULT 8 ha llegado a la cola de EXIT.
+[INFO] 22:12:59:253 SUSE/(13665:13671): El ULT 4 ha llegado a la cola de EXIT.
+[INFO] 22:12:59:253 SUSE/(13665:13670): El ULT 8 ha llegado a la cola de EXIT.
+[INFO] 22:12:59:253 SUSE/(13665:13668): El ULT 8 ha llegado a la cola de EXIT.
+[INFO] 22:16:53:480 SUSE/(13750:13750): Se ha iniciado el servidor.
+[INFO] 22:16:56:718 SUSE/(13750:13750): Se conecto un cliente!
+[INFO] 22:16:56:718 SUSE/(13750:13750): Se conecto un cliente!
+[INFO] 22:16:56:718 SUSE/(13750:13754): El ULT 8 ha llegado a la cola de EXIT.
+[INFO] 22:16:56:718 SUSE/(13750:13750): Se conecto un cliente!
+[INFO] 22:16:56:718 SUSE/(13750:13750): Se conecto un cliente!
+[INFO] 22:16:56:718 SUSE/(13750:13753): El ULT 8 ha llegado a la cola de EXIT.
+[INFO] 22:16:56:718 SUSE/(13750:13756): El ULT 4 ha llegado a la cola de EXIT.
+[INFO] 22:16:56:718 SUSE/(13750:13755): El ULT 8 ha llegado a la cola de EXIT.
+[INFO] 22:16:57:232 SUSE/(13750:13750): Se conecto un cliente!
+[INFO] 22:16:57:232 SUSE/(13750:13750): Se conecto un cliente!
+[INFO] 22:16:57:232 SUSE/(13750:13750): Se conecto un cliente!
+[INFO] 22:16:57:232 SUSE/(13750:13750): Se conecto un cliente!
+[INFO] 22:16:57:232 SUSE/(13750:13761): El ULT 4 ha llegado a la cola de EXIT.
+[INFO] 22:16:57:232 SUSE/(13750:13759): El ULT 8 ha llegado a la cola de EXIT.
+[INFO] 22:16:57:232 SUSE/(13750:13758): El ULT 8 ha llegado a la cola de EXIT.
+[INFO] 22:16:57:233 SUSE/(13750:13760): El ULT 8 ha llegado a la cola de EXIT.
+[INFO] 22:16:57:562 SUSE/(13750:13750): Se conecto un cliente!
+[INFO] 22:16:57:562 SUSE/(13750:13750): Se conecto un cliente!
+[INFO] 22:16:57:562 SUSE/(13750:13750): Se conecto un cliente!
+[INFO] 22:16:57:562 SUSE/(13750:13750): Se conecto un cliente!
+[INFO] 22:16:57:562 SUSE/(13750:13766): El ULT 4 ha llegado a la cola de EXIT.
+[INFO] 22:16:57:563 SUSE/(13750:13765): El ULT 8 ha llegado a la cola de EXIT.
+[INFO] 22:16:57:563 SUSE/(13750:13763): El ULT 8 ha llegado a la cola de EXIT.
+[INFO] 22:16:57:563 SUSE/(13750:13764): El ULT 8 ha llegado a la cola de EXIT.
+[INFO] 22:16:57:766 SUSE/(13750:13750): Se conecto un cliente!
+[INFO] 22:16:57:766 SUSE/(13750:13750): Se conecto un cliente!
+[INFO] 22:16:57:766 SUSE/(13750:13750): Se conecto un cliente!
+[INFO] 22:16:57:766 SUSE/(13750:13750): Se conecto un cliente!
+[INFO] 22:16:57:766 SUSE/(13750:13771): El ULT 4 ha llegado a la cola de EXIT.
+[INFO] 22:16:57:766 SUSE/(13750:13770): El ULT 8 ha llegado a la cola de EXIT.
+[INFO] 22:16:57:766 SUSE/(13750:13768): El ULT 8 ha llegado a la cola de EXIT.
+[INFO] 22:16:57:766 SUSE/(13750:13769): El ULT 8 ha llegado a la cola de EXIT.
+[INFO] 22:23:09:849 SUSE/(13988:13988): Se ha iniciado el servidor.
+[INFO] 22:23:16:206 SUSE/(13988:13988): Se conecto un cliente!
+[INFO] 22:23:16:206 SUSE/(13988:13988): Se conecto un cliente!
+[INFO] 22:23:16:206 SUSE/(13988:13988): Se conecto un cliente!
+[INFO] 22:23:16:206 SUSE/(13988:13988): Se conecto un cliente!
+[INFO] 22:23:16:206 SUSE/(13988:13994): El ULT 4 ha llegado a la cola de EXIT.
+[INFO] 22:23:16:206 SUSE/(13988:13992): El ULT 8 ha llegado a la cola de EXIT.
+[INFO] 22:23:16:206 SUSE/(13988:13991): El ULT 8 ha llegado a la cola de EXIT.
+[INFO] 22:23:16:207 SUSE/(13988:13993): El ULT 8 ha llegado a la cola de EXIT.
+[INFO] 22:23:34:825 SUSE/(13988:13988): Se conecto un cliente!
+[INFO] 22:23:34:825 SUSE/(13988:13988): Se conecto un cliente!
+[INFO] 22:23:34:825 SUSE/(13988:13988): Se conecto un cliente!
+[INFO] 22:23:34:825 SUSE/(13988:13988): Se conecto un cliente!
+[INFO] 22:23:34:825 SUSE/(13988:14047): El ULT 8 ha llegado a la cola de EXIT.
+[INFO] 22:23:34:825 SUSE/(13988:14050): El ULT 4 ha llegado a la cola de EXIT.
+[INFO] 22:23:34:825 SUSE/(13988:14049): El ULT 8 ha llegado a la cola de EXIT.
+[INFO] 22:23:34:825 SUSE/(13988:14048): El ULT 8 ha llegado a la cola de EXIT.

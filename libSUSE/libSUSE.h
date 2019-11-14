@@ -45,7 +45,7 @@ typedef enum {
 } operacion_t;
 
 typedef struct {
-	int operacion;
+	int accion;
 	hilo_t* hilo;
 } mensaje_t;
 

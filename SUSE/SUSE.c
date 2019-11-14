@@ -79,11 +79,10 @@ void ejecutar_hilo(hilo_t* hilo) {
 void atender_cliente(int cliente_fd) {
 	mensaje_t* mensaje = malloc(sizeof(mensaje_t));
 	mensaje->hilo = malloc(sizeof(hilo_t));
+	int cod_op = recibir_operacion(cliente_fd);
 	mensaje = recibir_paquete(cliente_fd);
 
-	printf("recibo operacion %i\n", mensaje->operacion);
-
-	switch (mensaje->operacion) {
+	switch (mensaje->accion) {
 		case 1:
 			encolar_hilo_en_new(mensaje->hilo);
 			agregar_programa(mensaje->hilo);
@@ -92,15 +91,15 @@ void atender_cliente(int cliente_fd) {
 				encolar_hilo_en_ready(mensaje->hilo);
 			break;
 		case 2:
-			printf("recibo operación 2\n");
+			printf("recibo acción 2\n");
 			ejecutar_hilo(mensaje->hilo);
 			break;
 		case 3:
-			printf("recibo operación 3\n");
+			printf("recibo acción 3\n");
 			bloquear_hilo(mensaje->hilo);
 			break;
 		case 4:
-			printf("recibo operación 4\n");
+			printf("recibo acción 4\n");
 			cerrar_hilo(mensaje->hilo);
 			break;
 	}

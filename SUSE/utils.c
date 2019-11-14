@@ -52,7 +52,7 @@ int esperar_cliente(int socket_servidor)
 int recibir_operacion(int socket_cliente)
 {
 	int cod_op;
-	if(recv(socket_cliente, &cod_op, sizeof(int), MSG_WAITALL) != 0)
+	if (recv(socket_cliente, &cod_op, sizeof(int), MSG_WAITALL) != 0)
 		return cod_op;
 	else
 	{
@@ -82,12 +82,11 @@ void recibir_mensaje(int socket_cliente)
 
 mensaje_t* recibir_paquete(int socket_cliente)
 {
-	void* buffer = malloc(sizeof(mensaje_t));
-	recv(socket_cliente, buffer, sizeof(buffer), 0);
+	int size;
+	void* buffer = recibir_buffer(&size, socket_cliente);
 	mensaje_t* mensaje = malloc(sizeof(mensaje_t));
 	mensaje->hilo = malloc(sizeof(hilo_t));
-	memcpy(&(mensaje->operacion), buffer, sizeof(int));
-	printf("la operacion leida es %i\n", mensaje->operacion);
+	memcpy(&(mensaje->accion), buffer, sizeof(int));
 	memcpy(&(mensaje->hilo->tid), buffer + sizeof(int), sizeof(int));
 	return mensaje;
 }
