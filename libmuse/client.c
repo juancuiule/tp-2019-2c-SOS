@@ -10,17 +10,15 @@ int main(void) {
 	muse_init((int) getpid(), IP, PORT);
 
 	void* mem_muse = muse_alloc(5);
+	
 	log_info(logger, "dir de mem_muse: %u", mem_muse);
 	void* x = malloc(5);
-	void* y = malloc(5);
 
 	muse_get(x, mem_muse, 5);
+	log_info(logger, "dir de mem_muse: %u", mem_muse);
 	log_info(logger, "x es: %s", x);
 
 	muse_free(mem_muse);
-
-	muse_get(y, mem_muse, 5);
-	log_info(logger, "y es: %s", y);
 
 	muse_close();
 

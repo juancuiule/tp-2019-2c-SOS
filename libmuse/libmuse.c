@@ -16,7 +16,7 @@ int muse_init(int id, char* ip, int puerto){
 	conexion = create_connection(ip, puerto);
 
 	if (conexion != -1) {
-		send_connect(conexion);
+		send_code(conexion, INIT_MUSE);
 		return 0;
 	} else {
 		return -1;
@@ -25,20 +25,32 @@ int muse_init(int id, char* ip, int puerto){
 
 void muse_close(){
 	log_info(logger, "muse_close");
+
 	log_destroy(logger);
 	config_destroy(config);
-	send_disconnet(conexion);
+	send_code(conexion, DISCONNECT_MUSE);
+
 	free_connection(conexion);
 }
 
 uint32_t muse_alloc(uint32_t tam){
 	log_info(logger, "muse_alloc: tam = %i", tam);
-	return send_alloc(conexion, tam);
+	send_int(conexion, ALLOC, tam);
+
+	int status = recv_response_status(conexion);
+
+	int size;
+	char* buffer = recv_buffer(&size, conexion);
+
+	log_info(logger, "dir: %s", buffer);
+
+	char* x;
+	return strtoul(buffer, &x, 10);
 }
 
 void muse_free(uint32_t dir) {
-	log_info(logger, "muse_free: a %u", dir);
-    send_free(conexion, dir);
+	log_info(logger, "muse_free a: %u", dir);
+	send_int(conexion, FREE, dir);
 }
 
 int muse_get(void* dst, uint32_t src, size_t n){

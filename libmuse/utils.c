@@ -142,6 +142,13 @@ void send_response(muse_response* response, int socket_cliente) {
 	free(to_send);
 }
 
+void send_int(int socket_cliente, muse_op_code op_code, uint32_t tam){
+	char str[11];
+	snprintf(str, sizeof str, "%u", tam);
+	log_info(logger, " asdfasdfasdfas %s", str);
+	send_something(socket_cliente, op_code, str);
+}
+
 void send_something(int socket_cliente, muse_op_code op_code, char* something){
 	muse_header* header = create_header(op_code);
 	muse_body* body = create_body(strlen(something) + 1, something);
@@ -150,33 +157,12 @@ void send_something(int socket_cliente, muse_op_code op_code, char* something){
 	free_package(package);
 }
 
-void send_connect(int socket_cliente) {
-	send_something(socket_cliente, INIT_MUSE, "Connect");
-}
-
-void send_disconnet(int socket_cliente) {
-	send_something(socket_cliente, DISCONNECT_MUSE, "Disconnect");
-}
-
-int send_alloc(int socket_cliente, uint32_t tam) {
-	char str[11];
-	snprintf(str, sizeof str, "%u", tam);
-	send_something(socket_cliente, ALLOC, str);
-
-	int status = recv_response_status(socket_cliente);
-	int size;
-	char* buffer = recv_buffer(&size, socket_cliente);
-	log_info(logger, "dir: %s", buffer);
-	char* x;
-	return strtoul(buffer, &x, 10);
-}
-
-void send_free(int socket_cliente, uint32_t dir) {
-	char str[11];
-	snprintf(str, sizeof str, "%u", dir);
-	log_info(logger, "pido free a: %u", dir);
-	send_something(socket_cliente, FREE, str);
-	return;
+void send_code(int socket_cliente, muse_op_code op_code){
+	muse_header* header = create_header(op_code);
+	muse_body* body = create_body(0, NULL);
+	muse_package* package = create_package(header, body);
+	send_package(package, socket_cliente);
+	free_package(package);
 }
 
 void* send_get(int socket_cliente, uint32_t src, size_t n) {

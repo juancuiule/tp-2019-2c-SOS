@@ -1,11 +1,17 @@
 #include "MUSE.h"
 
+void * MEMORIA;
+
+void recv_void_msg(int socket_cliente) {
+	int size;
+	recv_buffer(&size, socket_cliente);
+	// solo para "consumir" el buffer vacio que viene
+}
+
 void recibir_mensaje(int socket_cliente) {
 	int size;
 
 	char* buffer = recv_buffer(&size, socket_cliente);
-
-	log_info(logger, "Me llego el mensaje: %s", buffer);
 
 	free(buffer);
 }
@@ -13,17 +19,16 @@ void recibir_mensaje(int socket_cliente) {
 void respond_alloc(int socket_cliente, char* id) {
 	int size;
 
-	char* buffer = recv_buffer(&size, socket_cliente);
-
-	int tam_pedido = atoi(buffer);
-    void* dir = malloc(tam_pedido);
+	void* buffer = recv_buffer(&size, socket_cliente);
 	
-	memcpy(dir, "hola", 5); // demo porque todavía no tenemos muse_cpy
+	int tam_pedido = atoi(buffer);
+	
+	memcpy(MEMORIA, "hola", 5); // demo porque todavía no tenemos muse_cpy
 
 	log_info(logger, "El cliente con id: %s hizo muse_malloc con %i", id, tam_pedido);
 	
 	char str[11];
-	snprintf(str, sizeof str, "%u", dir);
+	snprintf(str, sizeof str, "%u", MEMORIA);
 	
 	muse_response* response = create_response(
 		SUCCESS,
@@ -67,7 +72,8 @@ int respond_to_client(int cliente_fd) {
 		char* id = recv_muse_id(cliente_fd);
 		switch(cod_op) {
 			case INIT_MUSE:
-				recibir_mensaje(cliente_fd);
+				recv_void_msg(cliente_fd);
+				log_info(logger, "El cliente se conecto.");
 				break;
 			case ALLOC:
 				log_info(logger, "muse_alloc");
@@ -120,6 +126,8 @@ int main(void) {
 	if (server_fd == -1) {
 		return EXIT_FAILURE;
 	}
+
+	MEMORIA = malloc(100);
 
 	pthread_t hilo;
 	int r1;
