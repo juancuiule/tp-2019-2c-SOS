@@ -27,6 +27,72 @@ void free_connection(int socket_cliente) {
 	close(socket_cliente);
 }
 
+int init_server(char* IP, char* PORT) {
+	int socket_servidor;
+
+    struct addrinfo hints, *servinfo, *p;
+
+    memset(&hints, 0, sizeof(hints));
+    hints.ai_family = PF_INET;
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_flags = AI_PASSIVE;
+
+    getaddrinfo(IP, PORT, &hints, &servinfo);
+
+    for (p = servinfo; p != NULL; p = p->ai_next) {
+		socket_servidor = socket(
+			p->ai_family,
+			p->ai_socktype,
+			p->ai_protocol
+		);
+
+        if (socket_servidor == -1) {
+            continue;
+		}
+
+		int bind_result = bind(
+			socket_servidor,
+			p->ai_addr,
+			p->ai_addrlen
+		);
+
+        if (bind_result == -1) {
+            close(socket_servidor);
+			freeaddrinfo(servinfo);
+			log_error(logger, "Fallo el bind.");
+            return -1;
+        }
+
+        break;
+    }
+
+	listen(socket_servidor, SOMAXCONN);
+
+	log_info(logger, "Servidor listo para recibir clientes");
+
+    freeaddrinfo(servinfo);
+
+    return socket_servidor;
+}
+
+void* recv_full_size(int socket_cliente) {
+	int size;
+	recv(socket_cliente, &size, sizeof(int), MSG_WAITALL);
+	return size;
+}
+
+void* recv_buffer(int* size, int socket_cliente) {
+	void* buffer;
+
+	recv(socket_cliente, size, sizeof(int), MSG_WAITALL);
+
+	buffer = malloc(*size);
+
+	recv(socket_cliente, buffer, *size, MSG_WAITALL);
+
+	return buffer;
+}
+
 muse_package* create_package(muse_header* header, muse_body* body) {
 	muse_package* package = malloc(sizeof(muse_package));
 	package->header = header;
@@ -35,7 +101,7 @@ muse_package* create_package(muse_header* header, muse_body* body) {
 }
 
 muse_header* create_header(muse_op_code code) {
-	char* ip = "127.0.0.1";
+	char* ip = "127.0.0.1"; // getip acá
 	int ip_size = strlen(ip) + 1;
 
 	muse_header* header = malloc(sizeof(muse_header));
@@ -44,16 +110,35 @@ muse_header* create_header(muse_op_code code) {
 	header->id->ip_size = ip_size;
 	header->id->ip = malloc(ip_size);
 	memcpy(header->id->ip, ip, ip_size);
-	header->id->ip = ip;
 	header->id->pid = 1;
 	return header;
 }
 
-muse_body* create_body(int content_size, void* content) {
+muse_body* create_empty_body() {
 	muse_body* body = malloc(sizeof(muse_body));
-	body->content_size = content_size;
-	body->content = malloc(content_size);
-	memcpy(body->content, content, content_size);
+	body->content_size = 0;
+	body->content = NULL;
+	return body;
+}
+
+void add_to_body(muse_body* body, int size, void* value) {
+	log_info(logger, "add_to_body value: %s", value);
+	body->content = realloc(
+		body->content, // *ptr
+		body->content_size + // prev size
+		sizeof(int) + // new size value indicator
+		size // size of the value to ad
+	);
+
+	memcpy(body->content + body->content_size, &size, sizeof(int));
+	memcpy(body->content + body->content_size + sizeof(int), value, size);
+
+	body->content_size += size + sizeof(int);
+}
+
+muse_body* create_body(int content_size, void* content) {
+	muse_body* body = create_empty_body();
+	add_to_body(body, content_size, content);
 	return body;
 }
 
@@ -76,6 +161,8 @@ response_status recv_response_status(int socket_cliente) {
 
 	if (recv_result != 0) {
 		log_info(logger, "status: %i", status);
+		int size = recv_full_size(socket_cliente);
+		log_info(logger, "response full_size %i", size);
 		return status;
 	} else {
 		close(socket_cliente);
@@ -164,54 +251,6 @@ void send_code(int socket_cliente, muse_op_code op_code){
 	free_package(package);
 }
 
-int init_server(char* IP, char* PORT) {
-	int socket_servidor;
-
-    struct addrinfo hints, *servinfo, *p;
-
-    memset(&hints, 0, sizeof(hints));
-    hints.ai_family = PF_INET;
-    hints.ai_socktype = SOCK_STREAM;
-    hints.ai_flags = AI_PASSIVE;
-
-    getaddrinfo(IP, PORT, &hints, &servinfo);
-
-    for (p = servinfo; p != NULL; p = p->ai_next) {
-		socket_servidor = socket(
-			p->ai_family,
-			p->ai_socktype,
-			p->ai_protocol
-		);
-
-        if (socket_servidor == -1) {
-            continue;
-		}
-
-		int bind_result = bind(
-			socket_servidor,
-			p->ai_addr,
-			p->ai_addrlen
-		);
-
-        if (bind_result == -1) {
-            close(socket_servidor);
-			freeaddrinfo(servinfo);
-			log_error(logger, "Fallo el bind.");
-            return -1;
-        }
-
-        break;
-    }
-
-	listen(socket_servidor, SOMAXCONN);
-
-	log_info(logger, "Servidor listo para recibir clientes");
-
-    freeaddrinfo(servinfo);
-
-    return socket_servidor;
-}
-
 int recibir_cliente(int socket_servidor) {
 	struct sockaddr_in dir_cliente;
 	int tam_direccion = sizeof(struct sockaddr_in);
@@ -272,16 +311,4 @@ char* recv_muse_id(int socket_cliente) {
     memcpy(id + len1, separador, len2);
 	memcpy(id + len1 + len2, ip, len3 + 1);
 	return id;
-}
-
-void* recv_buffer(int* size, int socket_cliente) {
-	void* buffer;
-
-	recv(socket_cliente, size, sizeof(int), MSG_WAITALL);
-
-	buffer = malloc(*size);
-
-	recv(socket_cliente, buffer, *size, MSG_WAITALL);
-
-	return buffer;
 }

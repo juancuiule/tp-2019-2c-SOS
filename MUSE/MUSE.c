@@ -20,13 +20,13 @@ void respond_alloc(int socket_cliente, char* id) {
 	int size;
 
 	void* buffer = recv_buffer(&size, socket_cliente);
-	
+
 	int tam_pedido = atoi(buffer);
-	
-	memcpy(MEMORIA, "hola", 5); // demo porque todavía no tenemos muse_cpy
 
 	log_info(logger, "El cliente con id: %s hizo muse_malloc con %i", id, tam_pedido);
 	
+	memcpy(MEMORIA, "hola", 5);
+
 	char str[11];
 	snprintf(str, sizeof str, "%u", MEMORIA);
 	
@@ -70,6 +70,8 @@ int respond_to_client(int cliente_fd) {
 	while(1) {
 		int cod_op = recv_muse_op_code(cliente_fd);
 		char* id = recv_muse_id(cliente_fd);
+		int size = recv_full_size(cliente_fd);
+		log_info(logger, "full_size %i", size);
 		switch(cod_op) {
 			case INIT_MUSE:
 				recv_void_msg(cliente_fd);
