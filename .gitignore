@@ -58,3 +58,5 @@ Mkfile.old
 dkms.conf
 /Default/
 /Debug/
+
+*.project
