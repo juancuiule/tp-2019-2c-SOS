@@ -112,10 +112,12 @@ void* serializar_paquete(t_paquete* paquete, int bytes)
 	desplazamiento+= paquete->buffer->size;
 
 	int opcode, size, tid;
-	memcpy(&opcode, magic, 4);
-	//printf("opcode serializado: %i\n", opcode);
-	memcpy(&tid, &magic + 8, 4);
-	//printf("TID serializado: %i\n", tid);
+	memcpy(&opcode, magic, sizeof(int));
+	printf("opcode serializado: %i\n", opcode);
+	memcpy(&size, magic + 4, sizeof(int));
+	printf("size serializado: %i\n", size);
+	memcpy(&tid, magic + 8, sizeof(int));
+	printf("TID serializado: %i\n", tid);
 
 	return magic;
 }
@@ -140,9 +142,10 @@ void agregar_a_paquete(t_paquete* paquete, void* valor, int tamanio)
 	memcpy(&opcode, &paquete->codigo_operacion, sizeof(int));
 	memcpy(&size, &paquete->buffer->size, sizeof(int));
 	memcpy(&val, valor, sizeof(int));
-	printf("codigo de operacion del paquete: %i\n", opcode);
-	printf("size del paquete: %i\n", size);
-	printf("valor agregado al paquete: %i\n", val);
+
+	//printf("codigo de operacion del paquete: %i\n", opcode);
+	//printf("size del paquete: %i\n", size);
+	printf("TID agregado al paquete: %i\n", val);
 }
 
 void enviar_paquete(t_paquete* paquete, int socket_cliente)
