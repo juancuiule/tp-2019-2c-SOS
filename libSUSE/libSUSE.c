@@ -139,7 +139,7 @@ void agregar_a_paquete(t_paquete* paquete, void* valor, int tamanio)
 	int val;
 	memcpy(&opcode, &paquete->codigo_operacion, sizeof(int));
 	memcpy(&size, &paquete->buffer->size, sizeof(int));
-	memcpy(&val, &paquete->buffer->stream, sizeof(int));
+	memcpy(&val, valor, sizeof(int));
 	printf("codigo de operacion del paquete: %i\n", opcode);
 	printf("size del paquete: %i\n", size);
 	printf("valor agregado al paquete: %i\n", val);
