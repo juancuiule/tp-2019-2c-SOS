@@ -8,16 +8,24 @@
 
 int max_tid = 0;
 
+hilo_t* crear_nuevo_hilo(int tid, int pid) {
+	hilo_t* hilo = malloc(sizeof(hilo_t));
+	hilo->tid = tid;
+	hilo->pid = pid;
+	hilo->tiempo_ejecucion = 0;
+	hilo->tiempo_espera = 0;
+	hilo->tiempo_cpu = 0;
+	hilo->estimacion_anterior = 0;
+	hilo->rafaga_anterior = 0;
+	return hilo;
+}
+
 int ejecutar_operacion(int tid, int operacion) {
 	int conexion = conectarse_a_suse();
 	int pid = getpid();
 	t_paquete* paquete = crear_paquete(operacion);
-	//agregar_a_paquete(paquete, &operacion, sizeof(int));
-	//agregar_a_paquete(paquete, &tid, sizeof(tid));
-	memcpy(&(paquete->buffer->stream), &tid, sizeof(int));
-	int thread_id;
-	memcpy(&thread_id, &paquete->buffer->stream, sizeof(int));
-	printf("TID agregado a paquete: %i\n", thread_id);
+	hilo_t* hilo = crear_nuevo_hilo(tid, pid);
+	agregar_a_paquete(paquete, hilo, sizeof(hilo_t));
 	enviar_paquete(paquete, conexion);
 	return 0;
 }
@@ -103,6 +111,12 @@ void* serializar_paquete(t_paquete* paquete, int bytes)
 	memcpy(magic + desplazamiento, paquete->buffer->stream, paquete->buffer->size);
 	desplazamiento+= paquete->buffer->size;
 
+	int opcode, size, tid;
+	memcpy(&opcode, magic, 4);
+	//printf("opcode serializado: %i\n", opcode);
+	memcpy(&tid, &magic + 8, 4);
+	//printf("TID serializado: %i\n", tid);
+
 	return magic;
 }
 
@@ -120,17 +134,31 @@ void agregar_a_paquete(t_paquete* paquete, void* valor, int tamanio)
 	memcpy(paquete->buffer->stream + paquete->buffer->size, &tamanio, sizeof(int));
 	memcpy(paquete->buffer->stream + paquete->buffer->size + sizeof(int), valor, tamanio);
 	paquete->buffer->size += tamanio + sizeof(int);
+	int opcode;
+	int size;
 	int val;
-	memcpy(&val, paquete->buffer->stream, sizeof(int));
-	printf("valor agregado al paquete:%i\n", val);
+	memcpy(&opcode, &paquete->codigo_operacion, sizeof(int));
+	memcpy(&size, &paquete->buffer->size, sizeof(int));
+	memcpy(&val, &paquete->buffer->stream, sizeof(int));
+	printf("codigo de operacion del paquete: %i\n", opcode);
+	printf("size del paquete: %i\n", size);
+	printf("valor agregado al paquete: %i\n", val);
 }
 
 void enviar_paquete(t_paquete* paquete, int socket_cliente)
 {
 	int bytes = paquete->buffer->size + 2*sizeof(int);
 	void* a_enviar = serializar_paquete(paquete, bytes);
-
 	send(socket_cliente, a_enviar, bytes, 0);
+	int opcode, size, tid;
+	memcpy(&opcode, a_enviar, 4);
+	memcpy(&size, a_enviar + 4, 4);
+	memcpy(&tid, a_enviar + 8, 4);
+	/*
+	printf("opcode enviado: %i\n", opcode);
+	printf("size enviado: %i\n", size);
+	printf("TID enviado: %i\n", tid);
+	*/
 }
 
 void crear_buffer(t_paquete* paquete)

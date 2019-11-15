@@ -27,7 +27,7 @@ typedef struct {
 	int tiempo_cpu;
 	float estimacion_anterior;
 	float rafaga_anterior;
-} hilo_t;
+} __attribute__((packed)) hilo_t;
 
 typedef struct {
 	int pid;
