@@ -75,7 +75,13 @@ int init_server(char* IP, char* PORT) {
     return socket_servidor;
 }
 
-void* recv_full_size(int socket_cliente) {
+uint32_t recv_uint(int socket_cliente) {
+	uint32_t size;
+	recv(socket_cliente, &size, sizeof(uint32_t), MSG_WAITALL);
+	return size;
+}
+
+void* recv_int(int socket_cliente) {
 	int size;
 	recv(socket_cliente, &size, sizeof(int), MSG_WAITALL);
 	return size;
@@ -121,19 +127,30 @@ muse_body* create_empty_body() {
 	return body;
 }
 
-void add_to_body(muse_body* body, int size, void* value) {
-	log_info(logger, "add_to_body value: %s", value);
+void add(muse_body* body, int size) {
 	body->content = realloc(
 		body->content, // *ptr
 		body->content_size + // prev size
 		sizeof(int) + // new size value indicator
 		size // size of the value to ad
 	);
-
 	memcpy(body->content + body->content_size, &size, sizeof(int));
-	memcpy(body->content + body->content_size + sizeof(int), value, size);
+}
 
+void add_to_body(muse_body* body, int size, void* value) {
+	add(body, size);
+	memcpy(body->content + body->content_size + sizeof(int), value, size);
 	body->content_size += size + sizeof(int);
+}
+
+void add_ref_to_body(muse_body* body, int size, void* value) {
+	body->content = realloc(
+		body->content, // *ptr
+		body->content_size + // prev size
+		size // size of the value to ad
+	);
+	memcpy(body->content + body->content_size, &value, size);
+	body->content_size += size;
 }
 
 muse_body* create_body(int content_size, void* content) {
@@ -161,13 +178,24 @@ response_status recv_response_status(int socket_cliente) {
 
 	if (recv_result != 0) {
 		log_info(logger, "status: %i", status);
-		int size = recv_full_size(socket_cliente);
+		int size = recv_int(socket_cliente);
 		log_info(logger, "response full_size %i", size);
 		return status;
 	} else {
 		close(socket_cliente);
 		return -1;
 	}
+}
+
+muse_body* recv_body(int socket) {
+	muse_body* body = malloc(sizeof(muse_body));
+	body->content_size = recv_int(socket);
+	log_info(logger, "El content size es %i", body->content_size);
+	if (body->content_size > 0) {
+		body->content = malloc(body->content_size);
+		recv(socket, body->content, body->content_size, MSG_WAITALL);
+	}
+	return body;
 }
 
 void free_package(muse_package* package) {
@@ -245,7 +273,7 @@ void send_something(int socket_cliente, muse_op_code op_code, char* something){
 
 void send_code(int socket_cliente, muse_op_code op_code){
 	muse_header* header = create_header(op_code);
-	muse_body* body = create_body(0, NULL);
+	muse_body* body = create_empty_body();
 	muse_package* package = create_package(header, body);
 	send_package(package, socket_cliente);
 	free_package(package);
@@ -277,7 +305,6 @@ muse_op_code recv_muse_op_code(int socket_cliente) {
 	);
 
 	if (recv_result != 0) {
-		log_info(logger, "op_code: %i", op_code);
 		return op_code;
 	} else {
 		close(socket_cliente);

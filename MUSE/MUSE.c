@@ -16,14 +16,12 @@ void recibir_mensaje(int socket_cliente) {
 	free(buffer);
 }
 
-void respond_alloc(int socket_cliente, char* id) {
-	int size;
+void respond_alloc(muse_body* body, char* id, int socket_cliente) {
+	uint32_t tam_pedido;
 
-	void* buffer = recv_buffer(&size, socket_cliente);
+	memcpy(&tam_pedido, body->content, sizeof(uint32_t));
 
-	int tam_pedido = atoi(buffer);
-
-	log_info(logger, "El cliente con id: %s hizo muse_malloc con %i", id, tam_pedido);
+	log_info(logger, "El cliente con id: %s hizo muse_malloc con %u", id, tam_pedido);
 	
 	memcpy(MEMORIA, "hola", 5);
 
@@ -66,43 +64,42 @@ void respond_free(int socket_cliente, char* id) {
 	free(dir);
 }
 
+
 int respond_to_client(int cliente_fd) {
 	while(1) {
 		int cod_op = recv_muse_op_code(cliente_fd);
 		char* id = recv_muse_id(cliente_fd);
-		int size = recv_full_size(cliente_fd);
-		log_info(logger, "full_size %i", size);
+		muse_body* body = recv_body(cliente_fd);
 		switch(cod_op) {
 			case INIT_MUSE:
-				recv_void_msg(cliente_fd);
-				log_info(logger, "El cliente se conecto.");
+				// recv_void_msg(cliente_fd);
 				break;
 			case ALLOC:
-				log_info(logger, "muse_alloc");
-				respond_alloc(cliente_fd, id);
+				log_info(logger, "muse_alloc.");
+				respond_alloc(body, id, cliente_fd);
 				break;
 			case FREE:
 				log_info(logger, "muse_free.");
-				respond_free(cliente_fd, id);
+				// respond_free(cliente_fd, id);
 				break;
 			case GET:
-				log_info(logger, "muse_get");
-				respond_get(cliente_fd, id);
+				log_info(logger, "muse_get.");
+				// respond_get(cliente_fd, id);
 				break;
 			case CPY:
 				log_info(logger, "muse_copy.");
 				//realizar cod_op
 				break;
 			case MAP:
-				log_info(logger, "muse_map");
+				log_info(logger, "muse_map.");
 				//realizar cod_op
 				break;
 			case SYNC:
-				log_info(logger, "muse_sync");
+				log_info(logger, "muse_sync.");
 				//realizar cod_op
 				break;
 			case UNMAP:
-				log_info(logger, "muse_unmap");
+				log_info(logger, "muse_unmap.");
 				//realizar cod_op
 				break;
 			case DISCONNECT_MUSE:
