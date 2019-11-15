@@ -8,7 +8,7 @@
 
 int conexion;
 
-int muse_init(int id, char* ip, int puerto){
+int muse_init(int id, char* ip, int puerto) {
 	logger = log_create("./logs/libmuse.log", "libmuse", 1, LOG_LEVEL_INFO);
 
 	log_info(logger, "Conectandome a %s:%s", ip, puerto);
@@ -23,7 +23,7 @@ int muse_init(int id, char* ip, int puerto){
 	}
 }
 
-void muse_close(){
+void muse_close() {
 	log_info(logger, "muse_close");
 
 	log_destroy(logger);
@@ -33,7 +33,7 @@ void muse_close(){
 	free_connection(conexion);
 }
 
-uint32_t muse_alloc(uint32_t tam){
+uint32_t muse_alloc(uint32_t tam) {
 	log_info(logger, "muse_alloc: tam = %i", tam);
 	
 	muse_header* header = create_header(ALLOC);
@@ -64,12 +64,13 @@ void muse_free(uint32_t dir) {
 	send_package(package, conexion);
 
 	int status = recv_response_status(conexion); // check status?
+	muse_body* response_body = recv_body(conexion);	
 
 	return;
 	
 }
 
-int muse_get(void* dst, uint32_t src, size_t n){
+int muse_get(void* dst, uint32_t src, size_t n) {
 	log_info(logger, "muse_get a: %u, de %i bytes", src, n);
 
 	muse_header* header = create_header(GET);
@@ -93,12 +94,23 @@ int muse_get(void* dst, uint32_t src, size_t n){
     return 0;
 }
 
-int muse_cpy(uint32_t dst, void* src, int n){
-    memcpy((void*) dst, src, n);
+int muse_cpy(uint32_t dst, void* src, int n) {
+	log_info(logger, "muse_cpy a: %u, de %i bytes", dst, n);
+
+	muse_header* header = create_header(CPY);
+	muse_body* body = create_empty_body();
+	add_fixed_to_body(body, sizeof(uint32_t), dst);
+	add_to_body(body, n, src);
+
+	muse_package* package = create_package(header, body);
+	send_package(package, conexion);
+
+	int status = recv_response_status(conexion);
+	muse_body* response_body = recv_body(conexion);
     return 0;
 }
 
-uint32_t muse_map(char *path, size_t length, int flags){
+uint32_t muse_map(char *path, size_t length, int flags) {
     return 0;
 }
 

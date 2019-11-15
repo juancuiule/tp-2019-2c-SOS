@@ -13,6 +13,13 @@ int main(void) {
 		void* mem_muse = muse_alloc(5);
 		char* x = malloc(5);
 
+		muse_cpy(mem_muse, "Hola", 5);
+
+		muse_get(x, mem_muse, 5);
+		log_info(logger, "x es: %s", x);
+
+		muse_cpy(mem_muse, "Ciao", 5);
+
 		muse_get(x, mem_muse, 5);
 		log_info(logger, "x es: %s", x);
 

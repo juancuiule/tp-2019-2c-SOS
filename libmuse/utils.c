@@ -173,7 +173,6 @@ response_status recv_response_status(int socket_cliente) {
 	);
 
 	if (recv_result != 0) {
-		log_info(logger, "status: %i", status);
 		return status;
 	} else {
 		close(socket_cliente);
