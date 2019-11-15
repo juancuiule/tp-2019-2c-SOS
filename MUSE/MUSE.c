@@ -1,6 +1,6 @@
 #include "MUSE.h"
 
-void * MEMORIA;
+void* MEMORIA;
 
 void recv_void_msg(int socket_cliente) {
 	int size;
@@ -24,14 +24,10 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 	log_info(logger, "El cliente con id: %s hizo muse_malloc con %u", id, tam_pedido);
 	
 	memcpy(MEMORIA, "hola", 5);
-
-	char str[11];
-	snprintf(str, sizeof str, "%u", MEMORIA);
 	
-	muse_response* response = create_response(
-		SUCCESS,
-		create_body(11, str)
-	);
+	muse_body* r_body = create_empty_body();
+	add_fixed_to_body(r_body, sizeof(uint32_t), MEMORIA);
+	muse_response* response = create_response(SUCCESS, r_body);
 	send_response(response, socket_cliente);
 }
 

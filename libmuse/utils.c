@@ -127,7 +127,7 @@ muse_body* create_empty_body() {
 	return body;
 }
 
-void add(muse_body* body, int size) {
+void add_to_body(muse_body* body, int size, void* value) {
 	body->content = realloc(
 		body->content, // *ptr
 		body->content_size + // prev size
@@ -135,15 +135,11 @@ void add(muse_body* body, int size) {
 		size // size of the value to ad
 	);
 	memcpy(body->content + body->content_size, &size, sizeof(int));
-}
-
-void add_to_body(muse_body* body, int size, void* value) {
-	add(body, size);
 	memcpy(body->content + body->content_size + sizeof(int), value, size);
 	body->content_size += size + sizeof(int);
 }
 
-void add_ref_to_body(muse_body* body, int size, void* value) {
+void add_fixed_to_body(muse_body* body, int size, void* value) {
 	body->content = realloc(
 		body->content, // *ptr
 		body->content_size + // prev size
@@ -178,8 +174,6 @@ response_status recv_response_status(int socket_cliente) {
 
 	if (recv_result != 0) {
 		log_info(logger, "status: %i", status);
-		int size = recv_int(socket_cliente);
-		log_info(logger, "response full_size %i", size);
 		return status;
 	} else {
 		close(socket_cliente);
