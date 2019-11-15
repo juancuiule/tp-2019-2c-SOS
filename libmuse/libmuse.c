@@ -39,6 +39,7 @@ uint32_t muse_alloc(uint32_t tam){
 	muse_header* header = create_header(ALLOC);
 	muse_body* body = create_empty_body();
 	add_fixed_to_body(body, sizeof(uint32_t), tam);
+
 	muse_package* package = create_package(header, body);
 	send_package(package, conexion);
 
@@ -54,7 +55,18 @@ uint32_t muse_alloc(uint32_t tam){
 
 void muse_free(uint32_t dir) {
 	log_info(logger, "muse_free a: %u", dir);
-	send_int(conexion, FREE, dir);
+	
+	muse_header* header = create_header(FREE);
+	muse_body* body = create_empty_body();
+	add_fixed_to_body(body, sizeof(uint32_t), dir);
+
+	muse_package* package = create_package(header, body);
+	send_package(package, conexion);
+
+	int status = recv_response_status(conexion); // check status?
+
+	return;
+	
 }
 
 int muse_get(void* dst, uint32_t src, size_t n){
@@ -70,12 +82,14 @@ int muse_get(void* dst, uint32_t src, size_t n){
 
 	int status = recv_response_status(conexion);
 
-	int size;
-	char* data = recv_buffer(&size, conexion);
+	muse_body* response_body = recv_body(conexion);
 
-	log_info(logger, "data: %s", data);
+	size_t r_size;
+	memcpy(&r_size, response_body->content, sizeof(size_t));
 
-	memcpy(dst, data, 5);
+	log_info(logger, "Esperaba %i bytes y llegaron %i", n, r_size);
+
+	memcpy(dst, response_body->content + sizeof(size_t), r_size);
     return 0;
 }
 

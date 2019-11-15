@@ -11,12 +11,9 @@ int main(void) {
 
 	if (init_result != -1) {
 		void* mem_muse = muse_alloc(5);
-		
-		log_info(logger, "dir de mem_muse: %u", mem_muse);
-		void* x = malloc(5);
+		char* x = malloc(5);
 
 		muse_get(x, mem_muse, 5);
-		log_info(logger, "dir de mem_muse: %u", mem_muse);
 		log_info(logger, "x es: %s", x);
 
 		muse_free(mem_muse);

@@ -184,7 +184,6 @@ response_status recv_response_status(int socket_cliente) {
 muse_body* recv_body(int socket) {
 	muse_body* body = malloc(sizeof(muse_body));
 	body->content_size = recv_int(socket);
-	log_info(logger, "El content size es %i", body->content_size);
 	if (body->content_size > 0) {
 		body->content = malloc(body->content_size);
 		recv(socket, body->content, body->content_size, MSG_WAITALL);

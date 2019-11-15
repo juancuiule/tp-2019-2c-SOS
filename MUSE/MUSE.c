@@ -31,33 +31,34 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 	send_response(response, socket_cliente);
 }
 
-void respond_get(int socket_cliente, char* id) {
-	int size;
+void respond_get(muse_body* body, char* id, int socket_cliente) {
+	uint32_t src;
+	memcpy(&src, body->content, sizeof(uint32_t));
+	size_t size;
+	memcpy(&size, body->content + sizeof(uint32_t), sizeof(size_t));
 
-	char* buffer = recv_buffer(&size, socket_cliente);
+	log_info(logger, "El cliente con id: %s hizo get a la src: %u de %i bytes", id, src, size);
 
-	char* x;
-	void* dir = strtoul(buffer, &x, 10);
+	void* val = malloc(size);
+	memcpy((void*) val, MEMORIA, size);
 
-	log_info(logger, "El cliente con id: %s hizo get a la dir: %u", id, dir);
-	
-	muse_response* response = create_response(
-		SUCCESS,
-		create_body(5, dir)
-	);
+	log_info(logger, "El valor %s", (char*) val);
+
+	muse_body* r_body = create_empty_body();
+	add_to_body(r_body, size, val);
+	muse_response* response = create_response(SUCCESS, r_body);
 	send_response(response, socket_cliente);
 }
 
-void respond_free(int socket_cliente, char* id) {
-	int size;
+void respond_free(muse_body* body, char* id, int socket_cliente) {
+	uint32_t dir_to_free;
+	memcpy(&dir_to_free, body->content, sizeof(uint32_t));
+	log_info(logger, "El cliente con id: %s hizo free a la dir: %u", id, dir_to_free);
 
-	char* buffer = recv_buffer(&size, socket_cliente);
-
-	char* x;
-	void* dir = strtoul(buffer, &x, 10);
-
-	log_info(logger, "El cliente con id: %s hizo free a la dir: %u", id, dir);
-	free(dir);
+	free(dir_to_free);
+	muse_body* r_body = create_empty_body();
+	muse_response* response = create_response(SUCCESS, r_body);
+	send_response(response, socket_cliente);
 }
 
 
@@ -76,11 +77,11 @@ int respond_to_client(int cliente_fd) {
 				break;
 			case FREE:
 				log_info(logger, "muse_free.");
-				// respond_free(cliente_fd, id);
+				respond_free(body, id, cliente_fd);
 				break;
 			case GET:
 				log_info(logger, "muse_get.");
-				// respond_get(cliente_fd, id);
+				respond_get(body, id, cliente_fd);
 				break;
 			case CPY:
 				log_info(logger, "muse_copy.");
