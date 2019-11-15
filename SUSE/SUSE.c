@@ -54,9 +54,13 @@ void atender_cliente(int cliente_fd) {
 	//paquete->buffer = malloc(sizeof(t_buffer));
 	//paquete->buffer->stream = malloc(sizeof(100));
 	t_paquete* paquete = recibir_paquete(cliente_fd);
-	hilo_t* hilo = malloc(sizeof(hilo_t));
+	paquete->buffer = malloc(sizeof(t_buffer));
+	paquete->buffer->stream = malloc(paquete->buffer->size);
+	//hilo_t* hilo = malloc(sizeof(hilo_t));
 	//memcpy(&(hilo->tid), paquete->buffer->stream, sizeof(int));
-	printf("hilo %i\n", hilo->tid);
+	int tid;
+	memcpy(&tid, paquete->buffer->stream, sizeof(int));
+	printf("hilo: %i\n", tid);
 /*
 	switch (cod_op) {
 		case 1:

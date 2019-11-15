@@ -12,11 +12,12 @@ int ejecutar_operacion(int tid, int operacion) {
 	int conexion = conectarse_a_suse();
 	int pid = getpid();
 	t_paquete* paquete = crear_paquete(operacion);
-	hilo_t* hilo = malloc(sizeof(hilo_t));
-	hilo->tid = tid;
-	printf("hilo: %i\n", hilo->tid);
 	//agregar_a_paquete(paquete, &operacion, sizeof(int));
-	agregar_a_paquete(paquete, &hilo, sizeof(hilo_t));
+	//agregar_a_paquete(paquete, &tid, sizeof(tid));
+	memcpy(&(paquete->buffer->stream), &tid, sizeof(int));
+	int thread_id;
+	memcpy(&thread_id, &paquete->buffer->stream, sizeof(int));
+	printf("TID agregado a paquete: %i\n", thread_id);
 	enviar_paquete(paquete, conexion);
 	return 0;
 }
@@ -119,6 +120,9 @@ void agregar_a_paquete(t_paquete* paquete, void* valor, int tamanio)
 	memcpy(paquete->buffer->stream + paquete->buffer->size, &tamanio, sizeof(int));
 	memcpy(paquete->buffer->stream + paquete->buffer->size + sizeof(int), valor, tamanio);
 	paquete->buffer->size += tamanio + sizeof(int);
+	int val;
+	memcpy(&val, paquete->buffer->stream, sizeof(int));
+	printf("valor agregado al paquete:%i\n", val);
 }
 
 void enviar_paquete(t_paquete* paquete, int socket_cliente)
