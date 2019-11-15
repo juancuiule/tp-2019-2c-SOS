@@ -87,9 +87,9 @@ t_paquete* recibir_paquete(int socket_cliente)
 	void* buffer = recibir_buffer(&size, socket_cliente);
 	t_paquete* paquete = malloc(sizeof(t_paquete));
 	paquete->buffer = malloc(sizeof(t_buffer));
-	paquete->buffer->stream = malloc(sizeof(t_buffer) + sizeof(int));
+	paquete->buffer->stream = malloc(sizeof(t_paquete));
 	memcpy(&(paquete->buffer->size), buffer, sizeof(int));
-	memcpy(&(paquete->buffer->stream), buffer + sizeof(int), size);
+	memcpy(&(paquete->buffer->stream), buffer + sizeof(int) + sizeof(int), size);
 	return paquete;
 }
 

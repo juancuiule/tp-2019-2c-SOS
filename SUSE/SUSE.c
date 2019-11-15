@@ -50,12 +50,12 @@ void inicializar() {
 void atender_cliente(int cliente_fd) {
 	int cod_op = recibir_cod_op(cliente_fd);
 	printf("código de operación recibido: %i\n", cod_op);
-	t_paquete* paquete = malloc(sizeof(t_paquete));
-	paquete->buffer = malloc(sizeof(t_buffer));
-	paquete->buffer->stream = malloc(sizeof(100));
-	paquete = recibir_paquete(cliente_fd);
+	//t_paquete* paquete = malloc(sizeof(t_paquete));
+	//paquete->buffer = malloc(sizeof(t_buffer));
+	//paquete->buffer->stream = malloc(sizeof(100));
+	t_paquete* paquete = recibir_paquete(cliente_fd);
 	hilo_t* hilo = malloc(sizeof(hilo_t));
-	memcpy(&(hilo->tid), paquete->buffer->stream, sizeof(int));
+	//memcpy(&(hilo->tid), paquete->buffer->stream, sizeof(int));
 	printf("hilo %i\n", hilo->tid);
 /*
 	switch (cod_op) {
