@@ -1040,3 +1040,228 @@
 [INFO] 23:34:21:483 SUSE/(5927:5927): Se conecto un cliente!
 [INFO] 23:34:21:483 SUSE/(5927:5927): Se conecto un cliente!
 [INFO] 23:34:21:527 SUSE/(5927:5927): Se conecto un cliente!
+[INFO] 23:41:25:250 SUSE/(6127:6127): Se ha iniciado el servidor.
+[INFO] 23:41:37:75 SUSE/(6127:6127): Se conecto un cliente!
+[INFO] 23:41:37:76 SUSE/(6127:6127): Se conecto un cliente!
+[INFO] 23:41:37:76 SUSE/(6127:6127): Se conecto un cliente!
+[INFO] 23:41:37:76 SUSE/(6127:6127): Se conecto un cliente!
+[INFO] 23:41:37:76 SUSE/(6127:6154): El hilo 2 del programa 6151 llegó a NEW
+[INFO] 23:41:37:76 SUSE/(6127:6153): El hilo 1 del programa 6151 llegó a NEW
+[INFO] 23:42:25:204 SUSE/(6159:6159): Se ha iniciado el servidor.
+[INFO] 23:42:28:602 SUSE/(6159:6159): Se conecto un cliente!
+[INFO] 23:42:28:671 SUSE/(6159:6159): Se conecto un cliente!
+[INFO] 23:42:28:736 SUSE/(6159:6162): El hilo 0 del programa 6161 llegó a NEW
+[INFO] 23:46:14:492 SUSE/(6239:6239): Se ha iniciado el servidor.
+[INFO] 23:46:16:697 SUSE/(6239:6239): Se conecto un cliente!
+[INFO] 23:46:16:697 SUSE/(6239:6239): Se conecto un cliente!
+[INFO] 23:46:16:697 SUSE/(6239:6239): Se conecto un cliente!
+[INFO] 23:46:16:697 SUSE/(6239:6239): Se conecto un cliente!
+[INFO] 23:46:16:697 SUSE/(6239:6243): El hilo 1 del programa 6241 llegó a NEW
+[INFO] 23:46:16:697 SUSE/(6239:6242): El hilo 0 del programa 6241 llegó a NEW
+[INFO] 23:46:38:716 SUSE/(6249:6249): Se ha iniciado el servidor.
+[INFO] 23:46:41:8 SUSE/(6249:6249): Se conecto un cliente!
+[INFO] 23:46:41:76 SUSE/(6249:6249): Se conecto un cliente!
+[INFO] 23:46:41:145 SUSE/(6249:6252): El hilo 0 del programa 6251 llegó a NEW
+[INFO] 23:46:41:150 SUSE/(6249:6249): Se conecto un cliente!
+[INFO] 23:46:41:209 SUSE/(6249:6253): El hilo 1 del programa 6251 llegó a NEW
+[INFO] 23:46:41:210 SUSE/(6249:6249): Se conecto un cliente!
+[INFO] 23:46:41:251 SUSE/(6249:6254): El hilo 2 del programa 6251 llegó a NEW
+[INFO] 23:46:41:252 SUSE/(6249:6249): Se conecto un cliente!
+[INFO] 23:52:02:257 SUSE/(6336:6336): Se ha iniciado el servidor.
+[INFO] 23:52:04:568 SUSE/(6336:6336): Se conecto un cliente!
+[INFO] 23:52:04:568 SUSE/(6336:6336): Se conecto un cliente!
+[INFO] 23:52:04:568 SUSE/(6336:6336): Se conecto un cliente!
+[INFO] 23:52:04:568 SUSE/(6336:6339): El hilo 0 del programa 6338 llegó a NEW
+[INFO] 23:52:04:568 SUSE/(6336:6336): Se conecto un cliente!
+[INFO] 23:52:04:568 SUSE/(6336:6341): El hilo 2 del programa 6338 llegó a NEW
+[INFO] 23:52:04:569 SUSE/(6336:6340): El hilo 1 del programa 6338 llegó a NEW
+[INFO] 23:52:41:550 SUSE/(6417:6417): Se ha iniciado el servidor.
+[INFO] 23:52:44:825 SUSE/(6417:6417): Se conecto un cliente!
+[INFO] 23:52:44:825 SUSE/(6417:6417): Se conecto un cliente!
+[INFO] 23:52:44:825 SUSE/(6417:6420): El hilo 0 del programa 6419 llegó a NEW
+[INFO] 23:52:44:825 SUSE/(6417:6417): Se conecto un cliente!
+[INFO] 23:52:44:825 SUSE/(6417:6417): Se conecto un cliente!
+[INFO] 23:52:44:825 SUSE/(6417:6421): El hilo 1 del programa 6419 llegó a NEW
+[INFO] 23:52:44:825 SUSE/(6417:6422): El hilo 2 del programa 6419 llegó a NEW
+[INFO] 23:53:20:181 SUSE/(6488:6488): Se ha iniciado el servidor.
+[INFO] 23:53:23:39 SUSE/(6488:6488): Se conecto un cliente!
+[INFO] 23:53:23:39 SUSE/(6488:6488): Se conecto un cliente!
+[INFO] 23:53:23:39 SUSE/(6488:6491): El hilo 0 del programa 6490 llegó a NEW
+[INFO] 23:53:23:39 SUSE/(6488:6488): Se conecto un cliente!
+[INFO] 23:53:23:39 SUSE/(6488:6488): Se conecto un cliente!
+[INFO] 23:53:23:39 SUSE/(6488:6493): El hilo 2 del programa 6490 llegó a NEW
+[INFO] 23:53:23:39 SUSE/(6488:6492): El hilo 1 del programa 6490 llegó a NEW
+[INFO] 23:56:13:966 SUSE/(6501:6501): Se ha iniciado el servidor.
+[INFO] 23:56:16:281 SUSE/(6501:6501): Se conecto un cliente!
+[INFO] 23:56:16:347 SUSE/(6501:6501): Se conecto un cliente!
+[INFO] 23:56:16:357 SUSE/(6501:6504): El hilo 0 del programa 6503 llegó a NEW
+[INFO] 23:56:16:421 SUSE/(6501:6501): Se conecto un cliente!
+[INFO] 23:56:16:462 SUSE/(6501:6505): El hilo 1 del programa 6503 llegó a NEW
+[INFO] 23:56:16:462 SUSE/(6501:6501): Se conecto un cliente!
+[INFO] 23:56:16:501 SUSE/(6501:6506): El hilo 2 del programa 6503 llegó a NEW
+[INFO] 23:56:16:501 SUSE/(6501:6501): Se conecto un cliente!
+[INFO] 00:12:35:980 SUSE/(6663:6663): Se ha iniciado el servidor.
+[INFO] 00:12:39:633 SUSE/(6663:6663): Se conecto un cliente!
+[INFO] 00:12:39:633 SUSE/(6663:6663): Se conecto un cliente!
+[INFO] 00:12:39:633 SUSE/(6663:6663): Se conecto un cliente!
+[INFO] 00:12:39:634 SUSE/(6663:6663): Se conecto un cliente!
+[INFO] 00:12:39:634 SUSE/(6663:6668): El hilo 2 del programa 6665 llegó a NEW
+[INFO] 00:12:44:190 SUSE/(6672:6672): Se ha iniciado el servidor.
+[INFO] 00:12:47:508 SUSE/(6672:6672): Se conecto un cliente!
+[INFO] 00:12:47:571 SUSE/(6672:6672): Se conecto un cliente!
+[INFO] 00:12:47:633 SUSE/(6672:6675): El hilo 0 del programa 6674 llegó a NEW
+[INFO] 00:12:47:636 SUSE/(6672:6672): Se conecto un cliente!
+[INFO] 00:12:47:679 SUSE/(6672:6676): El hilo 1 del programa 6674 llegó a NEW
+[INFO] 00:12:47:679 SUSE/(6672:6672): Se conecto un cliente!
+[INFO] 00:12:47:729 SUSE/(6672:6672): Se conecto un cliente!
+[INFO] 00:17:00:197 SUSE/(6850:6850): Se ha iniciado el servidor.
+[INFO] 00:17:02:242 SUSE/(6850:6850): Se conecto un cliente!
+[INFO] 00:17:02:242 SUSE/(6850:6850): Se conecto un cliente!
+[INFO] 00:17:02:242 SUSE/(6850:6850): Se conecto un cliente!
+[INFO] 00:17:02:242 SUSE/(6850:6850): Se conecto un cliente!
+[INFO] 00:17:02:242 SUSE/(6850:6858): El hilo 2 del programa 6855 llegó a NEW
+[INFO] 00:17:02:242 SUSE/(6850:6856): El hilo 0 del programa 6855 llegó a NEW
+[INFO] 00:17:02:242 SUSE/(6850:6857): El hilo 1 del programa 6855 llegó a NEW
+[INFO] 00:17:11:354 SUSE/(6862:6862): Se ha iniciado el servidor.
+[INFO] 00:17:13:495 SUSE/(6862:6862): Se conecto un cliente!
+[INFO] 00:17:13:570 SUSE/(6862:6862): Se conecto un cliente!
+[INFO] 00:17:13:627 SUSE/(6862:6865): El hilo 0 del programa 6864 llegó a NEW
+[INFO] 00:17:13:631 SUSE/(6862:6862): Se conecto un cliente!
+[INFO] 00:17:13:676 SUSE/(6862:6866): El hilo 1 del programa 6864 llegó a NEW
+[INFO] 00:17:13:677 SUSE/(6862:6867): El hilo 2 del programa 6864 llegó a NEW
+[INFO] 00:17:13:677 SUSE/(6862:6862): Se conecto un cliente!
+[INFO] 00:17:13:727 SUSE/(6862:6862): Se conecto un cliente!
+[INFO] 00:20:15:57 SUSE/(6985:6985): Se ha iniciado el servidor.
+[INFO] 00:20:17:657 SUSE/(6985:6985): Se conecto un cliente!
+[INFO] 00:20:17:657 SUSE/(6985:6985): Se conecto un cliente!
+[INFO] 00:20:17:657 SUSE/(6985:6985): Se conecto un cliente!
+[INFO] 00:20:17:657 SUSE/(6985:6985): Se conecto un cliente!
+[INFO] 00:20:17:657 SUSE/(6985:6989): El hilo 1 del programa 6987 llegó a NEW
+[INFO] 00:20:17:657 SUSE/(6985:6990): El hilo 2 del programa 6987 llegó a NEW
+[INFO] 00:20:17:657 SUSE/(6985:6988): El hilo 0 del programa 6987 llegó a NEW
+[INFO] 00:20:17:702 SUSE/(6985:6985): Se conecto un cliente!
+[INFO] 00:20:17:702 SUSE/(6985:6992): El ULT 2 ha llegado a la cola de EXIT.
+[INFO] 00:22:21:19 SUSE/(7077:7077): Se ha iniciado el servidor.
+[INFO] 00:22:23:284 SUSE/(7077:7077): Se conecto un cliente!
+[INFO] 00:22:23:284 SUSE/(7077:7077): Se conecto un cliente!
+[INFO] 00:22:23:284 SUSE/(7077:7077): Se conecto un cliente!
+[INFO] 00:22:23:284 SUSE/(7077:7077): Se conecto un cliente!
+[INFO] 00:22:23:284 SUSE/(7077:7080): El hilo 0 del programa 7079 llegó a NEW
+[INFO] 00:22:23:288 SUSE/(7077:7082): El hilo 2 del programa 7079 llegó a NEW
+[INFO] 00:22:23:288 SUSE/(7077:7081): El hilo 1 del programa 7079 llegó a NEW
+[INFO] 00:22:31:23 SUSE/(7086:7086): Se ha iniciado el servidor.
+[INFO] 00:22:33:882 SUSE/(7086:7086): Se conecto un cliente!
+[INFO] 00:22:33:980 SUSE/(7086:7086): Se conecto un cliente!
+[INFO] 00:22:34:33 SUSE/(7086:7086): Se conecto un cliente!
+[INFO] 00:22:34:38 SUSE/(7086:7089): El hilo 0 del programa 7088 llegó a NEW
+[INFO] 00:26:56:373 SUSE/(7162:7162): Se ha iniciado el servidor.
+[INFO] 00:27:57:39 SUSE/(7162:7162): Se conecto un cliente!
+[INFO] 00:27:57:40 SUSE/(7162:7162): Se conecto un cliente!
+[INFO] 00:27:57:40 SUSE/(7162:7162): Se conecto un cliente!
+[INFO] 00:27:57:40 SUSE/(7162:7162): Se conecto un cliente!
+[INFO] 00:27:57:40 SUSE/(7162:7167): El hilo 1 del programa 7165 llegó a NEW
+[INFO] 00:27:57:40 SUSE/(7162:7168): El hilo 2 del programa 7165 llegó a NEW
+[INFO] 00:28:50:596 SUSE/(7173:7173): Se ha iniciado el servidor.
+[INFO] 00:28:52:780 SUSE/(7173:7173): Se conecto un cliente!
+[INFO] 00:28:52:857 SUSE/(7173:7173): Se conecto un cliente!
+[INFO] 00:28:52:903 SUSE/(7173:7176): El hilo 0 del programa 7175 llegó a NEW
+[INFO] 00:30:42:636 SUSE/(7240:7240): Se ha iniciado el servidor.
+[INFO] 00:30:45:450 SUSE/(7240:7240): Se conecto un cliente!
+[INFO] 00:30:45:450 SUSE/(7240:7240): Se conecto un cliente!
+[INFO] 00:30:45:450 SUSE/(7240:7240): Se conecto un cliente!
+[INFO] 00:30:45:451 SUSE/(7240:7240): Se conecto un cliente!
+[INFO] 00:30:45:451 SUSE/(7240:7244): El hilo 1 del programa 7242 llegó a NEW
+[INFO] 00:30:45:451 SUSE/(7240:7243): El hilo 0 del programa 7242 llegó a NEW
+[INFO] 00:30:45:451 SUSE/(7240:7245): El hilo 2 del programa 7242 llegó a NEW
+[INFO] 00:30:45:495 SUSE/(7240:7240): Se conecto un cliente!
+[INFO] 00:30:45:496 SUSE/(7240:7247): El ULT 2 ha llegado a la cola de EXIT.
+[INFO] 00:30:57:963 SUSE/(7240:7240): Se conecto un cliente!
+[INFO] 00:30:57:963 SUSE/(7240:7240): Se conecto un cliente!
+[INFO] 00:30:57:963 SUSE/(7240:7240): Se conecto un cliente!
+[INFO] 00:30:57:963 SUSE/(7240:7240): Se conecto un cliente!
+[INFO] 00:30:57:963 SUSE/(7240:7250): El hilo 1 del programa 7248 llegó a NEW
+[INFO] 00:30:57:963 SUSE/(7240:7249): El hilo 0 del programa 7248 llegó a NEW
+[INFO] 00:30:57:963 SUSE/(7240:7251): El hilo 2 del programa 7248 llegó a NEW
+[INFO] 00:30:58:7 SUSE/(7240:7240): Se conecto un cliente!
+[INFO] 00:30:58:9 SUSE/(7240:7253): El ULT 2 ha llegado a la cola de EXIT.
+[INFO] 00:30:58:394 SUSE/(7240:7240): Se conecto un cliente!
+[INFO] 00:30:58:394 SUSE/(7240:7240): Se conecto un cliente!
+[INFO] 00:30:58:394 SUSE/(7240:7240): Se conecto un cliente!
+[INFO] 00:30:58:394 SUSE/(7240:7240): Se conecto un cliente!
+[INFO] 00:30:58:395 SUSE/(7240:7256): El hilo 1 del programa 7254 llegó a NEW
+[INFO] 00:30:58:395 SUSE/(7240:7257): El hilo 2 del programa 7254 llegó a NEW
+[INFO] 00:30:58:395 SUSE/(7240:7255): El hilo 0 del programa 7254 llegó a NEW
+[INFO] 00:30:58:439 SUSE/(7240:7240): Se conecto un cliente!
+[INFO] 00:30:58:439 SUSE/(7240:7259): El ULT 2 ha llegado a la cola de EXIT.
+[INFO] 00:30:58:794 SUSE/(7240:7240): Se conecto un cliente!
+[INFO] 00:30:58:794 SUSE/(7240:7240): Se conecto un cliente!
+[INFO] 00:30:58:795 SUSE/(7240:7240): Se conecto un cliente!
+[INFO] 00:30:58:795 SUSE/(7240:7240): Se conecto un cliente!
+[INFO] 00:30:58:795 SUSE/(7240:7262): El hilo 1 del programa 7260 llegó a NEW
+[INFO] 00:30:58:795 SUSE/(7240:7263): El hilo 2 del programa 7260 llegó a NEW
+[INFO] 00:30:58:795 SUSE/(7240:7261): El hilo 0 del programa 7260 llegó a NEW
+[INFO] 00:30:58:837 SUSE/(7240:7240): Se conecto un cliente!
+[INFO] 00:30:58:837 SUSE/(7240:7265): El ULT 2 ha llegado a la cola de EXIT.
+[INFO] 00:30:59:43 SUSE/(7240:7240): Se conecto un cliente!
+[INFO] 00:30:59:44 SUSE/(7240:7240): Se conecto un cliente!
+[INFO] 00:30:59:44 SUSE/(7240:7240): Se conecto un cliente!
+[INFO] 00:30:59:44 SUSE/(7240:7267): El hilo 0 del programa 7266 llegó a NEW
+[INFO] 00:30:59:44 SUSE/(7240:7240): Se conecto un cliente!
+[INFO] 00:30:59:44 SUSE/(7240:7269): El hilo 2 del programa 7266 llegó a NEW
+[INFO] 00:30:59:44 SUSE/(7240:7268): El hilo 1 del programa 7266 llegó a NEW
+[INFO] 00:30:59:91 SUSE/(7240:7240): Se conecto un cliente!
+[INFO] 00:30:59:92 SUSE/(7240:7271): El ULT 2 ha llegado a la cola de EXIT.
+[INFO] 00:32:28:83 SUSE/(7369:7369): Se ha iniciado el servidor.
+[INFO] 00:32:30:827 SUSE/(7369:7369): Se conecto un cliente!
+[INFO] 00:32:30:827 SUSE/(7369:7369): Se conecto un cliente!
+[INFO] 00:32:30:827 SUSE/(7369:7372): El hilo 0 del programa 7371 llegó a NEW
+[INFO] 00:32:30:827 SUSE/(7369:7373): El hilo 1 del programa 7371 llegó a NEW
+[INFO] 00:32:30:827 SUSE/(7369:7369): Se conecto un cliente!
+[INFO] 00:32:30:827 SUSE/(7369:7369): Se conecto un cliente!
+[INFO] 00:32:30:827 SUSE/(7369:7374): El hilo 2 del programa 7371 llegó a NEW
+[INFO] 00:32:30:871 SUSE/(7369:7369): Se conecto un cliente!
+[INFO] 00:32:30:872 SUSE/(7369:7376): El hilo 2 ha llegado a la cola de EXIT.
+[INFO] 00:33:17:42 SUSE/(7446:7446): Se ha iniciado el servidor.
+[INFO] 00:33:22:837 SUSE/(7446:7446): Se conecto un cliente!
+[INFO] 00:33:22:837 SUSE/(7446:7446): Se conecto un cliente!
+[INFO] 00:33:22:837 SUSE/(7446:7446): Se conecto un cliente!
+[INFO] 00:33:22:837 SUSE/(7446:7446): Se conecto un cliente!
+[INFO] 00:33:22:837 SUSE/(7446:7450): El hilo 1 del programa 7448 llegó a NEW
+[INFO] 00:33:22:838 SUSE/(7446:7451): El hilo 2 del programa 7448 llegó a NEW
+[INFO] 00:33:22:838 SUSE/(7446:7449): El hilo 0 del programa 7448 llegó a NEW
+[INFO] 00:33:22:879 SUSE/(7446:7446): Se conecto un cliente!
+[INFO] 00:33:22:879 SUSE/(7446:7453): El hilo 2 ha llegado a la cola de EXIT.
+[INFO] 00:34:03:94 SUSE/(7446:7446): Se conecto un cliente!
+[INFO] 00:34:03:94 SUSE/(7446:7446): Se conecto un cliente!
+[INFO] 00:34:03:94 SUSE/(7446:7446): Se conecto un cliente!
+[INFO] 00:34:03:94 SUSE/(7446:7456): El hilo 1 del programa 7454 llegó a NEW
+[INFO] 00:34:03:94 SUSE/(7446:7446): Se conecto un cliente!
+[INFO] 00:34:03:94 SUSE/(7446:7457): El hilo 2 del programa 7454 llegó a NEW
+[INFO] 00:34:03:94 SUSE/(7446:7455): El hilo 0 del programa 7454 llegó a NEW
+[INFO] 00:34:03:136 SUSE/(7446:7446): Se conecto un cliente!
+[INFO] 00:34:03:136 SUSE/(7446:7459): El hilo 2 ha llegado a la cola de EXIT.
+[INFO] 00:36:03:955 SUSE/(7584:7584): Se ha iniciado el servidor.
+[INFO] 00:36:08:399 SUSE/(7584:7584): Se conecto un cliente!
+[INFO] 00:36:08:399 SUSE/(7584:7584): Se conecto un cliente!
+[INFO] 00:36:08:399 SUSE/(7584:7584): Se conecto un cliente!
+[INFO] 00:36:08:399 SUSE/(7584:7584): Se conecto un cliente!
+[INFO] 00:36:08:399 SUSE/(7584:7588): El hilo 1 del programa 7586 llegó a NEW
+[INFO] 00:36:08:399 SUSE/(7584:7587): El hilo 0 del programa 7586 llegó a NEW
+[INFO] 00:36:08:400 SUSE/(7584:7589): El hilo 2 del programa 7586 llegó a NEW
+[INFO] 00:36:14:678 SUSE/(7593:7593): Se ha iniciado el servidor.
+[INFO] 00:36:17:702 SUSE/(7593:7593): Se conecto un cliente!
+[INFO] 00:36:17:795 SUSE/(7593:7593): Se conecto un cliente!
+[INFO] 00:36:17:843 SUSE/(7593:7596): El hilo 0 del programa 7595 llegó a NEW
+[INFO] 00:37:24:821 SUSE/(7700:7700): Se ha iniciado el servidor.
+[INFO] 00:37:26:943 SUSE/(7700:7700): Se conecto un cliente!
+[INFO] 00:37:26:943 SUSE/(7700:7700): Se conecto un cliente!
+[INFO] 00:37:26:943 SUSE/(7700:7700): Se conecto un cliente!
+[INFO] 00:37:26:943 SUSE/(7700:7700): Se conecto un cliente!
+[INFO] 00:37:26:943 SUSE/(7700:7703): El hilo 0 del programa 7702 llegó a NEW
+[INFO] 00:37:53:848 SUSE/(7709:7709): Se ha iniciado el servidor.
+[INFO] 00:37:55:297 SUSE/(7709:7709): Se conecto un cliente!
+[INFO] 00:37:55:374 SUSE/(7709:7709): Se conecto un cliente!
+[INFO] 00:37:55:427 SUSE/(7709:7712): El hilo 0 del programa 7711 llegó a NEW
+[INFO] 00:38:43:593 SUSE/(7717:7717): Se ha iniciado el servidor.
+[INFO] 00:38:46:315 SUSE/(7717:7717): Se conecto un cliente!
+[INFO] 00:38:46:392 SUSE/(7717:7721): El hilo 0 del programa 7720 llegó a NEW

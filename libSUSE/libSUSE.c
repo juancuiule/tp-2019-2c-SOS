@@ -61,23 +61,23 @@ int conectarse_a_suse() {
 
 int suse_create(int tid){
 	if (tid > max_tid) max_tid = tid;
-	printf("suse_create(%i)\n", tid);
+	//printf("suse_create(%i)\n", tid);
 	return ejecutar_operacion(tid, 1);
 }
 
 int suse_schedule_next(void){
 	int next = max_tid;
-	printf("suse_schedule_next() (hilo %i)\n", next);
+	//printf("suse_schedule_next() (hilo %i)\n", next);
 	return next;
 }
 
 int suse_join(int tid){
-	printf("suse_join(%i)\n", tid);
+	//printf("suse_join(%i)\n", tid);
 	return ejecutar_operacion(tid, 3);
 }
 
 int suse_close(int tid){
-	printf("suse_close(%i)\n", tid);
+	//printf("suse_close(%i)\n", tid);
 	return ejecutar_operacion(tid, 4);
 }
 
@@ -113,11 +113,8 @@ void* serializar_paquete(t_paquete* paquete, int bytes)
 
 	int opcode, size, tid;
 	memcpy(&opcode, magic, sizeof(int));
-	printf("opcode serializado: %i\n", opcode);
 	memcpy(&size, magic + 4, sizeof(int));
-	printf("size serializado: %i\n", size);
 	memcpy(&tid, magic + 8, sizeof(int));
-	printf("TID serializado: %i\n", tid);
 
 	return magic;
 }
@@ -142,10 +139,6 @@ void agregar_a_paquete(t_paquete* paquete, void* valor, int tamanio)
 	memcpy(&opcode, &paquete->codigo_operacion, sizeof(int));
 	memcpy(&size, &paquete->buffer->size, sizeof(int));
 	memcpy(&val, valor, sizeof(int));
-
-	//printf("codigo de operacion del paquete: %i\n", opcode);
-	//printf("size del paquete: %i\n", size);
-	printf("TID agregado al paquete: %i\n", val);
 }
 
 void enviar_paquete(t_paquete* paquete, int socket_cliente)
