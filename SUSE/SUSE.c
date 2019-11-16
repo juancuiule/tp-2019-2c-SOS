@@ -69,7 +69,7 @@ void atender_cliente(int cliente_fd) {
 			agregar_programa(hilo);
 
 			if (GRADO_MULTIPROGRAMACION < MAX_MULTIPROG)
-				encolar_hilo_en_ready(hilo);
+				encolar_hilo_en_ready();
 			break;
 		case 2:
 			ejecutar_hilo(hilo);
@@ -175,7 +175,7 @@ int obtener_indice_de_programa(int pid) {
 void encolar_hilo_en_ready() {
 	hilo_t* hilo = queue_pop(cola_new);
 	//int indice = obtener_indice_de_programa(hilo->pid);
-	queue_push(programas[hilo->pid].cola_ready, hilo);
+	queue_push(programas[PID].cola_ready, hilo);
 	log_info(logger, "El hilo %d del programa %d está en READY", hilo->tid, hilo->pid);
 	GRADO_MULTIPROGRAMACION++;
 

@@ -3568,3 +3568,8 @@
 [INFO] 00:35:27:67 SUSE/(7446:7447): Grado de multiprogramación: -2
 [INFO] 00:35:32:68 SUSE/(7446:7447): Grado de multiprogramación: -2
 [INFO] 00:35:37:69 SUSE/(7446:7447): Grado de multiprogramación: -2
+[INFO] 00:42:01:372 SUSE/(7801:7802): Grado de multiprogramación: 0
+[INFO] 00:42:06:373 SUSE/(7801:7802): Grado de multiprogramación: 0
+[INFO] 00:44:26:237 SUSE/(7874:7875): Grado de multiprogramación: 0
+[INFO] 00:44:31:237 SUSE/(7874:7875): Grado de multiprogramación: 2
+[INFO] 00:44:36:238 SUSE/(7874:7875): Grado de multiprogramación: 2
