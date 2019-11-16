@@ -49,7 +49,7 @@ void inicializar() {
 
 void atender_cliente(int cliente_fd) {
 	int offset = 0;
-	int opcode, size, tid;
+	int opcode, size, tid, pid;
 	int tamanio;
 	int cod_op = recibir_cod_op(cliente_fd);
 	printf("opcode recibido: %i\n", cod_op);
@@ -61,6 +61,9 @@ void atender_cliente(int cliente_fd) {
 	offset += sizeof(int);
 	memcpy(&tid, buffer + offset, sizeof(int));
 	printf("TID: %i\n", tid);
+	offset += sizeof(int);
+	memcpy(&pid, buffer + offset, sizeof(int));
+	printf("PID: %i\n", pid);
 	offset += sizeof(int);
 
 
