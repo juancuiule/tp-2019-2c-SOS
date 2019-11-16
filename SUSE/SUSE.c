@@ -75,7 +75,7 @@ void atender_cliente(int cliente_fd) {
 			ejecutar_hilo(hilo);
 			break;
 		case 3:
-			//bloquear_hilo(hilo);
+			bloquear_hilo(hilo);
 			break;
 		case 4:
 			cerrar_hilo(hilo);
@@ -186,9 +186,10 @@ void encolar_hilo_en_ready() {
 void bloquear_hilo(hilo_t* hilo) {
 	char* thread_id = string_itoa(hilo->tid);
 	int pid = dictionary_get(diccionario_tid_pid, thread_id);
-	hilo_t* thread = queue_pop(programas[pid].hilo_en_exec);
+	hilo_t* thread = programas[PID].hilo_en_exec;
+	programas[PID].hilo_en_exec = NULL;
 	queue_push(cola_blocked, thread);
-	log_info(logger, "El thread %d ha llegado a la cola de BLOCKED", dictionary_get(diccionario_tid, thread_id));
+	log_info(logger, "El hilo %d ha llegado a la cola de BLOCKED", dictionary_get(diccionario_tid, thread_id));
 }
 
 hilo_t* siguiente_hilo_a_ejecutar(programa_t* programa) {
