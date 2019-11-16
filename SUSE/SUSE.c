@@ -48,22 +48,23 @@ void inicializar() {
 }
 
 void atender_cliente(int cliente_fd) {
+	int offset = 0;
 	int opcode, size, tid;
-	//int cod_op = recibir_cod_op(cliente_fd);
-	//printf("código de operación recibido: %i\n", cod_op);
-	//t_paquete* paquete = malloc(sizeof(t_paquete));
-	//paquete->buffer = malloc(sizeof(t_buffer));
-	//paquete->buffer->stream = malloc(sizeof(100));
-	//t_paquete* paquete = recibir_paquete(cliente_fd);
-	//paquete->buffer = malloc(sizeof(t_buffer));
-	//paquete->buffer->stream = malloc(paquete->buffer->size);
-	//hilo_t* hilo = malloc(sizeof(hilo_t));
-	//memcpy(&(hilo->tid), paquete->buffer->stream, sizeof(int));
-	recv(cliente_fd, opcode, sizeof(opcode), 0);
-	printf("opcode recibido: %i\n", opcode);
-	//memcpy(&opcode, paquete->codigo_operacion);
-	//memcpy(&tid, paquete->buffer->stream, sizeof(int));
-	//printf("hilo: %i\n", tid);
+	int tamanio;
+	int cod_op = recibir_cod_op(cliente_fd);
+	printf("opcode recibido: %i\n", cod_op);
+
+	void* buffer = recibir_buffer(&size, cliente_fd);
+
+	memcpy(&tamanio, buffer + offset, sizeof(int));
+	printf("tamaño: %i\n", tamanio);
+	offset += sizeof(int);
+	memcpy(&tid, buffer + offset, sizeof(int));
+	printf("TID: %i\n", tid);
+	offset += sizeof(int);
+
+
+
 /*
 	switch (cod_op) {
 		case 1:
