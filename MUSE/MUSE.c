@@ -4,12 +4,11 @@ void* MEMORIA;
 
 void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 	uint32_t tam_pedido;
-
 	memcpy(&tam_pedido, body->content, sizeof(uint32_t));
 
 	log_info(logger, "El cliente con id: %s hizo muse_malloc con %u", id, tam_pedido);
 	
-	muse_body* r_body = create_empty_body();
+	muse_body* r_body = create_body();
 	add_fixed_to_body(r_body, sizeof(uint32_t), MEMORIA);
 	muse_response* response = create_response(SUCCESS, r_body);
 	send_response(response, socket_cliente);
@@ -26,7 +25,7 @@ void respond_get(muse_body* body, char* id, int socket_cliente) {
 	void* val = malloc(5);
 	memcpy((void*) val, MEMORIA, 5);
 
-	muse_body* r_body = create_empty_body();
+	muse_body* r_body = create_body();
 	add_to_body(r_body, size, val);
 	muse_response* response = create_response(SUCCESS, r_body);
 	send_response(response, socket_cliente);
@@ -35,28 +34,47 @@ void respond_get(muse_body* body, char* id, int socket_cliente) {
 void respond_free(muse_body* body, char* id, int socket_cliente) {
 	uint32_t dir_to_free;
 	memcpy(&dir_to_free, body->content, sizeof(uint32_t));
+
 	log_info(logger, "El cliente con id: %s hizo free a la dir: %u", id, dir_to_free);
 
 	free(dir_to_free);
-	muse_body* r_body = create_empty_body();
-	muse_response* response = create_response(SUCCESS, r_body);
-	send_response(response, socket_cliente);
+	send_response_status(socket_cliente, SUCCESS);
 }
 
 void respond_cpy(muse_body* body, char* id, int socket_cliente) {	
 	uint32_t dst;
-	memcpy(&dst, body->content, sizeof(uint32_t));
-	
+	memcpy(&dst, body->content, sizeof(uint32_t));	
 	int size;
 	memcpy(&size, body->content + sizeof(uint32_t), sizeof(int));
-	
 	memcpy(MEMORIA, body->content + sizeof(uint32_t) + sizeof(int), size);
 
 	log_info(logger, "El cliente con id: %s hizo cpy a dst: %u, %i bytes", id, dst, size);
 
-	muse_body* r_body = create_empty_body();
-	muse_response* response = create_response(SUCCESS, r_body);
-	send_response(response, socket_cliente);
+	send_response_status(socket_cliente, SUCCESS);
+}
+
+void respond_map(muse_body* body, char* id, int socket_cliente) {
+	int path_size;
+	memcpy(&path_size, body->content, sizeof(int));
+	char* path = malloc(path_size * sizeof(char));
+	memcpy(path, body->content + sizeof(int), path_size);
+	
+	size_t length;
+	memcpy(&length, body->content + sizeof(int) + path_size, sizeof(size_t));
+	map_flag flags;
+	memcpy(&flags, body->content + sizeof(int) + path_size + sizeof(size_t), sizeof(int));
+
+	log_info(logger, "muse_map a: %s, de %i bytes, flag: %i", path, length, flags);
+
+	return;
+}
+
+void respond_sync(muse_body* body, char* id, int socket_cliente) {
+	return;
+}
+
+void respond_unmap(muse_body* body, char* id, int socket_cliente) {
+	return;
 }
 
 int respond_to_client(int cliente_fd) {
@@ -85,15 +103,15 @@ int respond_to_client(int cliente_fd) {
 				break;
 			case MAP:
 				log_info(logger, "muse_map.");
-				//realizar cod_op
+				respond_map(body, id, cliente_fd);
 				break;
 			case SYNC:
 				log_info(logger, "muse_sync.");
-				//realizar cod_op
+				respond_sync(body, id, cliente_fd);
 				break;
 			case UNMAP:
 				log_info(logger, "muse_unmap.");
-				//realizar cod_op
+				respond_unmap(body, id, cliente_fd);
 				break;
 			case DISCONNECT_MUSE:
 				log_info(logger, "El cliente se desconecto.");

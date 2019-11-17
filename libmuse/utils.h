@@ -57,21 +57,28 @@ typedef struct {
 t_log* logger;
 t_config* config;
 
-int create_connection(char *IP, char* PORT);
-void free_connection(int socket_cliente);
+typedef enum {
+	MAP_PRIVATE,
+	MAP_SHARED
+} map_flag;
 
 muse_package* create_package(muse_header* header, muse_body* body);
 muse_header* create_header(muse_op_code code);
-muse_body* create_body(int content_size, void* content);
+muse_body* create_body();
+void add_to_body(muse_body* body, int size, void* value);
+void add_fixed_to_body(muse_body* body, int size, void* value);
+muse_response* create_response(response_status status, muse_body* body);
+response_status recv_response_status(int socket_cliente);
+int recv_enum(int socket_cliente);
+muse_body* recv_body(int socket);
 void free_package(muse_package* package);
 void* serialize_package(muse_package* package, int bytes);
+void* serialize_response(muse_response* response, int bytes);
 void send_package(muse_package* package, int socket_cliente);
+void send_response(muse_response* response, int socket_cliente);
 void send_something(int socket_cliente, muse_op_code op_code, char* something);
-
-int init_server(char* IP, char* PORT);
-int recibir_cliente(int socket_servidor);
+void send_muse_op_code(int socket_cliente, muse_op_code op_code);
 muse_op_code recv_muse_op_code(int socket_cliente);
 char* recv_muse_id(int socket_cliente);
-void* recv_buffer(int* size, int socket_cliente);
 
 #endif

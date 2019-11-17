@@ -1,109 +1,18 @@
 #include "utils.h"
-
-int create_connection(char *IP, char* PORT) {
-	struct addrinfo hints, *server_info;
-
-	memset(&hints, 0, sizeof(hints));
-	hints.ai_family = PF_INET;
-	hints.ai_socktype = SOCK_STREAM;
-	hints.ai_flags = AI_PASSIVE;
-
-	getaddrinfo(IP, PORT, &hints, &server_info);
-
-	int socket_cliente = socket(server_info->ai_family, server_info->ai_socktype, server_info->ai_protocol);
-	int connect_result = connect(socket_cliente, server_info->ai_addr, server_info->ai_addrlen);
-
-	if(connect_result == -1) {
-		log_error(logger, "Error al conectar");
-		return -1;
-	}
-
-	freeaddrinfo(server_info);
-
-	return socket_cliente;
-}
-
-void free_connection(int socket_cliente) {
-	close(socket_cliente);
-}
-
-int init_server(char* IP, char* PORT) {
-	int socket_servidor;
-
-    struct addrinfo hints, *servinfo, *p;
-
-    memset(&hints, 0, sizeof(hints));
-    hints.ai_family = PF_INET;
-    hints.ai_socktype = SOCK_STREAM;
-    hints.ai_flags = AI_PASSIVE;
-
-    getaddrinfo(IP, PORT, &hints, &servinfo);
-
-    for (p = servinfo; p != NULL; p = p->ai_next) {
-		socket_servidor = socket(
-			p->ai_family,
-			p->ai_socktype,
-			p->ai_protocol
-		);
-
-        if (socket_servidor == -1) {
-            continue;
-		}
-
-		int bind_result = bind(
-			socket_servidor,
-			p->ai_addr,
-			p->ai_addrlen
-		);
-
-        if (bind_result == -1) {
-            close(socket_servidor);
-			freeaddrinfo(servinfo);
-			log_error(logger, "Fallo el bind.");
-            return -1;
-        }
-
-        break;
-    }
-
-	listen(socket_servidor, SOMAXCONN);
-
-	log_info(logger, "Servidor listo para recibir clientes");
-
-    freeaddrinfo(servinfo);
-
-    return socket_servidor;
-}
-
-uint32_t recv_uint(int socket_cliente) {
-	uint32_t size;
-	recv(socket_cliente, &size, sizeof(uint32_t), MSG_WAITALL);
-	return size;
-}
-
-void* recv_int(int socket_cliente) {
-	int size;
-	recv(socket_cliente, &size, sizeof(int), MSG_WAITALL);
-	return size;
-}
-
-void* recv_buffer(int* size, int socket_cliente) {
-	void* buffer;
-
-	recv(socket_cliente, size, sizeof(int), MSG_WAITALL);
-
-	buffer = malloc(*size);
-
-	recv(socket_cliente, buffer, *size, MSG_WAITALL);
-
-	return buffer;
-}
+#include "network.h"
 
 muse_package* create_package(muse_header* header, muse_body* body) {
 	muse_package* package = malloc(sizeof(muse_package));
 	package->header = header;
 	package->body = body;
 	return package;
+}
+
+muse_response* create_response(response_status status, muse_body* body) {
+	muse_response* response = malloc(sizeof(muse_response));
+	response->status = status;
+	response->body = body;
+	return response;
 }
 
 muse_header* create_header(muse_op_code code) {
@@ -120,7 +29,7 @@ muse_header* create_header(muse_op_code code) {
 	return header;
 }
 
-muse_body* create_empty_body() {
+muse_body* create_body() {
 	muse_body* body = malloc(sizeof(muse_body));
 	body->content_size = 0;
 	body->content = NULL;
@@ -132,7 +41,7 @@ void add_to_body(muse_body* body, int size, void* value) {
 		body->content, // *ptr
 		body->content_size + // prev size
 		sizeof(int) + // new size value indicator
-		size // size of the value to ad
+		size // size of the value to add
 	);
 	memcpy(body->content + body->content_size, &size, sizeof(int));
 	memcpy(body->content + body->content_size + sizeof(int), value, size);
@@ -143,41 +52,10 @@ void add_fixed_to_body(muse_body* body, int size, void* value) {
 	body->content = realloc(
 		body->content, // *ptr
 		body->content_size + // prev size
-		size // size of the value to ad
+		size // size of the value to add
 	);
 	memcpy(body->content + body->content_size, &value, size);
 	body->content_size += size;
-}
-
-muse_body* create_body(int content_size, void* content) {
-	muse_body* body = create_empty_body();
-	add_to_body(body, content_size, content);
-	return body;
-}
-
-muse_response* create_response(response_status status, muse_body* body) {
-	muse_response* response = malloc(sizeof(muse_response));
-	response->status = status;
-	response->body = body;
-	return response;
-}
-
-response_status recv_response_status(int socket_cliente) {
-	response_status status;
-
-	int recv_result = recv(
-		socket_cliente,
-		&status,
-		sizeof(int),
-		MSG_WAITALL
-	);
-
-	if (recv_result != 0) {
-		return status;
-	} else {
-		close(socket_cliente);
-		return -1;
-	}
 }
 
 muse_body* recv_body(int socket) {
@@ -194,6 +72,12 @@ void free_package(muse_package* package) {
 	free(package->body->content);
 	free(package->body);
 	free(package);
+}
+
+void free_response(muse_response* response) {
+	free(response->body->content);
+	free(response->body);
+	free(response);
 }
 
 void* serialize_package(muse_package* package, int bytes) {
@@ -249,44 +133,30 @@ void send_response(muse_response* response, int socket_cliente) {
 	free(to_send);
 }
 
-void send_int(int socket_cliente, muse_op_code op_code, uint32_t tam){
-	char str[11];
-	snprintf(str, sizeof str, "%u", tam);
-	send_something(socket_cliente, op_code, str);
-}
-
-void send_something(int socket_cliente, muse_op_code op_code, char* something){
+void send_muse_op_code(int socket_cliente, muse_op_code op_code) {
 	muse_header* header = create_header(op_code);
-	muse_body* body = create_body(strlen(something) + 1, something);
+	muse_body* body = create_body();
 	muse_package* package = create_package(header, body);
 	send_package(package, socket_cliente);
 	free_package(package);
 }
 
-void send_code(int socket_cliente, muse_op_code op_code){
-	muse_header* header = create_header(op_code);
-	muse_body* body = create_empty_body();
-	muse_package* package = create_package(header, body);
-	send_package(package, socket_cliente);
-	free_package(package);
-}
-
-int recibir_cliente(int socket_servidor) {
-	struct sockaddr_in dir_cliente;
-	int tam_direccion = sizeof(struct sockaddr_in);
-
-	int socket_cliente = accept(
-		socket_servidor,
-		(void*) &dir_cliente,
-		&tam_direccion
-	);
-
-	log_info(logger, "Se conecto un cliente! %i", socket_cliente);
-
-	return socket_cliente;
+void send_response_status(int socket_cliente, response_status status) {
+	muse_body* body = create_body();
+	muse_response* response = create_response(status, body);
+	send_response(response, socket_cliente);
+	free_response(response);
 }
 
 muse_op_code recv_muse_op_code(int socket_cliente) {
+	return recv_enum(socket_cliente);
+}
+
+response_status recv_response_status(int socket_cliente) {
+	return recv_enum(socket_cliente);
+}
+
+int recv_enum(int socket_cliente) {
 	muse_op_code op_code;
 
 	int recv_result = recv(
@@ -305,15 +175,8 @@ muse_op_code recv_muse_op_code(int socket_cliente) {
 }
 
 char* recv_muse_id(int socket_cliente) {
-	int pid;
+	int pid = recv_int(socket_cliente);
 	int ip_size;
-
-	recv(
-		socket_cliente,
-		&pid,
-		sizeof(int),
-		MSG_WAITALL
-	);
 
 	char pid_str[11];
 	snprintf(pid_str, sizeof pid_str, "%i", pid);

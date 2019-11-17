@@ -20,6 +20,8 @@ int main(void) {
 
 		muse_cpy(mem_muse, "Ciao", 5);
 
+		muse_map("/Downloads", 100, MAP_PRIVATE);
+
 		muse_get(x, mem_muse, 5);
 		log_info(logger, "x es: %s", x);
 
