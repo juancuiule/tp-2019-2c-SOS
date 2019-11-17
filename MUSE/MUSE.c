@@ -64,16 +64,28 @@ void respond_map(muse_body* body, char* id, int socket_cliente) {
 	map_flag flags;
 	memcpy(&flags, body->content + sizeof(int) + path_size + sizeof(size_t), sizeof(int));
 
-	log_info(logger, "muse_map a: %s, de %i bytes, flag: %i", path, length, flags);
+	log_info(logger, "El cliente con id: %s hizo map a: %s, de %i bytes, flag: %i", id, path, length, flags);
 
 	return;
 }
 
 void respond_sync(muse_body* body, char* id, int socket_cliente) {
+	uint32_t addr;
+	memcpy(&addr, body->content, sizeof(uint32_t));
+	size_t len;
+	memcpy(&len, body->content + sizeof(uint32_t), sizeof(size_t));
+
+	log_info(logger, "El cliente con id: %s hizo sync a la addr: %u de %i bytes", id, addr, len);
+
 	return;
 }
 
 void respond_unmap(muse_body* body, char* id, int socket_cliente) {
+	uint32_t addr;
+	memcpy(&addr, body->content, sizeof(uint32_t));
+
+	log_info(logger, "El cliente con id: %s hizo unmap a la addr: %u", id, addr);
+
 	return;
 }
 
