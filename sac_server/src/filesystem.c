@@ -268,5 +268,47 @@ ptrGBloque fs_get_blk_ind_with_data_blk()
 
 }
 
+size_t fs_read_file(char *buf, size_t size, off_t offset, uint32_t node_blk)
+{
+	log_msje_info("Preparando para leer blk de datos");
+	log_msje_info("Cantidad de bytes por leer [ %d ]", size);
 
+	int leido = 0;
+	GFile *file_node = (GFile *)disk_blk_pointer + node_blk;
 
+	//check
+	if(offset == file_node->file_size)
+		return leido;
+
+	int nro_blk = (int) (offset / BLOCKSIZE);
+	off_t blk_offset = offset - (nro_blk * BLOCKSIZE);
+	size_t blk_size = size;
+	size_t size_por_leer = 0;
+
+	// Para empezar leo del 1er blk ind simple
+	GBlock_IndSimple * blk_is = (GBlock_IndSimple *) file_node->blk_indirect[0];
+	int bloques_a_leer = (int) (size / BLOCKSIZE);
+
+	for(int i = nro_blk; i <= bloques_a_leer; i++)
+	{
+
+		if( (blk_offset + blk_size) > BLOCKSIZE )
+		{
+			size_por_leer = blk_size - BLOCKSIZE + blk_offset;
+			blk_size = BLOCKSIZE - blk_offset;
+
+		}
+
+		void *blk_data = (void *) blk_is->blk_datos[nro_blk];
+
+		memcpy(buf + leido, (char *)blk_data + blk_offset, blk_size);
+
+		leido += blk_size;
+		blk_offset = 0;
+		blk_size = size_por_leer;
+
+	}
+
+	log_msje_error("Lei [ %d ] bytes, falto leer [ %d ] bytes", leido, size-leido);
+	return leido;
+}

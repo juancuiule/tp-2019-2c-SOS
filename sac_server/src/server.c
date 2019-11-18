@@ -44,8 +44,8 @@ int atender_conexiones(int cliente_fd)
 				break;
 			case COD_READ:
 				log_msje_info("Me llego operacion read");
-				dslz_cod_read(paquete.payload, &path, &fd, &size, &offset);
-				sac_read(path,fd, size, offset, cliente_fd);
+				dslz_cod_read(paquete.payload, &path, &blk, &size, &offset);
+				sac_read(path, blk, size, offset, cliente_fd);
 				break;
 			case COD_RELEASE:
 				log_msje_info("Me llego operacion release");

@@ -213,27 +213,28 @@ void sac_open(char *path, int flags, int cliente_fd)
 
 }
 
-void sac_read(char *path, int fd, size_t size, off_t offset, int cliente_fd)
+void sac_read(char *path, uint32_t blk, size_t size, off_t offset, int cliente_fd)
 {
 	log_msje_info("SAC READ Path = [ %s ]", path);
 	package_t paquete;
 
+	int error;
+	GFile *file_node = (GFile *)disk_blk_pointer + blk;
+	if(offset > file_node->file_size)
+	{
+		error = EFAULT;
+		log_msje_error("read: [ %s ]", strerror(error));
+		paquete = slz_res_error(error);
+		return;
+	}
+
 	int leido;
 	char * buffer = malloc(size);
 
-	//ejecuto operacion
-	leido = pread(fd, buffer, size, offset);
+	leido = fs_read_file(buffer, size, offset, blk);
 
-    if (leido == -1) {
-    	log_msje_error("pread: [ %s ]", strerror(errno));
-    	int err=errno;
-    	paquete = slz_res_error(err);
-    }
-    else {
-    	log_msje_info("Exito operacion pread sobre fs local");
-    	paquete = slz_res_read(buffer, leido);
-    }
-
+	log_msje_info("Exito operacion pread sobre disco");
+	paquete = slz_res_read(buffer, leido);
     paquete_enviar(cliente_fd, paquete);
     free(buffer);
 }

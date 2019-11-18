@@ -91,4 +91,6 @@ GBlock* get_free_blk_data_dir();
 //desc: devuelve un bloque ind simple con su primer bloque de datos seteado o EDQUOT si no hay mas blks de datos
 ptrGBloque fs_get_blk_ind_with_data_blk();
 
+size_t fs_read_file(char *buf, size_t size, off_t offset, uint32_t node_blk);
+
 #endif /* FILESYSTEM_H_ */
