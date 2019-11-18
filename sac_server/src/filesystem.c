@@ -41,10 +41,11 @@ void fs_set_config()
 bool fs_map_disk_in_memory(char *disk_name)
 {
 	disk_size = get_filesize(disk_name);
+
 	int disk_fd = open(disk_name, O_RDWR, 0);
-	disk = mmap(NULL, disk_size, PROT_READ | PROT_WRITE, MAP_FILE | MAP_SHARED, disk_fd, 0);
-	disk_blk_pointer = disk;
-	return disk != MAP_FAILED;
+	disk_blk_pointer = mmap(NULL, disk_size, PROT_READ | PROT_WRITE, MAP_FILE | MAP_SHARED, disk_fd, 0);
+
+	return disk_blk_pointer != MAP_FAILED;
 }
 
 //desc: busca dentro de los candidatos aquel que sea la raiz
@@ -183,7 +184,89 @@ void fs_get_child_filenames_of(uint32_t blk_father, t_list *filenames)
 
 }
 
+//desc: devuelve el indice donde se encuentra el primer bloque de datos en el disco
+static int get_first_blk_data_index()
+{
+	// 1 BLK HEADER + 1024 BLKS NODOS + BITMAP BLKS
+	int blks_metadata = 1 + 1024 + sac_header->size_bitmap;
 
+	//Blk de datos comienza uno siguiente dsps de blk metadata
+	return blks_metadata + 1;
+}
+
+//desc: devuelve el indice donde se encuentra el ultimo bloque de datos en el disco
+static int get_last_blk_data_index()
+{
+	//Cant de bloques total, el ultimo
+	return disk_size / BLOCKSIZE;
+}
+
+//desc: devuelve direccion de un bloque de datos libre
+GBlock* get_free_blk_data_dir()
+{
+	int first_datablk = get_first_blk_data_index();
+	log_msje_info("Primer bloque de datos es [ %d ]", first_datablk);
+	int last_datablk = get_last_blk_data_index();
+	log_msje_info("Ultimo bloque de datos es [ %d ]", last_datablk);
+
+	int datablk_index;
+	bool taken = true;//ocupado
+
+	log_msje_info("Buscando un blk de datos libre, recorro bitmap...");
+
+	//mutex
+	for(datablk_index = first_datablk; datablk_index < last_datablk; datablk_index++)
+	{
+		taken = bitarray_test_bit(sac_bitarray, datablk_index);
+		if(!taken){
+			bitarray_set_bit(sac_bitarray, datablk_index);
+			//sync a disco?
+			break;
+		}
+	}
+	//mutex
+
+	if(taken)//todos ocupados
+		return NULL;
+
+	log_msje_info("NRO DE BLOQUE DE DATOS LIBRE, es el [ %d ]", datablk_index);
+	GBlock *free_data_blk = disk_blk_pointer + datablk_index;
+
+	return free_data_blk;
+}
+
+
+ptrGBloque fs_get_blk_ind_with_data_blk()
+{
+	bool done = false;
+
+	GBlock_IndSimple *blk_ind = (GBlock_IndSimple*) get_free_blk_data_dir();
+	ptrGBloque ptr_blk_ind = (ptrGBloque) blk_ind;
+
+	log_msje_info("Pointer adress to blk ind simple is [ %p ]", blk_ind);
+	log_msje_info("Pointer adress to blk ind simple UINT [ %p ]", ptr_blk_ind);
+
+	if(blk_ind != NULL){
+
+		// Busca y setea bloque libre para ser usado como blk de datos
+		GBlock * data_blk = get_free_blk_data_dir();
+		ptrGBloque ptr_blk= (ptrGBloque) data_blk;
+
+		log_msje_info("Pointer adress to data block is [ %p ]", data_blk);
+		log_msje_info("Pointer adress to data block is UINT [ %p ]", ptr_blk);
+
+		if(data_blk != NULL){
+			blk_ind->blk_datos[0] = ptr_blk;
+			done = true;
+		}
+	}
+
+	if(!done)
+		return EDQUOT; // Quota of disks blocks has bean exhausted
+	else
+		return ptr_blk_ind;
+
+}
 
 
 

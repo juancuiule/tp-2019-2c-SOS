@@ -10,8 +10,6 @@ static void sac_fullpath(char fpath[PATH_MAX], char *path)
 
 /*
  * Primer operacion que va a consultar con nuestro disco binario sac!
- *
- * Mandamos size y modif time
  */
 void sac_getattr(char *path, int cliente_fd)
 {
@@ -29,13 +27,13 @@ void sac_getattr(char *path, int cliente_fd)
     }
     else {
     	log_msje_info("Exito operacion getattr sobre disco binario");
-    	uint32_t size= sac_nodetable[blk].file_size;
+    	uint32_t size = sac_nodetable[blk].file_size;
     	uint64_t modif_date = sac_nodetable[blk].m_date;
     	uint8_t state = sac_nodetable[blk].state;
 
     	log_msje_info("getattr: state = [ %d ]", state);
     	log_msje_info("getattr: size = [ %d ]", size);
-    	log_msje_info("getattr: modif time = [ %d ]", modif_date);
+    	log_msje_info("getattr: modif time = [ %lu ]", modif_date);
 
     	paquete = slz_res_getattr(size, modif_date, state);
     }
@@ -43,7 +41,6 @@ void sac_getattr(char *path, int cliente_fd)
     paquete_enviar(cliente_fd, paquete);
 }
 
-//desc: ejecuta op opendir en el fs local y envia respuesta a sac cli
 void sac_opendir(char *path, int cliente_fd)
 {
 	package_t paquete;
@@ -130,22 +127,34 @@ void sac_mknod(char *path, int cliente_fd)
 
 					if(node == EDQUOT)
 					{
-						error = EDQUOT; //Disk quota exceeded
+						error = EDQUOT; //Disk inodes exceeded
 					}
-					else{
-						log_msje_info("Encontre bloque libre, es el [ %d ]", node);
-						GFile *node_to_set = sac_nodetable + node;
-						node_to_set->state = 1;
-						strcpy(node_to_set->fname, filename);
-						node_to_set->parent_dir_block = father_blk;
-						node_to_set->file_size = 0;
-						node_to_set->c_date = get_current_time();
-						node_to_set->m_date = get_current_time();
-						//deberia asignarle un bloque de datos como minimo?
+					else
+					{
+						log_msje_info("Encontre nodo libre, es el [ %d ]", node);
 
-						paquete = slz_simple_res(COD_MKNOD);
-						paquete_enviar(cliente_fd, paquete);
-						return;
+						ptrGBloque blk_ind = fs_get_blk_ind_with_data_blk();
+
+						if(blk_ind == EDQUOT)
+						{
+							error = EDQUOT; //Disk blocks exceeded
+						}
+						else
+						{
+							GFile *node_to_set = sac_nodetable + node;
+							node_to_set->state = 1;
+							strcpy(node_to_set->fname, filename);
+							node_to_set->parent_dir_block = father_blk;
+							node_to_set->file_size = 0;
+							node_to_set->c_date = get_current_time();
+							node_to_set->m_date = get_current_time();
+							node_to_set->blk_indirect[0] = blk_ind;
+
+							paquete = slz_simple_res(COD_MKNOD);
+							paquete_enviar(cliente_fd, paquete);
+							return;
+
+						}
 					}
 				}
 			}

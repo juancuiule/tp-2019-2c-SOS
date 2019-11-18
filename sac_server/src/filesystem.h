@@ -21,16 +21,20 @@
 #define GFILENAMELENGTH 71
 #define GHEADERBLOCKS 1
 #define BLKINDIRECT 1000
-
+#define BLKDATA 1024
 #define MAX_FILE_NUMBER 1024
 
 typedef uint32_t ptrGBloque;
 
-typedef struct sac_block_t{
+typedef struct sac_block_t{ // un bloque
 	unsigned char bytes[BLOCKSIZE];
 } GBlock;
 
-typedef struct sac_header_t { // un bloque
+typedef struct sac_blk_i { // un bloque ind simple
+	ptrGBloque blk_datos[BLKDATA]; //array de 1024 blks de datos
+} GBlock_IndSimple;
+
+typedef struct sac_header_t { // un bloque header
 	unsigned char sac[3];
 	uint32_t version;
 	uint32_t blk_bitmap;
@@ -50,12 +54,12 @@ typedef struct sac_file_t { // un cuarto de bloque (256 bytes)
 
 
 GBlock* disk_blk_pointer;
-void* disk;
 size_t disk_size;
 
 GHeader *sac_header;
 t_bitarray *sac_bitarray;
 GFile *sac_nodetable;//mi tabla de nodos
+
 
 typedef struct blk_candidato{
 	int the_blk;
@@ -80,5 +84,11 @@ bool fs_path_exist(char *path);
 
 //desc: Obtiene todos los filenames de un directorio
 void fs_get_child_filenames_of(uint32_t blk_father, t_list *filenames);
+
+//desc: devuelve direccion de un bloque de datos libre
+GBlock* get_free_blk_data_dir();
+
+//desc: devuelve un bloque ind simple con su primer bloque de datos seteado o EDQUOT si no hay mas blks de datos
+ptrGBloque fs_get_blk_ind_with_data_blk();
 
 #endif /* FILESYSTEM_H_ */
