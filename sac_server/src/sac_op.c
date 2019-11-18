@@ -181,25 +181,35 @@ void sac_open(char *path, int flags, int cliente_fd)
 {
 	log_msje_info("SAC OPEN Path = [ %s ]", path);
 	package_t paquete;
+	int error;
 
-	char fpath[PATH_MAX];
-	sac_fullpath(fpath, path);
+	int blk_number = fs_get_blk_by_fullpath(path);
 
-	int fd;
-	//ejecuto operacion
-	fd = open(fpath, flags);
-
-    if (fd == -1) {
-    	log_msje_error("open: [ %s ]", strerror(errno));
-    	int err=errno;
-    	paquete = slz_res_error(err);
+    if (blk_number == -1)
+    {
+    	error = ENOENT;
     }
-    else {//todo ok
-    	log_msje_info("Exito operacion open sobre fs local");
-    	paquete = slz_res_open(fd);
+    else
+    {
+    	if(sac_nodetable[blk_number].state == 2)
+    	{
+    		error = EISDIR; //Pathname refers to a directory
+    	}
+
+    	if(sac_nodetable[blk_number].state == 1)
+    	{
+    		log_msje_info("Exito operacion open sobre disco");
+    		paquete = slz_res_open(blk_number);
+    		paquete_enviar(cliente_fd, paquete);
+    		return;
+    	}
     }
+
+	log_msje_error("open: [ %s ]", strerror(error));
+	paquete = slz_res_error(error);
 
     paquete_enviar(cliente_fd, paquete);
+    return;
 
 }
 

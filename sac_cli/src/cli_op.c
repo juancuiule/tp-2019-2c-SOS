@@ -30,6 +30,7 @@ int cli_getattr(const char *path, struct stat *statbuf)
 
 	dslz_res_getattr(respuesta.payload, &size, &m_date, &state);
 
+	log_msje_info("milliseconds [ %lu ]", m_date);
 	struct timespec ts_m_time;
 	convert_to_timespec(m_date, &ts_m_time);
 
@@ -83,11 +84,7 @@ int cli_readdir(const char *path, void *buf, fuse_fill_dir_t filler, off_t offse
 	log_msje_info("Operacion READDIR sobre path [ %s ]", path);
 	package_t paquete, respuesta;
 
-	/*
-	if((uint32_t)fi->fh == NULL)
-		return -EBADF;*/
-
-	log_msje_info("-- readdir bloquee nro [ %d ]", fi->fh);
+	log_msje_info("CLI READDIR BLK NUMBER: [ %d ]", fi->fh);
 	paquete = slz_cod_readdir(path, fi->fh);
 
 	if(!paquete_enviar(sac_server.fd, paquete))
@@ -161,7 +158,7 @@ int cli_open(const char *path, struct fuse_file_info *fi)
 	else
 		log_msje_info("Se envio operacion open al server");
 
-	//espero respuesta de server : un filedescriptor
+	//espero respuesta de server : el nro de bloque
 	respuesta = paquete_recibir(sac_server.fd);
 
 	if(respuesta.header.cod_operacion == COD_ERROR){
@@ -171,11 +168,11 @@ int cli_open(const char *path, struct fuse_file_info *fi)
 		return -err;
 	}
 
-	int fd;
-	dslz_res_open(respuesta.payload, &fd);
+	int blk;
+	dslz_res_open(respuesta.payload, &blk);
 
-	//Me guardo en fi el fd
-	fi->fh = fd;
+	//Me guardo en fi el nro de blk
+	fi->fh = blk;
 
 	return 0;
 }

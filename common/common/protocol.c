@@ -339,9 +339,9 @@ void dslz_res_readdir(void *buffer, t_list** filenames)
 
 	}
 }
-void dslz_res_open(void *buffer, int *fd)
+void dslz_res_open(void *buffer, int *blk_num)
 {
-	memcpy(fd, buffer, sizeof(int));
+	memcpy(blk_num, buffer, sizeof(int));
 }
 
 void dslz_res_getattr(void *buffer, uint32_t *size, uint64_t *m_date, uint8_t *state)
@@ -554,14 +554,14 @@ package_t slz_res_readdir(t_list *filenames)
 	return paquete;
 }
 
-package_t slz_res_open(int fd)
+package_t slz_res_open(int blk_num)
 {
 	package_t paquete;
 
 	int tam_payload = sizeof(int);
 	paquete.header = header_get('S', COD_OPEN, tam_payload);
 	paquete.payload = malloc(tam_payload);
-	memcpy(paquete.payload, &fd, sizeof(int));
+	memcpy(paquete.payload, &blk_num, sizeof(int));
 
 	return paquete;
 }
