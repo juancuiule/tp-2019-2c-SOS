@@ -1,6 +1,6 @@
 #include "MUSE.h"
 
-void* MEMORIA;
+void* MEMORY;
 
 void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 	uint32_t tam_pedido;
@@ -142,6 +142,14 @@ int main(void) {
 
 	char* IP = "127.0.0.1";
 	char* PORT = config_get_string_value(config, "LISTEN_PORT");
+	int MEMORY_SIZE = config_get_int_value(config, "MEMORY_SIZE");
+	int PAGE_SIZE = config_get_int_value(config, "PAGE_SIZE");
+	int SWAP_SIZE = config_get_int_value(config, "SWAP_SIZE");
+
+	log_info(logger, "Port: %s", PORT);
+	log_info(logger, "Memory size: %i", MEMORY_SIZE);
+	log_info(logger, "Page size: %i", PAGE_SIZE);
+	log_info(logger, "Number of pages: %i", MEMORY_SIZE / PAGE_SIZE);
 
 	int server_fd = init_server(IP, PORT);
 	
@@ -149,7 +157,7 @@ int main(void) {
 		return EXIT_FAILURE;
 	}
 
-	MEMORIA = malloc(100);
+	MEMORY = malloc(MEMORY_SIZE);
 
 	pthread_t hilo;
 	int r1;

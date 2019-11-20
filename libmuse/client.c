@@ -10,24 +10,18 @@ int main(void) {
 	int init_result = muse_init((int) getpid(), IP, PORT);
 
 	if (init_result != -1) {
-		void* mem_muse = muse_alloc(5);
-		char* x = malloc(5);
-
-		muse_cpy(mem_muse, "Hola", 5);
-
-		muse_get(x, mem_muse, 5);
-		log_info(logger, "x es: %s", x);
-
-		muse_cpy(mem_muse, "Ciao", 5);
+		uint32_t my_memory = muse_alloc(10);
+		int x = 10;
+		int*y = malloc(4);
+		muse_cpy(my_memory, &x, 4);
+		muse_get(y, my_memory, 4);
+		printf("y: %d \n", *y);
+		muse_free(my_memory);
+		
 
 		muse_map("/Downloads", 100, MAP_PRIVATE);
 		muse_sync(1000, 20);
 		muse_unmap(5555);
-
-		muse_get(x, mem_muse, 5);
-		log_info(logger, "x es: %s", x);
-
-		muse_free(mem_muse);
 
 		muse_close();
 
