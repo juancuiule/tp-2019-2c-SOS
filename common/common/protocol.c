@@ -237,11 +237,11 @@ package_t slz_cod_open(const char *path, int flags)
 	return paquete;
 }
 
-package_t slz_cod_read(const char *path, int fd, size_t size, off_t offset)
+package_t slz_cod_read(const char *path, uint32_t blk_num, size_t size, off_t offset)
 {
 	package_t paquete;
 	int tam_path = strlen(path);
-	int tam_payload = sizeof(int) + tam_path + sizeof(int) + sizeof(size_t) + sizeof(off_t);
+	int tam_payload = sizeof(int) + tam_path + sizeof(uint32_t) + sizeof(size_t) + sizeof(off_t);
 
 	paquete.header = header_get('C', COD_READ, tam_payload);
 	paquete.payload = malloc(tam_payload);
@@ -251,7 +251,7 @@ package_t slz_cod_read(const char *path, int fd, size_t size, off_t offset)
 	offs+=sizeof(int);
 	memcpy(paquete.payload+offs, path, tam_path);
 	offs+=tam_path;
-	memcpy(paquete.payload+offs, &fd, sizeof(int));
+	memcpy(paquete.payload+offs, &blk_num, sizeof(uint32_t));
 	offs+=sizeof(int);
 	memcpy(paquete.payload+offs, &size, sizeof(size_t));
 	offs+=sizeof(size_t);
@@ -280,7 +280,7 @@ package_t slz_cod_release(const char *path, int fd)
 }
 
 
-package_t slz_cod_write(const char *path, const char *buffer, int fd, size_t size, off_t offset)
+package_t slz_cod_write(const char *path, const char *buffer, uint32_t blk, size_t size, off_t offset)
 {
 	package_t paquete;
 	int tam_path = strlen(path);
@@ -299,7 +299,7 @@ package_t slz_cod_write(const char *path, const char *buffer, int fd, size_t siz
 	offs+=sizeof(int);
 	memcpy(paquete.payload+offs, buffer, tam_buff);
 	offs+=tam_buff;
-	memcpy(paquete.payload+offs, &fd, sizeof(int));
+	memcpy(paquete.payload+offs, &blk, sizeof(uint32_t));
 	offs+=sizeof(int);
 	memcpy(paquete.payload+offs, &size, sizeof(size_t));
 	offs+=sizeof(size_t);
@@ -339,9 +339,9 @@ void dslz_res_readdir(void *buffer, t_list** filenames)
 
 	}
 }
-void dslz_res_open(void *buffer, int *blk_num)
+void dslz_res_open(void *buffer, uint32_t *blk_num)
 {
-	memcpy(blk_num, buffer, sizeof(int));
+	memcpy(blk_num, buffer, sizeof(uint32_t));
 }
 
 void dslz_res_getattr(void *buffer, uint32_t *size, uint64_t *m_date, uint8_t *state)
@@ -416,7 +416,7 @@ void dslz_cod_open(void *buffer, char **path, int *flags)
 	memcpy(flags,	buffer+sizeof(int)+tam_path, sizeof(int));
 }
 
-void dslz_cod_read(void *buffer, char **path, int *fd, size_t *size, off_t *offset)
+void dslz_cod_read(void *buffer, char **path, uint32_t *blk, size_t *size, off_t *offset)
 {
 	int offs = 0;
 
@@ -431,7 +431,7 @@ void dslz_cod_read(void *buffer, char **path, int *fd, size_t *size, off_t *offs
 	ruta[tam_path]='\0';
 	*path = ruta;
 
-	memcpy(fd, buffer+offs, sizeof(int));
+	memcpy(blk, buffer+offs, sizeof(uint32_t));
 	offs += sizeof(int);
 
 	memcpy(size, buffer+offs, sizeof(size_t));
@@ -459,7 +459,7 @@ void dslz_cod_release(void *buffer, char **path, int *fd)
 	memcpy(fd, buffer+offs, sizeof(int));
 }
 
-void dslz_cod_write(void *payload, char **path, char **buffer, int *fd, size_t *size, off_t *offset)
+void dslz_cod_write(void *payload, char **path, char **buffer, uint32_t *fd, size_t *size, off_t *offset)
 {
 	int offs = 0;
 
@@ -485,7 +485,7 @@ void dslz_cod_write(void *payload, char **path, char **buffer, int *fd, size_t *
 	ruta2[tam_buffer]='\0';
 	*buffer = ruta2;
 
-	memcpy(fd, payload+offs, sizeof(int));
+	memcpy(fd, payload+offs, sizeof(uint32_t));
 	offs += sizeof(int);
 
 	memcpy(size, payload+offs, sizeof(size_t));
@@ -554,14 +554,14 @@ package_t slz_res_readdir(t_list *filenames)
 	return paquete;
 }
 
-package_t slz_res_open(int blk_num)
+package_t slz_res_open(uint32_t blk_num)
 {
 	package_t paquete;
 
-	int tam_payload = sizeof(int);
+	int tam_payload = sizeof(uint32_t);
 	paquete.header = header_get('S', COD_OPEN, tam_payload);
 	paquete.payload = malloc(tam_payload);
-	memcpy(paquete.payload, &blk_num, sizeof(int));
+	memcpy(paquete.payload, &blk_num, sizeof(uint32_t));
 
 	return paquete;
 }

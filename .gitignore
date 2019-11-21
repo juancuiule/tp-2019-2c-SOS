@@ -51,5 +51,10 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+<<<<<<< HEAD
 #Settings
 .settings
+=======
+
+*.project
+>>>>>>> origin
