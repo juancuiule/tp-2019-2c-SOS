@@ -29,8 +29,8 @@ int get_size_filenames(char **names)
 //desc: invierto el orden del vector de strings. de ["home", "lala.txt", NULL] a ["lala.txt", "home", NULL]
 void reverse_string_vector(char ** strings)
 {
-	int size = sizeof(strings);
-	int j= size - 2;
+	int j = get_size_filenames(strings);
+	j=j-1;
 	char *temp;
 
 	for(int i = 0; i < j ; i++){

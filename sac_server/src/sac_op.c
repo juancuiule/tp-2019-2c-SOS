@@ -264,27 +264,69 @@ void sac_release(char *path, int fd, int cliente_fd)
 void sac_mkdir(char *path, int cliente_fd)
 {
 	log_msje_info("SAC MKDIR Path = [ %s ]", path);
-	/*
 	package_t paquete;
+	int error;
 
-	char fpath[PATH_MAX];
-	sac_fullpath(fpath, path);
+	if(fs_path_exist(path))
+	{
+		error = EEXIST; //Pathname already exists
+	}
+	else
+	{
+		char *filename = get_last_filename_from_path(path);
 
-	int res, err;
-	//ejecuto operacion
-	//res = mkdir(fpath, mode);
+		if(strlen(filename) > GFILENAMELENGTH)
+		{
+			error = ENAMETOOLONG; //Filename exceeds limit name length
+		}
+		else
+		{
+			char *prev_path = get_lastfile_previous_path(path);
+			int father_blk = fs_get_blk_by_fullpath(prev_path);
 
-    if (res == -1) {
-    	log_msje_error("mkdir: [ %s ]", strerror(errno));
-    	err = errno;
-    	paquete = slz_res_error(err);
-    }
-    else {
-    	log_msje_info("Exito operacion mkdir sobre fs local");
-    	paquete = slz_simple_res(COD_MKDIR);
-    }
+			if (father_blk == -1)
+			{
+				error = ENOENT; //No such file or directory
+			}
+			else
+			{
+				if( sac_nodetable[father_blk].state != 2 )
+				{
+					error = ENOTDIR; //Component used as dir, is, in fact, not a dir
+				}
+				else
+				{
+					int node = fs_get_free_blk_node();
 
-    paquete_enviar(cliente_fd, paquete);*/
+					if(node == EDQUOT)
+					{
+						error = EDQUOT; //Disk inodes exceeded
+					}
+					else
+					{
+						log_msje_info("Encontre nodo libre, es el [ %d ]", node);
+
+						GFile *node_to_set = sac_nodetable + node;
+						node_to_set->state = 2;
+						strcpy(node_to_set->fname, filename);
+						node_to_set->parent_dir_block = father_blk;
+						node_to_set->file_size = BLOCKSIZE;
+						node_to_set->c_date = get_current_time();
+						node_to_set->m_date = get_current_time();
+
+						paquete = slz_simple_res(COD_MKNOD);
+						paquete_enviar(cliente_fd, paquete);
+						return;
+					}
+				}
+			}
+		}
+	}
+
+	log_msje_error("mkdir: [ %s ]", strerror(error));
+	paquete = slz_res_error(error);
+	paquete_enviar(cliente_fd, paquete);
+	return;
 }
 
 void sac_rmdir(char *path, int cliente_fd)
