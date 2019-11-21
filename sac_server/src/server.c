@@ -69,8 +69,8 @@ int atender_conexiones(int cliente_fd)
 				break;
 			case COD_WRITE:
 				log_msje_info("Me llego operacion write");
-				dslz_cod_write(paquete.payload, &path, &buffer, &fd, &size, &offset);
-				sac_write(path, buffer, fd, size, offset, cliente_fd);
+				dslz_cod_write(paquete.payload, &path, &buffer, &blk, &size, &offset);
+				sac_write(path, buffer, blk, size, offset, cliente_fd);
 				break;
 			case COD_UNLINK:
 				log_msje_info("Me llego operacion unlink");

@@ -315,25 +315,17 @@ void sac_rmdir(char *path, int cliente_fd)
 }
 
 
-void sac_write(char *path, char *buffer, int fd, size_t size, off_t offset, int cliente_fd)
+void sac_write(char *path, char *buffer, uint32_t blk, size_t size, off_t offset, int cliente_fd)
 {
 	log_msje_info("SAC WRITE Path = [ %s ]", path);
 	package_t paquete;
 
-	int leido;
+	int escrito;
 
-	//ejecuto operacion
-	leido = write(fd, buffer, size);
+	escrito = fs_write_file(blk, buffer, size, offset);
 
-    if (leido == -1) {
-    	log_msje_error("pwrite: [ %s ]", strerror(errno));
-    	int err=errno;
-    	paquete = slz_res_error(err);
-    }
-    else {
-    	log_msje_info("Exito operacion pwrite sobre fs local");
-    	paquete = slz_res_write(leido);
-    }
+    log_msje_info("Exito operacion pwrite sobre disco");
+    paquete = slz_res_write(escrito);
 
     paquete_enviar(cliente_fd, paquete);
 }

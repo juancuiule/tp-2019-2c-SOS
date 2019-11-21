@@ -93,4 +93,6 @@ ptrGBloque fs_get_blk_ind_with_data_blk();
 
 size_t fs_read_file(char *buf, size_t size, off_t offset, uint32_t node_blk);
 
+size_t fs_write_file(uint32_t node_blk, char *buffer, size_t size, off_t offset);
+
 #endif /* FILESYSTEM_H_ */

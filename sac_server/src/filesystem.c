@@ -268,13 +268,14 @@ ptrGBloque fs_get_blk_ind_with_data_blk()
 
 }
 
+//Pruebaa
 size_t fs_read_file(char *buf, size_t size, off_t offset, uint32_t node_blk)
 {
 	log_msje_info("Preparando para leer blk de datos");
 	log_msje_info("Cantidad de bytes por leer [ %d ]", size);
 
 	int leido = 0;
-	GFile *file_node = (GFile *)disk_blk_pointer + node_blk;
+	GFile *file_node = (GFile *)sac_nodetable + node_blk;
 
 	//check
 	if(offset == file_node->file_size)
@@ -309,6 +310,59 @@ size_t fs_read_file(char *buf, size_t size, off_t offset, uint32_t node_blk)
 
 	}
 
-	log_msje_error("Lei [ %d ] bytes, falto leer [ %d ] bytes", leido, size-leido);
+	log_msje_info("Lei [ %d ] bytes, falto leer [ %d ] bytes", leido, size-leido);
 	return leido;
 }
+
+//Ok!!
+size_t fs_write_file(uint32_t node_blk, char *buffer, size_t size, off_t offset)
+{
+	log_msje_info("Preparando para escribir blk de datos");
+	log_msje_info("Cantidad de bytes por escribir [ %d ]", size);
+
+	GFile *file_node = (GFile *)sac_nodetable + node_blk;
+
+	GBlock_IndSimple * blk_is = (GBlock_IndSimple *) (*file_node).blk_indirect[0];
+
+	int nro_blk = (int) (offset / BLOCKSIZE);
+	off_t blk_offset = offset - (nro_blk * BLOCKSIZE);
+
+	size_t blk_size = size;
+	size_t size_por_escribir = 0;
+	int escrito = 0;
+
+	int bloques_a_escribir = (int) (size / BLOCKSIZE);
+
+	for(int i = nro_blk; i <= bloques_a_escribir; i++)
+	{
+
+		if( (blk_offset + blk_size) > BLOCKSIZE )
+		{
+			size_por_escribir = blk_size - BLOCKSIZE + blk_offset;
+			blk_size = BLOCKSIZE - blk_offset;
+
+		}
+
+		void *blk_data = (void *) (*blk_is).blk_datos[nro_blk];
+
+		memcpy((char *)blk_data + blk_offset, buffer, blk_size);
+
+		escrito += blk_size;
+		blk_offset = 0;
+		blk_size = size_por_escribir;
+
+	}
+
+	file_node->file_size += escrito;
+
+	log_msje_info("Se escribio [ %d ] bytes, falto escribir [ %d ] bytes", escrito, size-escrito);
+
+	return escrito;
+}
+
+
+
+
+
+
+
