@@ -10,7 +10,11 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 	uint32_t tam_pedido;
 	memcpy(&tam_pedido, body->content, sizeof(uint32_t));
 
-	// log_info(logger, "El cliente con id: %s hizo muse_malloc con %u", id, tam_pedido);
+	log_info(logger, "El cliente con id: %s hizo muse_malloc con %u", id, tam_pedido);
+	process_table* t = get_table_for_process(id);
+	if (t != NULL) {
+		log_info(logger, "El proceso %s tiene %i segmentos", id, t->segments->elements_count);
+	}
 
 	muse_body* r_body = create_body();
 	add_fixed_to_body(r_body, sizeof(uint32_t), MEMORY);

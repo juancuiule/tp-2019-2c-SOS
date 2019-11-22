@@ -17,8 +17,8 @@ t_page *create_page(int frame_number, char **reg) {
 	return page;
 }
 
-t_segment *create_segment(segment_type type, int base, int size) {
-	t_segment *segment = malloc(sizeof(t_segment));
+process_segment *create_segment(segment_type type, int base, int size) {
+	process_segment *segment = malloc(sizeof(process_segment));
 	segment->type = type;
 	segment->base = base;
 	segment->size = size;
@@ -37,7 +37,15 @@ void create_process_table(char* process) {
 	log_info(logger, "Se creo una process_table para el proceso: %s", process);
 }
 
-void add_process_segment(char* process, t_segment* segment) {
+void alloc_for_process(char* process, int size) {
+	process_table* process_table = get_table_for_process(process);
+	int is_heap(process_segment *segment) {
+		return segment->type == HEAP;
+	}
+	list_filter(process_table->segments, (void*) is_heap);
+}
+
+void add_process_segment(char* process, process_segment* segment) {
 	process_table* process_table = get_table_for_process(process);
 	list_add((*process_table).segments, segment);
 }

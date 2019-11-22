@@ -21,9 +21,9 @@ typedef struct {
 typedef struct {
 	segment_type type; // segmento de heap o mmap
 	int base; // base
-	int size; // tamaño
+	uint32_t size; // tamaño
 	t_list *pages; // lista de paginas
-} t_segment;
+} process_segment;
 
 typedef struct {
 	int frame_number; // frame de memoria o posición de swap
@@ -33,9 +33,9 @@ typedef struct {
 
 void init_structures();
 t_page *create_page(int frame_number, char **reg);
-t_segment *create_segment(segment_type type, int base, int size);
+process_segment *create_segment(segment_type type, int base, int size);
 void create_process_table(char* process);
 process_table* get_table_for_process(char* process);
-void add_process_segment(char* process, t_segment* segment);
+void add_process_segment(char* process, process_segment* segment);
 
 #endif
