@@ -2,14 +2,18 @@
 
 void* MEMORY;
 
+void respond_init(muse_body* body, char* id, int socket_cliente) {
+	create_process_table(id);
+}
+
 void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 	uint32_t tam_pedido;
 	memcpy(&tam_pedido, body->content, sizeof(uint32_t));
 
-	log_info(logger, "El cliente con id: %s hizo muse_malloc con %u", id, tam_pedido);
-	
+	// log_info(logger, "El cliente con id: %s hizo muse_malloc con %u", id, tam_pedido);
+
 	muse_body* r_body = create_body();
-	add_fixed_to_body(r_body, sizeof(uint32_t), MEMORIA);
+	add_fixed_to_body(r_body, sizeof(uint32_t), MEMORY);
 	muse_response* response = create_response(SUCCESS, r_body);
 	send_response(response, socket_cliente);
 }
@@ -20,10 +24,10 @@ void respond_get(muse_body* body, char* id, int socket_cliente) {
 	size_t size;
 	memcpy(&size, body->content + sizeof(uint32_t), sizeof(size_t));
 
-	log_info(logger, "El cliente con id: %s hizo get a la src: %u de %i bytes", id, src, size);
+	// log_info(logger, "El cliente con id: %s hizo get a la src: %u de %i bytes", id, src, size);
 
 	void* val = malloc(5);
-	memcpy((void*) val, MEMORIA, 5);
+	memcpy((void*) val, MEMORY, 5);
 
 	muse_body* r_body = create_body();
 	add_to_body(r_body, size, val);
@@ -35,7 +39,7 @@ void respond_free(muse_body* body, char* id, int socket_cliente) {
 	uint32_t dir_to_free;
 	memcpy(&dir_to_free, body->content, sizeof(uint32_t));
 
-	log_info(logger, "El cliente con id: %s hizo free a la dir: %u", id, dir_to_free);
+	// log_info(logger, "El cliente con id: %s hizo free a la dir: %u", id, dir_to_free);
 
 	free(dir_to_free);
 	send_response_status(socket_cliente, SUCCESS);
@@ -46,9 +50,9 @@ void respond_cpy(muse_body* body, char* id, int socket_cliente) {
 	memcpy(&dst, body->content, sizeof(uint32_t));	
 	int size;
 	memcpy(&size, body->content + sizeof(uint32_t), sizeof(int));
-	memcpy(MEMORIA, body->content + sizeof(uint32_t) + sizeof(int), size);
+	memcpy(MEMORY, body->content + sizeof(uint32_t) + sizeof(int), size);
 
-	log_info(logger, "El cliente con id: %s hizo cpy a dst: %u, %i bytes", id, dst, size);
+	// log_info(logger, "El cliente con id: %s hizo cpy a dst: %u, %i bytes", id, dst, size);
 
 	send_response_status(socket_cliente, SUCCESS);
 }
@@ -64,7 +68,7 @@ void respond_map(muse_body* body, char* id, int socket_cliente) {
 	map_flag flags;
 	memcpy(&flags, body->content + sizeof(int) + path_size + sizeof(size_t), sizeof(int));
 
-	log_info(logger, "El cliente con id: %s hizo map a: %s, de %i bytes, flag: %i", id, path, length, flags);
+	// log_info(logger, "El cliente con id: %s hizo map a: %s, de %i bytes, flag: %i", id, path, length, flags);
 
 	return;
 }
@@ -75,7 +79,7 @@ void respond_sync(muse_body* body, char* id, int socket_cliente) {
 	size_t len;
 	memcpy(&len, body->content + sizeof(uint32_t), sizeof(size_t));
 
-	log_info(logger, "El cliente con id: %s hizo sync a la addr: %u de %i bytes", id, addr, len);
+	// log_info(logger, "El cliente con id: %s hizo sync a la addr: %u de %i bytes", id, addr, len);
 
 	return;
 }
@@ -84,7 +88,7 @@ void respond_unmap(muse_body* body, char* id, int socket_cliente) {
 	uint32_t addr;
 	memcpy(&addr, body->content, sizeof(uint32_t));
 
-	log_info(logger, "El cliente con id: %s hizo unmap a la addr: %u", id, addr);
+	// log_info(logger, "El cliente con id: %s hizo unmap a la addr: %u", id, addr);
 
 	return;
 }
@@ -96,41 +100,42 @@ int respond_to_client(int cliente_fd) {
 		muse_body* body = recv_body(cliente_fd);
 		switch(cod_op) {
 			case INIT_MUSE:
+				respond_init(body, id, cliente_fd);
 				break;
 			case ALLOC:
-				log_info(logger, "muse_alloc.");
+				// log_info(logger, "muse_alloc.");
 				respond_alloc(body, id, cliente_fd);
 				break;
 			case FREE:
-				log_info(logger, "muse_free.");
+				// log_info(logger, "muse_free.");
 				respond_free(body, id, cliente_fd);
 				break;
 			case GET:
-				log_info(logger, "muse_get.");
+				// log_info(logger, "muse_get.");
 				respond_get(body, id, cliente_fd);
 				break;
 			case CPY:
-				log_info(logger, "muse_copy.");
+				// log_info(logger, "muse_copy.");
 				respond_cpy(body, id, cliente_fd);
 				break;
 			case MAP:
-				log_info(logger, "muse_map.");
+				// log_info(logger, "muse_map.");
 				respond_map(body, id, cliente_fd);
 				break;
 			case SYNC:
-				log_info(logger, "muse_sync.");
+				// log_info(logger, "muse_sync.");
 				respond_sync(body, id, cliente_fd);
 				break;
 			case UNMAP:
-				log_info(logger, "muse_unmap.");
+				// log_info(logger, "muse_unmap.");
 				respond_unmap(body, id, cliente_fd);
 				break;
 			case DISCONNECT_MUSE:
-				log_info(logger, "El cliente se desconecto.");
+				// log_info(logger, "El cliente se desconecto.");
 				return EXIT_FAILURE;
 				break;
 			default:
-				log_warning(logger, "Operacion desconocida. No quieras meter la pata");
+				// log_warning(logger, "Operacion desconocida. No quieras meter la pata");
 				break;
 		}
 	}
@@ -157,6 +162,7 @@ int main(void) {
 		return EXIT_FAILURE;
 	}
 
+	init_structures();
 	MEMORY = malloc(MEMORY_SIZE);
 
 	pthread_t hilo;

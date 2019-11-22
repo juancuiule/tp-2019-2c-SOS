@@ -109,7 +109,5 @@ int recibir_cliente(int socket_servidor) {
 		&tam_direccion
 	);
 
-	log_info(logger, "Se conecto un cliente! %i", socket_cliente);
-
 	return socket_cliente;
 }

@@ -11,17 +11,17 @@ int main(void) {
 
 	if (init_result != -1) {
 		uint32_t my_memory = muse_alloc(10);
-		int x = 10;
-		int*y = malloc(4);
-		muse_cpy(my_memory, &x, 4);
-		muse_get(y, my_memory, 4);
-		printf("y: %d \n", *y);
+//		int x = 10;
+//		int*y = malloc(4);
+//		muse_cpy(my_memory, &x, 4);
+//		muse_get(y, my_memory, 4);
+//		printf("y: %d \n", *y);
 		muse_free(my_memory);
-		
-
-		muse_map("/Downloads", 100, MAP_PRIVATE);
-		muse_sync(1000, 20);
-		muse_unmap(5555);
+//
+//
+//		muse_map("/Downloads", 100, MAP_PRIVATE);
+//		muse_sync(1000, 20);
+//		muse_unmap(5555);
 
 		muse_close();
 

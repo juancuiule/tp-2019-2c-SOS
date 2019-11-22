@@ -7,5 +7,6 @@
 #include <pthread.h>
 
 #include "../libmuse/utils.h"
+#include "segmentpag.h"
 
 #endif
