@@ -12,7 +12,7 @@ int main() {
 
 	while(1) {
 		cliente_fd = esperar_cliente(servidor_fd);
-		pthread_create(&hilo_clientes, NULL, atender_cliente, cliente_fd);
+		pthread_create(&hilo_clientes, NULL, (void*)atender_cliente, cliente_fd);
 	}
 
 	liberar();
@@ -48,6 +48,7 @@ void inicializar() {
 }
 
 void atender_cliente(int cliente_fd) {
+	int indice;
 	int offset = 0;
 	int opcode, size, tid, pid;
 	int tamanio;
@@ -70,9 +71,14 @@ void atender_cliente(int cliente_fd) {
 
 			if (GRADO_MULTIPROGRAMACION < MAX_MULTIPROG)
 				encolar_hilo_en_ready();
+
 			break;
 		case 2:
-			ejecutar_hilo(hilo);
+		    indice = obtener_indice_de_pid(hilo->pid);
+			bloquear_hilo(programas[indice].hilo_en_exec);
+			hilo_t* siguiente_hilo = malloc(sizeof(hilo_t));
+			siguiente_hilo = siguiente_hilo_a_ejecutar(programas[hilo->pid]);
+			ejecutar_nuevo_hilo(siguiente_hilo);
 			break;
 		case 3:
 			bloquear_hilo(hilo);
@@ -82,6 +88,29 @@ void atender_cliente(int cliente_fd) {
 			break;
 	}
 
+}
+
+int obtener_indice_de_pid(int pid) {
+	int indice = 0;
+
+	while (indice < 100) {
+		if (programas[indice].pid == pid)
+			return indice;
+
+		indice++;
+	}
+}
+
+void ejecutar_nuevo_hilo(hilo_t* hilo) {
+	printf("Ejecuto hilo %i", hilo->tid);
+	hilo_t* hilo_anterior = malloc(sizeof(hilo_t));
+
+	if (programas[hilo->pid].hilo_en_exec != NULL)
+		hilo_anterior = programas[hilo->pid].hilo_en_exec;
+
+	programas[hilo->pid].hilo_en_exec = hilo;
+	log_info(logger, "El hilo %i del programa %i llegó a EXEC.", hilo->tid, hilo->pid);
+	free(hilo_anterior);
 }
 
 void logear_metricas() {
@@ -192,13 +221,13 @@ void bloquear_hilo(hilo_t* hilo) {
 	log_info(logger, "El hilo %d ha llegado a la cola de BLOCKED", dictionary_get(diccionario_tid, thread_id));
 }
 
-hilo_t* siguiente_hilo_a_ejecutar(programa_t* programa) {
+hilo_t* siguiente_hilo_a_ejecutar(programa_t programa) {
 	float min = 9999;
 	float siguiente_est = 0;
 	hilo_t* hilo = malloc(sizeof(hilo_t));
 	hilo_t* siguiente = malloc(sizeof(hilo_t));
 	t_queue* aux = queue_create();
-	aux = programa->cola_ready;
+	aux = programa.cola_ready;
 
 	while (aux != NULL) {
 		hilo = queue_pop(aux);

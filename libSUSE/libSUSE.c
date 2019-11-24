@@ -68,6 +68,7 @@ int suse_create(int tid){
 int suse_schedule_next(void){
 	int next = max_tid;
 	//printf("suse_schedule_next() (hilo %i)\n", next);
+	ejecutar_operacion(next, 2);
 	return next;
 }
 
