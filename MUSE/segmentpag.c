@@ -3,7 +3,7 @@
 void init_structures(int frames) {
 	tables = list_create();
 	logger = log_create("./logs/segmentpag.log", "Segment", 1, LOG_LEVEL_DEBUG);
-	int bitmap_size_in_bytes = ceil(frames / 8);
+	int bitmap_size_in_bytes = ceil((double) frames / 8);
 	bitmap_pointer = malloc(bitmap_size_in_bytes);
 	frame_usage_bitmap = bitarray_create_with_mode(bitmap_pointer, bitmap_size_in_bytes, LSB_FIRST);
 }
