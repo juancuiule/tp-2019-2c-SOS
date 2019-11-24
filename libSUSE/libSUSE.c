@@ -27,13 +27,6 @@ int ejecutar_operacion(int tid, int operacion) {
 	hilo_t* hilo = crear_nuevo_hilo(tid, pid);
 	agregar_a_paquete(paquete, hilo, sizeof(hilo_t));
 	enviar_paquete(paquete, conexion);
-
-	if (operacion == 2) {
-		int tid_proximo_hilo;
-		recv(conexion, &tid_proximo_hilo, sizeof(int), 0);
-		return tid_proximo_hilo;
-	}
-
 	return 0;
 }
 
@@ -74,10 +67,8 @@ int suse_create(int tid){
 
 int suse_schedule_next(void){
 	int next = max_tid;
-	next = ejecutar_operacion(next, 2);
-	return next;
 	//printf("suse_schedule_next() (hilo %i)\n", next);
-	//SUSE debe devolver el TID del próximo hilo a planificar.
+	return next;
 }
 
 int suse_join(int tid){
