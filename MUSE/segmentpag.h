@@ -28,11 +28,10 @@ typedef struct {
 typedef struct {
 	int frame_number; // frame de memoria o posición de swap
 	bool flag; // bit de presencia
-	char **reg;
 } t_page;
 
 void init_structures();
-t_page *create_page(int frame_number, char **reg);
+t_page *create_page(int frame_number);
 process_segment *create_segment(segment_type type, int base, int size);
 void create_process_table(char* process);
 process_table* get_table_for_process(char* process);

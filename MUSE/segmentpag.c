@@ -8,11 +8,10 @@ void init_structures() {
 	logger = log_create("./logs/segmentpag.log", "Segment", 1, LOG_LEVEL_DEBUG);
 }
 
-t_page *create_page(int frame_number, char **reg) {
+t_page *create_page(int frame_number) {
 	t_page * page = malloc(sizeof(t_page));
 	page->flag = false;
 	page->frame_number = frame_number;
-	page->reg = reg;
 	log_info(logger, "Nueva pagina creada");
 	return page;
 }
