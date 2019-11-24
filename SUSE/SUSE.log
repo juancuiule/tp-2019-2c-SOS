@@ -1423,3 +1423,333 @@
 [INFO] 00:51:14:417 SUSE/(8294:8306): El hilo 0 ha llegado a la cola de BLOCKED
 [INFO] 00:51:14:459 SUSE/(8294:8294): Se conecto un cliente!
 [INFO] 00:51:14:460 SUSE/(8294:8307): El hilo 2 ha llegado a la cola de EXIT.
+[INFO] 02:55:10:3 SUSE/(7961:7961): Se ha iniciado el servidor.
+[INFO] 02:55:28:983 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:28:983 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:28:983 SUSE/(7961:8017): El hilo 0 del programa 8016 llegó a NEW
+[INFO] 02:55:28:983 SUSE/(7961:8017): El hilo 0 del programa 8016 está en READY
+[INFO] 02:55:28:983 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:28:983 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:28:983 SUSE/(7961:8018): El hilo 1 del programa 8016 llegó a NEW
+[INFO] 02:55:28:983 SUSE/(7961:8018): El hilo 1 del programa 8016 está en READY
+[INFO] 02:55:28:983 SUSE/(7961:8019): El hilo 2 del programa 8016 llegó a NEW
+[INFO] 02:55:28:983 SUSE/(7961:8019): El hilo 2 del programa 8016 está en READY
+[INFO] 02:55:28:983 SUSE/(7961:8020): El hilo 0 ha llegado a la cola de BLOCKED
+[INFO] 02:55:29:27 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:29:27 SUSE/(7961:8021): El hilo 2 ha llegado a la cola de EXIT.
+[INFO] 02:55:31:34 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:31:34 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:31:34 SUSE/(7961:8023): El hilo 0 del programa 8022 llegó a NEW
+[INFO] 02:55:31:34 SUSE/(7961:8023): El hilo 0 del programa 8022 está en READY
+[INFO] 02:55:31:34 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:31:34 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:31:34 SUSE/(7961:8024): El hilo 1 del programa 8022 llegó a NEW
+[INFO] 02:55:31:34 SUSE/(7961:8024): El hilo 1 del programa 8022 está en READY
+[INFO] 02:55:31:34 SUSE/(7961:8025): El hilo 2 del programa 8022 llegó a NEW
+[INFO] 02:55:31:34 SUSE/(7961:8025): El hilo 2 del programa 8022 está en READY
+[INFO] 02:55:31:34 SUSE/(7961:8026): El hilo 0 ha llegado a la cola de BLOCKED
+[INFO] 02:55:31:79 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:31:79 SUSE/(7961:8027): El hilo 2 ha llegado a la cola de EXIT.
+[INFO] 02:55:31:570 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:31:570 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:31:570 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:31:570 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:31:570 SUSE/(7961:8030): El hilo 1 del programa 8028 llegó a NEW
+[INFO] 02:55:31:570 SUSE/(7961:8030): El hilo 1 del programa 8028 está en READY
+[INFO] 02:55:31:570 SUSE/(7961:8029): El hilo 0 del programa 8028 llegó a NEW
+[INFO] 02:55:31:570 SUSE/(7961:8029): El hilo 0 del programa 8028 está en READY
+[INFO] 02:55:31:570 SUSE/(7961:8031): El hilo 2 del programa 8028 llegó a NEW
+[INFO] 02:55:31:570 SUSE/(7961:8032): El hilo 0 ha llegado a la cola de BLOCKED
+[INFO] 02:55:31:570 SUSE/(7961:8031): El hilo 2 del programa 8028 está en READY
+[INFO] 02:55:31:615 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:31:615 SUSE/(7961:8033): El hilo 2 ha llegado a la cola de EXIT.
+[INFO] 02:55:32:130 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:32:130 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:32:130 SUSE/(7961:8035): El hilo 0 del programa 8034 llegó a NEW
+[INFO] 02:55:32:130 SUSE/(7961:8035): El hilo 0 del programa 8034 está en READY
+[INFO] 02:55:32:130 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:32:130 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:32:130 SUSE/(7961:8037): El hilo 2 del programa 8034 llegó a NEW
+[INFO] 02:55:32:130 SUSE/(7961:8037): El hilo 2 del programa 8034 está en READY
+[INFO] 02:55:32:130 SUSE/(7961:8036): El hilo 1 del programa 8034 llegó a NEW
+[INFO] 02:55:32:130 SUSE/(7961:8036): El hilo 1 del programa 8034 está en READY
+[INFO] 02:55:32:130 SUSE/(7961:8038): El hilo 0 ha llegado a la cola de BLOCKED
+[INFO] 02:55:32:172 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:32:172 SUSE/(7961:8039): El hilo 2 ha llegado a la cola de EXIT.
+[INFO] 02:55:32:640 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:32:640 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:32:640 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:32:640 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:32:640 SUSE/(7961:8043): El hilo 2 del programa 8040 llegó a NEW
+[INFO] 02:55:32:640 SUSE/(7961:8044): El hilo 0 ha llegado a la cola de BLOCKED
+[INFO] 02:55:32:640 SUSE/(7961:8043): El hilo 2 del programa 8040 está en READY
+[INFO] 02:55:32:640 SUSE/(7961:8041): El hilo 0 del programa 8040 llegó a NEW
+[INFO] 02:55:32:640 SUSE/(7961:8041): El hilo 0 del programa 8040 está en READY
+[WARNING] 02:55:32:640 SUSE/(7961:8041): Se ha alcanzado el grado máximo de multiprogramación
+[INFO] 02:55:32:640 SUSE/(7961:8042): El hilo 1 del programa 8040 llegó a NEW
+[INFO] 02:55:32:683 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:32:683 SUSE/(7961:8045): El hilo 2 ha llegado a la cola de EXIT.
+[INFO] 02:55:33:165 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:33:165 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:33:165 SUSE/(7961:8048): El hilo 0 del programa 8047 llegó a NEW
+[INFO] 02:55:33:165 SUSE/(7961:8048): El hilo 1 del programa 8040 está en READY
+[WARNING] 02:55:33:165 SUSE/(7961:8048): Se ha alcanzado el grado máximo de multiprogramación
+[INFO] 02:55:33:165 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:33:165 SUSE/(7961:8049): El hilo 1 del programa 8047 llegó a NEW
+[INFO] 02:55:33:165 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:33:165 SUSE/(7961:8050): El hilo 2 del programa 8047 llegó a NEW
+[INFO] 02:55:33:165 SUSE/(7961:8051): El hilo 0 ha llegado a la cola de BLOCKED
+[INFO] 02:55:33:209 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:33:209 SUSE/(7961:8052): El hilo 2 ha llegado a la cola de EXIT.
+[INFO] 02:55:33:692 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:33:692 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:33:692 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:33:692 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:33:692 SUSE/(7961:8056): El hilo 2 del programa 8053 llegó a NEW
+[INFO] 02:55:33:692 SUSE/(7961:8057): El hilo 0 ha llegado a la cola de BLOCKED
+[INFO] 02:55:33:692 SUSE/(7961:8056): El hilo 0 del programa 8047 está en READY
+[WARNING] 02:55:33:692 SUSE/(7961:8056): Se ha alcanzado el grado máximo de multiprogramación
+[INFO] 02:55:33:692 SUSE/(7961:8054): El hilo 0 del programa 8053 llegó a NEW
+[INFO] 02:55:33:693 SUSE/(7961:8055): El hilo 1 del programa 8053 llegó a NEW
+[INFO] 02:55:33:739 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:33:739 SUSE/(7961:8058): El hilo 2 ha llegado a la cola de EXIT.
+[INFO] 02:55:34:148 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:34:148 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:34:149 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:34:149 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:34:149 SUSE/(7961:8061): El hilo 1 del programa 8059 llegó a NEW
+[INFO] 02:55:34:148 SUSE/(7961:8060): El hilo 0 del programa 8059 llegó a NEW
+[INFO] 02:55:34:149 SUSE/(7961:8061): El hilo 1 del programa 8047 está en READY
+[INFO] 02:55:34:149 SUSE/(7961:8060): El hilo 2 del programa 8047 está en READY
+[WARNING] 02:55:34:149 SUSE/(7961:8061): Se ha alcanzado el grado máximo de multiprogramación
+[INFO] 02:55:34:149 SUSE/(7961:8062): El hilo 2 del programa 8059 llegó a NEW
+[INFO] 02:55:34:149 SUSE/(7961:8063): El hilo 0 ha llegado a la cola de BLOCKED
+[INFO] 02:55:34:193 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:55:34:193 SUSE/(7961:8064): El hilo 2 ha llegado a la cola de EXIT.
+[INFO] 02:56:08:370 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:56:08:370 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:56:08:370 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:56:08:370 SUSE/(7961:8067): El hilo 0 del programa 8066 llegó a NEW
+[INFO] 02:56:08:370 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:56:08:370 SUSE/(7961:8068): El hilo 1 del programa 8066 llegó a NEW
+[INFO] 02:56:08:370 SUSE/(7961:8069): El hilo 2 del programa 8066 llegó a NEW
+[INFO] 02:56:08:370 SUSE/(7961:8070): El hilo 0 ha llegado a la cola de BLOCKED
+[INFO] 02:56:08:413 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:56:08:413 SUSE/(7961:8071): El hilo 2 ha llegado a la cola de EXIT.
+[INFO] 02:56:23:267 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:56:23:267 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:56:23:267 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:56:23:267 SUSE/(7961:8073): El hilo 0 del programa 8072 llegó a NEW
+[INFO] 02:56:23:267 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:56:23:267 SUSE/(7961:8075): El hilo 2 del programa 8072 llegó a NEW
+[INFO] 02:56:23:267 SUSE/(7961:8075): El hilo 0 del programa 8053 está en READY
+[INFO] 02:56:23:267 SUSE/(7961:8074): El hilo 1 del programa 8072 llegó a NEW
+[WARNING] 02:56:23:267 SUSE/(7961:8075): Se ha alcanzado el grado máximo de multiprogramación
+[INFO] 02:56:23:267 SUSE/(7961:8073): El hilo 2 del programa 8053 está en READY
+[INFO] 02:56:23:267 SUSE/(7961:8076): El hilo 0 ha llegado a la cola de BLOCKED
+[INFO] 02:56:23:309 SUSE/(7961:7961): Se conecto un cliente!
+[INFO] 02:56:23:309 SUSE/(7961:8077): El hilo 2 ha llegado a la cola de EXIT.
+[INFO] 15:36:12:107 SUSE/(11844:11844): Se ha iniciado el servidor.
+[INFO] 15:36:46:701 SUSE/(11844:11844): Se conecto un cliente!
+[INFO] 15:36:46:702 SUSE/(11844:11844): Se conecto un cliente!
+[INFO] 15:36:46:702 SUSE/(11844:11844): Se conecto un cliente!
+[INFO] 15:36:46:702 SUSE/(11844:11844): Se conecto un cliente!
+[INFO] 15:36:46:702 SUSE/(11844:11908): El hilo 1 del programa 11906 llegó a NEW
+[INFO] 15:36:46:702 SUSE/(11844:11908): El hilo 1 del programa 11906 está en READY
+[INFO] 15:36:46:702 SUSE/(11844:11907): El hilo 0 del programa 11906 llegó a NEW
+[INFO] 15:36:46:702 SUSE/(11844:11907): El hilo 0 del programa 11906 está en READY
+[INFO] 15:36:46:702 SUSE/(11844:11909): El hilo 2 del programa 11906 llegó a NEW
+[INFO] 15:36:46:702 SUSE/(11844:11909): El hilo 2 del programa 11906 está en READY
+[INFO] 15:36:46:702 SUSE/(11844:11910): El hilo 0 ha llegado a la cola de BLOCKED
+[INFO] 15:36:46:743 SUSE/(11844:11844): Se conecto un cliente!
+[INFO] 15:36:46:743 SUSE/(11844:11911): El hilo 2 ha llegado a la cola de EXIT.
+[INFO] 15:39:52:9 SUSE/(12101:12101): Se ha iniciado el servidor.
+[INFO] 15:39:56:742 SUSE/(12101:12101): Se conecto un cliente!
+[INFO] 15:39:56:742 SUSE/(12101:12101): Se conecto un cliente!
+[INFO] 15:39:56:742 SUSE/(12101:12101): Se conecto un cliente!
+[INFO] 15:39:56:742 SUSE/(12101:12101): Se conecto un cliente!
+[INFO] 15:39:56:742 SUSE/(12101:12106): El hilo 2 del programa 12103 llegó a NEW
+[INFO] 15:39:56:742 SUSE/(12101:12106): El hilo 0 del programa 12103 está en READY
+[INFO] 15:39:56:743 SUSE/(12101:12107): El hilo 0 ha llegado a la cola de BLOCKED
+[INFO] 15:39:56:742 SUSE/(12101:12104): El hilo 0 del programa 12103 llegó a NEW
+[INFO] 15:39:56:743 SUSE/(12101:12104): El hilo 2 del programa 12103 está en READY
+[INFO] 15:39:56:743 SUSE/(12101:12105): El hilo 1 del programa 12103 llegó a NEW
+[INFO] 15:39:56:743 SUSE/(12101:12105): El hilo 1 del programa 12103 está en READY
+[INFO] 15:39:56:787 SUSE/(12101:12101): Se conecto un cliente!
+[INFO] 15:39:56:788 SUSE/(12101:12108): El hilo 2 ha llegado a la cola de EXIT.
+[INFO] 15:40:05:849 SUSE/(12101:12101): Se conecto un cliente!
+[INFO] 15:40:05:849 SUSE/(12101:12101): Se conecto un cliente!
+[INFO] 15:40:05:849 SUSE/(12101:12101): Se conecto un cliente!
+[INFO] 15:40:05:849 SUSE/(12101:12101): Se conecto un cliente!
+[INFO] 15:40:05:849 SUSE/(12101:12110): El hilo 0 del programa 12109 llegó a NEW
+[INFO] 15:40:05:849 SUSE/(12101:12110): El hilo 1 del programa 12109 está en READY
+[INFO] 15:40:05:849 SUSE/(12101:12113): El hilo 0 ha llegado a la cola de BLOCKED
+[INFO] 15:40:05:849 SUSE/(12101:12111): El hilo 1 del programa 12109 llegó a NEW
+[INFO] 15:40:05:850 SUSE/(12101:12111): El hilo 0 del programa 12109 está en READY
+[INFO] 15:40:05:850 SUSE/(12101:12112): El hilo 2 del programa 12109 llegó a NEW
+[INFO] 15:40:05:850 SUSE/(12101:12112): El hilo 2 del programa 12109 está en READY
+[INFO] 15:40:05:896 SUSE/(12101:12101): Se conecto un cliente!
+[INFO] 15:40:05:896 SUSE/(12101:12114): El hilo 2 ha llegado a la cola de EXIT.
+[INFO] 15:40:06:597 SUSE/(12101:12101): Se conecto un cliente!
+[INFO] 15:40:06:597 SUSE/(12101:12101): Se conecto un cliente!
+[INFO] 15:40:06:597 SUSE/(12101:12116): El hilo 0 del programa 12115 llegó a NEW
+[INFO] 15:40:06:597 SUSE/(12101:12101): Se conecto un cliente!
+[INFO] 15:40:06:597 SUSE/(12101:12116): El hilo 0 del programa 12115 está en READY
+[INFO] 15:40:06:597 SUSE/(12101:12101): Se conecto un cliente!
+[INFO] 15:40:06:597 SUSE/(12101:12117): El hilo 1 del programa 12115 llegó a NEW
+[INFO] 15:40:06:597 SUSE/(12101:12117): El hilo 1 del programa 12115 está en READY
+[INFO] 15:40:06:597 SUSE/(12101:12119): El hilo 0 ha llegado a la cola de BLOCKED
+[INFO] 15:40:06:597 SUSE/(12101:12118): El hilo 2 del programa 12115 llegó a NEW
+[INFO] 15:40:06:597 SUSE/(12101:12118): El hilo 2 del programa 12115 está en READY
+[INFO] 15:40:06:639 SUSE/(12101:12101): Se conecto un cliente!
+[INFO] 15:40:06:640 SUSE/(12101:12120): El hilo 2 ha llegado a la cola de EXIT.
+[INFO] 15:40:12:368 SUSE/(12101:12101): Se conecto un cliente!
+[INFO] 15:40:12:368 SUSE/(12101:12101): Se conecto un cliente!
+[INFO] 15:40:12:368 SUSE/(12101:12101): Se conecto un cliente!
+[INFO] 15:40:12:368 SUSE/(12101:12122): El hilo 0 del programa 12121 llegó a NEW
+[INFO] 15:40:12:368 SUSE/(12101:12122): El hilo 0 del programa 12121 está en READY
+[INFO] 15:40:12:368 SUSE/(12101:12101): Se conecto un cliente!
+[INFO] 15:40:12:368 SUSE/(12101:12124): El hilo 2 del programa 12121 llegó a NEW
+[INFO] 15:40:12:368 SUSE/(12101:12124): El hilo 2 del programa 12121 está en READY
+[INFO] 15:40:12:368 SUSE/(12101:12123): El hilo 1 del programa 12121 llegó a NEW
+[INFO] 15:40:12:368 SUSE/(12101:12123): El hilo 1 del programa 12121 está en READY
+[INFO] 15:40:12:368 SUSE/(12101:12125): El hilo 0 ha llegado a la cola de BLOCKED
+[INFO] 15:40:12:411 SUSE/(12101:12101): Se conecto un cliente!
+[INFO] 15:40:12:411 SUSE/(12101:12126): El hilo 2 ha llegado a la cola de EXIT.
+[INFO] 15:40:13:133 SUSE/(12101:12101): Se conecto un cliente!
+[INFO] 15:40:13:133 SUSE/(12101:12101): Se conecto un cliente!
+[INFO] 15:40:13:133 SUSE/(12101:12101): Se conecto un cliente!
+[INFO] 15:40:13:133 SUSE/(12101:12101): Se conecto un cliente!
+[INFO] 15:40:13:133 SUSE/(12101:12130): El hilo 2 del programa 12127 llegó a NEW
+[INFO] 15:40:13:133 SUSE/(12101:12131): El hilo 0 ha llegado a la cola de BLOCKED
+[INFO] 15:40:13:133 SUSE/(12101:12129): El hilo 1 del programa 12127 llegó a NEW
+[INFO] 15:40:13:133 SUSE/(12101:12129): El hilo 1 del programa 12127 está en READY
+[INFO] 15:40:13:133 SUSE/(12101:12128): El hilo 0 del programa 12127 llegó a NEW
+[INFO] 15:40:13:133 SUSE/(12101:12130): El hilo 2 del programa 12127 está en READY
+[INFO] 15:40:13:134 SUSE/(12101:12128): El hilo 0 del programa 12127 está en READY
+[WARNING] 15:40:13:134 SUSE/(12101:12128): Se ha alcanzado el grado máximo de multiprogramación
+[INFO] 15:40:13:178 SUSE/(12101:12101): Se conecto un cliente!
+[INFO] 15:40:13:179 SUSE/(12101:12132): El hilo 2 ha llegado a la cola de EXIT.
+[INFO] 15:40:13:824 SUSE/(12101:12101): Se conecto un cliente!
+[INFO] 15:40:13:824 SUSE/(12101:12101): Se conecto un cliente!
+[INFO] 15:40:13:824 SUSE/(12101:12101): Se conecto un cliente!
+[INFO] 15:40:13:824 SUSE/(12101:12101): Se conecto un cliente!
+[INFO] 15:40:13:824 SUSE/(12101:12136): El hilo 2 del programa 12133 llegó a NEW
+[INFO] 15:40:13:824 SUSE/(12101:12137): El hilo 0 ha llegado a la cola de BLOCKED
+[INFO] 15:40:13:824 SUSE/(12101:12135): El hilo 1 del programa 12133 llegó a NEW
+[INFO] 15:40:13:825 SUSE/(12101:12134): El hilo 0 del programa 12133 llegó a NEW
+[INFO] 15:40:13:867 SUSE/(12101:12101): Se conecto un cliente!
+[INFO] 15:40:13:867 SUSE/(12101:12138): El hilo 2 ha llegado a la cola de EXIT.
+[INFO] 15:40:58:941 SUSE/(12192:12192): Se ha iniciado el servidor.
+[INFO] 15:41:11:566 SUSE/(12192:12192): Se conecto un cliente!
+[INFO] 15:41:11:566 SUSE/(12192:12192): Se conecto un cliente!
+[INFO] 15:41:11:566 SUSE/(12192:12192): Se conecto un cliente!
+[INFO] 15:41:11:566 SUSE/(12192:12232): El hilo 0 del programa 12231 llegó a NEW
+[INFO] 15:41:11:566 SUSE/(12192:12232): El hilo 0 del programa 12231 está en READY
+[INFO] 15:41:11:567 SUSE/(12192:12192): Se conecto un cliente!
+[INFO] 15:41:11:567 SUSE/(12192:12234): El hilo 2 del programa 12231 llegó a NEW
+[INFO] 15:41:11:567 SUSE/(12192:12234): El hilo 2 del programa 12231 está en READY
+[INFO] 15:41:11:567 SUSE/(12192:12233): El hilo 1 del programa 12231 llegó a NEW
+[INFO] 15:41:11:567 SUSE/(12192:12233): El hilo 1 del programa 12231 está en READY
+[INFO] 15:41:11:567 SUSE/(12192:12235): El hilo 0 ha llegado a la cola de BLOCKED
+[INFO] 15:41:11:611 SUSE/(12192:12192): Se conecto un cliente!
+[INFO] 15:41:11:611 SUSE/(12192:12236): El hilo 2 ha llegado a la cola de EXIT.
+[INFO] 15:41:14:847 SUSE/(12192:12192): Se conecto un cliente!
+[INFO] 15:41:14:847 SUSE/(12192:12192): Se conecto un cliente!
+[INFO] 15:41:14:847 SUSE/(12192:12192): Se conecto un cliente!
+[INFO] 15:41:14:847 SUSE/(12192:12238): El hilo 0 del programa 12237 llegó a NEW
+[INFO] 15:41:14:847 SUSE/(12192:12192): Se conecto un cliente!
+[INFO] 15:41:14:847 SUSE/(12192:12238): El hilo 0 del programa 12237 está en READY
+[INFO] 15:41:14:847 SUSE/(12192:12240): El hilo 2 del programa 12237 llegó a NEW
+[INFO] 15:41:14:847 SUSE/(12192:12240): El hilo 2 del programa 12237 está en READY
+[INFO] 15:41:14:847 SUSE/(12192:12239): El hilo 1 del programa 12237 llegó a NEW
+[INFO] 15:41:26:508 SUSE/(12250:12250): Se ha iniciado el servidor.
+[INFO] 15:41:29:353 SUSE/(12250:12250): Se conecto un cliente!
+[INFO] 15:41:29:353 SUSE/(12250:12250): Se conecto un cliente!
+[INFO] 15:41:29:353 SUSE/(12250:12250): Se conecto un cliente!
+[INFO] 15:41:29:353 SUSE/(12250:12253): El hilo 0 del programa 12252 llegó a NEW
+[INFO] 15:41:29:353 SUSE/(12250:12253): El hilo 0 del programa 12252 está en READY
+[INFO] 15:41:29:353 SUSE/(12250:12250): Se conecto un cliente!
+[INFO] 15:41:29:353 SUSE/(12250:12255): El hilo 2 del programa 12252 llegó a NEW
+[INFO] 15:41:29:353 SUSE/(12250:12255): El hilo 2 del programa 12252 está en READY
+[INFO] 15:41:29:353 SUSE/(12250:12254): El hilo 1 del programa 12252 llegó a NEW
+[INFO] 15:41:29:354 SUSE/(12250:12254): El hilo 1 del programa 12252 está en READY
+[INFO] 15:41:29:354 SUSE/(12250:12256): El hilo 0 ha llegado a la cola de BLOCKED
+[INFO] 15:41:29:396 SUSE/(12250:12250): Se conecto un cliente!
+[INFO] 15:41:29:396 SUSE/(12250:12257): El hilo 2 ha llegado a la cola de EXIT.
+[INFO] 15:41:38:222 SUSE/(12250:12250): Se conecto un cliente!
+[INFO] 15:41:38:222 SUSE/(12250:12250): Se conecto un cliente!
+[INFO] 15:41:38:222 SUSE/(12250:12259): El hilo 0 del programa 12258 llegó a NEW
+[INFO] 15:41:38:222 SUSE/(12250:12250): Se conecto un cliente!
+[INFO] 15:41:38:222 SUSE/(12250:12259): El hilo 0 del programa 12258 está en READY
+[INFO] 15:41:38:222 SUSE/(12250:12250): Se conecto un cliente!
+[INFO] 15:41:38:222 SUSE/(12250:12261): El hilo 2 del programa 12258 llegó a NEW
+[INFO] 15:41:38:222 SUSE/(12250:12260): El hilo 1 del programa 12258 llegó a NEW
+[INFO] 15:41:38:222 SUSE/(12250:12261): El hilo 2 del programa 12258 está en READY
+[INFO] 15:41:38:222 SUSE/(12250:12262): El hilo 0 ha llegado a la cola de BLOCKED
+[INFO] 15:41:38:222 SUSE/(12250:12260): El hilo 1 del programa 12258 está en READY
+[INFO] 15:41:38:268 SUSE/(12250:12250): Se conecto un cliente!
+[INFO] 15:41:38:268 SUSE/(12250:12263): El hilo 2 ha llegado a la cola de EXIT.
+[INFO] 15:41:44:18 SUSE/(12250:12250): Se conecto un cliente!
+[INFO] 15:41:44:18 SUSE/(12250:12250): Se conecto un cliente!
+[INFO] 15:41:44:18 SUSE/(12250:12250): Se conecto un cliente!
+[INFO] 15:41:44:18 SUSE/(12250:12266): El hilo 1 del programa 12264 llegó a NEW
+[INFO] 15:41:44:18 SUSE/(12250:12250): Se conecto un cliente!
+[INFO] 15:41:44:18 SUSE/(12250:12266): El hilo 1 del programa 12264 está en READY
+[INFO] 15:41:44:18 SUSE/(12250:12265): El hilo 0 del programa 12264 llegó a NEW
+[INFO] 15:41:44:18 SUSE/(12250:12265): El hilo 0 del programa 12264 está en READY
+[INFO] 15:41:44:18 SUSE/(12250:12267): El hilo 2 del programa 12264 llegó a NEW
+[INFO] 15:41:44:18 SUSE/(12250:12267): El hilo 2 del programa 12264 está en READY
+[INFO] 15:41:44:18 SUSE/(12250:12268): El hilo 0 ha llegado a la cola de BLOCKED
+[INFO] 15:41:44:64 SUSE/(12250:12250): Se conecto un cliente!
+[INFO] 15:41:44:64 SUSE/(12250:12269): El hilo 2 ha llegado a la cola de EXIT.
+[INFO] 15:41:46:95 SUSE/(12250:12250): Se conecto un cliente!
+[INFO] 15:41:46:95 SUSE/(12250:12250): Se conecto un cliente!
+[INFO] 15:41:46:95 SUSE/(12250:12271): El hilo 0 del programa 12270 llegó a NEW
+[INFO] 15:41:46:95 SUSE/(12250:12271): El hilo 0 del programa 12270 está en READY
+[INFO] 15:41:46:95 SUSE/(12250:12250): Se conecto un cliente!
+[INFO] 15:41:46:95 SUSE/(12250:12272): El hilo 1 del programa 12270 llegó a NEW
+[INFO] 15:41:46:95 SUSE/(12250:12250): Se conecto un cliente!
+[INFO] 15:41:46:95 SUSE/(12250:12272): El hilo 1 del programa 12270 está en READY
+[INFO] 15:41:46:95 SUSE/(12250:12274): El hilo 0 ha llegado a la cola de BLOCKED
+[INFO] 15:41:46:95 SUSE/(12250:12273): El hilo 2 del programa 12270 llegó a NEW
+[INFO] 15:41:46:95 SUSE/(12250:12273): El hilo 2 del programa 12270 está en READY
+[INFO] 15:41:46:137 SUSE/(12250:12250): Se conecto un cliente!
+[INFO] 15:41:46:138 SUSE/(12250:12275): El hilo 2 ha llegado a la cola de EXIT.
+[INFO] 15:41:47:870 SUSE/(12250:12250): Se conecto un cliente!
+[INFO] 15:41:47:870 SUSE/(12250:12250): Se conecto un cliente!
+[INFO] 15:41:47:871 SUSE/(12250:12250): Se conecto un cliente!
+[INFO] 15:41:47:871 SUSE/(12250:12250): Se conecto un cliente!
+[INFO] 15:41:47:871 SUSE/(12250:12278): El hilo 1 del programa 12276 llegó a NEW
+[INFO] 15:41:47:871 SUSE/(12250:12278): El hilo 1 del programa 12276 está en READY
+[INFO] 15:41:47:871 SUSE/(12250:12277): El hilo 0 del programa 12276 llegó a NEW
+[INFO] 15:41:47:871 SUSE/(12250:12277): El hilo 0 del programa 12276 está en READY
+[WARNING] 15:41:47:871 SUSE/(12250:12277): Se ha alcanzado el grado máximo de multiprogramación
+[INFO] 15:41:47:871 SUSE/(12250:12279): El hilo 2 del programa 12276 llegó a NEW
+[INFO] 15:41:47:871 SUSE/(12250:12280): El hilo 0 ha llegado a la cola de BLOCKED
+[INFO] 15:41:47:914 SUSE/(12250:12250): Se conecto un cliente!
+[INFO] 15:41:47:914 SUSE/(12250:12281): El hilo 2 ha llegado a la cola de EXIT.
+[INFO] 15:41:49:974 SUSE/(12250:12250): Se conecto un cliente!
+[INFO] 15:41:49:974 SUSE/(12250:12250): Se conecto un cliente!
+[INFO] 15:41:49:974 SUSE/(12250:12283): El hilo 0 del programa 12282 llegó a NEW
+[INFO] 15:41:49:974 SUSE/(12250:12283): El hilo 2 del programa 12276 está en READY
+[WARNING] 15:41:49:974 SUSE/(12250:12283): Se ha alcanzado el grado máximo de multiprogramación
+[INFO] 15:41:49:975 SUSE/(12250:12284): El hilo 1 del programa 12282 llegó a NEW
+[INFO] 15:41:49:975 SUSE/(12250:12250): Se conecto un cliente!
+[INFO] 15:41:49:975 SUSE/(12250:12250): Se conecto un cliente!
+[INFO] 15:41:49:975 SUSE/(12250:12285): El hilo 2 del programa 12282 llegó a NEW
+[INFO] 15:41:49:975 SUSE/(12250:12286): El hilo 0 ha llegado a la cola de BLOCKED
+[INFO] 15:41:50:22 SUSE/(12250:12250): Se conecto un cliente!
+[INFO] 15:41:50:22 SUSE/(12250:12287): El hilo 2 ha llegado a la cola de EXIT.
+[INFO] 15:41:51:925 SUSE/(12250:12250): Se conecto un cliente!
+[INFO] 15:41:51:925 SUSE/(12250:12250): Se conecto un cliente!
+[INFO] 15:41:51:925 SUSE/(12250:12250): Se conecto un cliente!
+[INFO] 15:41:51:925 SUSE/(12250:12289): El hilo 0 del programa 12288 llegó a NEW
+[INFO] 15:41:51:925 SUSE/(12250:12289): El hilo 0 del programa 12282 está en READY
+[INFO] 15:41:51:925 SUSE/(12250:12250): Se conecto un cliente!
+[WARNING] 15:41:51:925 SUSE/(12250:12289): Se ha alcanzado el grado máximo de multiprogramación
+[INFO] 15:41:51:925 SUSE/(12250:12290): El hilo 1 del programa 12288 llegó a NEW
+[INFO] 15:41:51:925 SUSE/(12250:12291): El hilo 2 del programa 12288 llegó a NEW
+[INFO] 15:41:51:925 SUSE/(12250:12292): El hilo 0 ha llegado a la cola de BLOCKED
+[INFO] 15:41:51:968 SUSE/(12250:12250): Se conecto un cliente!
+[INFO] 15:41:51:969 SUSE/(12250:12293): El hilo 2 ha llegado a la cola de EXIT.

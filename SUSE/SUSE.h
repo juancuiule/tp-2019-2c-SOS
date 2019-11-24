@@ -5,8 +5,6 @@
 #include <semaphore.h>
 #include "utils.h"
 #include "configuracion.h"
-#include <libSUSE/libSUSE.h>
-#include <libSUSE/utils.h>
 #include <commons/string.h>
 
 int PID = 0;
