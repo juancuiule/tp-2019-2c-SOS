@@ -2,10 +2,15 @@
 
 t_list *tables;
 t_log *logger;
+t_bitarray *frame_usage_bitmap;
+void* bitmap_pointer;
 
-void init_structures() {
+void init_structures(int frames) {
 	tables = list_create();
 	logger = log_create("./logs/segmentpag.log", "Segment", 1, LOG_LEVEL_DEBUG);
+	int bitmap_size_in_bytes = ceil(frames / 8);
+	bitmap_pointer = malloc(bitmap_size_in_bytes);
+	frame_usage_bitmap = bitarray_create_with_mode(bitmap_pointer, bitmap_size_in_bytes, LSB_FIRST);
 }
 
 t_page *create_page(int frame_number) {

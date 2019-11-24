@@ -11,6 +11,7 @@ int main(void) {
 
 	if (init_result != -1) {
 		uint32_t my_memory = muse_alloc(10);
+		log_info(logger, "my_memory: %u", my_memory);
 //		int x = 10;
 //		int*y = malloc(4);
 //		muse_cpy(my_memory, &x, 4);

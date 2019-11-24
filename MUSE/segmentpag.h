@@ -6,6 +6,8 @@
 #include <commons/collections/list.h>
 #include <commons/string.h>
 #include <commons/log.h>
+#include <commons/bitarray.h>
+#include <math.h>
 #include <stdint.h>
 
 typedef enum {
