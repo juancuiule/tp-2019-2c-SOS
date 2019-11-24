@@ -34,6 +34,8 @@ typedef struct {
 
 typedef struct {
 	int frame_number; // frame de memoria o posición de swap
+	bool in_use; // para clock modificado
+	bool modified; // para clock modificado
 	bool flag; // bit de presencia
 } t_page;
 

@@ -12,6 +12,8 @@ t_page *create_page(int frame_number) {
 	t_page * page = malloc(sizeof(t_page));
 	page->flag = false;
 	page->frame_number = frame_number;
+	page->in_use = 1;
+	page->modified = 0;
 	log_info(logger, "Nueva pagina creada");
 	return page;
 }
