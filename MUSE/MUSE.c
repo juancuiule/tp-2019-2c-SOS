@@ -40,7 +40,6 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 	} else {
 		log_info(logger, "El proceso %s no tiene tabla, falto hacer init?");
 		response = create_response(ERROR, r_body);
-		return;
 	}
 	send_response(response, socket_cliente);
 }
@@ -51,14 +50,29 @@ void respond_get(muse_body* body, char* id, int socket_cliente) {
 	size_t size;
 	memcpy(&size, body->content + sizeof(uint32_t), sizeof(size_t));
 
-	// log_info(logger, "El cliente con id: %s hizo get a la src: %u de %i bytes", id, src, size);
-
-	void* val = malloc(5);
-	memcpy((void*) val, MEMORY, 5);
-
+	log_info(logger, "El cliente con id: %s hizo get a la src: %u de %i bytes", id, src, size);
+	process_table* t = get_table_for_process(id);
 	muse_body* r_body = create_body();
-	add_to_body(r_body, size, val);
-	muse_response* response = create_response(SUCCESS, r_body);
+	muse_response* response;
+
+	if (t != NULL) {
+		int process_segments = t->segments->elements_count;
+		process_segment *segment;
+		if (process_segments == 0) {
+			log_info(logger, "El proceso %s no tiene segmentos, es un seg fault?");
+			response = create_response(ERROR, r_body);
+		} else {
+			void* val = malloc(size);
+			// TODO: buscar dato en segmento
+			memcpy((void*) val, MEMORY, 5);
+			add_to_body(r_body, size, val);
+			response = create_response(SUCCESS, r_body);
+			free(val);
+		}
+	} else {
+		log_info(logger, "El proceso %s no tiene tabla, falto hacer init?");
+		response = create_response(ERROR, r_body);
+	}
 	send_response(response, socket_cliente);
 }
 
@@ -189,7 +203,7 @@ int main(void) {
 		return EXIT_FAILURE;
 	}
 
-	init_structures();
+	init_structures(MEMORY_SIZE / PAGE_SIZE);
 	MEMORY = malloc(MEMORY_SIZE);
 
 	pthread_t hilo;
