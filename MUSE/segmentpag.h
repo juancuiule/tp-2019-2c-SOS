@@ -10,6 +10,11 @@
 #include <math.h>
 #include <stdint.h>
 
+t_list *tables;
+t_log *logger;
+t_bitarray *frame_usage_bitmap;
+void* bitmap_pointer;
+
 typedef enum {
 	HEAP,
 	MMAP
@@ -38,5 +43,7 @@ process_segment *create_segment(segment_type type, int base, int size);
 void create_process_table(char* process);
 process_table* get_table_for_process(char* process);
 void add_process_segment(char* process, process_segment* segment);
+void add_page_to_segment(process_segment* segment, t_page* page);
+int find_free_frame(t_bitarray* bitmap);
 
 #endif

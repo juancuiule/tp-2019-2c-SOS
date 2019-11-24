@@ -1,10 +1,5 @@
 #include "segmentpag.h"
 
-t_list *tables;
-t_log *logger;
-t_bitarray *frame_usage_bitmap;
-void* bitmap_pointer;
-
 void init_structures(int frames) {
 	tables = list_create();
 	logger = log_create("./logs/segmentpag.log", "Segment", 1, LOG_LEVEL_DEBUG);
@@ -32,6 +27,18 @@ process_segment *create_segment(segment_type type, int base, int size) {
 	return segment;
 }
 
+void add_page_to_segment(process_segment* segment, t_page* page) {
+	list_add(segment->pages, page);
+}
+
+process_segment *find_segment_with_space(t_list* segments, int size) {
+	int has_space(process_segment* segment) {
+		// TODO: calcular si el segmento tiene espacio;
+		return 0;
+	}
+	return list_find(segments, (void*) has_space);
+}
+
 void create_process_table(char* process) {
 	process_table* new_table = malloc(sizeof(process_table));
 	new_table->process = process;
@@ -39,14 +46,6 @@ void create_process_table(char* process) {
 	new_table->segments = segments;
 	list_add(tables, new_table);
 	log_info(logger, "Se creo una process_table para el proceso: %s", process);
-}
-
-void alloc_for_process(char* process, int size) {
-	process_table* process_table = get_table_for_process(process);
-	int is_heap(process_segment *segment) {
-		return segment->type == HEAP;
-	}
-	list_filter(process_table->segments, (void*) is_heap);
 }
 
 void add_process_segment(char* process, process_segment* segment) {
@@ -64,4 +63,15 @@ process_table* get_table_for_process(char* process) {
 	} else {
 		return NULL;
 	}
+}
+
+int find_free_frame(t_bitarray* bitmap) {
+	int var;
+	for (var = 0; var < bitmap->size; ++var) {
+		bool is_used = bitarray_test_bit(bitmap, var);
+		if (!is_used) {
+			return var;
+		}
+	}
+	return -1;
 }
