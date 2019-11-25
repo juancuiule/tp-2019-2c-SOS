@@ -4,13 +4,16 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../libSUSE.c 
+../libSUSE.c \
+../utils.c 
 
 OBJS += \
-./libSUSE.o 
+./libSUSE.o \
+./utils.o 
 
 C_DEPS += \
-./libSUSE.d 
+./libSUSE.d \
+./utils.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

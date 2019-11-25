@@ -61,24 +61,20 @@ int conectarse_a_suse() {
 
 int suse_create(int tid){
 	if (tid > max_tid) max_tid = tid;
-	//printf("suse_create(%i)\n", tid);
 	return ejecutar_operacion(tid, 1);
 }
 
 int suse_schedule_next(void){
 	int next = max_tid;
-	//printf("suse_schedule_next() (hilo %i)\n", next);
 	ejecutar_operacion(next, 2);
 	return next;
 }
 
 int suse_join(int tid){
-	//printf("suse_join(%i)\n", tid);
 	return ejecutar_operacion(tid, 3);
 }
 
 int suse_close(int tid){
-	//printf("suse_close(%i)\n", tid);
 	return ejecutar_operacion(tid, 4);
 }
 
@@ -151,11 +147,6 @@ void enviar_paquete(t_paquete* paquete, int socket_cliente)
 	memcpy(&opcode, a_enviar, 4);
 	memcpy(&size, a_enviar + 4, 4);
 	memcpy(&tid, a_enviar + 8, 4);
-	/*
-	printf("opcode enviado: %i\n", opcode);
-	printf("size enviado: %i\n", size);
-	printf("TID enviado: %i\n", tid);
-	*/
 }
 
 void crear_buffer(t_paquete* paquete)

@@ -17,8 +17,10 @@
 #include <commons/collections/list.h>
 #include <string.h>
 #include "configuracion.h"
-#include <libSUSE/libSUSE.h>
-#include <libSUSE/utils.h>
+
+typedef enum {
+	MENSAJE, PAQUETE
+} op_code;
 
 typedef struct
 {

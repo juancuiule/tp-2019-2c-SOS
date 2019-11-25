@@ -42,7 +42,7 @@ typedef enum {
 	CLOSE,
 	WAIT,
 	SIGNAL
-} op_code;
+} operacion;
 
 typedef struct {
 	char* id;

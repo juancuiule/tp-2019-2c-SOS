@@ -22,9 +22,6 @@ int main() {
 void inicializar() {
 	logger = log_create("../SUSE.log", "SUSE", 1, LOG_LEVEL_DEBUG);
 	logger_metricas = log_create("../METRICAS.log", "SUSE", 1, LOG_LEVEL_DEBUG);
-	diccionario_programas = dictionary_create();
-	diccionario_tid_pid = dictionary_create();
-	diccionario_tid = dictionary_create();
 
 	programas = list_create();
 	cola_new = queue_create();
@@ -42,7 +39,7 @@ void inicializar() {
 }
 
 void atender_cliente(int cliente_fd) {
-	int indice;
+	int pedido;
 	int offset = 0;
 	int opcode, size, tid, pid;
 	int tamanio;
@@ -57,6 +54,10 @@ void atender_cliente(int cliente_fd) {
 	hilo_t* hilo = malloc(sizeof(hilo_t));
 	hilo->tid = tid;
 	hilo->pid = pid;
+
+	programa_t* programa = malloc(sizeof(programa_t));
+	programa = obtener_programa(pid);
+	hilo_t* proximo_hilo = malloc(sizeof(hilo_t));
 
 	switch (opcode) {
 		case 1:
@@ -111,10 +112,6 @@ void logear_metricas() {
 		sleep(METRICS_TIMER);
 		log_info(logger_metricas, "Grado de multiprogramación: %i", GRADO_MULTIPROGRAMACION);
 	}
-}
-
-void ejecutar_hilo(hilo_t* hilo) {
-	printf("Ejecuto hilo %i", hilo->tid);
 }
 
 void agregar_programa(hilo_t* hilo) {
@@ -192,9 +189,6 @@ void liberar() {
 	config_destroy(config);
 	log_destroy(logger);
 	log_destroy(logger_metricas);
-	dictionary_destroy(diccionario_programas);
-	dictionary_destroy(diccionario_tid_pid);
-	dictionary_destroy(diccionario_tid);
 	sem_destroy(tid_sem);
 	sem_destroy(pid_sem);
 	sem_destroy(multiprogramacion_sem);

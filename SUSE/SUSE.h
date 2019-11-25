@@ -8,6 +8,36 @@
 #include <commons/string.h>
 #include <stdbool.h>
 
+typedef struct {
+	int tid;
+	int pid;
+	int tiempo_ejecucion;
+	int tiempo_espera;
+	int tiempo_cpu;
+	float estimacion_anterior;
+	float rafaga_anterior;
+} __attribute__((packed)) hilo_t;
+
+typedef struct {
+	int pid;
+	t_queue* cola_ready;
+	hilo_t* hilo_en_exec;
+} programa_t;
+
+typedef enum {
+	CREATE,
+	SCHEDULE_NEXT,
+	JOIN,
+	CLOSE,
+	WAIT,
+	SIGNAL
+} operacion;
+
+typedef struct {
+	char* id;
+	int valor;
+} semaforo_t;
+
 int pid_programa_buscado;
 
 int PID = 0;
@@ -37,5 +67,6 @@ int programa_nuevo(hilo_t*);
 void agregar_programa(hilo_t*);
 int obtener_indice_de_programa(int);
 hilo_t* siguiente_hilo_a_ejecutar(programa_t*);
+programa_t* obtener_programa(int);
 void ejecutar_nuevo_hilo(hilo_t*);
 void liberar();
