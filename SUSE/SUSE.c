@@ -68,6 +68,11 @@ void atender_cliente(int cliente_fd) {
 
 			break;
 		case 2:
+			/*
+			hilo_t* siguiente_hilo = malloc(sizeof(hilo_t));
+			siguiente_hilo = siguiente_hilo_a_ejecutar();
+			enviar_siguiente_hilo_a_ejecutar(cliente_fd, siguiente_hilo);
+			*/
 			break;
 		case 3:
 			bloquear_hilo(hilo);
@@ -83,12 +88,16 @@ bool es_programa_buscado(programa_t* programa) {
 	return programa->pid == pid_programa_buscado;
 }
 
+programa_t* obtener_programa(int pid) {
+	pid_programa_buscado = pid;
+	return list_find(programas, (void*)es_programa_buscado);
+}
+
 void ejecutar_nuevo_hilo(hilo_t* hilo) {
 	printf("Ejecuto hilo %i", hilo->tid);
 	hilo_t* hilo_anterior = malloc(sizeof(hilo_t));
 	programa_t* programa = malloc(sizeof(programa_t));
-	pid_programa_buscado = hilo->pid;
-	programa = list_find(programas, es_programa_buscado);
+	programa = obtener_programa(hilo->pid);
 
 	if (programa->hilo_en_exec != NULL)
 		hilo_anterior = programa->hilo_en_exec;
@@ -145,9 +154,8 @@ void encolar_hilo_en_ready() {
 	programa_t* programa = malloc(sizeof(programa_t));
 	programa->cola_ready = queue_create();
 	programa->hilo_en_exec = malloc(sizeof(hilo_t));
-	pid_programa_buscado = PID;
-	programa = list_find(programas, es_programa_buscado);
-	//queue_push(programa->cola_ready, hilo);
+	programa = obtener_programa(hilo->pid);
+	queue_push(programa->cola_ready, hilo);
 	log_info(logger, "El hilo %d del programa %d está en READY", hilo->tid, hilo->pid);
 	GRADO_MULTIPROGRAMACION++;
 
