@@ -6,6 +6,9 @@
 #include "utils.h"
 #include "configuracion.h"
 #include <commons/string.h>
+#include <stdbool.h>
+
+int pid_programa_buscado;
 
 int PID = 0;
 int TID = 0;
@@ -17,9 +20,7 @@ t_log* logger_metricas;
 t_queue* cola_new;
 t_queue* cola_blocked;
 t_queue* cola_exit;
-programa_t* programas;
-t_queue* colas_ready[100];
-t_queue* colas_exec[100];
+t_list* programas;
 
 sem_t* tid_sem;
 sem_t* pid_sem;

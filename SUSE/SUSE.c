@@ -26,16 +26,10 @@ void inicializar() {
 	diccionario_tid_pid = dictionary_create();
 	diccionario_tid = dictionary_create();
 
+	programas = list_create();
 	cola_new = queue_create();
 	cola_blocked = queue_create();
 	cola_exit = queue_create();
-	programas = malloc(100 * sizeof(programa_t));
-
-	for (int i = 0; i < 100; i++) {
-		programas[i].pid = 0;
-		programas[i].cola_ready = queue_create();
-		programas[i].hilo_en_exec = malloc(sizeof(hilo_t));
-	}
 
 	tid_sem = malloc(sizeof(sem_t));
 	sem_init(tid_sem, 0 , 1);
@@ -74,11 +68,6 @@ void atender_cliente(int cliente_fd) {
 
 			break;
 		case 2:
-		    indice = obtener_indice_de_pid(hilo->pid);
-			bloquear_hilo(programas[indice].hilo_en_exec);
-			hilo_t* siguiente_hilo = malloc(sizeof(hilo_t));
-			siguiente_hilo = siguiente_hilo_a_ejecutar(programas[hilo->pid]);
-			ejecutar_nuevo_hilo(siguiente_hilo);
 			break;
 		case 3:
 			bloquear_hilo(hilo);
@@ -90,26 +79,23 @@ void atender_cliente(int cliente_fd) {
 
 }
 
-int obtener_indice_de_pid(int pid) {
-	int indice = 0;
-
-	while (indice < 100) {
-		if (programas[indice].pid == pid)
-			return indice;
-
-		indice++;
-	}
+bool es_programa_buscado(programa_t* programa) {
+	return programa->pid == pid_programa_buscado;
 }
 
 void ejecutar_nuevo_hilo(hilo_t* hilo) {
 	printf("Ejecuto hilo %i", hilo->tid);
 	hilo_t* hilo_anterior = malloc(sizeof(hilo_t));
+	programa_t* programa = malloc(sizeof(programa_t));
+	pid_programa_buscado = hilo->pid;
+	programa = list_find(programas, es_programa_buscado);
 
-	if (programas[hilo->pid].hilo_en_exec != NULL)
-		hilo_anterior = programas[hilo->pid].hilo_en_exec;
+	if (programa->hilo_en_exec != NULL)
+		hilo_anterior = programa->hilo_en_exec;
 
-	programas[hilo->pid].hilo_en_exec = hilo;
+	programa->hilo_en_exec = hilo;
 	log_info(logger, "El hilo %i del programa %i llegó a EXEC.", hilo->tid, hilo->pid);
+	free(programa);
 	free(hilo_anterior);
 }
 
@@ -122,61 +108,22 @@ void logear_metricas() {
 	}
 }
 
-int cantidad_de_hilos_en_new(programa_t programa) {
-	int cant = 0;
-	int indice = obtener_indice_de_programa(programa.pid);
-	t_queue* aux = cola_new;
-	hilo_t* hilo = malloc(sizeof(hilo_t));
-
-	while (aux != NULL) {
-		hilo = queue_pop(cola_new);
-
-		if (hilo->pid == programa.pid)
-			cant++;
-	}
-
-	return cant;
-}
-
 void ejecutar_hilo(hilo_t* hilo) {
 	printf("Ejecuto hilo %i", hilo->tid);
 }
 
-void imprimir_programas() {
-	int pid = 0;
-
-	for(int i = 0; i < 10; i++) {
-		printf("programa %i\n", programas[i].pid);
-	}
-}
-
 void agregar_programa(hilo_t* hilo) {
-	programa_t programa;
-	programa.pid = 0;
-	programa.cola_ready = queue_create();
-	programa.hilo_en_exec = 0;
-	programas[PID].pid = PID;
-	programas[PID].cola_ready = programa.cola_ready;
-	programas[PID].hilo_en_exec = NULL;
+	programa_t* programa = malloc(sizeof(programa_t));
+	programa->pid = 0;
+	programa->cola_ready = queue_create();
+	programa->hilo_en_exec = NULL;
+	list_add(programas, programa);
 	PID++;
 }
 
 void atender_nuevo_cliente(int cliente_fd) {
 	hilo_t* hilo = malloc(sizeof(hilo_t));
 	hilo = recibir_paquete(cliente_fd);
-}
-
-int programa_nuevo(hilo_t* hilo) {
-	int i = 0;
-
-	while (programas[i].pid != -1) {
-		if (programas->pid != hilo->pid)
-			i++;
-		else
-			return 0;
-	}
-
-	return 1;
 }
 
 void encolar_hilo_en_new(hilo_t* hilo) {
@@ -192,19 +139,15 @@ void cerrar_hilo(hilo_t* hilo) {
 	sem_post(multiprogramacion_sem);
 }
 
-int obtener_indice_de_programa(int pid) {
-	int i = 0;
-
-	while (programas[i].pid != pid)
-		i++;
-
-	return i;
-}
-
 void encolar_hilo_en_ready() {
-	hilo_t* hilo = queue_pop(cola_new);
-	//int indice = obtener_indice_de_programa(hilo->pid);
-	queue_push(programas[PID].cola_ready, hilo);
+	hilo_t* hilo = malloc(sizeof(hilo_t));
+	hilo = queue_pop(cola_new);
+	programa_t* programa = malloc(sizeof(programa_t));
+	programa->cola_ready = queue_create();
+	programa->hilo_en_exec = malloc(sizeof(hilo_t));
+	pid_programa_buscado = PID;
+	programa = list_find(programas, es_programa_buscado);
+	//queue_push(programa->cola_ready, hilo);
 	log_info(logger, "El hilo %d del programa %d está en READY", hilo->tid, hilo->pid);
 	GRADO_MULTIPROGRAMACION++;
 
@@ -213,12 +156,23 @@ void encolar_hilo_en_ready() {
 }
 
 void bloquear_hilo(hilo_t* hilo) {
+	/*
 	char* thread_id = string_itoa(hilo->tid);
 	int pid = dictionary_get(diccionario_tid_pid, thread_id);
-	hilo_t* thread = programas[PID].hilo_en_exec;
-	programas[PID].hilo_en_exec = NULL;
+	*/
+	programa_t* programa = malloc(sizeof(programa_t));
+	programa->cola_ready = queue_create();
+	programa->hilo_en_exec = malloc(sizeof(hilo_t));
+	pid_programa_buscado = hilo->pid;
+	programa = list_find(programas, es_programa_buscado);
+	queue_push(cola_blocked, hilo);
+	/*
+	hilo_t* thread = malloc(sizeof(hilo_t));
+	thread = programa->hilo_en_exec;
+	programa->hilo_en_exec = NULL;
 	queue_push(cola_blocked, thread);
-	log_info(logger, "El hilo %d ha llegado a la cola de BLOCKED", dictionary_get(diccionario_tid, thread_id));
+	*/
+	log_info(logger, "El hilo %d ha llegado a la cola de BLOCKED", hilo->tid);
 }
 
 hilo_t* siguiente_hilo_a_ejecutar(programa_t programa) {
@@ -250,6 +204,7 @@ void liberar() {
 	sem_destroy(tid_sem);
 	sem_destroy(pid_sem);
 	sem_destroy(multiprogramacion_sem);
+	list_destroy(programas);
 }
 
 
