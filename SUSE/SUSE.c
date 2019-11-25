@@ -114,7 +114,7 @@ void ejecutar_hilo(hilo_t* hilo) {
 
 void agregar_programa(hilo_t* hilo) {
 	programa_t* programa = malloc(sizeof(programa_t));
-	programa->pid = 0;
+	programa->pid = hilo->pid;
 	programa->cola_ready = queue_create();
 	programa->hilo_en_exec = NULL;
 	list_add(programas, programa);
@@ -164,7 +164,7 @@ void bloquear_hilo(hilo_t* hilo) {
 	programa->cola_ready = queue_create();
 	programa->hilo_en_exec = malloc(sizeof(hilo_t));
 	pid_programa_buscado = hilo->pid;
-	programa = list_find(programas, es_programa_buscado);
+	programa = list_find(programas, (void*)es_programa_buscado);
 	queue_push(cola_blocked, hilo);
 	/*
 	hilo_t* thread = malloc(sizeof(hilo_t));
