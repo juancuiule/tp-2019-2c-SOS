@@ -164,22 +164,11 @@ void encolar_hilo_en_ready() {
 }
 
 void bloquear_hilo(hilo_t* hilo) {
-	/*
-	char* thread_id = string_itoa(hilo->tid);
-	int pid = dictionary_get(diccionario_tid_pid, thread_id);
-	*/
 	programa_t* programa = malloc(sizeof(programa_t));
 	programa->cola_ready = queue_create();
 	programa->hilo_en_exec = malloc(sizeof(hilo_t));
-	pid_programa_buscado = hilo->pid;
-	programa = list_find(programas, (void*)es_programa_buscado);
+	programa = obtener_programa(hilo->pid);
 	queue_push(cola_blocked, hilo);
-	/*
-	hilo_t* thread = malloc(sizeof(hilo_t));
-	thread = programa->hilo_en_exec;
-	programa->hilo_en_exec = NULL;
-	queue_push(cola_blocked, thread);
-	*/
 	log_info(logger, "El hilo %d ha llegado a la cola de BLOCKED", hilo->tid);
 }
 
