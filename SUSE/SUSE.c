@@ -68,11 +68,7 @@ void atender_cliente(int cliente_fd) {
 
 			break;
 		case 2:
-			/*
-			hilo_t* siguiente_hilo = malloc(sizeof(hilo_t));
-			siguiente_hilo = siguiente_hilo_a_ejecutar();
-			enviar_siguiente_hilo_a_ejecutar(cliente_fd, siguiente_hilo);
-			*/
+			ejecutar_nuevo_hilo(hilo);
 			break;
 		case 3:
 			bloquear_hilo(hilo);
@@ -94,22 +90,22 @@ programa_t* obtener_programa(int pid) {
 }
 
 void ejecutar_nuevo_hilo(hilo_t* hilo) {
-	printf("Ejecuto hilo %i", hilo->tid);
 	hilo_t* hilo_anterior = malloc(sizeof(hilo_t));
 	programa_t* programa = malloc(sizeof(programa_t));
+	programa->cola_ready = queue_create();
+	programa->hilo_en_exec = malloc(sizeof(hilo_t));
 	programa = obtener_programa(hilo->pid);
 
 	if (programa->hilo_en_exec != NULL)
 		hilo_anterior = programa->hilo_en_exec;
 
+	hilo = siguiente_hilo_a_ejecutar(programa);
+
 	programa->hilo_en_exec = hilo;
 	log_info(logger, "El hilo %i del programa %i llegó a EXEC.", hilo->tid, hilo->pid);
-	free(programa);
-	free(hilo_anterior);
 }
 
 void logear_metricas() {
-	int hilos_new = 0;
 
 	while (1) {
 		sleep(METRICS_TIMER);
@@ -172,21 +168,22 @@ void bloquear_hilo(hilo_t* hilo) {
 	log_info(logger, "El hilo %d ha llegado a la cola de BLOCKED", hilo->tid);
 }
 
-hilo_t* siguiente_hilo_a_ejecutar(programa_t programa) {
-	float min = 9999;
-	float siguiente_est = 0;
+hilo_t* siguiente_hilo_a_ejecutar(programa_t* programa) {
 	hilo_t* hilo = malloc(sizeof(hilo_t));
 	hilo_t* siguiente = malloc(sizeof(hilo_t));
-	t_queue* aux = queue_create();
-	aux = programa.cola_ready;
+	t_list* hilos = list_create();
+	hilos = programa->cola_ready->elements;
 
-	while (aux != NULL) {
-		hilo = queue_pop(aux);
-		siguiente_est = (1 - ALPHA_SJF) * hilo->estimacion_anterior + ALPHA_SJF * hilo->rafaga_anterior;
-
-		if (siguiente_est < min)
-			siguiente = hilo;
+	double estimacion(hilo_t* hilo) {
+		return (1 - ALPHA_SJF) * hilo->estimacion_anterior + ALPHA_SJF * hilo->rafaga_anterior;
 	}
+
+	bool comparador(hilo_t* hilo1, hilo_t* hilo2) {
+		return estimacion(hilo1) <= estimacion(hilo2);
+	}
+
+	list_sort(hilos, comparador);
+	siguiente = list_get(hilos, 0);
 
 	return siguiente;
 }
