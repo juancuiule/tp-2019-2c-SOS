@@ -7,6 +7,7 @@
 #include "utils.h"
 
 int max_tid = 0;
+int conexion_con_suse;
 
 hilo_t* crear_nuevo_hilo(int tid, int pid) {
 	hilo_t* hilo = malloc(sizeof(hilo_t));
@@ -21,19 +22,20 @@ hilo_t* crear_nuevo_hilo(int tid, int pid) {
 }
 
 int ejecutar_operacion(int tid, int operacion) {
-	int conexion = conectarse_a_suse();
+	conexion_con_suse = conectarse_a_suse();
 	int pid = getpid();
 	t_paquete* paquete = crear_paquete(operacion);
 	hilo_t* hilo = crear_nuevo_hilo(tid, pid);
 	agregar_a_paquete(paquete, hilo, sizeof(hilo_t));
-	enviar_paquete(paquete, conexion);
+	enviar_paquete(paquete, conexion_con_suse);
+
+	int next = 45;
 
 	if (operacion == 2) {
-		int siguiente_tid;
-		conexion = conectarse_a_suse();
-		recv(conexion, siguiente_tid, sizeof(int), 0);
-		return siguiente_tid;
+		recv(conexion_con_suse, next, sizeof(int), 0);
+		printf("Próximo hilo a ejecutar: %i\n", next);
 	}
+
 
 	return 0;
 }
@@ -73,7 +75,7 @@ int suse_create(int tid){
 }
 
 int suse_schedule_next(void){
-	int next = max_tid;
+	int next;
 	return ejecutar_operacion(next, 2);
 }
 

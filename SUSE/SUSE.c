@@ -100,9 +100,10 @@ void atender_cliente(int cliente_fd) {
 				ejecutar_nuevo_hilo(hilo);
 			}
 
-			hilo_t* proximo_hilo = siguiente_hilo_a_ejecutar(programa);
-			printf("TID del próximo hilo a ejecutar: %i\n", proximo_hilo->tid);
-			send(cliente_fd, proximo_hilo->tid, sizeof(int), 0);
+			/*hilo_t* proximo_hilo = siguiente_hilo_a_ejecutar(programa);
+			printf("TID del próximo hilo a ejecutar: %i\n", proximo_hilo->tid);*/
+			int next = 55;
+			send(cliente_fd, next, sizeof(next), 0);
 
 			break;
 		case 3:
