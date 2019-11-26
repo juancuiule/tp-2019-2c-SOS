@@ -38,7 +38,9 @@ typedef struct {
 	int valor;
 } semaforo_t;
 
+int servidor_fd;
 int pid_programa_buscado;
+int tid_siguiente_hilo;
 
 int PID = 0;
 int TID = 0;

@@ -2,13 +2,14 @@
 
 int main() {
 	int cliente_fd;
-	pthread_t hilo_clientes, hilo_metricas;
+	pthread_t hilo_clientes, hilo_metricas, hilo_tid_proximo_hilo;
 
 	inicializar();
 	configurar();
-	int servidor_fd = iniciar_servidor();
+	servidor_fd = iniciar_servidor();
 
-	pthread_create(&hilo_metricas, NULL, logear_metricas, NULL);
+	pthread_create(&hilo_metricas, NULL, (void*)logear_metricas, NULL);
+	pthread_create(&hilo_tid_proximo_hilo, NULL, (void*)obtener_tid_proximo_hilo, NULL);
 
 	while(1) {
 		cliente_fd = esperar_cliente(servidor_fd);
@@ -36,6 +37,13 @@ void inicializar() {
 
 	multiprogramacion_sem = malloc(sizeof(sem_t));
 	sem_init(multiprogramacion_sem, 0, 1);
+}
+
+void obtener_tid_proximo_hilo() {
+	int
+	while (1) {
+		recv()
+	}
 }
 
 void atender_cliente(int cliente_fd) {
