@@ -45,6 +45,7 @@ typedef struct {
 int servidor_fd;
 int tid_hilo_buscado;
 int pid_programa_buscado;
+int tid_hilo_anterior;
 int tid_siguiente_hilo;
 
 int PID = 0;

@@ -20,6 +20,8 @@ int main() {
 }
 
 void inicializar() {
+	tid_hilo_anterior = 9999;
+
 	logger = log_create("../SUSE.log", "SUSE", 1, LOG_LEVEL_DEBUG);
 	logger_metricas = log_create("../METRICAS.log", "SUSE", 1, LOG_LEVEL_DEBUG);
 
@@ -92,7 +94,16 @@ void atender_cliente(int cliente_fd) {
 
 			break;
 		case 2:
-			ejecutar_nuevo_hilo(hilo);
+
+			if (hilo->tid != tid_hilo_anterior) {
+				tid_hilo_anterior = hilo->tid;
+				ejecutar_nuevo_hilo(hilo);
+			}
+
+			hilo_t* proximo_hilo = siguiente_hilo_a_ejecutar(programa);
+			printf("TID del próximo hilo a ejecutar: %i\n", proximo_hilo->tid);
+			send(cliente_fd, proximo_hilo->tid, sizeof(int), 0);
+
 			break;
 		case 3:
 			bloquear_hilo(hilo);
@@ -123,10 +134,10 @@ void ejecutar_nuevo_hilo(hilo_t* hilo) {
 	if (programa->hilo_en_exec != NULL)
 		hilo_anterior = programa->hilo_en_exec;
 
+	log_info(logger, "El hilo %i del programa %i llegó a EXEC.", hilo->tid, hilo->pid);
 	hilo = siguiente_hilo_a_ejecutar(programa);
 	hilo->timestamp_ultima_llegada_a_exec = time(NULL);
 	programa->hilo_en_exec = hilo;
-	log_info(logger, "El hilo %i del programa %i llegó a EXEC.", hilo->tid, hilo->pid);
 }
 
 void logear_metricas() {
@@ -183,6 +194,7 @@ void cerrar_hilo(hilo_t* hilo) {
 	sem_wait(multiprogramacion_sem);
 	GRADO_MULTIPROGRAMACION--;
 	sem_post(multiprogramacion_sem);
+	tid_hilo_anterior = 9999;
 }
 
 void encolar_hilo_en_ready() {
