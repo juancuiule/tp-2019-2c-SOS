@@ -93,7 +93,6 @@ void atender_cliente(int cliente_fd) {
 			break;
 		case 2:
 			ejecutar_nuevo_hilo(hilo);
-
 			break;
 		case 3:
 			bloquear_hilo(hilo);
@@ -131,10 +130,30 @@ void ejecutar_nuevo_hilo(hilo_t* hilo) {
 }
 
 void logear_metricas() {
+	void logear_metricas_hilo(hilo_t* hilo) {
+		log_info(logger_metricas, "Métricas del hilo %i: ", hilo->tid);
+		log_info(logger_metricas, "tiempo de ejecución: %i", hilo->tiempo_ejecucion);
+		log_info(logger_metricas, "tiempo de espera: %i", hilo->tiempo_espera);
+		log_info(logger_metricas, "tiempo de uso de CPU: %i", hilo->tiempo_cpu);
+	}
+
+	void logear_metricas_hilos_programa(programa_t* programa) {
+		hilo_t* hilo_en_ejecucion = malloc(sizeof(hilo_t));
+		hilo_en_ejecucion = programa->hilo_en_exec;
+		t_list* hilos_programa = list_create();
+		list_add(hilos_programa, hilo_en_ejecucion);
+		list_add_all(hilos_programa, programa->cola_ready->elements);
+		list_iterate(hilos_programa, (void*)logear_metricas_hilo);
+	}
 
 	while (1) {
 		sleep(METRICS_TIMER);
 		log_info(logger_metricas, "Grado de multiprogramación: %i", GRADO_MULTIPROGRAMACION);
+		/*
+		list_iterate(cola_new->elements, (void*)logear_metricas_hilo);
+		list_iterate(cola_blocked->elements, (void*)logear_metricas_hilo);
+		list_iterate(programas, (void*)logear_metricas_hilos_programa);
+		*/
 	}
 }
 
@@ -160,7 +179,7 @@ void encolar_hilo_en_new(hilo_t* hilo) {
 
 void cerrar_hilo(hilo_t* hilo) {
 	queue_push(cola_exit, hilo);
-	log_info(logger, "El hilo %i ha llegado a la cola de EXIT.", hilo->tid);
+	log_info(logger, "El hilo %i del programa %i llegó a EXIT.", hilo->tid, hilo->pid);
 	sem_wait(multiprogramacion_sem);
 	GRADO_MULTIPROGRAMACION--;
 	sem_post(multiprogramacion_sem);
@@ -175,7 +194,7 @@ void encolar_hilo_en_ready() {
 	programa = obtener_programa(hilo->pid);
 	hilo->timestamp_ultima_llegada_a_ready = time(NULL);
 	queue_push(programa->cola_ready, hilo);
-	log_info(logger, "El hilo %d del programa %d está en READY", hilo->tid, hilo->pid);
+	log_info(logger, "El hilo %d del programa %d llegó a READY", hilo->tid, hilo->pid);
 	GRADO_MULTIPROGRAMACION++;
 
 	if (GRADO_MULTIPROGRAMACION == MAX_MULTIPROG)
@@ -188,7 +207,7 @@ void bloquear_hilo(hilo_t* hilo) {
 	programa->hilo_en_exec = malloc(sizeof(hilo_t));
 	programa = obtener_programa(hilo->pid);
 	queue_push(cola_blocked, hilo);
-	log_info(logger, "El hilo %d ha llegado a la cola de BLOCKED", hilo->tid);
+	log_info(logger, "El hilo %d del programa %i llegó a BLOCKED", hilo->tid, hilo->pid);
 }
 
 hilo_t* siguiente_hilo_a_ejecutar(programa_t* programa) {
