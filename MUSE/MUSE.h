@@ -11,8 +11,5 @@
 
 char* IP;
 char* PORT;
-int MEMORY_SIZE;
-int PAGE_SIZE;
-int SWAP_SIZE;
 
 #endif

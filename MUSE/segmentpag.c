@@ -8,27 +8,23 @@ void init_structures(int m_size, int p_size) {
 	bitmap_pointer = malloc(bitmap_size_in_bytes);
 	frame_usage_bitmap = bitarray_create_with_mode(bitmap_pointer, bitmap_size_in_bytes, LSB_FIRST);
 
-	MEMORY = malloc(m_size);
-//	int i;
-//	for(i = 0; i < frames; i++) {
-//		frame* new_frame = malloc(sizeof(frame));
-//		new_frame->frame_number = i;
-//		new_frame->blocks = list_create();
-//		frame_metadata* metadata = malloc(sizeof(frame_metadata));
-//		log_info(logger, "frame metadata size: %i", sizeof(frame_metadata));
-//		metadata->is_free = 1;
-//		metadata->size = p_size - sizeof(frame_metadata);
-//		// log_info(logger, "frame metadata size: %i", metadata->size);
-//		frame_block* block = malloc(sizeof(frame_block));
-//		block->data = NULL;
-//		block->metadata = metadata;
-//		memcpy(MEMORY, new_frame + i * sizeof(frame), sizeof(frame) * i);
-//	}
+	MEMORY = calloc(frames, p_size);
+	int i;
+	for(i = 0; i < frames; i++) {
+		void* new_frame = malloc(p_size);
+		bool is_free = true;
+		uint32_t size = p_size - sizeof(bool) - sizeof(uint32_t);
+		log_info(logger, "size: %i", size);
+		memcpy(new_frame, &is_free, sizeof(bool));
+		memcpy(new_frame + sizeof(bool), &size, sizeof(uint32_t));
+		*(MEMORY + i) = new_frame;
+		// free(new_frame);
+	}
 }
 
 t_page *create_page(int frame_number) {
 	t_page * page = malloc(sizeof(t_page));
-	page->flag = false;
+	page->flag = true;
 	page->frame_number = frame_number;
 	page->in_use = 1;
 	page->modified = 0;
@@ -36,7 +32,7 @@ t_page *create_page(int frame_number) {
 	return page;
 }
 
-process_segment *create_segment(segment_type type, int base, int size) {
+process_segment *create_segment(segment_type type, uint32_t base, int size) {
 	process_segment *segment = malloc(sizeof(process_segment));
 	segment->type = type;
 	segment->base = base;
@@ -48,32 +44,46 @@ process_segment *create_segment(segment_type type, int base, int size) {
 }
 
 void add_page_to_segment(process_segment* segment, t_page* page) {
-	list_add(segment->pages, page);
+	list_add((*segment).pages, page);
+	log_info(logger, "segment has: %i pages", segment->pages->elements_count);
 }
 
 process_segment *find_segment_with_space(t_list* segments, int size) {
-	int is_heap(process_segment* segment) {
-		return segment->type == HEAP;
-	};
-	t_list* heap_segments = list_filter(segments, (void*) is_heap);
-	log_info(logger, "Heap Segments Length %i", heap_segments->elements_count);
+	process_segment* segment = segments->head->data;
+	log_info(logger, "base: %i, size: %i, pages: %i, type: %s", segment->base, segment->size, segment->pages->elements_count, segment->type == 0 ? "HEAP" : "MMAP");
 
-	int has_space(process_segment* segment) {
-		int has_free_frame(t_page* page) {
-			frame* a_frame = malloc(sizeof(frame));
-			log_info(logger, "frame number %i", page->frame_number);
-			memcpy(a_frame, MEMORY + page->frame_number * sizeof(frame), sizeof(frame));
+	t_page* page = segment->pages->head->data;
+	void* frame = MEMORY[page->frame_number];
 
-			log_info(logger, "frame number %i, blocks: %i", a_frame->frame_number, a_frame->blocks->elements_count);
-			int frame_with_space(frame_block* block) {
-				log_info(logger, "data %i, size: %i", block->data, block->metadata->size);
-				return block->metadata->is_free && block->metadata->size > size;
-			}
-			return list_find(a_frame->blocks, (void*) frame_with_space);
-		}
-		return list_any_satisfy(segment->pages, (void*) has_free_frame);
-	}
-	return list_find(heap_segments, (void*) has_space);
+	bool is_free;
+	memcpy(&is_free, frame, sizeof(bool));
+	uint32_t data_size;
+	memcpy(&data_size, frame + 1, sizeof(uint32_t));
+	log_info(logger, "Una pagina del segmento %i apunta al frame %i y este esta: %s data_size es %i", segment->base, page->frame_number, is_free ? "LIBRE" : "OCUPADO", data_size);
+
+//	int is_heap(process_segment* segment) {
+//		return segment->type == HEAP;
+//	};
+//	t_list* heap_segments = list_filter(segments, (void*) is_heap);
+
+//	int has_space(process_segment* segment) {
+//		int has_free_frame(t_page* page) {
+//			void* frame = MEMORY[page->frame_number];
+//			bool is_free;
+//			memcpy(&is_free, frame, sizeof(bool));
+//			uint32_t data_size;
+//			memcpy(&data_size, frame + 1, sizeof(uint32_t));
+//			log_info(logger, "Una pagina del segmento %i apunta al frame %i y este esta: %s data_size es %i", segment->base, page->frame_number, is_free ? "LIBRE" : "OCUPADO", data_size);
+////			int frame_with_space(frame_block* block) {
+////				return block->metadata->is_free && block->metadata->size > size;
+////			}
+////			return list_find(a_frame->blocks, (void*) frame_with_space);
+//			return 0;
+//		}
+//		return list_any_satisfy(segment->pages, (void*) has_free_frame);
+//	}
+//	return list_find(heap_segments, (void*) has_space);
+	return segment;
 }
 
 void create_process_table(char* process) {
@@ -85,9 +95,18 @@ void create_process_table(char* process) {
 	log_info(logger, "Se creo una process_table para el proceso: %s", process);
 }
 
+//void* get_segment_from_dir(t_list* segments, int dir) {
+//	int is_this(process_segment* segment) {
+//		return segment->base;
+//	}
+//	return;
+//}
+
 void add_process_segment(char* process, process_segment* segment) {
 	process_table* process_table = get_table_for_process(process);
 	list_add((*process_table).segments, segment);
+	log_info(logger, "process has: %i segments", process_table->segments->elements_count);
+
 }
 
 process_table* get_table_for_process(char* process) {
@@ -99,6 +118,47 @@ process_table* get_table_for_process(char* process) {
 		return filtered->head->data;
 	} else {
 		return NULL;
+	}
+}
+
+void register_used_space_in_frame(int frame_number, uint32_t size) {
+	void* frame = MEMORY[frame_number];
+	bool x = false;
+	bool y = true;
+	bool is_free = false;
+	uint32_t data_size = 0;
+    uint32_t offset = 0;
+
+    // Me muevo hasta encontrar un espacio libre o que se termine el frame...
+	while (offset < PAGE_SIZE) {
+		log_info(logger, "is_free: %i, data_size: %u, offset: %i", is_free, data_size, offset);
+		memcpy(&is_free, frame + offset, sizeof(bool));
+		log_info(logger, "is_free: %i", is_free);
+		if (is_free) {
+			break;
+		}
+		offset += sizeof(bool);
+		memcpy(&data_size, frame + offset, sizeof(uint32_t));
+		offset += sizeof(uint32_t);
+		log_info(logger, "data_size: %i", data_size);
+		offset += data_size;
+	}
+
+	// Si queda espacio libre entonces lo ocupo
+	// y al final agrego mas metadata para lo que queda free
+	if (is_free) {
+		log_info(logger, "is_free: %i, data_size: %u, offset: %u", is_free, data_size, offset);
+		memcpy(frame + offset, &x, sizeof(bool));
+		log_info(logger, "after set as used");
+		offset += sizeof(bool);
+		memcpy(frame + offset, &(size), sizeof(uint32_t));
+		log_info(logger, "after set size %i", size);
+		offset += sizeof(uint32_t);
+		// pointer = offset ???
+		memcpy(frame + offset, &y, sizeof(bool));
+		offset += sizeof(bool);
+		uint32_t remaining_size = PAGE_SIZE - offset - sizeof(uint32_t);
+		memcpy(frame + offset, &(remaining_size), sizeof(uint32_t));
 	}
 }
 

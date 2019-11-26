@@ -8,6 +8,9 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 	uint32_t tam_pedido;
 	memcpy(&tam_pedido, body->content, sizeof(uint32_t));
 
+	int frames_to_ask = ceil((double) tam_pedido / PAGE_SIZE);
+	log_info(logger, "frames_to_ask to alloc %u es %i", tam_pedido, frames_to_ask);
+
 	log_info(logger, "El cliente con id: %s hizo muse_malloc con %u", id, tam_pedido);
 	process_table* t = get_table_for_process(id);
 	muse_body* r_body = create_body();
@@ -18,19 +21,20 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 		log_info(logger, "El proceso %s tiene %i segmentos", id, process_segments);
 		process_segment *segment;
 		if (process_segments == 0) {
-			segment = create_segment(HEAP, 0, tam_pedido);
+			segment = create_segment(HEAP, 0, frames_to_ask * PAGE_SIZE);
 			int frame_number = find_free_frame(frame_usage_bitmap);
 			if (frame_number == -1) {
 				log_info(logger, "No hay frame libre... SWAP");
 			} else {
 				t_page *new_page = create_page(frame_number);
+				register_used_space_in_frame(frame_number, tam_pedido);
 				add_page_to_segment(segment, new_page);
 				add_process_segment(id, segment);
 			}
 			add_fixed_to_body(r_body, sizeof(uint32_t), segment->base);
 		} else {
 			segment = find_segment_with_space(t->segments, tam_pedido);
-			add_fixed_to_body(r_body, sizeof(uint32_t), segment->base);
+//			add_fixed_to_body(r_body, sizeof(uint32_t), segment->base);
 			// TODO: en vez de devolver la base debería devolver
 			//		 el lugar donde puede guardar, el espacio de la página???
 		}
@@ -91,7 +95,29 @@ void respond_cpy(muse_body* body, char* id, int socket_cliente) {
 	memcpy(&size, body->content + sizeof(uint32_t), sizeof(int));
 	memcpy(MEMORY, body->content + sizeof(uint32_t) + sizeof(int), size);
 
-	// log_info(logger, "El cliente con id: %s hizo cpy a dst: %u, %i bytes", id, dst, size);
+	log_info(logger, "El cliente con id: %s hizo cpy a dst: %u, %i bytes", id, dst, size);
+	process_table* t = get_table_for_process(id);
+	muse_body* r_body = create_body();
+	muse_response* response;
+
+	if (t != NULL) {
+		int process_segments = t->segments->elements_count;
+		log_info(logger, "El proceso %s tiene %i segmentos", id, process_segments);
+		process_segment *segment;
+		if (process_segments == 0) {
+			// Error
+		} else {
+			// segment = find_segment_with_space(t->segments, tam_pedido);
+			add_fixed_to_body(r_body, sizeof(uint32_t), segment->base);
+			// TODO: en vez de devolver la base debería devolver
+			//		 el lugar donde puede guardar, el espacio de la página???
+		}
+		response = create_response(SUCCESS, r_body);
+	} else {
+		log_info(logger, "El proceso %s no tiene tabla, falto hacer init?");
+		response = create_response(ERROR, r_body);
+	}
+	send_response(response, socket_cliente);
 
 	send_response_status(socket_cliente, SUCCESS);
 }
