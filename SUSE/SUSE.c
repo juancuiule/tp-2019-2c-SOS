@@ -2,14 +2,13 @@
 
 int main() {
 	int cliente_fd;
-	pthread_t hilo_clientes, hilo_metricas, hilo_tid_proximo_hilo;
+	pthread_t hilo_clientes, hilo_metricas;
 
 	inicializar();
 	configurar();
 	servidor_fd = iniciar_servidor();
 
 	pthread_create(&hilo_metricas, NULL, (void*)logear_metricas, NULL);
-	pthread_create(&hilo_tid_proximo_hilo, NULL, (void*)obtener_tid_proximo_hilo, NULL);
 
 	while(1) {
 		cliente_fd = esperar_cliente(servidor_fd);
@@ -39,10 +38,26 @@ void inicializar() {
 	sem_init(multiprogramacion_sem, 0, 1);
 }
 
+bool es_programa_hilo_buscado(programa_t* programa) {
+	return programa->hilo_en_exec->tid == tid_hilo_buscado;
+}
+
+programa_t* obtener_programa_de_hilo(int tid) {
+	tid_hilo_buscado = tid;
+	return list_find(programas, (void*)es_programa_hilo_buscado);
+}
+
 void obtener_tid_proximo_hilo() {
-	int
+	int* tid_hilo_solicitante = malloc(sizeof(int));
+	hilo_t* hilo = malloc(sizeof(hilo_t));
+	programa_t* programa = malloc(sizeof(programa_t));
+
 	while (1) {
-		recv()
+		recv(servidor_fd, tid_hilo_solicitante, sizeof(tid_hilo_solicitante), 0);
+		programa = obtener_programa_de_hilo(tid_hilo_solicitante);
+		hilo = siguiente_hilo_a_ejecutar(programa);
+		send(servidor_fd, hilo->tid, sizeof(int), 0);
+		printf("El TID del siguiente hilo a ejecutar fue enviado\n");
 	}
 }
 
@@ -78,6 +93,7 @@ void atender_cliente(int cliente_fd) {
 			break;
 		case 2:
 			ejecutar_nuevo_hilo(hilo);
+
 			break;
 		case 3:
 			bloquear_hilo(hilo);
@@ -109,7 +125,7 @@ void ejecutar_nuevo_hilo(hilo_t* hilo) {
 		hilo_anterior = programa->hilo_en_exec;
 
 	hilo = siguiente_hilo_a_ejecutar(programa);
-
+	hilo->timestamp_ultima_llegada_a_exec = time(NULL);
 	programa->hilo_en_exec = hilo;
 	log_info(logger, "El hilo %i del programa %i llegó a EXEC.", hilo->tid, hilo->pid);
 }
@@ -137,6 +153,7 @@ void atender_nuevo_cliente(int cliente_fd) {
 }
 
 void encolar_hilo_en_new(hilo_t* hilo) {
+	hilo->timestamp_creacion = time(NULL);
 	queue_push(cola_new, hilo);
 	log_info(logger, "El hilo %i del programa %i llegó a NEW", hilo->tid, hilo->pid);
 }
@@ -156,6 +173,7 @@ void encolar_hilo_en_ready() {
 	programa->cola_ready = queue_create();
 	programa->hilo_en_exec = malloc(sizeof(hilo_t));
 	programa = obtener_programa(hilo->pid);
+	hilo->timestamp_ultima_llegada_a_ready = time(NULL);
 	queue_push(programa->cola_ready, hilo);
 	log_info(logger, "El hilo %d del programa %d está en READY", hilo->tid, hilo->pid);
 	GRADO_MULTIPROGRAMACION++;

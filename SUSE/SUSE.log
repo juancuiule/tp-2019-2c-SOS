@@ -1,0 +1,233 @@
+[INFO] 23:27:15:209 SUSE/(2632:2632): Se ha iniciado el servidor.
+[INFO] 23:27:23:79 SUSE/(2632:2658): El hilo 0 del programa 2657 llegó a NEW
+[INFO] 23:27:23:80 SUSE/(2632:2658): El hilo 0 del programa 2657 está en READY
+[INFO] 23:27:23:80 SUSE/(2632:2659): El hilo 1 del programa 2657 llegó a NEW
+[INFO] 23:27:23:80 SUSE/(2632:2659): El hilo 1 del programa 2657 está en READY
+[INFO] 23:27:23:80 SUSE/(2632:2660): El hilo 2 del programa 2657 llegó a NEW
+[INFO] 23:27:23:80 SUSE/(2632:2660): El hilo 2 del programa 2657 está en READY
+[INFO] 23:27:23:81 SUSE/(2632:2661): El hilo 3 del programa 2657 llegó a NEW
+[INFO] 23:27:23:81 SUSE/(2632:2661): El hilo 3 del programa 2657 está en READY
+[INFO] 23:27:23:81 SUSE/(2632:2662): El hilo 4 del programa 2657 llegó a NEW
+[INFO] 23:27:23:82 SUSE/(2632:2662): El hilo 4 del programa 2657 está en READY
+[INFO] 23:27:23:82 SUSE/(2632:2663): El hilo 5 del programa 2657 llegó a NEW
+[INFO] 23:27:23:82 SUSE/(2632:2663): El hilo 5 del programa 2657 está en READY
+[INFO] 23:27:23:83 SUSE/(2632:2664): El hilo 1 ha llegado a la cola de BLOCKED
+[INFO] 23:27:23:84 SUSE/(2632:2672): El hilo 0 del programa 2657 llegó a EXEC.
+[INFO] 23:27:23:84 SUSE/(2632:2671): El hilo 4 ha llegado a la cola de EXIT.
+[INFO] 23:27:23:84 SUSE/(2632:2670): El hilo 0 del programa 2657 llegó a EXEC.
+[INFO] 23:27:23:84 SUSE/(2632:2669): El hilo 0 del programa 2657 llegó a EXEC.
+[INFO] 23:27:23:84 SUSE/(2632:2668): El hilo 0 del programa 2657 llegó a EXEC.
+[INFO] 23:27:23:84 SUSE/(2632:2667): El hilo 0 del programa 2657 llegó a EXEC.
+[INFO] 23:27:23:84 SUSE/(2632:2666): El hilo 0 del programa 2657 llegó a EXEC.
+[INFO] 23:27:23:84 SUSE/(2632:2665): El hilo 0 del programa 2657 llegó a EXEC.
+[INFO] 00:04:12:542 SUSE/(3136:3136): Se ha iniciado el servidor.
+[INFO] 00:05:02:397 SUSE/(3136:3139): El hilo 0 del programa 3138 llegó a NEW
+[INFO] 00:05:02:397 SUSE/(3136:3139): El hilo 0 del programa 3138 está en READY
+[INFO] 00:05:02:397 SUSE/(3136:3140): El hilo 1 del programa 3138 llegó a NEW
+[INFO] 00:05:02:397 SUSE/(3136:3140): El hilo 1 del programa 3138 está en READY
+[INFO] 00:05:02:399 SUSE/(3136:3141): El hilo 2 del programa 3138 llegó a NEW
+[INFO] 00:05:02:399 SUSE/(3136:3141): El hilo 2 del programa 3138 está en READY
+[INFO] 00:05:02:399 SUSE/(3136:3142): El hilo 3 del programa 3138 llegó a NEW
+[INFO] 00:05:02:399 SUSE/(3136:3142): El hilo 3 del programa 3138 está en READY
+[INFO] 00:05:02:401 SUSE/(3136:3143): El hilo 4 del programa 3138 llegó a NEW
+[INFO] 00:05:02:401 SUSE/(3136:3143): El hilo 4 del programa 3138 está en READY
+[INFO] 00:05:02:401 SUSE/(3136:3144): El hilo 5 del programa 3138 llegó a NEW
+[INFO] 00:05:02:401 SUSE/(3136:3144): El hilo 5 del programa 3138 está en READY
+[INFO] 00:05:02:402 SUSE/(3136:3146): El hilo 0 del programa 3138 llegó a EXEC.
+[INFO] 00:05:02:402 SUSE/(3136:3151): El hilo 0 del programa 3138 llegó a EXEC.
+[INFO] 00:05:02:402 SUSE/(3136:3152): El hilo 4 ha llegado a la cola de EXIT.
+[INFO] 00:05:02:402 SUSE/(3136:3153): El hilo 0 del programa 3138 llegó a EXEC.
+[INFO] 00:05:02:402 SUSE/(3136:3150): El hilo 0 del programa 3138 llegó a EXEC.
+[INFO] 00:05:02:402 SUSE/(3136:3145): El hilo 1 ha llegado a la cola de BLOCKED
+[INFO] 00:05:02:402 SUSE/(3136:3149): El hilo 0 del programa 3138 llegó a EXEC.
+[INFO] 00:05:02:403 SUSE/(3136:3148): El hilo 0 del programa 3138 llegó a EXEC.
+[INFO] 00:05:02:403 SUSE/(3136:3147): El hilo 0 del programa 3138 llegó a EXEC.
+[INFO] 00:05:07:576 SUSE/(3136:3175): El hilo 0 del programa 3174 llegó a NEW
+[INFO] 00:05:07:576 SUSE/(3136:3175): El hilo 0 del programa 3174 está en READY
+[INFO] 00:05:07:576 SUSE/(3136:3176): El hilo 1 del programa 3174 llegó a NEW
+[INFO] 00:05:07:576 SUSE/(3136:3176): El hilo 1 del programa 3174 está en READY
+[INFO] 00:05:07:577 SUSE/(3136:3177): El hilo 2 del programa 3174 llegó a NEW
+[INFO] 00:05:07:577 SUSE/(3136:3177): El hilo 2 del programa 3174 está en READY
+[INFO] 00:05:07:577 SUSE/(3136:3178): El hilo 3 del programa 3174 llegó a NEW
+[INFO] 00:05:07:577 SUSE/(3136:3178): El hilo 3 del programa 3174 está en READY
+[INFO] 00:05:07:577 SUSE/(3136:3180): El hilo 0 del programa 3174 llegó a EXEC.
+[INFO] 00:05:07:577 SUSE/(3136:3179): El hilo 1 ha llegado a la cola de BLOCKED
+[INFO] 00:05:23:799 SUSE/(3239:3239): Se ha iniciado el servidor.
+[INFO] 00:05:26:455 SUSE/(3239:3242): El hilo 0 del programa 3241 llegó a NEW
+[INFO] 00:05:26:455 SUSE/(3239:3242): El hilo 0 del programa 3241 está en READY
+[INFO] 00:05:26:455 SUSE/(3239:3243): El hilo 1 del programa 3241 llegó a NEW
+[INFO] 00:05:26:455 SUSE/(3239:3243): El hilo 1 del programa 3241 está en READY
+[INFO] 00:05:26:456 SUSE/(3239:3244): El hilo 2 del programa 3241 llegó a NEW
+[INFO] 00:05:26:456 SUSE/(3239:3244): El hilo 2 del programa 3241 está en READY
+[INFO] 00:05:26:456 SUSE/(3239:3245): El hilo 3 del programa 3241 llegó a NEW
+[INFO] 00:05:26:456 SUSE/(3239:3245): El hilo 3 del programa 3241 está en READY
+[INFO] 00:05:26:457 SUSE/(3239:3247): El hilo 0 del programa 3241 llegó a EXEC.
+[INFO] 00:05:26:457 SUSE/(3239:3246): El hilo 1 ha llegado a la cola de BLOCKED
+[INFO] 00:06:32:847 SUSE/(3239:3329): El hilo 0 del programa 3328 llegó a NEW
+[INFO] 00:06:32:847 SUSE/(3239:3329): El hilo 0 del programa 3328 está en READY
+[INFO] 00:06:32:848 SUSE/(3239:3330): El hilo 1 del programa 3328 llegó a NEW
+[INFO] 00:06:32:848 SUSE/(3239:3330): El hilo 1 del programa 3328 está en READY
+[INFO] 00:06:32:848 SUSE/(3239:3331): El hilo 2 del programa 3328 llegó a NEW
+[INFO] 00:06:32:848 SUSE/(3239:3331): El hilo 2 del programa 3328 está en READY
+[INFO] 00:06:32:849 SUSE/(3239:3332): El hilo 3 del programa 3328 llegó a NEW
+[INFO] 00:06:32:849 SUSE/(3239:3332): El hilo 3 del programa 3328 está en READY
+[INFO] 00:06:32:849 SUSE/(3239:3333): El hilo 1 ha llegado a la cola de BLOCKED
+[INFO] 00:06:32:849 SUSE/(3239:3334): El hilo 0 del programa 3328 llegó a EXEC.
+[INFO] 00:06:32:850 SUSE/(3239:3335): El hilo 2 ha llegado a la cola de BLOCKED
+[INFO] 00:06:32:850 SUSE/(3239:3336): El hilo 0 del programa 3328 llegó a EXEC.
+[INFO] 00:06:32:850 SUSE/(3239:3337): El hilo 3 ha llegado a la cola de BLOCKED
+[INFO] 00:06:32:850 SUSE/(3239:3338): El hilo 0 del programa 3328 llegó a EXEC.
+[INFO] 00:06:32:851 SUSE/(3239:3339): El hilo 0 ha llegado a la cola de EXIT.
+[INFO] 00:06:53:731 SUSE/(3397:3397): Se ha iniciado el servidor.
+[INFO] 00:07:04:137 SUSE/(3397:3400): El hilo 0 del programa 3399 llegó a NEW
+[INFO] 00:07:04:137 SUSE/(3397:3400): El hilo 0 del programa 3399 está en READY
+[INFO] 00:07:04:137 SUSE/(3397:3401): El hilo 1 del programa 3399 llegó a NEW
+[INFO] 00:07:04:137 SUSE/(3397:3401): El hilo 1 del programa 3399 está en READY
+[INFO] 00:07:04:138 SUSE/(3397:3402): El hilo 2 del programa 3399 llegó a NEW
+[INFO] 00:07:04:138 SUSE/(3397:3402): El hilo 2 del programa 3399 está en READY
+[INFO] 00:07:04:138 SUSE/(3397:3403): El hilo 3 del programa 3399 llegó a NEW
+[INFO] 00:07:04:138 SUSE/(3397:3403): El hilo 3 del programa 3399 está en READY
+[INFO] 00:07:04:139 SUSE/(3397:3405): El hilo 0 del programa 3399 llegó a EXEC.
+[INFO] 00:07:04:139 SUSE/(3397:3404): El hilo 1 ha llegado a la cola de BLOCKED
+[INFO] 00:07:04:139 SUSE/(3397:3406): El hilo 2 ha llegado a la cola de BLOCKED
+[INFO] 00:07:04:139 SUSE/(3397:3407): El hilo 0 del programa 3399 llegó a EXEC.
+[INFO] 00:07:04:140 SUSE/(3397:3409): El hilo 0 del programa 3399 llegó a EXEC.
+[INFO] 00:07:04:140 SUSE/(3397:3408): El hilo 3 ha llegado a la cola de BLOCKED
+[INFO] 00:07:04:141 SUSE/(3397:3410): El hilo 0 ha llegado a la cola de EXIT.
+[INFO] 00:09:23:938 SUSE/(3495:3495): Se ha iniciado el servidor.
+[INFO] 00:09:30:715 SUSE/(3495:3518): El hilo 0 del programa 3517 llegó a NEW
+[INFO] 00:09:30:715 SUSE/(3495:3518): El hilo 0 del programa 3517 está en READY
+[INFO] 00:09:30:716 SUSE/(3495:3519): El hilo 1 del programa 3517 llegó a NEW
+[INFO] 00:09:30:716 SUSE/(3495:3519): El hilo 1 del programa 3517 está en READY
+[INFO] 00:09:30:716 SUSE/(3495:3520): El hilo 2 del programa 3517 llegó a NEW
+[INFO] 00:09:30:716 SUSE/(3495:3520): El hilo 2 del programa 3517 está en READY
+[INFO] 00:09:30:717 SUSE/(3495:3521): El hilo 3 del programa 3517 llegó a NEW
+[INFO] 00:09:30:717 SUSE/(3495:3521): El hilo 3 del programa 3517 está en READY
+[INFO] 00:09:30:717 SUSE/(3495:3522): El hilo 1 ha llegado a la cola de BLOCKED
+[INFO] 00:09:30:717 SUSE/(3495:3523): El hilo 0 del programa 3517 llegó a EXEC.
+[INFO] 00:09:30:718 SUSE/(3495:3524): El hilo 2 ha llegado a la cola de BLOCKED
+[INFO] 00:09:30:718 SUSE/(3495:3525): El hilo 0 del programa 3517 llegó a EXEC.
+[INFO] 00:09:30:718 SUSE/(3495:3526): El hilo 3 ha llegado a la cola de BLOCKED
+[INFO] 00:09:30:718 SUSE/(3495:3527): El hilo 0 del programa 3517 llegó a EXEC.
+[INFO] 00:09:30:719 SUSE/(3495:3528): El hilo 0 ha llegado a la cola de EXIT.
+[INFO] 00:11:23:907 SUSE/(3495:3576): El hilo 0 del programa 3575 llegó a NEW
+[INFO] 00:11:23:907 SUSE/(3495:3576): El hilo 0 del programa 3575 está en READY
+[INFO] 00:11:23:908 SUSE/(3495:3577): El hilo 1 del programa 3575 llegó a NEW
+[INFO] 00:11:23:908 SUSE/(3495:3577): El hilo 1 del programa 3575 está en READY
+[INFO] 00:11:23:908 SUSE/(3495:3578): El hilo 2 del programa 3575 llegó a NEW
+[INFO] 00:11:23:909 SUSE/(3495:3578): El hilo 2 del programa 3575 está en READY
+[INFO] 00:11:23:909 SUSE/(3495:3579): El hilo 3 del programa 3575 llegó a NEW
+[INFO] 00:11:23:909 SUSE/(3495:3579): El hilo 3 del programa 3575 está en READY
+[INFO] 00:11:23:910 SUSE/(3495:3582): El hilo 1 del programa 3575 llegó a EXEC.
+[INFO] 00:11:23:910 SUSE/(3495:3581): El hilo 1 del programa 3575 llegó a EXEC.
+[INFO] 00:11:23:911 SUSE/(3495:3586): El hilo 1 del programa 3575 llegó a EXEC.
+[INFO] 00:11:23:911 SUSE/(3495:3587): El hilo 1 ha llegado a la cola de EXIT.
+[INFO] 00:11:23:911 SUSE/(3495:3588): El hilo 1 del programa 3575 llegó a EXEC.
+[INFO] 00:11:23:911 SUSE/(3495:3585): El hilo 1 del programa 3575 llegó a EXEC.
+[INFO] 00:11:23:911 SUSE/(3495:3584): El hilo 1 del programa 3575 llegó a EXEC.
+[INFO] 00:11:23:912 SUSE/(3495:3583): El hilo 1 del programa 3575 llegó a EXEC.
+[INFO] 00:11:23:912 SUSE/(3495:3580): El hilo 1 ha llegado a la cola de BLOCKED
+[INFO] 00:11:54:785 SUSE/(3495:3636): El hilo 0 del programa 3635 llegó a NEW
+[INFO] 00:11:54:785 SUSE/(3495:3636): El hilo 0 del programa 3635 está en READY
+[INFO] 00:11:54:786 SUSE/(3495:3637): El hilo 1 del programa 3635 llegó a NEW
+[INFO] 00:11:54:786 SUSE/(3495:3637): El hilo 1 del programa 3635 está en READY
+[INFO] 00:11:54:786 SUSE/(3495:3638): El hilo 2 del programa 3635 llegó a NEW
+[INFO] 00:11:54:786 SUSE/(3495:3638): El hilo 2 del programa 3635 está en READY
+[INFO] 00:11:54:787 SUSE/(3495:3639): El hilo 3 del programa 3635 llegó a NEW
+[INFO] 00:11:54:787 SUSE/(3495:3639): El hilo 3 del programa 3635 está en READY
+[WARNING] 00:11:54:787 SUSE/(3495:3639): Se ha alcanzado el grado máximo de multiprogramación
+[INFO] 00:11:54:788 SUSE/(3495:3640): El hilo 1 ha llegado a la cola de BLOCKED
+[INFO] 00:11:54:789 SUSE/(3495:3642): El hilo 0 del programa 3635 llegó a EXEC.
+[INFO] 00:11:54:789 SUSE/(3495:3648): El hilo 0 del programa 3635 llegó a EXEC.
+[INFO] 00:11:54:789 SUSE/(3495:3647): El hilo 2 ha llegado a la cola de EXIT.
+[INFO] 00:11:54:789 SUSE/(3495:3641): El hilo 0 del programa 3635 llegó a EXEC.
+[INFO] 00:11:54:790 SUSE/(3495:3644): El hilo 0 del programa 3635 llegó a EXEC.
+[INFO] 00:11:54:790 SUSE/(3495:3645): El hilo 0 del programa 3635 llegó a EXEC.
+[INFO] 00:11:54:790 SUSE/(3495:3643): El hilo 0 del programa 3635 llegó a EXEC.
+[INFO] 00:11:54:790 SUSE/(3495:3646): El hilo 0 del programa 3635 llegó a EXEC.
+[INFO] 00:12:36:158 SUSE/(3495:3653): El hilo 0 del programa 3652 llegó a NEW
+[INFO] 00:12:36:158 SUSE/(3495:3653): El hilo 0 del programa 3652 está en READY
+[WARNING] 00:12:36:158 SUSE/(3495:3653): Se ha alcanzado el grado máximo de multiprogramación
+[INFO] 00:12:36:158 SUSE/(3495:3654): El hilo 1 del programa 3652 llegó a NEW
+[INFO] 00:12:36:159 SUSE/(3495:3655): El hilo 2 del programa 3652 llegó a NEW
+[INFO] 00:12:36:160 SUSE/(3495:3656): El hilo 3 del programa 3652 llegó a NEW
+[INFO] 00:12:36:161 SUSE/(3495:3657): El hilo 1 ha llegado a la cola de BLOCKED
+[INFO] 00:12:36:161 SUSE/(3495:3658): El hilo 0 del programa 3652 llegó a EXEC.
+[INFO] 00:12:36:161 SUSE/(3495:3659): El hilo 0 del programa 3652 llegó a EXEC.
+[INFO] 00:12:36:161 SUSE/(3495:3660): El hilo 0 del programa 3652 llegó a EXEC.
+[INFO] 00:12:36:162 SUSE/(3495:3661): El hilo 0 del programa 3652 llegó a EXEC.
+[INFO] 00:12:36:162 SUSE/(3495:3662): El hilo 0 del programa 3652 llegó a EXEC.
+[INFO] 00:12:36:162 SUSE/(3495:3663): El hilo 0 del programa 3652 llegó a EXEC.
+[INFO] 00:12:36:162 SUSE/(3495:3664): El hilo 2 ha llegado a la cola de EXIT.
+[INFO] 00:12:36:162 SUSE/(3495:3665): El hilo 0 del programa 3652 llegó a EXEC.
+[INFO] 00:13:05:312 SUSE/(3731:3731): Se ha iniciado el servidor.
+[INFO] 00:13:09:45 SUSE/(3731:3734): El hilo 0 del programa 3733 llegó a NEW
+[INFO] 00:13:09:45 SUSE/(3731:3734): El hilo 0 del programa 3733 está en READY
+[INFO] 00:13:09:46 SUSE/(3731:3735): El hilo 1 del programa 3733 llegó a NEW
+[INFO] 00:13:09:46 SUSE/(3731:3735): El hilo 1 del programa 3733 está en READY
+[INFO] 00:13:09:47 SUSE/(3731:3736): El hilo 2 del programa 3733 llegó a NEW
+[INFO] 00:13:09:47 SUSE/(3731:3736): El hilo 2 del programa 3733 está en READY
+[INFO] 00:13:09:48 SUSE/(3731:3737): El hilo 3 del programa 3733 llegó a NEW
+[INFO] 00:13:09:48 SUSE/(3731:3737): El hilo 3 del programa 3733 está en READY
+[INFO] 00:13:09:49 SUSE/(3731:3744): El hilo 0 del programa 3733 llegó a EXEC.
+[INFO] 00:13:09:49 SUSE/(3731:3745): El hilo 2 ha llegado a la cola de EXIT.
+[INFO] 00:13:09:49 SUSE/(3731:3746): El hilo 0 del programa 3733 llegó a EXEC.
+[INFO] 00:13:09:49 SUSE/(3731:3743): El hilo 0 del programa 3733 llegó a EXEC.
+[INFO] 00:13:09:49 SUSE/(3731:3742): El hilo 0 del programa 3733 llegó a EXEC.
+[INFO] 00:13:09:49 SUSE/(3731:3741): El hilo 0 del programa 3733 llegó a EXEC.
+[INFO] 00:13:09:49 SUSE/(3731:3740): El hilo 0 del programa 3733 llegó a EXEC.
+[INFO] 00:13:09:49 SUSE/(3731:3739): El hilo 0 del programa 3733 llegó a EXEC.
+[INFO] 00:13:09:49 SUSE/(3731:3738): El hilo 1 ha llegado a la cola de BLOCKED
+[INFO] 00:14:22:159 SUSE/(3731:3749): El hilo 0 del programa 3748 llegó a NEW
+[INFO] 00:14:22:159 SUSE/(3731:3749): El hilo 0 del programa 3748 está en READY
+[INFO] 00:14:22:161 SUSE/(3731:3750): El hilo 1 del programa 3748 llegó a NEW
+[INFO] 00:14:22:161 SUSE/(3731:3750): El hilo 1 del programa 3748 está en READY
+[INFO] 00:14:22:161 SUSE/(3731:3751): El hilo 2 del programa 3748 llegó a NEW
+[INFO] 00:14:22:161 SUSE/(3731:3751): El hilo 2 del programa 3748 está en READY
+[INFO] 00:14:22:163 SUSE/(3731:3752): El hilo 3 del programa 3748 llegó a NEW
+[INFO] 00:14:22:163 SUSE/(3731:3752): El hilo 3 del programa 3748 está en READY
+[INFO] 00:14:22:163 SUSE/(3731:3756): El hilo 0 del programa 3748 llegó a EXEC.
+[INFO] 00:14:22:164 SUSE/(3731:3754): El hilo 0 del programa 3748 llegó a EXEC.
+[INFO] 00:14:22:164 SUSE/(3731:3755): El hilo 0 del programa 3748 llegó a EXEC.
+[INFO] 00:14:22:164 SUSE/(3731:3760): El hilo 2 ha llegado a la cola de EXIT.
+[INFO] 00:14:22:164 SUSE/(3731:3761): El hilo 0 del programa 3748 llegó a EXEC.
+[INFO] 00:14:22:164 SUSE/(3731:3759): El hilo 0 del programa 3748 llegó a EXEC.
+[INFO] 00:14:22:164 SUSE/(3731:3758): El hilo 0 del programa 3748 llegó a EXEC.
+[INFO] 00:14:22:164 SUSE/(3731:3757): El hilo 0 del programa 3748 llegó a EXEC.
+[INFO] 00:14:22:165 SUSE/(3731:3753): El hilo 1 ha llegado a la cola de BLOCKED
+[INFO] 00:15:20:691 SUSE/(3731:3827): El hilo 0 del programa 3826 llegó a NEW
+[INFO] 00:15:20:691 SUSE/(3731:3827): El hilo 0 del programa 3826 está en READY
+[INFO] 00:15:20:692 SUSE/(3731:3828): El hilo 1 del programa 3826 llegó a NEW
+[INFO] 00:15:20:692 SUSE/(3731:3828): El hilo 1 del programa 3826 está en READY
+[INFO] 00:15:20:693 SUSE/(3731:3829): El hilo 2 del programa 3826 llegó a NEW
+[INFO] 00:15:20:693 SUSE/(3731:3829): El hilo 2 del programa 3826 está en READY
+[INFO] 00:15:20:693 SUSE/(3731:3830): El hilo 3 del programa 3826 llegó a NEW
+[INFO] 00:15:20:693 SUSE/(3731:3830): El hilo 3 del programa 3826 está en READY
+[WARNING] 00:15:20:693 SUSE/(3731:3830): Se ha alcanzado el grado máximo de multiprogramación
+[INFO] 00:15:20:694 SUSE/(3731:3832): El hilo 0 del programa 3826 llegó a EXEC.
+[INFO] 00:15:20:694 SUSE/(3731:3831): El hilo 1 ha llegado a la cola de BLOCKED
+[INFO] 00:15:20:694 SUSE/(3731:3833): El hilo 0 del programa 3826 llegó a EXEC.
+[INFO] 00:15:20:694 SUSE/(3731:3834): El hilo 0 del programa 3826 llegó a EXEC.
+[INFO] 00:15:20:694 SUSE/(3731:3835): El hilo 0 del programa 3826 llegó a EXEC.
+[INFO] 00:15:20:695 SUSE/(3731:3836): El hilo 0 del programa 3826 llegó a EXEC.
+[INFO] 00:15:20:695 SUSE/(3731:3837): El hilo 0 del programa 3826 llegó a EXEC.
+[INFO] 00:15:20:695 SUSE/(3731:3839): El hilo 0 del programa 3826 llegó a EXEC.
+[INFO] 00:15:20:695 SUSE/(3731:3838): El hilo 3 ha llegado a la cola de EXIT.
+[INFO] 01:05:16:978 SUSE/(4712:4712): Se ha iniciado el servidor.
+[INFO] 01:05:27:642 SUSE/(4712:4736): El hilo 0 del programa 4735 llegó a NEW
+[INFO] 01:05:27:642 SUSE/(4712:4736): El hilo 0 del programa 4735 está en READY
+[INFO] 01:05:27:643 SUSE/(4712:4737): El hilo 1 del programa 4735 llegó a NEW
+[INFO] 01:05:27:643 SUSE/(4712:4737): El hilo 1 del programa 4735 está en READY
+[INFO] 01:05:27:643 SUSE/(4712:4738): El hilo 2 del programa 4735 llegó a NEW
+[INFO] 01:05:27:643 SUSE/(4712:4738): El hilo 2 del programa 4735 está en READY
+[INFO] 01:05:27:644 SUSE/(4712:4739): El hilo 3 del programa 4735 llegó a NEW
+[INFO] 01:05:27:644 SUSE/(4712:4739): El hilo 3 del programa 4735 está en READY
+[INFO] 01:05:27:644 SUSE/(4712:4741): El hilo 0 del programa 4735 llegó a EXEC.
+[INFO] 01:05:27:644 SUSE/(4712:4740): El hilo 1 ha llegado a la cola de BLOCKED
+[INFO] 01:05:27:645 SUSE/(4712:4743): El hilo 0 del programa 4735 llegó a EXEC.
+[INFO] 01:05:27:645 SUSE/(4712:4748): El hilo 0 del programa 4735 llegó a EXEC.
+[INFO] 01:05:27:645 SUSE/(4712:4747): El hilo 3 ha llegado a la cola de EXIT.
+[INFO] 01:05:27:645 SUSE/(4712:4746): El hilo 0 del programa 4735 llegó a EXEC.
+[INFO] 01:05:27:645 SUSE/(4712:4745): El hilo 0 del programa 4735 llegó a EXEC.
+[INFO] 01:05:27:646 SUSE/(4712:4744): El hilo 0 del programa 4735 llegó a EXEC.
+[INFO] 01:05:27:646 SUSE/(4712:4742): El hilo 0 del programa 4735 llegó a EXEC.

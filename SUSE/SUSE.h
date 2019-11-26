@@ -7,15 +7,19 @@
 #include "configuracion.h"
 #include <commons/string.h>
 #include <stdbool.h>
+#include <time.h>
 
 typedef struct {
 	int tid;
 	int pid;
-	int tiempo_ejecucion;
-	int tiempo_espera;
-	int tiempo_cpu;
-	float estimacion_anterior;
-	float rafaga_anterior;
+	double tiempo_ejecucion;
+	double tiempo_espera;
+	double tiempo_cpu;
+	time_t timestamp_creacion;
+	time_t timestamp_ultima_llegada_a_ready;
+	time_t timestamp_ultima_llegada_a_exec;
+	double estimacion_anterior;
+	double rafaga_anterior;
 } __attribute__((packed)) hilo_t;
 
 typedef struct {
@@ -39,6 +43,7 @@ typedef struct {
 } semaforo_t;
 
 int servidor_fd;
+int tid_hilo_buscado;
 int pid_programa_buscado;
 int tid_siguiente_hilo;
 
@@ -49,10 +54,10 @@ int GRADO_MULTIPROGRAMACION = 0;
 t_log* logger;
 t_log* logger_metricas;
 
+t_list* programas;
 t_queue* cola_new;
 t_queue* cola_blocked;
 t_queue* cola_exit;
-t_list* programas;
 
 sem_t* tid_sem;
 sem_t* pid_sem;
