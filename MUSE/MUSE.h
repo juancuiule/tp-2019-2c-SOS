@@ -9,4 +9,10 @@
 #include "../libmuse/utils.h"
 #include "segmentpag.h"
 
+char* IP;
+char* PORT;
+int MEMORY_SIZE;
+int PAGE_SIZE;
+int SWAP_SIZE;
+
 #endif

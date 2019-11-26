@@ -1,7 +1,5 @@
 #include "MUSE.h"
 
-void* MEMORY;
-
 void respond_init(muse_body* body, char* id, int socket_cliente) {
 	create_process_table(id);
 }
@@ -186,11 +184,11 @@ int main(void) {
 	logger = log_create("./logs/MUSE.log", "Servidor", 1, LOG_LEVEL_DEBUG);
 	config = config_create("./program.config");
 
-	char* IP = "127.0.0.1";
-	char* PORT = config_get_string_value(config, "LISTEN_PORT");
-	int MEMORY_SIZE = config_get_int_value(config, "MEMORY_SIZE");
-	int PAGE_SIZE = config_get_int_value(config, "PAGE_SIZE");
-	int SWAP_SIZE = config_get_int_value(config, "SWAP_SIZE");
+	IP = "127.0.0.1";
+	PORT = config_get_string_value(config, "LISTEN_PORT");
+	MEMORY_SIZE = config_get_int_value(config, "MEMORY_SIZE");
+	PAGE_SIZE = config_get_int_value(config, "PAGE_SIZE");
+	SWAP_SIZE = config_get_int_value(config, "SWAP_SIZE");
 
 	log_info(logger, "Port: %s", PORT);
 	log_info(logger, "Memory size: %i", MEMORY_SIZE);
@@ -203,8 +201,7 @@ int main(void) {
 		return EXIT_FAILURE;
 	}
 
-	init_structures(MEMORY_SIZE / PAGE_SIZE);
-	MEMORY = malloc(MEMORY_SIZE);
+	init_structures(MEMORY_SIZE, PAGE_SIZE);
 
 	pthread_t hilo;
 	int r1;

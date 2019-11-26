@@ -14,6 +14,7 @@ t_list *tables;
 t_log *logger;
 t_bitarray *frame_usage_bitmap;
 void* bitmap_pointer;
+void* MEMORY;
 
 typedef enum {
 	HEAP,
@@ -38,6 +39,21 @@ typedef struct {
 	bool modified; // para clock modificado
 	bool flag; // bit de presencia
 } t_page;
+
+typedef struct {
+	uint32_t size;
+	bool is_free;
+} frame_metadata;
+
+typedef struct {
+	frame_metadata* metadata;
+	void* data;
+} frame_block;
+
+typedef struct {
+	int frame_number;
+	t_list* blocks; // frame_block(s)
+} frame;
 
 void init_structures();
 t_page *create_page(int frame_number);
