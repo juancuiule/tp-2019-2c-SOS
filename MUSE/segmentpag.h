@@ -72,5 +72,7 @@ int get_frame_free_size(void* frame);
 t_page* find_page_with_space(process_segment* segment, int size);
 process_segment* find_segment_with_space(process_table* table, int size);
 process_segment* segment_by_dir(process_table* table, int dir);
+process_segment* find_extensible_heap_segment(process_table* table);
+
 
 #endif

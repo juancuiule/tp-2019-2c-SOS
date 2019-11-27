@@ -59,6 +59,7 @@ void add_page_to_segment(process_segment* segment, t_page* page) {
 		int offset = number_of_pages * sizeof(t_page);
 		realloc(segment->pages, pages + offset + sizeof(t_page));
 		memcpy(segment->pages + offset, page, sizeof(t_page));
+		segment->size += PAGE_SIZE;
 	}
 	log_info(seg_logger, "segment has: %i pages", segment->size / PAGE_SIZE);
 }
@@ -98,6 +99,26 @@ process_segment* segment_by_dir(process_table* table, int dir) {
 	}
 	free(segment);
 	return NULL;
+}
+
+process_segment* find_extensible_heap_segment(process_table* table) {
+	process_segment* segment = malloc(sizeof(process_segment));
+	void* segments = table->segments;
+	int offset = (table->number_of_segments - 1) * sizeof(process_segment);
+	memcpy(segment, segments + offset, sizeof(process_segment));
+
+	log_info(
+		seg_logger,
+		"last seg, base: %i, fin: %i, type: %s",
+		segment->base,
+		segment->base + segment->size,
+		segment->type == HEAP ? "HEAP" : "MMAP"
+	);
+	if (segment->type == HEAP) {
+		return segment;
+	} else {
+		return NULL;
+	}
 }
 
 int last_position(char* process) {
@@ -157,12 +178,13 @@ void add_process_segment(char* process, process_segment* segment) {
 		process_table->segments = malloc(sizeof(process_segment));
 		memcpy(process_table->segments, segment, sizeof(process_segment));
 	} else {
-		log_info(seg_logger, "when add ... %s tiene %i segments", process, process_table->number_of_segments);
+		log_info(seg_logger, "pre add... %s tiene %i segments", process, process_table->number_of_segments);
 		int offset = process_table->number_of_segments * sizeof(process_segment);
 		realloc(process_table->segments, process_table->segments + offset + sizeof(process_segment));
 		memcpy(process_table->segments + offset, segment, sizeof(process_segment));
 	}
 	process_table->number_of_segments += 1;
+	log_info(seg_logger, "after add ... %s tiene %i segments", process, process_table->number_of_segments);
 }
 
 process_table* get_table_for_process(char* process) {
@@ -245,8 +267,10 @@ int get_frame_free_size(void* frame) {
 
 int find_free_frame(t_bitarray* bitmap) {
 	int var;
-	for (var = 0; var < bitmap->size; ++var) {
+	//	log_info(seg_logger, "bitmap: %i", bitmap->bitarray);
+	for (var = 0; var < (MEMORY_SIZE / PAGE_SIZE); ++var) {
 		bool is_used = bitarray_test_bit(bitmap, var);
+		log_info(seg_logger, "frame: %i, bit: %i, bitmap_size: %i", var, is_used, bitmap->size);
 		if (!is_used) {
 			return var;
 		}

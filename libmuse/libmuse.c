@@ -122,7 +122,14 @@ uint32_t muse_map(char *path, size_t length, int flags) {
 	muse_package* package = create_package(header, body);
 	send_package(package, conexion);
 
-    return 0;
+	int status = recv_response_status(conexion);
+	muse_body* response_body = recv_body(conexion);
+
+	uint32_t dir;
+	memcpy(&dir, response_body->content, sizeof(uint32_t));
+
+	log_info(logger, "dir: %u", dir);
+	return dir;
 }
 
 int muse_sync(uint32_t addr, size_t len){

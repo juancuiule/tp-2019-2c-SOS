@@ -18,25 +18,33 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 	muse_response* response;
 	void* dir;
 
+
 	if (t != NULL) {
 		process_segment *segment;
+
 		if (t->number_of_segments == 0) {
+			// no hay segmentos
 			log_debug(logger, "No había ningún segmento para el proceso: %s", id);
 			log_debug(logger, "Se crea uno con base 0 y %i páginas para hacer un alloc de %i", frames_to_ask * PAGE_SIZE, tam_pedido);
+
 			segment = create_segment(HEAP, 0, frames_to_ask * PAGE_SIZE);
 			int frame_number = find_free_frame(frame_usage_bitmap);
 			if (frame_number == -1) {
 				log_info(logger, "No hay frame libre... SWAP");
 			} else {
+				// esto por ahora funciona...
+				// pero solo para cuando se necesita un único frame
 				t_page *new_page = create_page(frame_number);
 				dir = alloc_in_frame(frame_number, tam_pedido);
 				add_page_to_segment(segment, new_page);
 				add_process_segment(id, segment);
 			}
-			add_fixed_to_body(r_body, sizeof(uint32_t), segment->base + dir);
 		} else {
+			// hay segmentos
 			log_debug(logger, "Hay segmentos para el proceso: %s", id);
 			log_debug(logger, "Se busca uno para hacer un alloc de %i", tam_pedido);
+
+			// busco uno con espacio
 			segment = find_segment_with_space(t, tam_pedido);
 			if (segment != NULL) {
 				// hay alguno con espacio
@@ -45,27 +53,43 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 				log_debug(logger, "La página con espacio refiere al frame %i", page->frame_number);
 				dir = alloc_in_frame(page->frame_number, tam_pedido);
 			} else {
+				// no hay espacio
 				log_debug(logger, "No hay uno con espacio");
-				// falta chequear si se puede "agrandar"
-				// if (se puede agrandar el segmento) {
-				//   agrandar el segmento la cantidad de frames necesarios y asignar
-				// } else {
 
+				log_debug(logger, "Busco si hay alguno extensible");
+				segment = find_extensible_heap_segment(t);
 
-				int new_base = last_position(id);
-				log_debug(logger, "Se crea un nuevo segmento desde la base: %i", new_base);
-				segment = create_segment(HEAP, new_base, frames_to_ask * PAGE_SIZE);
-				int frame_number = find_free_frame(frame_usage_bitmap);
-				if (frame_number == -1) {
-					log_info(logger, "No hay frame libre... SWAP");
+				if (segment != NULL) {
+					log_debug(logger, "Se puede extender el que tiene como base: %i", segment->base);
+					// ver cuanto espacio le queda al segmento
+					// para allocar la cantidad de paginas correctas
+					int frame_number = find_free_frame(frame_usage_bitmap);
+					if (frame_number == -1) {
+						log_info(logger, "No hay frame libre... SWAP");
+					} else {
+						t_page *new_page = create_page(frame_number);
+						int dir_in_frame = alloc_in_frame(frame_number, tam_pedido);
+						add_page_to_segment(segment, new_page);
+						dir = segment->size - PAGE_SIZE + dir_in_frame;
+					}
 				} else {
-					t_page *new_page = create_page(frame_number);
-					dir = alloc_in_frame(frame_number, tam_pedido);
-					add_page_to_segment(segment, new_page);
-					add_process_segment(id, segment);
+					log_debug(logger, "No se puede extender ninguno");
+					int new_base = last_position(id);
+					log_debug(logger, "Se crea un nuevo segmento desde la base: %i", new_base);
+					segment = create_segment(HEAP, new_base, frames_to_ask * PAGE_SIZE);
+					int frame_number = find_free_frame(frame_usage_bitmap);
+					if (frame_number == -1) {
+						log_info(logger, "No hay frame libre... SWAP");
+					} else {
+						t_page *new_page = create_page(frame_number);
+						dir = alloc_in_frame(frame_number, tam_pedido);
+						add_page_to_segment(segment, new_page);
+						add_process_segment(id, segment);
+					}
 				}
 			}
 		}
+		log_info(logger, "dir to send: %i", segment->base + dir);
 		add_fixed_to_body(r_body, sizeof(uint32_t), segment->base + dir);
 		response = create_response(SUCCESS, r_body);
 	} else {
@@ -161,7 +185,32 @@ void respond_map(muse_body* body, char* id, int socket_cliente) {
 	map_flag flags;
 	memcpy(&flags, body->content + sizeof(int) + path_size + sizeof(size_t), sizeof(int));
 
-	// log_info(logger, "El cliente con id: %s hizo map a: %s, de %i bytes, flag: %i", id, path, length, flags);
+	log_info(logger, "El cliente con id: %s hizo map a: %s, de %i bytes, flag: %i", id, path, length, flags);
+
+	process_table* t = get_table_for_process(id);
+	muse_body* r_body = create_body();
+	muse_response* response;
+	void* dir;
+
+	// min amount of frames to ask for the segment
+	int frames_to_ask = ceil((double) length / PAGE_SIZE);
+
+	process_segment *segment;
+	log_debug(logger, "Hay segmentos para el proceso: %s", id);
+	log_debug(logger, "Se crea uno para hacer un map de %i", length);
+
+	int new_base = last_position(id);
+	segment = create_segment(MMAP, new_base, frames_to_ask * PAGE_SIZE);
+	int frame_number = find_free_frame(frame_usage_bitmap);
+	t_page *new_page = create_page(frame_number);
+	dir = alloc_in_frame(frame_number, length);
+	add_page_to_segment(segment, new_page);
+	add_process_segment(id, segment);
+
+	log_info(logger, "dir to send en MMAP: %i", segment->base + dir);
+	add_fixed_to_body(r_body, sizeof(uint32_t), segment->base + dir);
+	response = create_response(SUCCESS, r_body);
+	send_response(response, socket_cliente);
 
 	return;
 }
