@@ -76,6 +76,21 @@ process_segment* find_segment_with_space(process_table* table , int size) {
 	return NULL;
 }
 
+process_segment* segment_by_dir(process_table* table, int dir) {
+	process_segment* segment = malloc(sizeof(process_segment));
+	void* segments = table->segments;
+	int i = 0;
+	while (i < table->number_of_segments) {
+		memcpy(segment, segments + i * sizeof(process_segment), sizeof(process_segment));
+		if (segment->base < dir && (segment->base + segment->size) > dir) {
+			return segment;
+		}
+		i++;
+	}
+	log_info(seg_logger, "will return null");
+	return NULL;
+}
+
 int last_position(char* process) {
 	process_table* process_table = get_table_for_process(process);
 	void* segments = process_table->segments;

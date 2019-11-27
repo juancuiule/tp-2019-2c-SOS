@@ -12,12 +12,12 @@ int main(void) {
 	if (init_result != -1) {
 		uint32_t my_memory = muse_alloc(10);
 		uint32_t another_memory = muse_alloc(10);
-		 uint32_t another_memory2 = muse_alloc(40);
+	    uint32_t another_memory2 = muse_alloc(40);
 
 		log_info(logger, "my_memory: %u", my_memory);
-//		int x = 10;
-//		int*y = malloc(4);
-//		muse_cpy(my_memory, &x, 4);
+		int x = 10;
+		int*y = malloc(4);
+		muse_cpy(my_memory, &x, 4);
 //		muse_get(y, my_memory, 4);
 //		printf("y: %d \n", *y);
 		muse_free(my_memory);

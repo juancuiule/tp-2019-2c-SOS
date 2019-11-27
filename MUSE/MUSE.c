@@ -19,10 +19,8 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 	void* dir;
 
 	if (t != NULL) {
-		// int process_segments = t->segments->elements_count;
-		// log_info(logger, "El proceso %s tiene %i segmentos", id, process_segments);
 		process_segment *segment;
-		if (t->segments == NULL) {
+		if (t->number_of_segments == 0) {
 			segment = create_segment(HEAP, 0, frames_to_ask * PAGE_SIZE);
 			int frame_number = find_free_frame(frame_usage_bitmap);
 			if (frame_number == -1) {
@@ -35,16 +33,6 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 			}
 			add_fixed_to_body(r_body, sizeof(uint32_t), segment->base + dir);
 		} else {
-			log_info(logger, "buscar segmentos con espacio");
-
-			// -- si hay segmentos con espacio
-			// dado un segmento con espacio buscar la pagina con espacio
-			// dada la pagina asignar el espacio y retornar la dir
-
-			// -- si no hay segmentos con espacio
-			// ver si se puede agrandar alguno
-			//   -- si se puede agrandar -> agrandar y asignar
-			//   -- si no se puede agrandar -> crear nuevo
 			segment = find_segment_with_space(t, tam_pedido);
 			if (segment != NULL) {
 				// hay alguno con espacio
@@ -98,9 +86,8 @@ void respond_get(muse_body* body, char* id, int socket_cliente) {
 	muse_response* response;
 
 	if (t != NULL) {
-//		int process_segments = t->segments->elements_count;
 		process_segment *segment;
-		if (t->segments == NULL) {
+		if (t->number_of_segments == 0) {
 			log_info(logger, "El proceso %s no tiene segmentos, es un seg fault?");
 			response = create_response(ERROR, r_body);
 		} else {
@@ -133,7 +120,6 @@ void respond_cpy(muse_body* body, char* id, int socket_cliente) {
 	memcpy(&dst, body->content, sizeof(uint32_t));	
 	int size;
 	memcpy(&size, body->content + sizeof(uint32_t), sizeof(int));
-	memcpy(MEMORY, body->content + sizeof(uint32_t) + sizeof(int), size);
 
 	log_info(logger, "El cliente con id: %s hizo cpy a dst: %u, %i bytes", id, dst, size);
 	process_table* t = get_table_for_process(id);
@@ -141,16 +127,15 @@ void respond_cpy(muse_body* body, char* id, int socket_cliente) {
 	muse_response* response;
 
 	if (t != NULL) {
-//		int process_segments = t->segments->elements_count;
-//		log_info(logger, "El proceso %s tiene %i segmentos", id, process_segments);
 		process_segment *segment;
-		if (t->segments == NULL) {
+		if (t->number_of_segments == 0) {
 			// Error
 		} else {
+			segment = segment_by_dir(t, dst);
+			log_info(logger, "segmento->base %i", segment->base);
+			log_info(logger, "dir de pagina %i", dst - segment->base);
 			// segment = find_segment_with_space(t->segments, tam_pedido);
-			add_fixed_to_body(r_body, sizeof(uint32_t), segment->base);
-			// TODO: en vez de devolver la base debería devolver
-			//		 el lugar donde puede guardar, el espacio de la página???
+			// add_fixed_to_body(r_body, sizeof(uint32_t), segment->pages->head->data);
 		}
 		response = create_response(SUCCESS, r_body);
 	} else {

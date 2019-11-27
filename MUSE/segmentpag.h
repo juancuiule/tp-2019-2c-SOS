@@ -71,5 +71,6 @@ void* alloc_in_frame(int frame_number, uint32_t size);
 int get_frame_free_size(void* frame);
 t_page* find_page_with_space(t_list* pages, int size);
 process_segment* find_segment_with_space(process_table* table, int size);
+process_segment* segment_by_dir(process_table* table, int dir);
 
 #endif
