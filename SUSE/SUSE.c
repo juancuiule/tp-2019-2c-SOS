@@ -19,16 +19,17 @@ int main() {
 	return EXIT_SUCCESS;
 }
 
-void inicializar_metricas_hilo(hilo_t* hilo) {
-	hilo->tiempo_cpu = 0;
-	hilo->tiempo_espera = 0;
-}
-
 long long current_timestamp() {
     struct timeval te;
     gettimeofday(&te, NULL);
     long long milliseconds = te.tv_sec*1000LL + te.tv_usec/1000;
     return milliseconds;
+}
+
+void inicializar_metricas_hilo(hilo_t* hilo) {
+	hilo->tiempo_creacion = current_timestamp();
+	hilo->tiempo_cpu = 0;
+	hilo->tiempo_espera = 0;
 }
 
 void inicializar() {
@@ -100,7 +101,6 @@ void atender_cliente(int cliente_fd) {
 	switch (opcode) {
 		case 1:
 			encolar_hilo_en_new(hilo);
-			printf("tiempo de creacion: %lld\n", hilo->tiempo_creacion);
 			agregar_programa(hilo);
 
 			if (GRADO_MULTIPROGRAMACION < MAX_MULTIPROG)
@@ -126,7 +126,6 @@ void atender_cliente(int cliente_fd) {
 			cerrar_hilo(hilo);
 			break;
 	}
-
 }
 
 bool es_programa_buscado(programa_t* programa) {
@@ -148,23 +147,24 @@ void ejecutar_nuevo_hilo(hilo_t* hilo) {
 	if (programa->hilo_en_exec != NULL)
 		hilo_anterior = programa->hilo_en_exec;
 
-	log_info(logger, "El hilo %i del programa %i llegó a EXEC.", hilo->tid, hilo->pid);
 	hilo = siguiente_hilo_a_ejecutar(programa);
+	log_info(logger, "El hilo %i del programa %i llegó a EXEC.", hilo->tid, hilo->pid);
+	hilo->tiempo_ultima_llegada_a_exec = current_timestamp();
+	hilo->tiempo_espera += current_timestamp() - hilo->tiempo_ultima_llegada_a_ready;
 	programa->hilo_en_exec = hilo;
 }
 
 void logear_metricas() {
 	long long tiempo_de_ejecucion(hilo_t* hilo) {
-    	printf("nuevo timestamp: %lld\n", current_timestamp());
 		return current_timestamp() - hilo->tiempo_creacion;
 	}
 
 	void logear_metricas_hilo(hilo_t* hilo) {
 		log_info(logger_metricas, "Métricas del hilo %i: ", hilo->tid);
 		long long tiempo_ejecucion = tiempo_de_ejecucion(hilo);
-		log_info(logger_metricas, "\ttiempo de ejecución: %lld", tiempo_ejecucion);
-		log_info(logger_metricas, "\ttiempo de espera: %i", hilo->tiempo_espera);
-		log_info(logger_metricas, "\ttiempo de uso de CPU: %i", hilo->tiempo_cpu);
+		log_info(logger_metricas, "\ttiempo de ejecución: %lld ms", tiempo_ejecucion);
+		log_info(logger_metricas, "\ttiempo de espera: %lld ms", hilo->tiempo_espera);
+		log_info(logger_metricas, "\ttiempo de uso de CPU: %lld ms", hilo->tiempo_cpu);
 	}
 
 	void logear_metricas_hilos_programa(programa_t* programa) {
