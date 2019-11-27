@@ -21,6 +21,8 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 	if (t != NULL) {
 		process_segment *segment;
 		if (t->number_of_segments == 0) {
+			log_debug(logger, "No había ningún segmento para el proceso: %s", id);
+			log_debug(logger, "Se crea uno con base 0 y %i páginas para hacer un alloc de %i", frames_to_ask * PAGE_SIZE, tam_pedido);
 			segment = create_segment(HEAP, 0, frames_to_ask * PAGE_SIZE);
 			int frame_number = find_free_frame(frame_usage_bitmap);
 			if (frame_number == -1) {
@@ -33,22 +35,25 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 			}
 			add_fixed_to_body(r_body, sizeof(uint32_t), segment->base + dir);
 		} else {
+			log_debug(logger, "Hay segmentos para el proceso: %s", id);
+			log_debug(logger, "Se busca uno para hacer un alloc de %i", tam_pedido);
 			segment = find_segment_with_space(t, tam_pedido);
 			if (segment != NULL) {
 				// hay alguno con espacio
-				t_page* page = find_page_with_space(segment->pages, tam_pedido);
+				log_debug(logger, "Hay uno con espacio, la base es: %i", segment->base);
+				t_page* page = find_page_with_space(segment, tam_pedido);
+				log_debug(logger, "La página con espacio refiere al frame %i", page->frame_number);
 				dir = alloc_in_frame(page->frame_number, tam_pedido);
 			} else {
+				log_debug(logger, "No hay uno con espacio");
 				// falta chequear si se puede "agrandar"
 				// if (se puede agrandar el segmento) {
 				//   agrandar el segmento la cantidad de frames necesarios y asignar
 				// } else {
 
-				// busco el final del último segmento
-				int new_base = last_position(id);
-				log_debug(logger, "new_base: %i", new_base);
 
-				// creo un nuevo segmento desde esa base
+				int new_base = last_position(id);
+				log_debug(logger, "Se crea un nuevo segmento desde la base: %i", new_base);
 				segment = create_segment(HEAP, new_base, frames_to_ask * PAGE_SIZE);
 				int frame_number = find_free_frame(frame_usage_bitmap);
 				if (frame_number == -1) {
@@ -59,11 +64,7 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 					add_page_to_segment(segment, new_page);
 					add_process_segment(id, segment);
 				}
-				// }
 			}
-
-			// TODO: en vez de devolver la base debería devolver
-			//		 el lugar donde puede guardar, el espacio de la página???
 		}
 		add_fixed_to_body(r_body, sizeof(uint32_t), segment->base + dir);
 		response = create_response(SUCCESS, r_body);

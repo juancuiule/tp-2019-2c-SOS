@@ -34,7 +34,7 @@ typedef struct {
 	segment_type type; // segmento de heap o mmap
 	uint32_t base; // base
 	uint32_t size; // tamaño
-	t_list *pages; // lista de paginas
+	void *pages; // paginas
 } process_segment;
 
 typedef struct {
@@ -69,7 +69,7 @@ void add_page_to_segment(process_segment* segment, t_page* page);
 int find_free_frame(t_bitarray* bitmap);
 void* alloc_in_frame(int frame_number, uint32_t size);
 int get_frame_free_size(void* frame);
-t_page* find_page_with_space(t_list* pages, int size);
+t_page* find_page_with_space(process_segment* segment, int size);
 process_segment* find_segment_with_space(process_table* table, int size);
 process_segment* segment_by_dir(process_table* table, int dir);
 

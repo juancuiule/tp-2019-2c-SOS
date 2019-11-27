@@ -42,15 +42,25 @@ process_segment *create_segment(segment_type type, uint32_t base, int size) {
 	segment->type = type;
 	segment->base = base;
 	segment->size = size;
-	t_list* pages = list_create();
-	segment->pages= pages;
+	segment->pages= NULL;
 	log_debug(seg_logger, "Nuevo segmento (%s) creado. base: %i, size: %i", type == HEAP ? "HEAP" : "MMAP", base, size);
 	return segment;
 }
 
 void add_page_to_segment(process_segment* segment, t_page* page) {
-	list_add((*segment).pages, page);
-	log_info(seg_logger, "segment has: %i pages", segment->pages->elements_count);
+	void* pages = segment->pages;
+	int number_of_pages = segment->size / PAGE_SIZE;
+	if (pages == NULL) {
+		// first page
+		segment->pages = malloc(sizeof(t_page));
+		memcpy(segment->pages, page, sizeof(t_page));
+	} else {
+		log_info(seg_logger, "el segmento de base: %i. tiene %i paginas", segment->base, number_of_pages);
+		int offset = number_of_pages * sizeof(t_page);
+		realloc(segment->pages, pages + offset + sizeof(t_page));
+		memcpy(segment->pages + offset, page, sizeof(t_page));
+	}
+	log_info(seg_logger, "segment has: %i pages", segment->size / PAGE_SIZE);
 }
 
 process_segment* find_segment_with_space(process_table* table , int size) {
@@ -58,7 +68,7 @@ process_segment* find_segment_with_space(process_table* table , int size) {
 		return segment->type == HEAP;
 	};
 	int has_space(process_segment* segment) {
-		return find_page_with_space(segment->pages, size) != NULL;
+		return find_page_with_space(segment, size) != NULL;
 	}
 
 	process_segment* segment = malloc(sizeof(process_segment));
@@ -72,7 +82,6 @@ process_segment* find_segment_with_space(process_table* table , int size) {
 		}
 		i++;
 	}
-	log_info(seg_logger, "will return null");
 	return NULL;
 }
 
@@ -87,7 +96,7 @@ process_segment* segment_by_dir(process_table* table, int dir) {
 		}
 		i++;
 	}
-	log_info(seg_logger, "will return null");
+	free(segment);
 	return NULL;
 }
 
@@ -102,17 +111,33 @@ int last_position(char* process) {
 		last += segment->size;
 		i++;
 	}
+	free(segment);
 	return last;
 }
 
-t_page* find_page_with_space(t_list* pages, int size) {
+t_page* find_page_with_space(process_segment* segment, int size) {
+	void* pages = segment->pages;
+	int number_of_pages = segment->size / PAGE_SIZE;
+	log_debug(seg_logger, "find_page_with_space, number_of_pages: %i", number_of_pages);
+
 	int has_free_frame(t_page* page) {
 		void* frame = MEMORY[page->frame_number];
 		int space = get_frame_free_size(frame);
-		log_info(seg_logger, "space: %i, size required: %i", space, size);
 		return space > size;
 	}
-	return list_find(pages, (void*) has_free_frame);
+
+	t_page* page = malloc(sizeof(t_page));
+	int i = 0;
+	while (i < number_of_pages) {
+		log_info(seg_logger, "i: %i", i);
+		memcpy(page, pages + i * sizeof(t_page), sizeof(t_page));
+		if (has_free_frame(page)) {
+			return page;
+		}
+		i++;
+	}
+	free(page);
+	return NULL;
 }
 
 void create_process_table(char* process) {
@@ -132,7 +157,7 @@ void add_process_segment(char* process, process_segment* segment) {
 		process_table->segments = malloc(sizeof(process_segment));
 		memcpy(process_table->segments, segment, sizeof(process_segment));
 	} else {
-		log_info(seg_logger, "%s tiene %i segments", process, process_table->number_of_segments);
+		log_info(seg_logger, "when add ... %s tiene %i segments", process, process_table->number_of_segments);
 		int offset = process_table->number_of_segments * sizeof(process_segment);
 		realloc(process_table->segments, process_table->segments + offset + sizeof(process_segment));
 		memcpy(process_table->segments + offset, segment, sizeof(process_segment));
@@ -209,10 +234,12 @@ int get_frame_free_size(void* frame) {
 		offset += sizeof(uint32_t);
 		offset += data_size;
 		if (is_free) {
+			log_debug(seg_logger, "get_frame_free_size, retorna %i", data_size);
 			return data_size;
 		}
 		data_size = 0;
 	}
+	log_debug(seg_logger, "get_frame_free_size, retorna %i", 0);
 	return 0;
 }
 
