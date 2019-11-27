@@ -18,6 +18,7 @@
 #include <netdb.h>
 #include <commons/collections/queue.h>
 #include <commons/collections/dictionary.h>
+#include <commons/string.h>
 
 typedef struct {
 	int tid;

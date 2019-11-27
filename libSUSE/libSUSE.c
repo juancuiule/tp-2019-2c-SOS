@@ -30,12 +30,13 @@ int ejecutar_operacion(int tid, int operacion) {
 	enviar_paquete(paquete, conexion_con_suse);
 
 	int next = 45;
+	char* proximo = string_new();
 
 	if (operacion == 2) {
-		recv(conexion_con_suse, next, sizeof(int), MSG_WAITALL);
-		printf("Próximo hilo a ejecutar: %i\n", next);
+		recv(conexion_con_suse, proximo, sizeof(proximo), MSG_WAITALL);
+		printf("Próximo hilo a ejecutar: %s\n", proximo);
+		return atoi(proximo);
 	}
-
 
 	return 0;
 }

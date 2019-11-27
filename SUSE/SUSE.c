@@ -100,10 +100,8 @@ void atender_cliente(int cliente_fd) {
 				ejecutar_nuevo_hilo(hilo);
 			}
 
-			/*hilo_t* proximo_hilo = siguiente_hilo_a_ejecutar(programa);
-			printf("TID del próximo hilo a ejecutar: %i\n", proximo_hilo->tid);*/
-			int next = 55;
-			char* proximo = string_itoa(next);
+			hilo_t* proximo_hilo = siguiente_hilo_a_ejecutar(programa);
+			char* proximo = string_itoa(2);
 			send(cliente_fd, proximo, sizeof(proximo), MSG_WAITALL);
 
 			break;
