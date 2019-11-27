@@ -35,3 +35,29 @@
 [INFO] 20:14:06:360 SUSE/(20604:20668): El hilo 3 del programa 20664 llegó a READY
 [INFO] 20:14:06:361 SUSE/(20604:20669): El hilo 1 del programa 20664 llegó a BLOCKED
 [INFO] 20:14:06:361 SUSE/(20604:20670): El hilo 0 del programa 20664 llegó a EXEC.
+[INFO] 20:46:29:617 SUSE/(24435:24435): Se ha iniciado el servidor.
+[INFO] 20:46:32:936 SUSE/(24435:24438): El hilo 0 del programa 24437 llegó a NEW
+[INFO] 20:46:32:936 SUSE/(24435:24438): El hilo 0 del programa 24437 llegó a READY
+[INFO] 20:46:32:937 SUSE/(24435:24439): El hilo 1 del programa 24437 llegó a NEW
+[INFO] 20:46:32:937 SUSE/(24435:24439): El hilo 1 del programa 24437 llegó a READY
+[INFO] 20:46:32:937 SUSE/(24435:24440): El hilo 2 del programa 24437 llegó a NEW
+[INFO] 20:46:32:937 SUSE/(24435:24440): El hilo 2 del programa 24437 llegó a READY
+[INFO] 20:46:32:937 SUSE/(24435:24441): El hilo 3 del programa 24437 llegó a NEW
+[INFO] 20:46:32:937 SUSE/(24435:24441): El hilo 3 del programa 24437 llegó a READY
+[INFO] 20:46:32:938 SUSE/(24435:24442): El hilo 1 del programa 24437 llegó a BLOCKED
+[INFO] 20:46:32:938 SUSE/(24435:24443): El hilo 45 del programa 24437 llegó a EXEC.
+[INFO] 23:07:35:551 SUSE/(2651:2651): Se ha iniciado el servidor.
+[INFO] 23:08:09:188 SUSE/(2651:2722): El hilo 0 del programa 2721 llegó a NEW
+[INFO] 23:08:09:188 SUSE/(2651:2722): El hilo 0 del programa 2721 llegó a READY
+[INFO] 23:08:09:188 SUSE/(2651:2723): El hilo 1 del programa 2721 llegó a NEW
+[INFO] 23:08:09:189 SUSE/(2651:2723): El hilo 1 del programa 2721 llegó a READY
+[INFO] 23:08:09:189 SUSE/(2651:2724): El hilo 2 del programa 2721 llegó a NEW
+[INFO] 23:08:09:189 SUSE/(2651:2724): El hilo 2 del programa 2721 llegó a READY
+[INFO] 23:08:09:189 SUSE/(2651:2725): El hilo 3 del programa 2721 llegó a NEW
+[INFO] 23:08:09:189 SUSE/(2651:2725): El hilo 3 del programa 2721 llegó a READY
+[INFO] 23:08:09:190 SUSE/(2651:2726): El hilo 1 del programa 2721 llegó a BLOCKED
+[INFO] 23:08:09:190 SUSE/(2651:2727): El hilo 0 del programa 2721 llegó a EXEC.
+[INFO] 23:08:09:191 SUSE/(2651:2728): El hilo 2 del programa 2721 llegó a BLOCKED
+[INFO] 23:08:09:191 SUSE/(2651:2729): El hilo 45 del programa 2721 llegó a EXEC.
+[INFO] 23:08:09:193 SUSE/(2651:2730): El hilo 3 del programa 2721 llegó a BLOCKED
+[INFO] 23:08:09:194 SUSE/(2651:2732): El hilo 0 del programa 2721 llegó a EXIT.

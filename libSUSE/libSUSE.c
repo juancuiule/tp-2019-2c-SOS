@@ -32,7 +32,7 @@ int ejecutar_operacion(int tid, int operacion) {
 	int next = 45;
 
 	if (operacion == 2) {
-		recv(conexion_con_suse, next, sizeof(int), 0);
+		recv(conexion_con_suse, next, sizeof(int), MSG_WAITALL);
 		printf("Próximo hilo a ejecutar: %i\n", next);
 	}
 
