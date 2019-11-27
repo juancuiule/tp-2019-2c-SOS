@@ -19,6 +19,18 @@ int main() {
 	return EXIT_SUCCESS;
 }
 
+void inicializar_metricas_hilo(hilo_t* hilo) {
+	hilo->tiempo_cpu = 0;
+	hilo->tiempo_espera = 0;
+}
+
+long long current_timestamp() {
+    struct timeval te;
+    gettimeofday(&te, NULL);
+    long long milliseconds = te.tv_sec*1000LL + te.tv_usec/1000;
+    return milliseconds;
+}
+
 void inicializar() {
 	tid_hilo_anterior = 9999;
 
@@ -77,6 +89,7 @@ void atender_cliente(int cliente_fd) {
 	memcpy(&pid, buffer + offset, sizeof(int));
 	offset += sizeof(int);
 	hilo_t* hilo = malloc(sizeof(hilo_t));
+	inicializar_metricas_hilo(hilo);
 	hilo->tid = tid;
 	hilo->pid = pid;
 
@@ -87,6 +100,7 @@ void atender_cliente(int cliente_fd) {
 	switch (opcode) {
 		case 1:
 			encolar_hilo_en_new(hilo);
+			printf("tiempo de creacion: %lld\n", hilo->tiempo_creacion);
 			agregar_programa(hilo);
 
 			if (GRADO_MULTIPROGRAMACION < MAX_MULTIPROG)
@@ -101,7 +115,7 @@ void atender_cliente(int cliente_fd) {
 			}
 
 			hilo_t* proximo_hilo = siguiente_hilo_a_ejecutar(programa);
-			char* proximo = string_itoa(2);
+			char* proximo = string_itoa(proximo_hilo->tid);
 			send(cliente_fd, proximo, sizeof(proximo), MSG_WAITALL);
 
 			break;
@@ -136,16 +150,21 @@ void ejecutar_nuevo_hilo(hilo_t* hilo) {
 
 	log_info(logger, "El hilo %i del programa %i llegó a EXEC.", hilo->tid, hilo->pid);
 	hilo = siguiente_hilo_a_ejecutar(programa);
-	hilo->timestamp_ultima_llegada_a_exec = time(NULL);
 	programa->hilo_en_exec = hilo;
 }
 
 void logear_metricas() {
+	long long tiempo_de_ejecucion(hilo_t* hilo) {
+    	printf("nuevo timestamp: %lld\n", current_timestamp());
+		return current_timestamp() - hilo->tiempo_creacion;
+	}
+
 	void logear_metricas_hilo(hilo_t* hilo) {
 		log_info(logger_metricas, "Métricas del hilo %i: ", hilo->tid);
-		log_info(logger_metricas, "tiempo de ejecución: %i", hilo->tiempo_ejecucion);
-		log_info(logger_metricas, "tiempo de espera: %i", hilo->tiempo_espera);
-		log_info(logger_metricas, "tiempo de uso de CPU: %i", hilo->tiempo_cpu);
+		long long tiempo_ejecucion = tiempo_de_ejecucion(hilo);
+		log_info(logger_metricas, "\ttiempo de ejecución: %lld", tiempo_ejecucion);
+		log_info(logger_metricas, "\ttiempo de espera: %i", hilo->tiempo_espera);
+		log_info(logger_metricas, "\ttiempo de uso de CPU: %i", hilo->tiempo_cpu);
 	}
 
 	void logear_metricas_hilos_programa(programa_t* programa) {
@@ -160,11 +179,9 @@ void logear_metricas() {
 	while (1) {
 		sleep(METRICS_TIMER);
 		log_info(logger_metricas, "Grado de multiprogramación: %i", GRADO_MULTIPROGRAMACION);
-		/*
 		list_iterate(cola_new->elements, (void*)logear_metricas_hilo);
 		list_iterate(cola_blocked->elements, (void*)logear_metricas_hilo);
-		list_iterate(programas, (void*)logear_metricas_hilos_programa);
-		*/
+		//list_iterate(programas, (void*)logear_metricas_hilos_programa);
 	}
 }
 
@@ -183,7 +200,7 @@ void atender_nuevo_cliente(int cliente_fd) {
 }
 
 void encolar_hilo_en_new(hilo_t* hilo) {
-	hilo->timestamp_creacion = time(NULL);
+	hilo->tiempo_creacion = current_timestamp();
 	queue_push(cola_new, hilo);
 	log_info(logger, "El hilo %i del programa %i llegó a NEW", hilo->tid, hilo->pid);
 }
@@ -204,13 +221,14 @@ void encolar_hilo_en_ready() {
 	programa->cola_ready = queue_create();
 	programa->hilo_en_exec = malloc(sizeof(hilo_t));
 	programa = obtener_programa(hilo->pid);
-	hilo->timestamp_ultima_llegada_a_ready = time(NULL);
 	queue_push(programa->cola_ready, hilo);
+	hilo->tiempo_ultima_llegada_a_ready = current_timestamp();
 	log_info(logger, "El hilo %d del programa %d llegó a READY", hilo->tid, hilo->pid);
 	GRADO_MULTIPROGRAMACION++;
 
 	if (GRADO_MULTIPROGRAMACION == MAX_MULTIPROG)
 		log_warning(logger, "Se ha alcanzado el grado máximo de multiprogramación");
+
 }
 
 void bloquear_hilo(hilo_t* hilo) {

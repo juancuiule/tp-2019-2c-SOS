@@ -8,16 +8,16 @@
 #include <commons/string.h>
 #include <stdbool.h>
 #include <time.h>
+#include <sys/time.h>
 
 typedef struct {
 	int tid;
 	int pid;
-	double tiempo_ejecucion;
-	double tiempo_espera;
-	double tiempo_cpu;
-	time_t timestamp_creacion;
-	time_t timestamp_ultima_llegada_a_ready;
-	time_t timestamp_ultima_llegada_a_exec;
+	long long tiempo_espera;
+	long long tiempo_cpu;
+	long long tiempo_creacion;
+	long long tiempo_ultima_llegada_a_ready;
+	long long tiempo_ultima_llegada_a_exec;
 	double estimacion_anterior;
 	double rafaga_anterior;
 } __attribute__((packed)) hilo_t;
