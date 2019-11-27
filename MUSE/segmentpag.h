@@ -11,7 +11,7 @@
 #include <stdint.h>
 
 t_list *tables;
-t_log *logger;
+t_log *seg_logger;
 t_bitarray *frame_usage_bitmap;
 void* bitmap_pointer;
 void** MEMORY;
@@ -66,6 +66,8 @@ process_table* get_table_for_process(char* process);
 void add_process_segment(char* process, process_segment* segment);
 void add_page_to_segment(process_segment* segment, t_page* page);
 int find_free_frame(t_bitarray* bitmap);
-void register_used_space_in_frame(int frame_number, uint32_t size);
+void* alloc_in_frame(int frame_number, uint32_t size);
+int get_frame_free_size(void* frame);
+t_page* find_page_with_space(t_list* pages, int size);
 
 #endif

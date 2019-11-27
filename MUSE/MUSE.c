@@ -8,13 +8,15 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 	uint32_t tam_pedido;
 	memcpy(&tam_pedido, body->content, sizeof(uint32_t));
 
+	// min amount of frames to ask for the segment
 	int frames_to_ask = ceil((double) tam_pedido / PAGE_SIZE);
-	log_info(logger, "frames_to_ask to alloc %u es %i", tam_pedido, frames_to_ask);
 
 	log_info(logger, "El cliente con id: %s hizo muse_malloc con %u", id, tam_pedido);
+
 	process_table* t = get_table_for_process(id);
 	muse_body* r_body = create_body();
 	muse_response* response;
+	void* dir;
 
 	if (t != NULL) {
 		int process_segments = t->segments->elements_count;
@@ -27,14 +29,48 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 				log_info(logger, "No hay frame libre... SWAP");
 			} else {
 				t_page *new_page = create_page(frame_number);
-				register_used_space_in_frame(frame_number, tam_pedido);
+				dir = alloc_in_frame(frame_number, tam_pedido);
 				add_page_to_segment(segment, new_page);
 				add_process_segment(id, segment);
 			}
-			add_fixed_to_body(r_body, sizeof(uint32_t), segment->base);
+			add_fixed_to_body(r_body, sizeof(uint32_t), dir);
 		} else {
+			// buscar segmentos con espacio
+
+			// -- si hay segmentos con espacio
+			// dado un segmento con espacio buscar la pagina con espacio
+			// dada la pagina asignar el espacio y retornar la dir
+
+			// -- si no hay segmentos con espacio
+			// ver si se puede agrandar alguno
+			//   -- si se puede agrandar -> agrandar y asignar
+			//   -- si no se puede agrandar -> crear nuevo
+
 			segment = find_segment_with_space(t->segments, tam_pedido);
-			add_fixed_to_body(r_body, sizeof(uint32_t), segment->base);
+			if (segment != NULL) {
+				// hay alguno con espacio
+				t_page* page = find_page_with_space(segment->pages, tam_pedido);
+				dir = alloc_in_frame(page->frame_number, tam_pedido);
+				add_fixed_to_body(r_body, sizeof(uint32_t), dir);
+			} else {
+				// falta chequear si se puede "agrandar"
+				// if (se puede agrandar el segmento) {
+				//   agrandar el segmento la cantidad de frames necesarios y asignar
+				// } else {
+				segment = create_segment(HEAP, 0, frames_to_ask * PAGE_SIZE);
+				int frame_number = find_free_frame(frame_usage_bitmap);
+				if (frame_number == -1) {
+					log_info(logger, "No hay frame libre... SWAP");
+				} else {
+					t_page *new_page = create_page(frame_number);
+					dir = alloc_in_frame(frame_number, tam_pedido);
+					add_page_to_segment(segment, new_page);
+					add_process_segment(id, segment);
+				}
+				// }
+				add_fixed_to_body(r_body, sizeof(uint32_t), dir);
+			}
+
 			// TODO: en vez de devolver la base debería devolver
 			//		 el lugar donde puede guardar, el espacio de la página???
 		}
@@ -82,9 +118,9 @@ void respond_free(muse_body* body, char* id, int socket_cliente) {
 	uint32_t dir_to_free;
 	memcpy(&dir_to_free, body->content, sizeof(uint32_t));
 
-	// log_info(logger, "El cliente con id: %s hizo free a la dir: %u", id, dir_to_free);
+	 log_info(logger, "El cliente con id: %s hizo free a la dir: %u", id, dir_to_free);
 
-	free(dir_to_free);
+	// free(dir_to_free);
 	send_response_status(socket_cliente, SUCCESS);
 }
 
@@ -216,10 +252,10 @@ int main(void) {
 	PAGE_SIZE = config_get_int_value(config, "PAGE_SIZE");
 	SWAP_SIZE = config_get_int_value(config, "SWAP_SIZE");
 
-	log_info(logger, "Port: %s", PORT);
-	log_info(logger, "Memory size: %i", MEMORY_SIZE);
-	log_info(logger, "Page size: %i", PAGE_SIZE);
-	log_info(logger, "Number of pages: %i", MEMORY_SIZE / PAGE_SIZE);
+	log_debug(logger, "Port: %s", PORT);
+	log_debug(logger, "Memory size: %i", MEMORY_SIZE);
+	log_debug(logger, "Page size: %i", PAGE_SIZE);
+	log_debug(logger, "Number of pages: %i", MEMORY_SIZE / PAGE_SIZE);
 
 	int server_fd = init_server(IP, PORT);
 	

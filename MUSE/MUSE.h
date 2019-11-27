@@ -11,5 +11,6 @@
 
 char* IP;
 char* PORT;
+t_log *logger;
 
 #endif
