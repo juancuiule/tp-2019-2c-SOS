@@ -25,7 +25,8 @@ typedef enum {
 } segment_type;
 
 typedef struct {
-	t_list *segments; // lista de segmentos
+	void *segments; // segmentos
+	int number_of_segments;
 	char *process; // a que proceso pertenece
 } process_table;
 
@@ -69,5 +70,6 @@ int find_free_frame(t_bitarray* bitmap);
 void* alloc_in_frame(int frame_number, uint32_t size);
 int get_frame_free_size(void* frame);
 t_page* find_page_with_space(t_list* pages, int size);
+process_segment* find_segment_with_space(process_table* table, int size);
 
 #endif

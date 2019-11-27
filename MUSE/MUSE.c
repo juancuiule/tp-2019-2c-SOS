@@ -19,10 +19,10 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 	void* dir;
 
 	if (t != NULL) {
-		int process_segments = t->segments->elements_count;
-		log_info(logger, "El proceso %s tiene %i segmentos", id, process_segments);
+		// int process_segments = t->segments->elements_count;
+		// log_info(logger, "El proceso %s tiene %i segmentos", id, process_segments);
 		process_segment *segment;
-		if (process_segments == 0) {
+		if (t->segments == NULL) {
 			segment = create_segment(HEAP, 0, frames_to_ask * PAGE_SIZE);
 			int frame_number = find_free_frame(frame_usage_bitmap);
 			if (frame_number == -1) {
@@ -33,9 +33,9 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 				add_page_to_segment(segment, new_page);
 				add_process_segment(id, segment);
 			}
-			add_fixed_to_body(r_body, sizeof(uint32_t), dir);
+			add_fixed_to_body(r_body, sizeof(uint32_t), segment->base + dir);
 		} else {
-			// buscar segmentos con espacio
+			log_info(logger, "buscar segmentos con espacio");
 
 			// -- si hay segmentos con espacio
 			// dado un segmento con espacio buscar la pagina con espacio
@@ -45,19 +45,23 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 			// ver si se puede agrandar alguno
 			//   -- si se puede agrandar -> agrandar y asignar
 			//   -- si no se puede agrandar -> crear nuevo
-
-			segment = find_segment_with_space(t->segments, tam_pedido);
+			segment = find_segment_with_space(t, tam_pedido);
 			if (segment != NULL) {
 				// hay alguno con espacio
 				t_page* page = find_page_with_space(segment->pages, tam_pedido);
 				dir = alloc_in_frame(page->frame_number, tam_pedido);
-				add_fixed_to_body(r_body, sizeof(uint32_t), dir);
 			} else {
 				// falta chequear si se puede "agrandar"
 				// if (se puede agrandar el segmento) {
 				//   agrandar el segmento la cantidad de frames necesarios y asignar
 				// } else {
-				segment = create_segment(HEAP, 0, frames_to_ask * PAGE_SIZE);
+
+				// busco el final del último segmento
+				int new_base = last_position(id);
+				log_debug(logger, "new_base: %i", new_base);
+
+				// creo un nuevo segmento desde esa base
+				segment = create_segment(HEAP, new_base, frames_to_ask * PAGE_SIZE);
 				int frame_number = find_free_frame(frame_usage_bitmap);
 				if (frame_number == -1) {
 					log_info(logger, "No hay frame libre... SWAP");
@@ -68,12 +72,12 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 					add_process_segment(id, segment);
 				}
 				// }
-				add_fixed_to_body(r_body, sizeof(uint32_t), dir);
 			}
 
 			// TODO: en vez de devolver la base debería devolver
 			//		 el lugar donde puede guardar, el espacio de la página???
 		}
+		add_fixed_to_body(r_body, sizeof(uint32_t), segment->base + dir);
 		response = create_response(SUCCESS, r_body);
 	} else {
 		log_info(logger, "El proceso %s no tiene tabla, falto hacer init?");
@@ -94,9 +98,9 @@ void respond_get(muse_body* body, char* id, int socket_cliente) {
 	muse_response* response;
 
 	if (t != NULL) {
-		int process_segments = t->segments->elements_count;
+//		int process_segments = t->segments->elements_count;
 		process_segment *segment;
-		if (process_segments == 0) {
+		if (t->segments == NULL) {
 			log_info(logger, "El proceso %s no tiene segmentos, es un seg fault?");
 			response = create_response(ERROR, r_body);
 		} else {
@@ -137,10 +141,10 @@ void respond_cpy(muse_body* body, char* id, int socket_cliente) {
 	muse_response* response;
 
 	if (t != NULL) {
-		int process_segments = t->segments->elements_count;
-		log_info(logger, "El proceso %s tiene %i segmentos", id, process_segments);
+//		int process_segments = t->segments->elements_count;
+//		log_info(logger, "El proceso %s tiene %i segmentos", id, process_segments);
 		process_segment *segment;
-		if (process_segments == 0) {
+		if (t->segments == NULL) {
 			// Error
 		} else {
 			// segment = find_segment_with_space(t->segments, tam_pedido);

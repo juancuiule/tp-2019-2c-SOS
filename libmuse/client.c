@@ -12,7 +12,7 @@ int main(void) {
 	if (init_result != -1) {
 		uint32_t my_memory = muse_alloc(10);
 		uint32_t another_memory = muse_alloc(10);
-		uint32_t another_memory2 = muse_alloc(40);
+		 uint32_t another_memory2 = muse_alloc(40);
 
 		log_info(logger, "my_memory: %u", my_memory);
 //		int x = 10;
