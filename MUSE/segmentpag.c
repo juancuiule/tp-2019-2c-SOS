@@ -49,41 +49,21 @@ void add_page_to_segment(process_segment* segment, t_page* page) {
 }
 
 process_segment *find_segment_with_space(t_list* segments, int size) {
-	process_segment* segment = segments->head->data;
-	log_info(logger, "base: %i, size: %i, pages: %i, type: %s", segment->base, segment->size, segment->pages->elements_count, segment->type == 0 ? "HEAP" : "MMAP");
+	int is_heap(process_segment* segment) {
+		return segment->type == HEAP;
+	};
 
-	t_page* page = segment->pages->head->data;
-	void* frame = MEMORY[page->frame_number];
+	t_list* heap_segments = list_filter(segments, (void*) is_heap);
 
-	bool is_free;
-	memcpy(&is_free, frame, sizeof(bool));
-	uint32_t data_size;
-	memcpy(&data_size, frame + 1, sizeof(uint32_t));
-	log_info(logger, "Una pagina del segmento %i apunta al frame %i y este esta: %s data_size es %i", segment->base, page->frame_number, is_free ? "LIBRE" : "OCUPADO", data_size);
-
-//	int is_heap(process_segment* segment) {
-//		return segment->type == HEAP;
-//	};
-//	t_list* heap_segments = list_filter(segments, (void*) is_heap);
-
-//	int has_space(process_segment* segment) {
-//		int has_free_frame(t_page* page) {
-//			void* frame = MEMORY[page->frame_number];
-//			bool is_free;
-//			memcpy(&is_free, frame, sizeof(bool));
-//			uint32_t data_size;
-//			memcpy(&data_size, frame + 1, sizeof(uint32_t));
-//			log_info(logger, "Una pagina del segmento %i apunta al frame %i y este esta: %s data_size es %i", segment->base, page->frame_number, is_free ? "LIBRE" : "OCUPADO", data_size);
-////			int frame_with_space(frame_block* block) {
-////				return block->metadata->is_free && block->metadata->size > size;
-////			}
-////			return list_find(a_frame->blocks, (void*) frame_with_space);
-//			return 0;
-//		}
-//		return list_any_satisfy(segment->pages, (void*) has_free_frame);
-//	}
-//	return list_find(heap_segments, (void*) has_space);
-	return segment;
+	int has_space(process_segment* segment) {
+		int has_free_frame(t_page* page) {
+			void* frame = MEMORY[page->frame_number];
+			int space = get_fragment_free_size(frame);
+			return space > size;
+		}
+		return list_any_satisfy(segment->pages, (void*) has_free_frame);
+	}
+	return list_find(heap_segments, (void*) has_space);
 }
 
 void create_process_table(char* process) {
@@ -94,13 +74,6 @@ void create_process_table(char* process) {
 	list_add(tables, new_table);
 	log_info(logger, "Se creo una process_table para el proceso: %s", process);
 }
-
-//void* get_segment_from_dir(t_list* segments, int dir) {
-//	int is_this(process_segment* segment) {
-//		return segment->base;
-//	}
-//	return;
-//}
 
 void add_process_segment(char* process, process_segment* segment) {
 	process_table* process_table = get_table_for_process(process);
@@ -147,19 +120,40 @@ void register_used_space_in_frame(int frame_number, uint32_t size) {
 	// Si queda espacio libre entonces lo ocupo
 	// y al final agrego mas metadata para lo que queda free
 	if (is_free) {
-		log_info(logger, "is_free: %i, data_size: %u, offset: %u", is_free, data_size, offset);
+		// log_info(logger, "is_free: %i, data_size: %u, offset: %u", is_free, data_size, offset)
 		memcpy(frame + offset, &x, sizeof(bool));
-		log_info(logger, "after set as used");
 		offset += sizeof(bool);
 		memcpy(frame + offset, &(size), sizeof(uint32_t));
-		log_info(logger, "after set size %i", size);
 		offset += sizeof(uint32_t);
+		offset += size;
 		// pointer = offset ???
 		memcpy(frame + offset, &y, sizeof(bool));
 		offset += sizeof(bool);
 		uint32_t remaining_size = PAGE_SIZE - offset - sizeof(uint32_t);
+		log_info(logger, "remaining_size %i", remaining_size);
 		memcpy(frame + offset, &(remaining_size), sizeof(uint32_t));
 	}
+}
+
+int get_fragment_free_size(void* frame) {
+	log_debug(logger, "get_fragment_free_size");
+	bool is_free = 0;
+	uint32_t data_size = 0;
+	uint32_t offset = 0;
+
+	// Me muevo hasta encontrar un espacio libre o que se termine el frame...
+	while (offset < PAGE_SIZE) {
+		memcpy(&is_free, frame + offset, sizeof(bool));
+		offset += sizeof(bool);
+		memcpy(&data_size, frame + offset, sizeof(uint32_t));
+		offset += sizeof(uint32_t);
+		offset += data_size;
+		if (is_free) {
+			return data_size;
+		}
+		data_size = 0;
+	}
+	return 0;
 }
 
 int find_free_frame(t_bitarray* bitmap) {

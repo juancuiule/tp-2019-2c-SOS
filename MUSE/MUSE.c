@@ -34,7 +34,7 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 			add_fixed_to_body(r_body, sizeof(uint32_t), segment->base);
 		} else {
 			segment = find_segment_with_space(t->segments, tam_pedido);
-//			add_fixed_to_body(r_body, sizeof(uint32_t), segment->base);
+			add_fixed_to_body(r_body, sizeof(uint32_t), segment->base);
 			// TODO: en vez de devolver la base debería devolver
 			//		 el lugar donde puede guardar, el espacio de la página???
 		}
