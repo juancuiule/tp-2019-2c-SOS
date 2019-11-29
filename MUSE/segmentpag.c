@@ -182,7 +182,6 @@ void* find_free_dir(process_segment* segment, int size) {
 				data_size = 0;
 				free_dir = -1;
 				free_space = 0;
-				log_debug(seg_logger, "offset: %i", offset);
 				break;
 			}
 			if (offset == (read_pages + 1) * PAGE_SIZE) {
@@ -192,31 +191,6 @@ void* find_free_dir(process_segment* segment, int size) {
 		read_pages++;
 	}
 	return -1;
-}
-
-t_page* find_page_with_space(process_segment* segment, int size) {
-	void* pages = segment->pages;
-	int number_of_pages = segment->size / PAGE_SIZE;
-	log_debug(seg_logger, "find_page_with_space, number_of_pages: %i", number_of_pages);
-
-	int has_free_frame(t_page* page) {
-		void* frame = MEMORY[page->frame_number];
-		int space = get_frame_free_size(frame);
-		return space > size;
-	}
-
-	t_page* page = malloc(sizeof(t_page));
-	int i = 0;
-	while (i < number_of_pages) {
-		log_info(seg_logger, "i: %i", i);
-		memcpy(page, pages + i * sizeof(t_page), sizeof(t_page));
-		if (has_free_frame(page)) {
-			return page;
-		}
-		i++;
-	}
-	free(page);
-	return NULL;
 }
 
 void create_process_table(char* process) {
@@ -248,49 +222,6 @@ process_table* get_table_for_process(char* process) {
 	return list_find(tables, (void*) is_this);
 }
 
-void* alloc_in_frame(int frame_number, uint32_t size) {
-	void* frame = MEMORY[frame_number];
-	void* pointer = NULL;
-	bool x = false;
-	bool y = true;
-
-	bool is_free = false;
-	uint32_t data_size = 0;
-    uint32_t offset = 0;
-
-    // Me muevo hasta encontrar un espacio libre o que se termine el frame...
-	while (offset < PAGE_SIZE) {
-		log_info(seg_logger, "is_free: %i, data_size: %u, offset: %i", is_free, data_size, offset);
-		memcpy(&is_free, frame + offset, sizeof(bool));
-		log_info(seg_logger, "is_free: %i", is_free);
-		if (is_free) {
-			break;
-		}
-		offset += sizeof(bool);
-		memcpy(&data_size, frame + offset, sizeof(uint32_t));
-		offset += sizeof(uint32_t);
-		log_info(seg_logger, "data_size: %i", data_size);
-		offset += data_size;
-	}
-
-	// Si queda espacio libre entonces lo ocupo
-	// y al final agrego mas metadata para lo que queda free
-	if (is_free) {
-		memcpy(frame + offset, &x, sizeof(bool));
-		offset += sizeof(bool);
-		memcpy(frame + offset, &(size), sizeof(uint32_t));
-		offset += sizeof(uint32_t);
-		pointer = offset; // acá empieza la dirección de datos de lo que se pidio
-		offset += size;
-		memcpy(frame + offset, &y, sizeof(bool));
-		offset += sizeof(bool);
-		uint32_t remaining_size = PAGE_SIZE - offset - sizeof(uint32_t);
-		log_info(seg_logger, "remaining_size %i", remaining_size);
-		memcpy(frame + offset, &(remaining_size), sizeof(uint32_t));
-	}
-	return pointer;
-}
-
 int get_frame_free_size(void* frame) {
 	log_debug(seg_logger, "get_frame_free_size");
 	bool is_free = 0;
@@ -318,6 +249,7 @@ int find_free_frame(t_bitarray* bitmap) {
 	int var;
 	for (var = 0; var < (MEMORY_SIZE / PAGE_SIZE); ++var) {
 		bool is_used = bitarray_test_bit(bitmap, var);
+		log_info(seg_logger, "i = %i, is_used?: %i", var, is_used);
 		if (!is_used) {
 			return var;
 		}
@@ -345,14 +277,6 @@ void* alloc_in_segment(process_segment* segment, int dir, uint32_t size) {
 	t_page* page = malloc(sizeof(t_page));
 	void* frame;
 	while (allocd < size) {
-//		log_debug(seg_logger,
-//				"allocd: %i, size: %i, offset: %i, read_pages: %i, segment offset %i",
-//				allocd,
-//				size,
-//				offset,
-//				pages_read,
-//				dir_in_segment + (pages_read * sizeof(t_page))
-//		);
 		memcpy(page, pages + dir_in_segment + pages_read * sizeof(t_page), sizeof(t_page));
 		// falta chequear que la pagina este en memoria
 

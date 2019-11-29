@@ -25,7 +25,8 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 			log_debug(logger, "No hay ningún segmento para el proceso: %s", id);
 			log_debug(logger, "Se crea uno con base 0 y %i páginas para hacer un alloc de %i", frames_to_ask, tam_pedido);
 
-			segment = create_segment(HEAP, 0);
+			int new_base = last_position(id);
+			segment = create_segment(HEAP, new_base);
 			for (int var = 0; var < frames_to_ask; var++) {
 				int frame_number = find_free_frame(frame_usage_bitmap);
 				t_page *new_page = create_page(frame_number);
@@ -41,33 +42,30 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 			segment = find_segment_with_space(table, tam_pedido);
 
 			if (segment != NULL) {
-				log_debug(logger, "Hay uno con espacio, la base es: %i", segment->base);
+				log_debug(logger, "Hay uno con espacio, la base es: %i, size es: %i", segment->base, segment->size);
 				int free_dir = find_free_dir(segment, tam_pedido);
 				log_debug(logger, "free dir: %i", free_dir);
 				dir = alloc_in_segment(segment, free_dir, tam_pedido);
-			}
-			else {
+			} else {
 				log_debug(logger, "No hay uno con espacio");
 
 				log_debug(logger, "Busco si hay alguno extensible");
 				segment = find_extensible_heap_segment(table);
 
 				if (segment != NULL) {
-					log_debug(logger, "Se puede extender el que tiene como base: %i", segment->base);
+					log_debug(logger, "Se puede extender el que tiene como base: %i, y size: %i", segment->base, segment->size);
 					// ver cuanto espacio le queda al segmento
 					// para allocar la cantidad de paginas correctas
-					int x = find_free_dir(segment, tam_pedido);
-					log_info(logger, "x: %i", x);
-					dir = 10;
-
-
-//					t_page *new_page = create_page(frame_number);
-//					int dir_in_frame = alloc_in_frame(frame_number, tam_pedido);
-//					add_page_to_segment(segment, new_page);
-//					dir = segment->size - PAGE_SIZE + dir_in_frame;
+//					for (int var = 0; var < frames_to_ask; var++) {
+//						int frame_number = find_free_frame(frame_usage_bitmap);
+//						t_page *new_page = create_page(frame_number);
+//						add_page_to_segment(segment, new_page);
+//					}
+//					int free_dir = find_free_dir(segment, tam_pedido);
+//					dir = alloc_in_segment(segment, free_dir, tam_pedido);
+//					add_process_segment(id, segment);
 				} else {
 					log_debug(logger, "No se puede extender ninguno");
-
 					int new_base = last_position(id);
 					log_debug(logger, "Se crea un nuevo segmento desde la base: %i", new_base);
 					segment = create_segment(HEAP, new_base);
@@ -180,31 +178,34 @@ void respond_map(muse_body* body, char* id, int socket_cliente) {
 
 	log_info(logger, "El cliente con id: %s hizo map a: %s, de %i bytes, flag: %i", id, path, length, flags);
 
-	process_table* t = get_table_for_process(id);
+
+	process_table* table = get_table_for_process(id);
 	muse_body* r_body = create_body();
 	muse_response* response;
 	void* dir;
 
 	// min amount of frames to ask for the segment
 	int frames_to_ask = ceil((double) length / PAGE_SIZE);
-
 	process_segment *segment;
-	log_debug(logger, "Hay segmentos para el proceso: %s", id);
-	log_debug(logger, "Se crea uno para hacer un map de %i", length);
 
-	int new_base = last_position(id);
-	segment = create_segment(MMAP, new_base);
-	int frame_number = find_free_frame(frame_usage_bitmap);
-	t_page *new_page = create_page(frame_number);
-	dir = alloc_in_frame(frame_number, length);
-	add_page_to_segment(segment, new_page);
-	add_process_segment(id, segment);
+	if (table != NULL) {
+		log_debug(logger, "Se crea un segmento para hacer un map de %i", length);
+		int new_base = last_position(id);
+		segment = create_segment(MMAP, new_base);
+		for (int var = 0; var < frames_to_ask; var++) {
+			int frame_number = find_free_frame(frame_usage_bitmap);
+			t_page *new_page = create_page(frame_number);
+			add_page_to_segment(segment, new_page);
+		}
+		int free_dir = find_free_dir(segment, length);
+		dir = alloc_in_segment(segment, free_dir, length);
+		add_process_segment(id, segment);
 
-	log_info(logger, "dir to send en MMAP: %i", segment->base + dir);
-	add_fixed_to_body(r_body, sizeof(uint32_t), segment->base + dir);
-	response = create_response(SUCCESS, r_body);
-	send_response(response, socket_cliente);
-
+		log_info(logger, "dir to send en MMAP: %i", segment->base + dir);
+		add_fixed_to_body(r_body, sizeof(uint32_t), segment->base + dir);
+		response = create_response(SUCCESS, r_body);
+		send_response(response, socket_cliente);
+	}
 	return;
 }
 
