@@ -78,6 +78,7 @@ void atender_cliente(int cliente_fd) {
 	inicializar_metricas_hilo(hilo);
 	hilo->tid = tid;
 	hilo->pid = pid;
+	char* proximo;
 
 	programa_t* programa = malloc(sizeof(programa_t));
 	programa = obtener_programa(pid);
@@ -103,7 +104,7 @@ void atender_cliente(int cliente_fd) {
 			}
 
 			hilo_t* proximo_hilo = siguiente_hilo_a_ejecutar(programa);
-			char* proximo = string_itoa(proximo_hilo->tid);
+			proximo = string_itoa(proximo_hilo->tid);
 			send(cliente_fd, proximo, sizeof(proximo), MSG_WAITALL);
 			break;
 		case 3:
@@ -114,6 +115,7 @@ void atender_cliente(int cliente_fd) {
 			break;
 	}
 
+	free(proximo);
 	free(proximo_hilo);
 }
 
@@ -221,7 +223,6 @@ void encolar_hilo_en_ready(hilo_t* hilo) {
 
 	if (GRADO_MULTIPROGRAMACION == MAX_MULTIPROG)
 		log_warning(logger, "Se ha alcanzado el grado máximo de multiprogramación");
-
 }
 
 void bloquear_hilo(hilo_t* hilo) {
@@ -252,6 +253,10 @@ hilo_t* siguiente_hilo_a_ejecutar(programa_t* programa) {
 
 void liberar() {
 
+	void liberar_programa(programa_t* programa) {
+		free(programa);
+	}
+
 	void liberar_hilos_programa(programa_t* programa) {
 		queue_destroy(programa->cola_ready);
 		free(programa->hilo_en_exec);
@@ -264,7 +269,7 @@ void liberar() {
 	sem_destroy(pid_sem);
 	sem_destroy(multiprogramacion_sem);
 	list_iterate(programas, liberar_hilos_programa);
-	list_destroy(programas);
+	list_destroy_and_destroy_elements(programas, liberar_programa);
 }
 
 

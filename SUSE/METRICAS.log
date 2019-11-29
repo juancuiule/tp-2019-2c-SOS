@@ -32463,3 +32463,55 @@
 [INFO] 18:14:11:932 SUSE/(8412:8413): 	tiempo de espera: 0 ms
 [INFO] 18:14:11:932 SUSE/(8412:8413): 	tiempo de uso de CPU: 0 ms
 [INFO] 18:17:50:885 SUSE/(8550:8551): Grado de multiprogramación: 0
+[INFO] 18:36:07:535 SUSE/(9306:9307): Grado de multiprogramación: 3
+[INFO] 18:36:07:536 SUSE/(9306:9307): Métricas del hilo 0: 
+[INFO] 18:36:07:537 SUSE/(9306:9307): 	tiempo de ejecución: 6818 ms
+[INFO] 18:36:07:537 SUSE/(9306:9307): 	tiempo de espera: 0 ms
+[INFO] 18:36:07:537 SUSE/(9306:9307): 	tiempo de uso de CPU: 0 ms
+[INFO] 18:36:07:537 SUSE/(9306:9307): Métricas del hilo 0: 
+[INFO] 18:36:07:538 SUSE/(9306:9307): 	tiempo de ejecución: 6752 ms
+[INFO] 18:36:07:538 SUSE/(9306:9307): 	tiempo de espera: 0 ms
+[INFO] 18:36:07:538 SUSE/(9306:9307): 	tiempo de uso de CPU: 0 ms
+[INFO] 18:36:07:538 SUSE/(9306:9307): Métricas del hilo 0: 
+[INFO] 18:36:07:539 SUSE/(9306:9307): 	tiempo de ejecución: 6626 ms
+[INFO] 18:36:07:539 SUSE/(9306:9307): 	tiempo de espera: 0 ms
+[INFO] 18:36:07:539 SUSE/(9306:9307): 	tiempo de uso de CPU: 0 ms
+[INFO] 18:41:43:434 SUSE/(9502:9503): Grado de multiprogramación: 3
+[INFO] 18:41:43:435 SUSE/(9502:9503): Métricas del hilo 0: 
+[INFO] 18:41:43:436 SUSE/(9502:9503): 	tiempo de ejecución: 7456 ms
+[INFO] 18:41:43:436 SUSE/(9502:9503): 	tiempo de espera: 0 ms
+[INFO] 18:41:43:436 SUSE/(9502:9503): 	tiempo de uso de CPU: 0 ms
+[INFO] 18:41:43:437 SUSE/(9502:9503): Métricas del hilo 0: 
+[INFO] 18:41:43:437 SUSE/(9502:9503): 	tiempo de ejecución: 7418 ms
+[INFO] 18:41:43:437 SUSE/(9502:9503): 	tiempo de espera: 0 ms
+[INFO] 18:41:43:437 SUSE/(9502:9503): 	tiempo de uso de CPU: 0 ms
+[INFO] 18:41:43:437 SUSE/(9502:9503): Métricas del hilo 0: 
+[INFO] 18:41:43:437 SUSE/(9502:9503): 	tiempo de ejecución: 7334 ms
+[INFO] 18:41:43:437 SUSE/(9502:9503): 	tiempo de espera: 0 ms
+[INFO] 18:41:43:438 SUSE/(9502:9503): 	tiempo de uso de CPU: 0 ms
+[INFO] 18:43:16:575 SUSE/(9582:9583): Grado de multiprogramación: 3
+[INFO] 18:43:16:575 SUSE/(9582:9583): Métricas del hilo 0: 
+[INFO] 18:43:16:576 SUSE/(9582:9583): 	tiempo de ejecución: 7246 ms
+[INFO] 18:43:16:576 SUSE/(9582:9583): 	tiempo de espera: 0 ms
+[INFO] 18:43:16:577 SUSE/(9582:9583): 	tiempo de uso de CPU: 0 ms
+[INFO] 18:43:16:577 SUSE/(9582:9583): Métricas del hilo 0: 
+[INFO] 18:43:16:577 SUSE/(9582:9583): 	tiempo de ejecución: 7219 ms
+[INFO] 18:43:16:577 SUSE/(9582:9583): 	tiempo de espera: 0 ms
+[INFO] 18:43:16:577 SUSE/(9582:9583): 	tiempo de uso de CPU: 0 ms
+[INFO] 18:43:16:578 SUSE/(9582:9583): Métricas del hilo 0: 
+[INFO] 18:43:16:578 SUSE/(9582:9583): 	tiempo de ejecución: 7138 ms
+[INFO] 18:43:16:578 SUSE/(9582:9583): 	tiempo de espera: 0 ms
+[INFO] 18:43:16:578 SUSE/(9582:9583): 	tiempo de uso de CPU: 0 ms
+[INFO] 18:44:05:192 SUSE/(9642:9643): Grado de multiprogramación: 3
+[INFO] 18:44:05:193 SUSE/(9642:9643): Métricas del hilo 0: 
+[INFO] 18:44:05:194 SUSE/(9642:9643): 	tiempo de ejecución: 8110 ms
+[INFO] 18:44:05:194 SUSE/(9642:9643): 	tiempo de espera: 0 ms
+[INFO] 18:44:05:194 SUSE/(9642:9643): 	tiempo de uso de CPU: 0 ms
+[INFO] 18:44:05:195 SUSE/(9642:9643): Métricas del hilo 0: 
+[INFO] 18:44:05:195 SUSE/(9642:9643): 	tiempo de ejecución: 8051 ms
+[INFO] 18:44:05:195 SUSE/(9642:9643): 	tiempo de espera: 0 ms
+[INFO] 18:44:05:195 SUSE/(9642:9643): 	tiempo de uso de CPU: 0 ms
+[INFO] 18:44:05:195 SUSE/(9642:9643): Métricas del hilo 0: 
+[INFO] 18:44:05:195 SUSE/(9642:9643): 	tiempo de ejecución: 7993 ms
+[INFO] 18:44:05:196 SUSE/(9642:9643): 	tiempo de espera: 0 ms
+[INFO] 18:44:05:196 SUSE/(9642:9643): 	tiempo de uso de CPU: 0 ms
