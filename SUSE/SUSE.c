@@ -26,19 +26,46 @@ long long current_timestamp() {
     return milliseconds;
 }
 
+void logear_metricas(int grado_multiprogramacion) {
+	long long tiempo_de_ejecucion(hilo_t* hilo) {
+		return current_timestamp() - hilo->tiempo_creacion;
+	}
+
+	void logear_metricas_hilo(hilo_t* hilo) {
+		log_info(logger_metricas, "Métricas del hilo %i: ", hilo->tid);
+		long long tiempo_ejecucion = tiempo_de_ejecucion(hilo);
+		log_info(logger_metricas, "\ttiempo de ejecución: %lld ms", tiempo_ejecucion);
+		log_info(logger_metricas, "\ttiempo de espera: %lld ms", hilo->tiempo_espera);
+		log_info(logger_metricas, "\ttiempo de uso de CPU: %lld ms", hilo->tiempo_cpu);
+	}
+
+	void logear_metricas_hilos_programa(programa_t* programa) {
+		hilo_t* hilo_en_ejecucion = malloc(sizeof(hilo_t));
+		hilo_en_ejecucion = programa->hilo_en_exec;
+		t_list* hilos_programa = list_create();
+		list_add(hilos_programa, hilo_en_ejecucion);
+		list_add_all(hilos_programa, programa->cola_ready->elements);
+		list_iterate(hilos_programa, (void*)logear_metricas_hilo);
+	}
+
+	while (1) {
+		sleep(METRICS_TIMER);
+		log_info(logger_metricas, "Grado de multiprogramación: %i", grado_multiprogramacion);
+		list_iterate(cola_new->elements, (void*)logear_metricas_hilo);
+		list_iterate(cola_blocked->elements, (void*)logear_metricas_hilo);
+		//list_iterate(programas, (void*)logear_metricas_hilos_programa);
+	}
+}
+
 void inicializar_metricas_hilo(hilo_t* hilo) {
 	hilo->tiempo_creacion = current_timestamp();
 	hilo->tiempo_cpu = 0;
 	hilo->tiempo_espera = 0;
-	hilo->hilos_esperando = queue_create();
+	hilo->hilos_a_esperar = queue_create();
 }
 
 void inicializar() {
-	tid_hilo_anterior = 9999;
-
-	logger = log_create("../SUSE.log", "SUSE", 1, LOG_LEVEL_DEBUG);
-	logger_metricas = log_create("../METRICAS.log", "SUSE", 1, LOG_LEVEL_DEBUG);
-
+	inicializar_loggers();
 	programas = list_create();
 	cola_new = queue_create();
 	cola_blocked = queue_create();
@@ -62,21 +89,7 @@ programa_t* obtener_programa_de_hilo(int tid) {
 	tid_hilo_buscado = tid;
 	return list_find(programas, (void*)es_programa_hilo_buscado);
 }
-/*
-void obtener_tid_proximo_hilo() {
-	int* tid_hilo_solicitante = malloc(sizeof(int));
-	hilo_t* hilo = malloc(sizeof(hilo_t));
-	programa_t* programa = malloc(sizeof(programa_t));
 
-	while (1) {
-		recv(servidor_fd, tid_hilo_solicitante, sizeof(tid_hilo_solicitante), 0);
-		programa = obtener_programa_de_hilo(tid_hilo_solicitante);
-		hilo = siguiente_hilo_a_ejecutar(programa);
-		send(servidor_fd, hilo->tid, sizeof(int), 0);
-		printf("El TID del siguiente hilo a ejecutar fue enviado\n");
-	}
-}
-*/
 void atender_cliente(int cliente_fd) {
 	int pedido;
 	int offset = 0;
@@ -91,6 +104,7 @@ void atender_cliente(int cliente_fd) {
 	memcpy(&pid, buffer + offset, sizeof(int));
 	offset += sizeof(int);
 	hilo_t* hilo = malloc(sizeof(hilo_t));
+	hilo->hilos_a_esperar = queue_create();
 	inicializar_metricas_hilo(hilo);
 	hilo->tid = tid;
 	hilo->pid = pid;
@@ -126,7 +140,7 @@ void atender_cliente(int cliente_fd) {
 			bloquear_hilo(hilo);
 			break;
 		case 4:
-			cerrar_hilo(hilo);
+			//cerrar_hilo(hilo);
 			break;
 	}
 }
@@ -157,37 +171,6 @@ void ejecutar_nuevo_hilo(hilo_t* hilo) {
 	programa->hilo_en_exec = hilo;
 }
 
-void logear_metricas() {
-	long long tiempo_de_ejecucion(hilo_t* hilo) {
-		return current_timestamp() - hilo->tiempo_creacion;
-	}
-
-	void logear_metricas_hilo(hilo_t* hilo) {
-		log_info(logger_metricas, "Métricas del hilo %i: ", hilo->tid);
-		long long tiempo_ejecucion = tiempo_de_ejecucion(hilo);
-		log_info(logger_metricas, "\ttiempo de ejecución: %lld ms", tiempo_ejecucion);
-		log_info(logger_metricas, "\ttiempo de espera: %lld ms", hilo->tiempo_espera);
-		log_info(logger_metricas, "\ttiempo de uso de CPU: %lld ms", hilo->tiempo_cpu);
-	}
-
-	void logear_metricas_hilos_programa(programa_t* programa) {
-		hilo_t* hilo_en_ejecucion = malloc(sizeof(hilo_t));
-		hilo_en_ejecucion = programa->hilo_en_exec;
-		t_list* hilos_programa = list_create();
-		list_add(hilos_programa, hilo_en_ejecucion);
-		list_add_all(hilos_programa, programa->cola_ready->elements);
-		list_iterate(hilos_programa, (void*)logear_metricas_hilo);
-	}
-
-	while (1) {
-		sleep(METRICS_TIMER);
-		log_info(logger_metricas, "Grado de multiprogramación: %i", GRADO_MULTIPROGRAMACION);
-		list_iterate(cola_new->elements, (void*)logear_metricas_hilo);
-		list_iterate(cola_blocked->elements, (void*)logear_metricas_hilo);
-		//list_iterate(programas, (void*)logear_metricas_hilos_programa);
-	}
-}
-
 void agregar_programa(hilo_t* hilo) {
 	programa_t* programa = malloc(sizeof(programa_t));
 	programa->pid = hilo->pid;
@@ -208,19 +191,21 @@ void encolar_hilo_en_new(hilo_t* hilo) {
 	log_info(logger, "El hilo %i del programa %i llegó a NEW", hilo->tid, hilo->pid);
 }
 
+void notificar_hilos_esperando(hilo_t* hilo_finalizado) {
+	return;
+}
+
 void cerrar_hilo(hilo_t* hilo) {
+	programa_t* programa = malloc(sizeof(programa_t));
+	programa->cola_ready = queue_create();
+	programa->hilo_en_exec = malloc(sizeof(hilo_t));
+	obtener_programa_de_hilo(hilo);
+	programa->hilo_en_exec = siguiente_hilo_a_ejecutar(programa);
 	queue_push(cola_exit, hilo);
 	log_info(logger, "El hilo %i del programa %i llegó a EXIT.", hilo->tid, hilo->pid);
 	sem_wait(multiprogramacion_sem);
 	GRADO_MULTIPROGRAMACION--;
 	sem_post(multiprogramacion_sem);
-	hilo_t* hilo_esperando = queue_pop(hilo->hilos_esperando);
-
-	while (hilo_esperando != NULL) {
-		printf("hilo que estaba esperando: %i\n", hilo_esperando->tid);
-		encolar_hilo_en_ready(hilo_esperando);
-		hilo_esperando = queue_pop(hilo->hilos_esperando);
-	}
 }
 
 void encolar_hilo_en_ready(hilo_t* hilo) {

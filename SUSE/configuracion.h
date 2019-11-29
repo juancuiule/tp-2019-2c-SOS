@@ -10,7 +10,6 @@
 
 #include <stdio.h>
 #include <commons/config.h>
-#include <commons/log.h>
 #include <commons/collections/dictionary.h>
 
 t_config* config;
