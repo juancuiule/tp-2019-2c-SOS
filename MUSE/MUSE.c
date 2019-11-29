@@ -31,68 +31,56 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 				t_page *new_page = create_page(frame_number);
 				add_page_to_segment(segment, new_page);
 			}
-			log_info(logger, "size seg: %i", segment->size);
 			int free_dir = find_free_dir(segment, tam_pedido);
-			log_info(logger, "free_dir la primera vez: %i", free_dir);
-			dir = alloc_in_segment(segment, 0, tam_pedido);
+			dir = alloc_in_segment(segment, free_dir, tam_pedido);
 			add_process_segment(id, segment);
 		} else {
-			// hay segmentos
 			log_debug(logger, "Hay segmentos para el proceso: %s", id);
 			log_debug(logger, "Se busca uno para hacer un alloc de %i", tam_pedido);
 
-			// busco uno con espacio
 			segment = find_segment_with_space(table, tam_pedido);
 
 			if (segment != NULL) {
 				log_debug(logger, "Hay uno con espacio, la base es: %i", segment->base);
 				int free_dir = find_free_dir(segment, tam_pedido);
-				log_debug(logger, "Busco free dir ahí y me dice: %i", free_dir);
-				log_debug(logger, "Busco free dir ahí y me dice: %i", free_dir);
-				log_debug(logger, "Busco free dir ahí y me dice: %i", free_dir);
-				log_debug(logger, "Busco free dir ahí y me dice: %i", free_dir);
+				log_debug(logger, "free dir: %i", free_dir);
 				dir = alloc_in_segment(segment, free_dir, tam_pedido);
-				log_debug(logger, "Después de alloc la dir es: %i", dir);
-				log_debug(logger, "Después de alloc la dir es: %i", dir);
-				log_debug(logger, "Después de alloc la dir es: %i", dir);
-				log_debug(logger, "Después de alloc la dir es: %i", dir);
 			}
-//			else {
-//				// no hay espacio
-//				log_debug(logger, "No hay uno con espacio");
-//
-//				log_debug(logger, "Busco si hay alguno extensible");
-//				segment = find_extensible_heap_segment(table);
-//
-//				if (segment != NULL) {
-//					log_debug(logger, "Se puede extender el que tiene como base: %i", segment->base);
-//					// ver cuanto espacio le queda al segmento
-//					// para allocar la cantidad de paginas correctas
-//					int frame_number = find_free_frame(frame_usage_bitmap);
-//					if (frame_number == -1) {
-//						log_info(logger, "No hay frame libre... SWAP");
-//					} else {
-//						t_page *new_page = create_page(frame_number);
-//						int dir_in_frame = alloc_in_frame(frame_number, tam_pedido);
-//						add_page_to_segment(segment, new_page);
-//						dir = segment->size - PAGE_SIZE + dir_in_frame;
-//					}
-//				} else {
-//					log_debug(logger, "No se puede extender ninguno");
-//					int new_base = last_position(id);
-//					log_debug(logger, "Se crea un nuevo segmento desde la base: %i", new_base);
-//					segment = create_segment(HEAP, new_base, frames_to_ask * PAGE_SIZE);
-//					int frame_number = find_free_frame(frame_usage_bitmap);
-//					if (frame_number == -1) {
-//						log_info(logger, "No hay frame libre... SWAP");
-//					} else {
-//						t_page *new_page = create_page(frame_number);
-//						dir = alloc_in_frame(frame_number, tam_pedido);
-//						add_page_to_segment(segment, new_page);
-//						add_process_segment(id, segment);
-//					}
-//				}
-//			}
+			else {
+				log_debug(logger, "No hay uno con espacio");
+
+				log_debug(logger, "Busco si hay alguno extensible");
+				segment = find_extensible_heap_segment(table);
+
+				if (segment != NULL) {
+					log_debug(logger, "Se puede extender el que tiene como base: %i", segment->base);
+					// ver cuanto espacio le queda al segmento
+					// para allocar la cantidad de paginas correctas
+					int x = find_free_dir(segment, tam_pedido);
+					log_info(logger, "x: %i", x);
+					dir = 10;
+
+
+//					t_page *new_page = create_page(frame_number);
+//					int dir_in_frame = alloc_in_frame(frame_number, tam_pedido);
+//					add_page_to_segment(segment, new_page);
+//					dir = segment->size - PAGE_SIZE + dir_in_frame;
+				} else {
+					log_debug(logger, "No se puede extender ninguno");
+
+					int new_base = last_position(id);
+					log_debug(logger, "Se crea un nuevo segmento desde la base: %i", new_base);
+					segment = create_segment(HEAP, new_base);
+					for (int var = 0; var < frames_to_ask; var++) {
+						int frame_number = find_free_frame(frame_usage_bitmap);
+						t_page *new_page = create_page(frame_number);
+						add_page_to_segment(segment, new_page);
+					}
+					int free_dir = find_free_dir(segment, tam_pedido);
+					dir = alloc_in_segment(segment, free_dir, tam_pedido);
+					add_process_segment(id, segment);
+				}
+			}
 		}
 		log_info(logger, "dir to send: %i", segment->base + dir);
 		add_fixed_to_body(r_body, sizeof(uint32_t), segment->base + dir);
