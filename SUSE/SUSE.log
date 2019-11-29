@@ -1359,3 +1359,17 @@
 [INFO] 18:14:02:314 SUSE/(8412:8444): El hilo 0 del programa 8436 llegó a EXEC.
 [INFO] 18:14:02:315 SUSE/(8412:8445): El hilo 0 del programa 8436 llegó a BLOCKED
 [INFO] 18:14:02:317 SUSE/(8412:8447): El hilo 0 del programa 8436 llegó a EXIT.
+[INFO] 18:17:40:885 SUSE/(8550:8550): Se ha iniciado el servidor.
+[INFO] 18:17:53:301 SUSE/(8550:8576): El hilo 0 del programa 8575 llegó a NEW
+[INFO] 18:17:53:301 SUSE/(8550:8576): El hilo 0 del programa 8575 llegó a READY
+[INFO] 18:17:53:301 SUSE/(8550:8577): El hilo 1 del programa 8575 llegó a NEW
+[INFO] 18:17:53:301 SUSE/(8550:8577): El hilo 1 del programa 8575 llegó a READY
+[INFO] 18:17:53:302 SUSE/(8550:8578): El hilo 2 del programa 8575 llegó a NEW
+[INFO] 18:17:53:302 SUSE/(8550:8578): El hilo 2 del programa 8575 llegó a READY
+[INFO] 18:17:53:306 SUSE/(8550:8579): El hilo 3 del programa 8575 llegó a NEW
+[INFO] 18:17:53:306 SUSE/(8550:8579): El hilo 3 del programa 8575 llegó a READY
+[INFO] 18:17:53:307 SUSE/(8550:8580): El hilo 0 del programa 8575 llegó a BLOCKED
+[INFO] 18:17:53:308 SUSE/(8550:8582): El hilo 0 del programa 8575 llegó a BLOCKED
+[INFO] 18:17:53:308 SUSE/(8550:8583): El hilo 0 del programa 8575 llegó a EXEC.
+[INFO] 18:17:53:309 SUSE/(8550:8584): El hilo 0 del programa 8575 llegó a BLOCKED
+[INFO] 18:17:53:310 SUSE/(8550:8586): El hilo 0 del programa 8575 llegó a EXIT.

@@ -248,12 +248,15 @@ hilo_t* siguiente_hilo_a_ejecutar(programa_t* programa) {
 	return siguiente;
 }
 
-void liberar_hilos_programa(programa_t* programa) {
-	queue_destroy(programa->cola_ready);
-	free(programa->hilo_en_exec);
-}
+
 
 void liberar() {
+
+	void liberar_hilos_programa(programa_t* programa) {
+		queue_destroy(programa->cola_ready);
+		free(programa->hilo_en_exec);
+	}
+
 	config_destroy(config);
 	log_destroy(logger);
 	log_destroy(logger_metricas);
