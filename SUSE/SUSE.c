@@ -245,8 +245,12 @@ hilo_t* siguiente_hilo_a_ejecutar(programa_t* programa) {
 
 	list_sort(hilos, comparador);
 	siguiente = list_get(hilos, 0);
-
 	return siguiente;
+}
+
+void liberar_hilos_programa(programa_t* programa) {
+	queue_destroy(programa->cola_ready);
+	free(programa->hilo_en_exec);
 }
 
 void liberar() {
@@ -256,8 +260,11 @@ void liberar() {
 	sem_destroy(tid_sem);
 	sem_destroy(pid_sem);
 	sem_destroy(multiprogramacion_sem);
+	list_iterate(programas, liberar_hilos_programa);
 	list_destroy(programas);
 }
+
+
 
 
 
