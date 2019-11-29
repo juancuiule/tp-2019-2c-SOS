@@ -34,8 +34,6 @@ void inicializar_metricas_hilo(hilo_t* hilo) {
 }
 
 void inicializar() {
-	tid_hilo_anterior = 9999;
-
 	logger = log_create("../SUSE.log", "SUSE", 1, LOG_LEVEL_DEBUG);
 	logger_metricas = log_create("../METRICAS.log", "SUSE", 1, LOG_LEVEL_DEBUG);
 
@@ -62,21 +60,7 @@ programa_t* obtener_programa_de_hilo(int tid) {
 	tid_hilo_buscado = tid;
 	return list_find(programas, (void*)es_programa_hilo_buscado);
 }
-/*
-void obtener_tid_proximo_hilo() {
-	int* tid_hilo_solicitante = malloc(sizeof(int));
-	hilo_t* hilo = malloc(sizeof(hilo_t));
-	programa_t* programa = malloc(sizeof(programa_t));
 
-	while (1) {
-		recv(servidor_fd, tid_hilo_solicitante, sizeof(tid_hilo_solicitante), 0);
-		programa = obtener_programa_de_hilo(tid_hilo_solicitante);
-		hilo = siguiente_hilo_a_ejecutar(programa);
-		send(servidor_fd, hilo->tid, sizeof(int), 0);
-		printf("El TID del siguiente hilo a ejecutar fue enviado\n");
-	}
-}
-*/
 void atender_cliente(int cliente_fd) {
 	int pedido;
 	int offset = 0;
@@ -129,6 +113,8 @@ void atender_cliente(int cliente_fd) {
 			cerrar_hilo(hilo);
 			break;
 	}
+
+	free(proximo_hilo);
 }
 
 bool es_programa_buscado(programa_t* programa) {
