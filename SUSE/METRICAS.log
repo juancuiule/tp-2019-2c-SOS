@@ -31328,3 +31328,42 @@
 [INFO] 03:25:14:53 SUSE/(2031:2032): 	tiempo de ejecución: 14382 ms
 [INFO] 03:25:14:53 SUSE/(2031:2032): 	tiempo de espera: 0 ms
 [INFO] 03:25:14:53 SUSE/(2031:2032): 	tiempo de uso de CPU: 0 ms
+[INFO] 15:01:48:330 SUSE/(4363:4364): Grado de multiprogramación: 0
+[INFO] 15:01:53:331 SUSE/(4363:4364): Grado de multiprogramación: 0
+[INFO] 15:01:58:331 SUSE/(4363:4364): Grado de multiprogramación: 0
+[INFO] 15:02:03:332 SUSE/(4363:4364): Grado de multiprogramación: 0
+[INFO] 15:02:08:332 SUSE/(4363:4364): Grado de multiprogramación: 0
+[INFO] 15:02:13:332 SUSE/(4363:4364): Grado de multiprogramación: 0
+[INFO] 15:02:18:333 SUSE/(4363:4364): Grado de multiprogramación: 0
+[INFO] 15:02:23:333 SUSE/(4363:4364): Grado de multiprogramación: 0
+[INFO] 15:02:28:333 SUSE/(4363:4364): Grado de multiprogramación: 0
+[INFO] 15:02:33:335 SUSE/(4363:4364): Grado de multiprogramación: 0
+[INFO] 15:02:38:335 SUSE/(4363:4364): Grado de multiprogramación: 0
+[INFO] 15:02:43:335 SUSE/(4363:4364): Grado de multiprogramación: 0
+[INFO] 15:02:48:336 SUSE/(4363:4364): Grado de multiprogramación: 0
+[INFO] 15:02:53:336 SUSE/(4363:4364): Grado de multiprogramación: 0
+[INFO] 15:02:58:336 SUSE/(4363:4364): Grado de multiprogramación: 0
+[INFO] 15:03:03:337 SUSE/(4363:4364): Grado de multiprogramación: 0
+[INFO] 15:03:08:337 SUSE/(4363:4364): Grado de multiprogramación: 0
+[INFO] 15:03:13:338 SUSE/(4363:4364): Grado de multiprogramación: 0
+[INFO] 15:03:18:339 SUSE/(4363:4364): Grado de multiprogramación: 0
+[INFO] 15:03:23:339 SUSE/(4363:4364): Grado de multiprogramación: 0
+[INFO] 15:03:28:339 SUSE/(4363:4364): Grado de multiprogramación: 0
+[INFO] 15:03:33:341 SUSE/(4363:4364): Grado de multiprogramación: 0
+[INFO] 15:03:38:342 SUSE/(4363:4364): Grado de multiprogramación: 0
+[INFO] 15:03:43:345 SUSE/(4363:4364): Grado de multiprogramación: 0
+[INFO] 15:03:48:346 SUSE/(4363:4364): Grado de multiprogramación: 0
+[INFO] 15:03:53:348 SUSE/(4363:4364): Grado de multiprogramación: 0
+[INFO] 15:04:19:46 SUSE/(4472:4473): Grado de multiprogramación: 3
+[INFO] 15:04:19:46 SUSE/(4472:4473): Métricas del hilo 0: 
+[INFO] 15:04:19:46 SUSE/(4472:4473): 	tiempo de ejecución: 747 ms
+[INFO] 15:04:19:46 SUSE/(4472:4473): 	tiempo de espera: 0 ms
+[INFO] 15:04:19:46 SUSE/(4472:4473): 	tiempo de uso de CPU: 0 ms
+[INFO] 15:04:19:46 SUSE/(4472:4473): Métricas del hilo 0: 
+[INFO] 15:04:19:46 SUSE/(4472:4473): 	tiempo de ejecución: 746 ms
+[INFO] 15:04:19:46 SUSE/(4472:4473): 	tiempo de espera: 0 ms
+[INFO] 15:04:19:46 SUSE/(4472:4473): 	tiempo de uso de CPU: 0 ms
+[INFO] 15:04:19:46 SUSE/(4472:4473): Métricas del hilo 0: 
+[INFO] 15:04:19:46 SUSE/(4472:4473): 	tiempo de ejecución: 745 ms
+[INFO] 15:04:19:46 SUSE/(4472:4473): 	tiempo de espera: 0 ms
+[INFO] 15:04:19:46 SUSE/(4472:4473): 	tiempo de uso de CPU: 0 ms
