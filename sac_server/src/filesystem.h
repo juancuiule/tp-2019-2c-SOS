@@ -54,6 +54,7 @@ typedef struct sac_file_t { // un cuarto de bloque (256 bytes)
 
 
 GBlock* disk_blk_pointer;
+void * disk_addr;
 size_t disk_size;
 
 GHeader *sac_header;
@@ -66,12 +67,15 @@ typedef struct blk_candidato{
 	int blk_father;
 } GBlk_nominee;
 
+int disk_fd;
 
 //desc: Setea las estructuras que necesitamos para manipular el SAC filesystem
 void fs_set_config();
 
 //desc: Mapea en memoria el disco - archivo binario con la estructura del filesystem
 bool fs_map_disk_in_memory(char *disk_name);
+
+void fs_munmap_disk();
 
 //desc: Obtiene el bloque de metadata del archivo. -1 si no existe el archivo.
 int fs_get_blk_by_fullpath(char *fullpath);
@@ -86,13 +90,20 @@ bool fs_path_exist(char *path);
 void fs_get_child_filenames_of(uint32_t blk_father, t_list *filenames);
 
 //desc: devuelve direccion de un bloque de datos libre
-GBlock* get_free_blk_data_dir();
+int get_free_blk_data_dir();
 
 //desc: devuelve un bloque ind simple con su primer bloque de datos seteado o EDQUOT si no hay mas blks de datos
-ptrGBloque fs_get_blk_ind_with_data_blk();
+int fs_get_blk_ind_with_data_blk();
 
 size_t fs_read_file(char *buf, size_t size, off_t offset, uint32_t node_blk);
 
 size_t fs_write_file(uint32_t node_blk, char *buffer, size_t size, off_t offset);
+
+void fs_truncate_file(int node, off_t newsize);
+
+bool node_has_blk_assigned(int node, int blk_data);
+bool node_has_blk_ind_assigned(int node, int blk_ind);
+int fs_get_next_index_blk_indsimple_to_assign(int node);
+int fs_get_next_index_blk_data_to_assign(int blk_ind);
 
 #endif /* FILESYSTEM_H_ */
