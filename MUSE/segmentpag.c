@@ -51,22 +51,26 @@ process_segment *create_segment(segment_type type, uint32_t base) {
 }
 
 void add_page_to_segment(process_segment* segment, t_page* page) {
-	void* pages = segment->pages;
 	int number_of_pages = segment->size / PAGE_SIZE;
 	int offset = number_of_pages * sizeof(t_page);
 
-	if (pages == NULL) {
-		log_error(seg_logger, "first page to add");
+	if (number_of_pages == 0) {
 		segment->pages = malloc(sizeof(t_page));
 	} else {
 		int new_size = offset + sizeof(t_page);
-		log_error(seg_logger, "not the first page, new size %i", new_size);
-		log_debug(seg_logger, "new segment pages size: %i", new_size);
-		segment->pages = realloc(pages, new_size);
+		segment->pages = realloc(segment->pages, new_size);
 	}
+
 
 	memcpy(segment->pages + offset, page, sizeof(t_page));
 	segment->size += PAGE_SIZE;
+
+//	for (int var = 0; var < number_of_pages + 1; ++var) {
+//		t_page* the_page = malloc(sizeof(t_page));
+//		memcpy(the_page, segment->pages + var * sizeof(t_page), sizeof(t_page));
+//		log_debug(seg_logger, "Page added frame: %i", the_page->frame_number);
+//	}
+
 	log_debug(seg_logger, "Se agrego una página al segmento con base: %i, nuevo size: %i", segment->base, segment->size);
 }
 
@@ -316,14 +320,14 @@ void* alloc_in_segment(process_segment* segment, int dir, uint32_t size) {
 	int allocd = 0;
 	int last_allocd = 0;
 
+	log_info(seg_logger, "dir_in_segment: %i, base: %i", dir_in_segment, base);
 	int offset = base;
 	int pages_read = 0;
 	t_page* page = malloc(sizeof(t_page));
 	void* frame;
 	while (allocd < size) {
-		memcpy(page, pages + dir_in_segment + pages_read * sizeof(t_page), sizeof(t_page));
+		memcpy(page, segment->pages + ((dir_in_segment / PAGE_SIZE) + pages_read) * sizeof(t_page), sizeof(t_page));
 
-		log_debug(seg_logger, "frame_number: %i", page->frame_number);
 		// falta chequear que la pagina este en memoria
 
 		// get frame

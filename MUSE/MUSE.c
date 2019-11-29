@@ -69,7 +69,6 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 						add_page_to_segment(segment, new_page);
 					}
 					int free_dir = find_free_dir(segment, tam_pedido);
-					log_debug(logger, "free_dir: %i", free_dir);
 					dir = alloc_in_segment(segment, free_dir, tam_pedido);
 				} else {
 					log_debug(logger, "No se puede extender ninguno");
