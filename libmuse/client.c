@@ -26,7 +26,7 @@ int main(void) {
 //		muse_free(my_memory);
 //		muse_close();
 
-		uint32_t my_memory = muse_alloc(10);
+		uint32_t my_memory = muse_alloc(65);
 		uint32_t another_memory = muse_alloc(10);
 
 		log_info(logger, "my_memory: %u", my_memory);

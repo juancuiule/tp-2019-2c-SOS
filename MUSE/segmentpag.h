@@ -61,7 +61,7 @@ typedef struct {
 
 void init_structures();
 t_page *create_page(int frame_number);
-process_segment *create_segment(segment_type type, uint32_t base, int size);
+process_segment *create_segment(segment_type type, uint32_t base);
 void create_process_table(char* process);
 process_table* get_table_for_process(char* process);
 void add_process_segment(char* process, process_segment* segment);
@@ -73,6 +73,8 @@ t_page* find_page_with_space(process_segment* segment, int size);
 process_segment* find_segment_with_space(process_table* table, int size);
 process_segment* segment_by_dir(process_table* table, int dir);
 process_segment* find_extensible_heap_segment(process_table* table);
+void* alloc_in_segment(process_segment* segment, int dir, uint32_t size);
+void* find_free_dir(process_segment* segment, int size);
 
 
 #endif
