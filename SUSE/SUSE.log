@@ -1345,3 +1345,17 @@
 [INFO] 18:10:12:959 SUSE/(8106:8115): El hilo 0 del programa 8108 llegó a BLOCKED
 [INFO] 18:10:12:960 SUSE/(8106:8117): El hilo 0 del programa 8108 llegó a BLOCKED
 [INFO] 18:10:12:961 SUSE/(8106:8119): El hilo 0 del programa 8108 llegó a EXIT.
+[INFO] 18:13:51:924 SUSE/(8412:8412): Se ha iniciado el servidor.
+[INFO] 18:14:02:305 SUSE/(8412:8437): El hilo 0 del programa 8436 llegó a NEW
+[INFO] 18:14:02:305 SUSE/(8412:8437): El hilo 0 del programa 8436 llegó a READY
+[INFO] 18:14:02:306 SUSE/(8412:8438): El hilo 1 del programa 8436 llegó a NEW
+[INFO] 18:14:02:306 SUSE/(8412:8438): El hilo 1 del programa 8436 llegó a READY
+[INFO] 18:14:02:307 SUSE/(8412:8439): El hilo 2 del programa 8436 llegó a NEW
+[INFO] 18:14:02:307 SUSE/(8412:8439): El hilo 2 del programa 8436 llegó a READY
+[INFO] 18:14:02:310 SUSE/(8412:8440): El hilo 3 del programa 8436 llegó a NEW
+[INFO] 18:14:02:310 SUSE/(8412:8440): El hilo 3 del programa 8436 llegó a READY
+[INFO] 18:14:02:313 SUSE/(8412:8441): El hilo 0 del programa 8436 llegó a BLOCKED
+[INFO] 18:14:02:314 SUSE/(8412:8443): El hilo 0 del programa 8436 llegó a BLOCKED
+[INFO] 18:14:02:314 SUSE/(8412:8444): El hilo 0 del programa 8436 llegó a EXEC.
+[INFO] 18:14:02:315 SUSE/(8412:8445): El hilo 0 del programa 8436 llegó a BLOCKED
+[INFO] 18:14:02:317 SUSE/(8412:8447): El hilo 0 del programa 8436 llegó a EXIT.

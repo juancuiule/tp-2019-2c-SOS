@@ -9,39 +9,7 @@
 #include <stdbool.h>
 #include <time.h>
 #include <sys/time.h>
-
-typedef struct {
-	int tid;
-	int pid;
-	long long tiempo_espera;
-	long long tiempo_cpu;
-	long long tiempo_creacion;
-	long long tiempo_ultima_llegada_a_ready;
-	long long tiempo_ultima_llegada_a_exec;
-	double estimacion_anterior;
-	double rafaga_anterior;
-	t_queue* hilos_esperando;
-} __attribute__((packed)) hilo_t;
-
-typedef struct {
-	int pid;
-	t_queue* cola_ready;
-	hilo_t* hilo_en_exec;
-} programa_t;
-
-typedef enum {
-	CREATE,
-	SCHEDULE_NEXT,
-	JOIN,
-	CLOSE,
-	WAIT,
-	SIGNAL
-} operacion;
-
-typedef struct {
-	char* id;
-	int valor;
-} semaforo_t;
+#include "estructuras.h"
 
 int servidor_fd;
 int tid_hilo_buscado;
