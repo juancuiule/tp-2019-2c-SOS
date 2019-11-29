@@ -30,6 +30,7 @@ void inicializar_metricas_hilo(hilo_t* hilo) {
 	hilo->tiempo_creacion = current_timestamp();
 	hilo->tiempo_cpu = 0;
 	hilo->tiempo_espera = 0;
+	hilo->hilos_esperando = queue_create();
 }
 
 void inicializar() {
@@ -61,7 +62,7 @@ programa_t* obtener_programa_de_hilo(int tid) {
 	tid_hilo_buscado = tid;
 	return list_find(programas, (void*)es_programa_hilo_buscado);
 }
-
+/*
 void obtener_tid_proximo_hilo() {
 	int* tid_hilo_solicitante = malloc(sizeof(int));
 	hilo_t* hilo = malloc(sizeof(hilo_t));
@@ -75,7 +76,7 @@ void obtener_tid_proximo_hilo() {
 		printf("El TID del siguiente hilo a ejecutar fue enviado\n");
 	}
 }
-
+*/
 void atender_cliente(int cliente_fd) {
 	int pedido;
 	int offset = 0;
@@ -103,8 +104,11 @@ void atender_cliente(int cliente_fd) {
 			encolar_hilo_en_new(hilo);
 			agregar_programa(hilo);
 
-			if (GRADO_MULTIPROGRAMACION < MAX_MULTIPROG)
-				encolar_hilo_en_ready();
+			if (GRADO_MULTIPROGRAMACION < MAX_MULTIPROG) {
+				hilo_t* hilo = malloc(sizeof(hilo_t));
+				hilo = queue_pop(cola_new);
+				encolar_hilo_en_ready(hilo);
+			}
 
 			break;
 		case 2:
@@ -117,7 +121,6 @@ void atender_cliente(int cliente_fd) {
 			hilo_t* proximo_hilo = siguiente_hilo_a_ejecutar(programa);
 			char* proximo = string_itoa(proximo_hilo->tid);
 			send(cliente_fd, proximo, sizeof(proximo), MSG_WAITALL);
-
 			break;
 		case 3:
 			bloquear_hilo(hilo);
@@ -211,12 +214,16 @@ void cerrar_hilo(hilo_t* hilo) {
 	sem_wait(multiprogramacion_sem);
 	GRADO_MULTIPROGRAMACION--;
 	sem_post(multiprogramacion_sem);
-	tid_hilo_anterior = 9999;
+	hilo_t* hilo_esperando = queue_pop(hilo->hilos_esperando);
+
+	while (hilo_esperando != NULL) {
+		printf("hilo que estaba esperando: %i\n", hilo_esperando->tid);
+		encolar_hilo_en_ready(hilo_esperando);
+		hilo_esperando = queue_pop(hilo->hilos_esperando);
+	}
 }
 
-void encolar_hilo_en_ready() {
-	hilo_t* hilo = malloc(sizeof(hilo_t));
-	hilo = queue_pop(cola_new);
+void encolar_hilo_en_ready(hilo_t* hilo) {
 	programa_t* programa = malloc(sizeof(programa_t));
 	programa->cola_ready = queue_create();
 	programa->hilo_en_exec = malloc(sizeof(hilo_t));
@@ -232,10 +239,6 @@ void encolar_hilo_en_ready() {
 }
 
 void bloquear_hilo(hilo_t* hilo) {
-	programa_t* programa = malloc(sizeof(programa_t));
-	programa->cola_ready = queue_create();
-	programa->hilo_en_exec = malloc(sizeof(hilo_t));
-	programa = obtener_programa(hilo->pid);
 	queue_push(cola_blocked, hilo);
 	log_info(logger, "El hilo %d del programa %i llegó a BLOCKED", hilo->tid, hilo->pid);
 }
