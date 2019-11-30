@@ -28,6 +28,7 @@ typedef enum{
 	COD_WRITE,
 	COD_UNLINK,
 	COD_ERROR,
+	COD_TRUNCATE,
 	COD_DESC
 }cod_operation;
 
@@ -62,6 +63,7 @@ package_t slz_cod_open(const char *path, int flags);
 package_t slz_cod_read(const char *path, uint32_t blk_num, size_t size, off_t offset);
 package_t slz_cod_release(const char *path, int fd);
 package_t slz_cod_write(const char *path, const char *buffer, uint32_t blk, size_t size, off_t offset);
+package_t slz_cod_truncate(const char *path, off_t newsize);
 
 void dslz_res_opendir(void *buffer, uint32_t* dir);
 void dslz_res_readdir(void *buffer, t_list** filenames);
@@ -78,6 +80,7 @@ void dslz_cod_open(void *buffer, char **path, int *flags);
 void dslz_cod_read(void *buffer, char **path, uint32_t *blk, size_t *size, off_t *offset);
 void dslz_cod_release(void *buffer, char **path, int *fd);
 void dslz_cod_write(void *payload, char **path, char **buffer, uint32_t *fd, size_t *size, off_t *offset);
+void dslz_cod_truncate(void *payload, char **path, off_t *newsize);
 
 package_t slz_res_opendir(uint32_t blk_number);
 package_t slz_res_readdir(t_list * filenames);
