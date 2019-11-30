@@ -13,8 +13,11 @@ int main() {
 	while(1) {
 		cliente_fd = esperar_cliente(servidor_fd);
 		pthread_create(&hilo_clientes, NULL, (void*)atender_cliente, cliente_fd);
+		pthread_detach(hilo_clientes);
 	}
 
+	pthread_detach(hilo_metricas);
+	pthread_detach(pthread_self());
 	liberar();
 	return EXIT_SUCCESS;
 }

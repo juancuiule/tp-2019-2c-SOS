@@ -1438,3 +1438,60 @@
 [INFO] 18:43:57:144 SUSE/(9642:9652): El hilo 0 del programa 9644 llegó a EXEC.
 [INFO] 18:43:57:203 SUSE/(9642:9653): El hilo 0 del programa 9644 llegó a BLOCKED
 [INFO] 18:43:57:232 SUSE/(9642:9655): El hilo 0 del programa 9644 llegó a EXIT.
+[INFO] 22:56:53:458 SUSE/(7555:7555): Se ha iniciado el servidor.
+[INFO] 22:57:26:252 SUSE/(8492:8492): Se ha iniciado el servidor.
+[INFO] 22:57:29:266 SUSE/(8492:8495): El hilo 0 del programa 8494 llegó a NEW
+[INFO] 22:57:29:273 SUSE/(8492:8495): El hilo 0 del programa 8494 llegó a READY
+[INFO] 22:57:29:325 SUSE/(8492:8496): El hilo 1 del programa 8494 llegó a NEW
+[INFO] 22:57:29:333 SUSE/(8492:8497): El hilo 2 del programa 8494 llegó a NEW
+[INFO] 22:57:29:333 SUSE/(8492:8497): El hilo 1 del programa 8494 llegó a READY
+[INFO] 22:57:29:373 SUSE/(8492:8496): El hilo 2 del programa 8494 llegó a READY
+[INFO] 22:57:29:428 SUSE/(8492:8498): El hilo 3 del programa 8494 llegó a NEW
+[INFO] 22:57:29:428 SUSE/(8492:8498): El hilo 3 del programa 8494 llegó a READY
+[INFO] 22:57:29:471 SUSE/(8492:8499): El hilo 0 del programa 8494 llegó a BLOCKED
+[INFO] 22:57:29:550 SUSE/(8492:8501): El hilo 0 del programa 8494 llegó a BLOCKED
+[INFO] 22:57:29:552 SUSE/(8492:8502): El hilo 0 del programa 8494 llegó a EXEC.
+[INFO] 22:57:29:590 SUSE/(8492:8503): El hilo 0 del programa 8494 llegó a BLOCKED
+[INFO] 22:57:29:667 SUSE/(8492:8505): El hilo 0 del programa 8494 llegó a EXIT.
+[INFO] 23:03:05:632 SUSE/(8639:8639): Se ha iniciado el servidor.
+[INFO] 23:03:12:949 SUSE/(8639:8642): El hilo 0 del programa 8641 llegó a NEW
+[INFO] 23:03:13:81 SUSE/(8639:8645): El hilo 3 del programa 8641 llegó a NEW
+[INFO] 23:03:13:82 SUSE/(8639:8644): El hilo 2 del programa 8641 llegó a NEW
+[INFO] 23:03:13:79 SUSE/(8639:8643): El hilo 1 del programa 8641 llegó a NEW
+[INFO] 23:03:13:83 SUSE/(8639:8646): El hilo 0 del programa 8641 llegó a BLOCKED
+[INFO] 23:03:13:86 SUSE/(8639:8642): El hilo 0 del programa 8641 llegó a READY
+[INFO] 23:03:13:86 SUSE/(8639:8643): El hilo 1 del programa 8641 llegó a READY
+[INFO] 23:03:13:89 SUSE/(8639:8647): El hilo 0 del programa 8641 llegó a EXEC.
+[INFO] 23:03:13:102 SUSE/(8639:8644): El hilo 3 del programa 8641 llegó a READY
+[INFO] 23:03:13:103 SUSE/(8639:8645): El hilo 2 del programa 8641 llegó a READY
+[INFO] 23:03:13:198 SUSE/(8639:8648): El hilo 0 del programa 8641 llegó a BLOCKED
+[INFO] 23:03:13:345 SUSE/(8639:8650): El hilo 0 del programa 8641 llegó a BLOCKED
+[INFO] 23:03:13:411 SUSE/(8639:8652): El hilo 0 del programa 8641 llegó a EXIT.
+[INFO] 23:06:13:166 SUSE/(8759:8759): Se ha iniciado el servidor.
+[INFO] 23:06:16:979 SUSE/(8759:8762): El hilo 0 del programa 8761 llegó a NEW
+[INFO] 23:06:17:155 SUSE/(8759:8762): El hilo 0 del programa 8761 llegó a READY
+[INFO] 23:06:17:155 SUSE/(8759:8765): El hilo 3 del programa 8761 llegó a NEW
+[INFO] 23:06:17:156 SUSE/(8759:8764): El hilo 2 del programa 8761 llegó a NEW
+[INFO] 23:06:17:156 SUSE/(8759:8763): El hilo 1 del programa 8761 llegó a NEW
+[INFO] 23:06:17:157 SUSE/(8759:8765): El hilo 3 del programa 8761 llegó a READY
+[INFO] 23:06:17:158 SUSE/(8759:8766): El hilo 0 del programa 8761 llegó a BLOCKED
+[INFO] 23:06:17:161 SUSE/(8759:8763): El hilo 2 del programa 8761 llegó a READY
+[INFO] 23:06:17:183 SUSE/(8759:8764): El hilo 1 del programa 8761 llegó a READY
+[INFO] 23:06:17:268 SUSE/(8759:8768): El hilo 0 del programa 8761 llegó a BLOCKED
+[INFO] 23:06:17:270 SUSE/(8759:8769): El hilo 0 del programa 8761 llegó a EXEC.
+[INFO] 23:06:17:358 SUSE/(8759:8770): El hilo 0 del programa 8761 llegó a BLOCKED
+[INFO] 23:06:17:407 SUSE/(8759:8772): El hilo 0 del programa 8761 llegó a EXIT.
+[INFO] 23:08:35:973 SUSE/(8889:8889): Se ha iniciado el servidor.
+[INFO] 23:08:39:577 SUSE/(8889:8892): El hilo 0 del programa 8891 llegó a NEW
+[INFO] 23:08:39:633 SUSE/(8889:8892): El hilo 0 del programa 8891 llegó a READY
+[INFO] 23:08:39:679 SUSE/(8889:8894): El hilo 2 del programa 8891 llegó a NEW
+[INFO] 23:08:39:681 SUSE/(8889:8894): El hilo 2 del programa 8891 llegó a READY
+[INFO] 23:08:39:733 SUSE/(8889:8896): El hilo 0 del programa 8891 llegó a BLOCKED
+[INFO] 23:08:39:680 SUSE/(8889:8895): El hilo 3 del programa 8891 llegó a NEW
+[INFO] 23:08:39:681 SUSE/(8889:8893): El hilo 1 del programa 8891 llegó a NEW
+[INFO] 23:08:39:735 SUSE/(8889:8893): El hilo 3 del programa 8891 llegó a READY
+[INFO] 23:08:39:735 SUSE/(8889:8895): El hilo 1 del programa 8891 llegó a READY
+[INFO] 23:08:39:742 SUSE/(8889:8898): El hilo 0 del programa 8891 llegó a BLOCKED
+[INFO] 23:08:39:744 SUSE/(8889:8899): El hilo 0 del programa 8891 llegó a EXEC.
+[INFO] 23:08:39:747 SUSE/(8889:8900): El hilo 0 del programa 8891 llegó a BLOCKED
+[INFO] 23:08:39:754 SUSE/(8889:8902): El hilo 0 del programa 8891 llegó a EXIT.
