@@ -92,7 +92,6 @@ static int fs_find_blk_nominees_by_name(char *filename, t_list *blks_candidatos)
 				blk_candidato->blk_father = sac_nodetable[i].parent_dir_block;
 
 				list_add(blks_candidatos, blk_candidato);
-				free(blk_candidato);
 
 			}
 		}
