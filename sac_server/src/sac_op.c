@@ -375,26 +375,37 @@ void sac_write(char *path, char *buffer, uint32_t blk, size_t size, off_t offset
 
 void sac_unlink(char *path, int cliente_fd)
 {
-	log_msje_info("SAC UNLINCK = [ %s ]", path);
+	log_msje_info("SAC UNLINK = [ %s ]", path);
 	package_t paquete;
-	int res_unlink, err;
+	int error;
 
-	char full_path[PATH_MAX];
-	sac_fullpath(full_path, path);
+	int node_to_set = fs_get_blk_by_fullpath(path);
 
-	res_unlink = unlink(path);
-
-	if(res_unlink == -1){
-		log_msje_error("unlink: [ %s ]", strerror(errno));
-		err = errno;
-		paquete = slz_res_error(err);
+	if (node_to_set == -1)
+	{
+		error = ENOENT;
 	}
-	else {
-		log_msje_info("Exito operacion unlink sobre fs local");
-		paquete = slz_simple_res(COD_UNLINK);
-	}
+	else
+	{
+		if(sac_nodetable[node_to_set].state == 2)
+		{
+			error = EISDIR;
+		}
+		else
+		{
+			fs_delete_file(node_to_set);
 
+			log_msje_info("Exito operacion delete sobre disco");
+			paquete = slz_simple_res(COD_UNLINK);
+			paquete_enviar(cliente_fd, paquete);
+			return;
+		}
+
+	}
+	log_msje_error("unlink: [ %s ]", strerror(error));
+	paquete = slz_res_error(error);
 	paquete_enviar(cliente_fd, paquete);
+	return;
 }
 
 

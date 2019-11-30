@@ -110,4 +110,7 @@ int fs_get_next_index_blk_data_to_assign(int blk_ind);
 int fs_get_max_filesize();
 bool fs_is_empty_directory(int node);
 void fs_rename_file(int node_to_set, char *new_name);
+void fs_remove_all_blocks_of(int node);
+void fs_delete_file(int node_to_set);
+
 #endif /* FILESYSTEM_H_ */

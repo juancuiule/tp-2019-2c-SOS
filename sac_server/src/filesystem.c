@@ -629,3 +629,38 @@ void fs_rename_file(int node_to_set, char *new_name)
 	strcpy(sac_nodetable[node_to_set].fname, new_name);
 	sem_post(&mutex_nodo[node_to_set]);
 }
+
+void fs_remove_all_blocks_of(int node)
+{
+	GFile *file_node = (GFile *)sac_nodetable + node;
+
+	int i=0;
+	int blk_ind;
+	while((blk_ind = file_node->blk_indirect[i]) != 0)
+	{
+		GBlock_IndSimple * blk_is = (GBlock_IndSimple *)(disk_blk_pointer + blk_ind);
+
+		int j=0;
+		int blk = blk_is->blk_datos[j];
+		while( blk >= get_first_blk_data_index() && blk <= get_last_blk_data_index())
+		{
+			bitarray_clean_bit(sac_bitarray, blk);
+			blk_is->blk_datos[j] = 0;
+
+			j++;
+			blk = blk_is->blk_datos[j];
+		}
+
+		file_node->blk_indirect[i] = 0;
+		i++;
+	}
+
+}
+
+void fs_delete_file(int node_to_set)
+{
+	sem_wait(&mutex_nodo[node_to_set]);
+	sac_nodetable[node_to_set].state = 0;
+	fs_remove_all_blocks_of(node_to_set);
+	sem_post(&mutex_nodo[node_to_set]);
+}
