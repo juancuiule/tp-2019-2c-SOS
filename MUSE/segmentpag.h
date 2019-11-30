@@ -73,5 +73,6 @@ process_segment* find_extensible_heap_segment(process_table* table);
 void* alloc_in_segment(process_segment* segment, int dir, uint32_t size);
 void* find_free_dir(process_segment* segment, int size);
 int free_space_at_the_end(process_segment* segment);
+void clear_bitmap(int bits);
 
 #endif

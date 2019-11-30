@@ -11,6 +11,8 @@ void init_structures(int m_size, int p_size) {
 	bitmap_pointer = malloc(bitmap_size_in_bytes);
 	frame_usage_bitmap = bitarray_create_with_mode(bitmap_pointer, bitmap_size_in_bytes, LSB_FIRST);
 
+	clear_bitmap(frames);
+
 	MEMORY = calloc(frames, p_size);
 	int i;
 	for(i = 0; i < frames; i++) {
@@ -21,6 +23,12 @@ void init_structures(int m_size, int p_size) {
 		memcpy(new_frame + sizeof(bool), &size, sizeof(uint32_t));
 		*(MEMORY + i) = new_frame;
 		// free(new_frame);
+	}
+}
+
+void clear_bitmap(int bits) {
+	for (int var = 0; var < bits; var++) {
+		bitarray_clean_bit(frame_usage_bitmap, var);
 	}
 }
 
@@ -239,7 +247,7 @@ int find_free_frame(t_bitarray* bitmap) {
 	int var;
 	for (var = 0; var < (MEMORY_SIZE / PAGE_SIZE); ++var) {
 		bool is_used = bitarray_test_bit(bitmap, var);
-//		log_info(seg_logger, "i = %i, is_used?: %i", var, is_used);
+		log_info(seg_logger, "i = %i, is_used?: %i", var, is_used);
 		if (!is_used) {
 			return var;
 		}

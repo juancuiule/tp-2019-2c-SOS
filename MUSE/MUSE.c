@@ -4,6 +4,19 @@ void respond_init(muse_body* body, char* id, int socket_cliente) {
 	create_process_table(id);
 }
 
+//void log_bitarray() {
+//	log_info(logger, "Used:");
+//	log_info(logger, "0 -> %i", bitarray_test_bit(frame_usage_bitmap, 0));
+//	log_info(logger, "2 -> %i", bitarray_test_bit(frame_usage_bitmap, 2));
+//	log_info(logger, "4 -> %i", bitarray_test_bit(frame_usage_bitmap, 4));
+//	log_info(logger, "6 -> %i", bitarray_test_bit(frame_usage_bitmap, 6));
+//	log_info(logger, "Not used:");
+//	log_info(logger, "1 -> %i", bitarray_test_bit(frame_usage_bitmap, 1));
+//	log_info(logger, "3 -> %i", bitarray_test_bit(frame_usage_bitmap, 3));
+//	log_info(logger, "5 -> %i", bitarray_test_bit(frame_usage_bitmap, 5));
+//	log_info(logger, "7 -> %i", bitarray_test_bit(frame_usage_bitmap, 7));
+//}
+
 void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 	uint32_t tam_pedido;
 	memcpy(&tam_pedido, body->content, sizeof(uint32_t));
@@ -71,6 +84,7 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 					int free_dir = find_free_dir(segment, tam_pedido);
 					dir = alloc_in_segment(segment, free_dir, tam_pedido);
 				} else {
+					frames_to_ask = ceil((double) (tam_pedido + sizeof(bool) + sizeof(uint32_t)) / PAGE_SIZE);
 					log_debug(logger, "No se puede extender ninguno");
 					int new_base = last_position(id);
 					log_debug(logger, "Se crea un nuevo segmento desde la base: %i", new_base);
@@ -186,12 +200,12 @@ void respond_map(muse_body* body, char* id, int socket_cliente) {
 	process_table* table = get_table_for_process(id);
 	muse_body* r_body = create_body();
 	muse_response* response;
-	void* dir;
 
+
+	void* dir;
 	// min amount of frames to ask for the segment
 	int frames_to_ask = ceil((double) (length + sizeof(bool) + sizeof(uint32_t)) / PAGE_SIZE);
 	process_segment *segment;
-
 	if (table != NULL) {
 		log_debug(logger, "Se crea un segmento para hacer un map de %i", length);
 		int new_base = last_position(id);
@@ -204,10 +218,13 @@ void respond_map(muse_body* body, char* id, int socket_cliente) {
 		int free_dir = find_free_dir(segment, length);
 		dir = alloc_in_segment(segment, free_dir, length);
 		add_process_segment(id, segment);
-
+		log_info(logger, "ASDFASDFASDFASFASDFA %i", segment->base + dir);
 		add_fixed_to_body(r_body, sizeof(uint32_t), segment->base + dir);
 		response = create_response(SUCCESS, r_body);
 		send_response(response, socket_cliente);
+	} else {
+		log_info(logger, "El proceso %s no tiene tabla, falto hacer init?");
+		send_response_status(socket_cliente, ERROR);
 	}
 	return;
 }
@@ -237,6 +254,7 @@ int respond_to_client(int cliente_fd) {
 		int cod_op = recv_muse_op_code(cliente_fd);
 		char* id = recv_muse_id(cliente_fd);
 		muse_body* body = recv_body(cliente_fd);
+//		log_bitarray();
 		switch(cod_op) {
 			case INIT_MUSE:
 				respond_init(body, id, cliente_fd);

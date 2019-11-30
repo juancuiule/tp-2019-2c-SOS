@@ -49,7 +49,6 @@ uint32_t muse_alloc(uint32_t tam) {
 	uint32_t dir;
 	memcpy(&dir, response_body->content, sizeof(uint32_t));
 
-	log_info(logger, "dir: %u", dir);
 	return dir;
 }
 
@@ -87,8 +86,6 @@ int muse_get(void* dst, uint32_t src, size_t n) {
 
 	size_t r_size;
 	memcpy(&r_size, response_body->content, sizeof(size_t));
-
-	log_info(logger, "Esperaba %i bytes y llegaron %i", n, r_size);
 
 	memcpy(dst, response_body->content + sizeof(size_t), r_size);
     return 0;

@@ -10,13 +10,15 @@ int main(void) {
 	int init_result = muse_init((int) getpid(), IP, PORT);
 
 	if (init_result != -1) {
-		uint32_t my_memory = muse_alloc(10);
-//		uint32_t map_dir = muse_map("/Downloads", 24, MAP_PRIVATE);
-//		uint32_t another_memory = muse_alloc(35);
+		uint32_t my_memory = muse_alloc(65);
+		uint32_t map_dir = muse_map("/Downloads", 25, MAP_PRIVATE);
+		uint32_t another_memory = muse_alloc(75);
+		uint32_t mem3 = muse_alloc(40);
 
 		log_info(logger, "my_memory: %u", my_memory);
-//		log_info(logger, "map_dir: %u", map_dir);
-//		log_info(logger, "another_memory: %u", another_memory);
+		log_info(logger, "map_dir: %u", map_dir);
+		log_info(logger, "another_memory: %u", another_memory);
+		log_info(logger, "mem3: %u", mem3);
 //		int x = 1998;
 //		int*y = malloc(4);
 
