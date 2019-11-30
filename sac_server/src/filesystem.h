@@ -101,9 +101,11 @@ size_t fs_write_file(uint32_t node_blk, char *buffer, size_t size, off_t offset)
 
 void fs_truncate_file(int node, off_t newsize);
 
+int fs_get_cant_blks_datos_asignados(int node);
 bool node_has_blk_assigned(int node, int blk_data);
 bool node_has_blk_ind_assigned(int node, int blk_ind);
 int fs_get_next_index_blk_indsimple_to_assign(int node);
 int fs_get_next_index_blk_data_to_assign(int blk_ind);
+int fs_get_max_filesize();
 
 #endif /* FILESYSTEM_H_ */

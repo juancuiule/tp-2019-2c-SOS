@@ -77,6 +77,11 @@ int atender_conexiones(int cliente_fd)
 				dslz_payload_with_path(paquete.payload, &path);
 				sac_unlink(path,cliente_fd);
 				break;
+			case COD_TRUNCATE:
+				log_msje_info("Me llego operacion truncate");
+				dslz_cod_truncate(paquete.payload, &path, &offset);
+				sac_truncate(path, offset, cliente_fd);
+				break;
 			case COD_DESC:
 				log_msje_info("El cliente en el socket [ %d ] se desconecto", cliente_fd);
 				return EXIT_FAILURE;

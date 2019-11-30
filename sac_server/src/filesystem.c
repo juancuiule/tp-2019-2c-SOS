@@ -243,6 +243,13 @@ int get_free_blk_data_dir()
 	return datablk_index;
 }
 
+void set_free_blk_data_bitmap(int bk_number)
+{
+	//mutex
+	bitarray_clean_bit(sac_bitarray, bk_number);
+	//mutex
+}
+
 
 int fs_get_blk_ind_with_data_blk()
 {
@@ -432,44 +439,96 @@ void fs_truncate_file(int node, off_t newsize)
 	log_msje_info("Truncate to size [ %d ]", newsize);
 	log_msje_info("Original size [ %d ]", file_node->file_size);
 
-	//si newsize > file
-	if(newsize > file_node->file_size)
+
+	if(newsize >= file_node->file_size)
 	{
-		int blks_already_assigned = file_node->file_size / BLOCKSIZE;
-		int blks_needed = newsize / BLOCKSIZE;
+		int blks_already_assigned = fs_get_cant_blks_datos_asignados(node);
+		int blks_needed = roundup(newsize / BLOCKSIZE);
 
 		if(blks_needed > blks_already_assigned)
 		{
 			int blks_to_assign = blks_needed - blks_already_assigned;
 
-			int i=1;
-			do{
-				int bk_data = get_free_blk_data_dir();
+			//Como bk puede ser mayor a 1024... calculo nro de blk ind simple
+			int bk_is = (int) blks_already_assigned / GFILEBYTABLE;
+			int bk = blks_already_assigned - (bk_is * GFILEBYTABLE); //bk data dentro bk ind simple
 
-				//todo buscar el ultimo blk ind simple que tenga el nodo
-				int bk_ind = file_node->blk_indirect[0];
+			if(bk == 0 && bk_is > 0){
+				int new_bk = get_free_blk_data_dir();
+				file_node->blk_indirect[bk_is] = new_bk;
+			}
 
-				//cargo el blk ind simple
-				GBlock_IndSimple * blk_addr = (GBlock_IndSimple *)(disk_blk_pointer +bk_ind);
-				//mmap(blk_addr, BLOCKSIZE, PROT_READ | PROT_WRITE, MAP_FILE | MAP_SHARED | MAP_FIXED, disk_fd, bk_ind*BLOCKSIZE);
+			while(blks_to_assign != 0)
+			{
+				if(bk == 1024)//es el ultimo blk valido dentro del ind simple
+				{
+					int new_indsimple = get_free_blk_data_dir();//nuevo bk ind simple
+					bk_is = bk_is + 1;
+					file_node->blk_indirect[bk_is] = new_indsimple;
+					bk = 0;
+				}
 
-				//tengo que asignar desde el ultimo blk el siguiente
-				blk_addr->blk_datos[i] = bk_data;
+				int bk_ind = file_node->blk_indirect[bk_is];
+				GBlock_IndSimple * blk_addr = (GBlock_IndSimple *)(disk_blk_pointer + bk_ind);
 
+				//Nuevo bloque
+				int new_bk = get_free_blk_data_dir();
+				blk_addr->blk_datos[bk] = new_bk;
+
+				bk = bk + 1;
 				blks_to_assign--;
-				i++;
-			}while(blks_to_assign == 0);
-
+			}
 		}
 	}
+	else
+	{
+		int blocks_already_assigned = fs_get_cant_blks_datos_asignados(node);
+		int blks_to_keep = roundup((double)newsize / BLOCKSIZE);
 
-	//else
-		//todo remove
+		if(blks_to_keep < blocks_already_assigned)
+		{
+		    int blocks_to_remove = blocks_already_assigned - blks_to_keep;
+
+		    //Como bk puede ser mayor a 1024... calculo nro de blk ind simple
+		    int bk_is = (int) blocks_already_assigned / GFILEBYTABLE;
+		    int bk = (blocks_already_assigned - (bk_is * GFILEBYTABLE)) - 1; //bk data dentro bk ind simple
+
+			if(bk == 0 && bk_is > 0){
+				bk = 1023;
+				bk_is = bk_is - 1;
+			}
+
+		    while(blocks_to_remove != 0)
+		    {
+		        if(bk == -1)//debo eliminar el 1023
+		        {
+		        	//Libero bk ind
+		            file_node->blk_indirect[bk_is] = 0;
+		            set_free_blk_data_bitmap(bk_is);
+
+		            bk_is = bk_is - 1;
+		            bk = 1023;
+		        }
+
+		        int bk_ind = file_node->blk_indirect[bk_is];
+		        GBlock_IndSimple * blk_addr = (GBlock_IndSimple *)(disk_blk_pointer + bk_ind);
+
+		        //Libero bloque
+		        blk_addr->blk_datos[bk] = 0;
+		        set_free_blk_data_bitmap(bk);
+
+		        bk = bk - 1;
+		        blocks_to_remove--;
+		    }
+		}
+	}
+	file_node->file_size = newsize;
+	file_node->m_date = get_current_time();
 }
 
 
 //devuelve para un node file, la cantidad de blks asignados
-static int fs_get_cant_blks_datos_asignados(int node)
+int fs_get_cant_blks_datos_asignados(int node)
 {
 	GFile *file_node = (GFile *)sac_nodetable + node;
 
@@ -540,4 +599,11 @@ int fs_get_next_index_blk_data_to_assign(int blk_ind)
 	}
 
 	return pos;
+}
+
+int fs_get_max_filesize()
+{
+	int a = get_first_blk_data_index();
+	int b = get_last_blk_data_index();
+	return (b - a) * BLOCKSIZE;
 }

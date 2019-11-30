@@ -225,6 +225,7 @@ void sac_read(char *path, uint32_t blk, size_t size, off_t offset, int cliente_f
 		error = EFAULT;
 		log_msje_error("read: [ %s ]", strerror(error));
 		paquete = slz_res_error(error);
+		paquete_enviar(cliente_fd, paquete);
 		return;
 	}
 
@@ -233,7 +234,7 @@ void sac_read(char *path, uint32_t blk, size_t size, off_t offset, int cliente_f
 
 	leido = fs_read_file(buffer, size, offset, blk);
 
-	log_msje_info("Exito operacion pread sobre disco");
+	log_msje_info("Exito operacion read sobre disco");
 	paquete = slz_res_read(buffer, leido);
     paquete_enviar(cliente_fd, paquete);
     free(buffer);
@@ -366,7 +367,7 @@ void sac_write(char *path, char *buffer, uint32_t blk, size_t size, off_t offset
 
 	escrito = fs_write_file(blk, buffer, size, offset);
 
-    log_msje_info("Exito operacion pwrite sobre disco");
+    log_msje_info("Exito operacion write sobre disco");
     paquete = slz_res_write(escrito);
 
     paquete_enviar(cliente_fd, paquete);
@@ -393,6 +394,50 @@ void sac_unlink(char *path, int cliente_fd)
 		paquete = slz_simple_res(COD_UNLINK);
 	}
 
+	paquete_enviar(cliente_fd, paquete);
+}
+
+
+void sac_truncate(char *path, off_t newsize, int cliente_fd)
+{
+	log_msje_info("SAC TRUNCATE path = [ %s ]", path);
+	package_t paquete;
+	int error;
+
+	int node_to_set = fs_get_blk_by_fullpath(path);
+
+	if (node_to_set == -1)
+	{
+		error = ENOENT;
+	}
+	else
+	{
+		if(sac_nodetable[node_to_set].state == 2)
+		{
+			error = EISDIR; //Pathname refers to a directory
+		}
+
+		if(sac_nodetable[node_to_set].state == 1)
+		{
+			if (newsize < 0 || newsize >= fs_get_max_filesize())
+			{
+				error = EINVAL;//Invalid argument
+			}
+			else
+			{
+				fs_truncate_file(node_to_set, newsize);
+
+				log_msje_info("Exito operacion truncate sobre disco");
+				paquete = slz_simple_res(COD_TRUNCATE);
+				paquete_enviar(cliente_fd, paquete);
+				return;
+			}
+
+		}
+	}
+
+	log_msje_error("truncate: [ %s ]", strerror(error));
+	paquete = slz_res_error(error);
 	paquete_enviar(cliente_fd, paquete);
 
 }
