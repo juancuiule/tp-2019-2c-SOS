@@ -664,3 +664,10 @@ void fs_delete_file(int node_to_set)
 	fs_remove_all_blocks_of(node_to_set);
 	sem_post(&mutex_nodo[node_to_set]);
 }
+
+void fs_remove_dir(int node_to_set)
+{
+	sem_wait(&mutex_nodo[node_to_set]);
+	sac_nodetable[node_to_set].state = 0;
+	sem_post(&mutex_nodo[node_to_set]);
+}

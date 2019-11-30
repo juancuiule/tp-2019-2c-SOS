@@ -1,16 +1,5 @@
 #include "sac_op.h"
 
-//desc: completa el path con la ruta del sac
-static void sac_fullpath(char fpath[PATH_MAX], char *path)
-{
-	 strcpy(fpath, FS_PATH);
-	 strcat(fpath, path);
-	 log_msje_info("full path : %s", fpath);
-}
-
-/*
- * Primer operacion que va a consultar con nuestro disco binario sac!
- */
 void sac_getattr(char *path, int cliente_fd)
 {
 	log_msje_info("SAC GETATTR Path = [ %s ]", path);
@@ -333,27 +322,44 @@ void sac_mkdir(char *path, int cliente_fd)
 void sac_rmdir(char *path, int cliente_fd)
 {
 	log_msje_info("SAC RMDIR Path = [ %s ]", path);
-
 	package_t paquete;
+	int error;
 
-	char fpath[PATH_MAX];
-	sac_fullpath(fpath, path);
+	int node_to_set = fs_get_blk_by_fullpath(path);
 
-	int res, err;
-	//ejecuto operacion
-	res = rmdir(fpath);
+	if (node_to_set == -1)
+	{
+		error = ENOENT;
+	}
+	else
+	{
+		if(sac_nodetable[node_to_set].state != 2)
+		{
+			error = ENOTDIR;
+		}
+		else
+		{
+			if(!fs_is_empty_directory(node_to_set))
+			{
+				error = ENOTEMPTY;
+			}
+			else
+			{
+				fs_remove_dir(node_to_set);
 
-    if (res == -1) {
-    	log_msje_error("mkdir: [ %s ]", strerror(errno));
-    	err = errno;
-    	paquete = slz_res_error(err);
-    }
-    else {
-    	log_msje_info("Exito operacion rmdir sobre fs local");
-    	paquete = slz_simple_res(COD_RMDIR);
-    }
+				log_msje_info("Exito operacion rmdir sobre disco");
+				paquete = slz_simple_res(COD_RMDIR);
+				paquete_enviar(cliente_fd, paquete);
+				return;
 
-    paquete_enviar(cliente_fd, paquete);
+			}
+		}
+
+	}
+	log_msje_error("rmdir: [ %s ]", strerror(error));
+	paquete = slz_res_error(error);
+	paquete_enviar(cliente_fd, paquete);
+	return;
 
 }
 

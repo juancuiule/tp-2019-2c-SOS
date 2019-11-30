@@ -112,5 +112,6 @@ bool fs_is_empty_directory(int node);
 void fs_rename_file(int node_to_set, char *new_name);
 void fs_remove_all_blocks_of(int node);
 void fs_delete_file(int node_to_set);
+void fs_remove_dir(int node_to_set);
 
 #endif /* FILESYSTEM_H_ */
