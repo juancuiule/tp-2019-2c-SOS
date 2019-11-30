@@ -149,7 +149,7 @@ void ejecutar_nuevo_hilo(hilo_t* hilo) {
 	hilo->tiempo_ultima_llegada_a_exec = current_timestamp();
 	hilo->tiempo_espera += current_timestamp() - hilo->tiempo_ultima_llegada_a_ready;
 	programa->hilo_en_exec = hilo;
-	//free(hilo_anterior);
+	free(hilo_anterior);
 }
 
 void logear_metricas() {

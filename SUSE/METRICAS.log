@@ -32907,3 +32907,42 @@
 [INFO] 00:02:26:730 SUSE/(10843:10844): 	tiempo de ejecución: 5663 ms
 [INFO] 00:02:26:731 SUSE/(10843:10844): 	tiempo de espera: 0 ms
 [INFO] 00:02:26:731 SUSE/(10843:10844): 	tiempo de uso de CPU: 0 ms
+[INFO] 00:13:12:249 SUSE/(11434:11435): Grado de multiprogramación: 3
+[INFO] 00:13:12:251 SUSE/(11434:11435): Métricas del hilo 0: 
+[INFO] 00:13:12:253 SUSE/(11434:11435): 	tiempo de ejecución: 6644 ms
+[INFO] 00:13:12:253 SUSE/(11434:11435): 	tiempo de espera: 0 ms
+[INFO] 00:13:12:254 SUSE/(11434:11435): 	tiempo de uso de CPU: 0 ms
+[INFO] 00:13:12:255 SUSE/(11434:11435): Métricas del hilo 0: 
+[INFO] 00:13:12:255 SUSE/(11434:11435): 	tiempo de ejecución: 6621 ms
+[INFO] 00:13:12:255 SUSE/(11434:11435): 	tiempo de espera: 0 ms
+[INFO] 00:13:12:256 SUSE/(11434:11435): 	tiempo de uso de CPU: 0 ms
+[INFO] 00:13:12:256 SUSE/(11434:11435): Métricas del hilo 0: 
+[INFO] 00:13:12:257 SUSE/(11434:11435): 	tiempo de ejecución: 6622 ms
+[INFO] 00:13:12:257 SUSE/(11434:11435): 	tiempo de espera: 0 ms
+[INFO] 00:13:12:257 SUSE/(11434:11435): 	tiempo de uso de CPU: 0 ms
+[INFO] 00:13:22:261 SUSE/(11434:11435): Grado de multiprogramación: 3
+[INFO] 00:13:22:261 SUSE/(11434:11435): Métricas del hilo 0: 
+[INFO] 00:13:22:262 SUSE/(11434:11435): 	tiempo de ejecución: 16654 ms
+[INFO] 00:13:22:262 SUSE/(11434:11435): 	tiempo de espera: 0 ms
+[INFO] 00:13:22:262 SUSE/(11434:11435): 	tiempo de uso de CPU: 0 ms
+[INFO] 00:13:22:263 SUSE/(11434:11435): Métricas del hilo 0: 
+[INFO] 00:13:22:263 SUSE/(11434:11435): 	tiempo de ejecución: 16630 ms
+[INFO] 00:13:22:263 SUSE/(11434:11435): 	tiempo de espera: 0 ms
+[INFO] 00:13:22:264 SUSE/(11434:11435): 	tiempo de uso de CPU: 0 ms
+[INFO] 00:13:22:264 SUSE/(11434:11435): Métricas del hilo 0: 
+[INFO] 00:13:22:264 SUSE/(11434:11435): 	tiempo de ejecución: 16630 ms
+[INFO] 00:13:22:265 SUSE/(11434:11435): 	tiempo de espera: 0 ms
+[INFO] 00:13:22:265 SUSE/(11434:11435): 	tiempo de uso de CPU: 0 ms
+[INFO] 00:14:14:908 SUSE/(11504:11505): Grado de multiprogramación: 3
+[INFO] 00:14:14:909 SUSE/(11504:11505): Métricas del hilo 0: 
+[INFO] 00:14:14:911 SUSE/(11504:11505): 	tiempo de ejecución: 6662 ms
+[INFO] 00:14:14:912 SUSE/(11504:11505): 	tiempo de espera: 0 ms
+[INFO] 00:14:14:912 SUSE/(11504:11505): 	tiempo de uso de CPU: 0 ms
+[INFO] 00:14:14:913 SUSE/(11504:11505): Métricas del hilo 0: 
+[INFO] 00:14:14:913 SUSE/(11504:11505): 	tiempo de ejecución: 6656 ms
+[INFO] 00:14:14:913 SUSE/(11504:11505): 	tiempo de espera: 0 ms
+[INFO] 00:14:14:914 SUSE/(11504:11505): 	tiempo de uso de CPU: 0 ms
+[INFO] 00:14:14:914 SUSE/(11504:11505): Métricas del hilo 0: 
+[INFO] 00:14:14:915 SUSE/(11504:11505): 	tiempo de ejecución: 6656 ms
+[INFO] 00:14:14:915 SUSE/(11504:11505): 	tiempo de espera: 0 ms
+[INFO] 00:14:14:916 SUSE/(11504:11505): 	tiempo de uso de CPU: 0 ms
