@@ -1,5 +1,8 @@
 #include "filesystem.h"
 
+sem_t mutex_bitmap;
+sem_t mutex_nodo[GFILEBYTABLE];
+
 //El header se encuentra en el primer bloque de mi disco
 static void set_sac_header()
 {
@@ -37,6 +40,12 @@ void fs_set_config()
 	set_sac_header();
 	set_sac_bitmap();
 	set_sac_nodetable();
+
+	sem_init(&mutex_bitmap, 0, 1);
+	for(int i = 0 ; i < GFILEBYTABLE; i++){
+		sem_init(&mutex_nodo[i], 0, 1);
+	}
+
 }
 
 bool fs_map_disk_in_memory(char *disk_name)
@@ -83,6 +92,7 @@ static int fs_find_blk_nominees_by_name(char *filename, t_list *blks_candidatos)
 				blk_candidato->blk_father = sac_nodetable[i].parent_dir_block;
 
 				list_add(blks_candidatos, blk_candidato);
+				free(blk_candidato);
 
 			}
 		}
@@ -223,17 +233,16 @@ int get_free_blk_data_dir()
 
 	log_msje_info("Buscando un blk de datos libre, recorro bitmap...");
 
-	//mutex
+	sem_wait(mutex_bitmap);
 	for(datablk_index = first_datablk; datablk_index < last_datablk; datablk_index++)
 	{
 		taken = bitarray_test_bit(sac_bitarray, datablk_index);
 		if(!taken){
 			bitarray_set_bit(sac_bitarray, datablk_index);
-			//sync a disco?
 			break;
 		}
 	}
-	//mutex
+	sem_post(mutex_bitmap);
 
 	if(taken)//todos ocupados
 		return -1;
@@ -245,9 +254,7 @@ int get_free_blk_data_dir()
 
 void set_free_blk_data_bitmap(int bk_number)
 {
-	//mutex
 	bitarray_clean_bit(sac_bitarray, bk_number);
-	//mutex
 }
 
 
@@ -387,7 +394,7 @@ size_t fs_write_file(uint32_t node_blk, char *buffer, size_t size, off_t offset)
 	/*
 	 * Escritura en varios bloques
 	 */
-
+	sem_wait(mutex_nodo[node_blk]);
 	int escrito = 0;
 	int size_to_write = size;
 	int size_missing = 0;
@@ -425,6 +432,7 @@ size_t fs_write_file(uint32_t node_blk, char *buffer, size_t size, off_t offset)
 	}
 
 	file_node->file_size += escrito;
+	sem_post(mutex_nodo[node_blk]);
 
 	log_msje_info("Se escribio [ %d ] bytes", escrito);
 	return escrito;

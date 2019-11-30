@@ -13,6 +13,7 @@
 #include <commons/collections/list.h>
 #include "utils.h"
 #include <errno.h>
+#include <semaphore.h>
 
 
 #define BLOCKSIZE 4096
