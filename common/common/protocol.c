@@ -327,6 +327,28 @@ package_t slz_cod_truncate(const char *path, off_t newsize)
 	return paquete;
 }
 
+package_t slz_cod_rename(const char *path, const char *newpath)
+{
+	package_t paquete;
+	int tam_path = strlen(path);
+	int tam_newpath = strlen(newpath);
+	int tam_payload = sizeof(int) + tam_path + sizeof(int) + tam_newpath;
+
+	paquete.header = header_get('C', COD_RENAME, tam_payload);
+	paquete.payload = malloc(tam_payload);
+
+	int offs=0;
+	memcpy(paquete.payload, &tam_path  ,sizeof(int));
+	offs+=sizeof(int);
+	memcpy(paquete.payload+offs, path, tam_path);
+	offs+=tam_path;
+	memcpy(paquete.payload+offs, &tam_newpath, sizeof(int));
+	offs+=sizeof(int);
+	memcpy(paquete.payload+offs, newpath, tam_newpath);
+
+	return paquete;
+}
+
 //desc: dslz el payload respuesta de server, guarda la direccion del DIR
 void dslz_res_opendir(void *buffer, uint32_t* dir)
 {
@@ -529,6 +551,32 @@ void dslz_cod_truncate(void *payload, char **path, off_t *newsize)
 	*path = ruta;
 
 	memcpy(newsize, payload+offs, sizeof(off_t));
+}
+
+void dslz_cod_rename(void *payload, char **path, char **newpath)
+{
+	int offs = 0;
+
+	int tam_path;
+	memcpy(&tam_path, payload, sizeof(int));
+	offs += sizeof(int);
+
+	char *ruta = malloc(tam_path+1);
+	memcpy(ruta, payload+offs, tam_path);
+	offs += tam_path;
+
+	ruta[tam_path]='\0';
+	*path = ruta;
+
+	int tam_newpath;
+	memcpy(&tam_newpath, payload+offs, sizeof(int));
+	offs += sizeof(int);
+
+	char *ruta2 = malloc(tam_newpath+1);
+	memcpy(ruta2, payload+offs, tam_newpath);
+
+	ruta2[tam_newpath]='\0';
+	*newpath = ruta2;
 }
 
 //desc: arma paquete con el pointer adress de DIR

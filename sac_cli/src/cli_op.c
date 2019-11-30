@@ -402,6 +402,32 @@ int cli_truncate(const char *path, off_t newsize)
 
 }
 
+int cli_rename(const char *path, const char *newpath)
+{
+	log_msje_info("Operacion RENAME sobre el archivo ");
+
+	//enviar paquete a sac server
+	package_t paquete, respuesta;
+	paquete = slz_cod_rename(path, newpath);
+
+	if(!paquete_enviar(sac_server.fd, paquete))
+		log_msje_error("No se pudo enviar el paquete");
+	else
+		log_msje_info("Se envio operacion write al server");
+
+	//...espero respuesta de server
+	respuesta = paquete_recibir(sac_server.fd);
+
+	if(respuesta.header.cod_operacion == COD_ERROR){
+		int err;
+		log_msje_error("rename me llego cod error");
+		dslz_res_error(respuesta.payload, &err);
+		return -err;
+	}
+
+	return 0;
+}
+
 //int cli_setattr
 void set_sac_fd(socket_t socket)
 {
@@ -423,6 +449,6 @@ struct fuse_operations cli_oper = {
 		.write = cli_write,
 		.unlink = cli_unlink,
 		.getxattr = cli_getxattr,
-		.truncate = cli_truncate
-
+		.truncate = cli_truncate,
+		.rename = cli_rename
 };
