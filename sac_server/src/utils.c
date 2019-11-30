@@ -60,3 +60,10 @@ char* get_lastfile_previous_path(char *path)
 	return string_substring(path, 0, strlen(path) - tam_last_filename);
 
 }
+
+int roundup(double number)
+{
+	long int num = number;
+	if((number - num) > 0.0001) num++;
+	return num;
+}

@@ -14,5 +14,5 @@ void reverse_string_vector(char **strings);
 int get_size_filenames(char **names);
 char* get_last_filename_from_path(char *path);
 char* get_lastfile_previous_path(char *path);
-
+int roundup(double number);
 #endif /* UTILS_H_ */
