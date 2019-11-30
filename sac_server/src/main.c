@@ -26,6 +26,7 @@ int main(int argc, char *argv[]) {
 
 	servidor_iniciar();
 
+	fs_munmap_disk();
 	log_liberar();
 	return EXIT_SUCCESS;
 }
