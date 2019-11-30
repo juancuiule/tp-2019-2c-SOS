@@ -17,7 +17,6 @@ int main() {
 	}
 
 	pthread_detach(hilo_metricas);
-	pthread_detach(pthread_self());
 	liberar();
 	return EXIT_SUCCESS;
 }
@@ -93,9 +92,9 @@ void atender_cliente(int cliente_fd) {
 			agregar_programa(hilo);
 
 			if (GRADO_MULTIPROGRAMACION < MAX_MULTIPROG) {
-				hilo_t* hilo = malloc(sizeof(hilo_t));
 				hilo = queue_pop(cola_new);
 				encolar_hilo_en_ready(hilo);
+
 			}
 
 			break;
@@ -109,6 +108,7 @@ void atender_cliente(int cliente_fd) {
 			hilo_t* proximo_hilo = siguiente_hilo_a_ejecutar(programa);
 			proximo = string_itoa(proximo_hilo->tid);
 			send(cliente_fd, proximo, sizeof(proximo), MSG_WAITALL);
+			free(proximo);
 			break;
 		case 3:
 			bloquear_hilo(hilo);
@@ -118,8 +118,11 @@ void atender_cliente(int cliente_fd) {
 			break;
 	}
 
-	free(proximo);
+	//free(hilo);
+	//free(proximo);
 	free(proximo_hilo);
+	//free(programa);
+	free(buffer);
 }
 
 bool es_programa_buscado(programa_t* programa) {
@@ -146,6 +149,7 @@ void ejecutar_nuevo_hilo(hilo_t* hilo) {
 	hilo->tiempo_ultima_llegada_a_exec = current_timestamp();
 	hilo->tiempo_espera += current_timestamp() - hilo->tiempo_ultima_llegada_a_ready;
 	programa->hilo_en_exec = hilo;
+	//free(hilo_anterior);
 }
 
 void logear_metricas() {
@@ -226,6 +230,10 @@ void encolar_hilo_en_ready(hilo_t* hilo) {
 
 	if (GRADO_MULTIPROGRAMACION == MAX_MULTIPROG)
 		log_warning(logger, "Se ha alcanzado el grado máximo de multiprogramación");
+
+	//free(programa->hilo_en_exec);
+	//queue_destroy(programa->cola_ready);
+	//free(programa);
 }
 
 void bloquear_hilo(hilo_t* hilo) {
@@ -234,7 +242,6 @@ void bloquear_hilo(hilo_t* hilo) {
 }
 
 hilo_t* siguiente_hilo_a_ejecutar(programa_t* programa) {
-	hilo_t* hilo = malloc(sizeof(hilo_t));
 	hilo_t* siguiente = malloc(sizeof(hilo_t));
 	t_list* hilos = list_create();
 	hilos = programa->cola_ready->elements;
@@ -249,6 +256,7 @@ hilo_t* siguiente_hilo_a_ejecutar(programa_t* programa) {
 
 	list_sort(hilos, comparador);
 	siguiente = list_get(hilos, 0);
+	//list_destroy(hilos);
 	return siguiente;
 }
 
