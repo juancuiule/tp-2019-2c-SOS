@@ -32,7 +32,7 @@ void inicializar_metricas_hilo(hilo_t* hilo) {
 	hilo->tiempo_creacion = current_timestamp();
 	hilo->tiempo_cpu = 0;
 	hilo->tiempo_espera = 0;
-	hilo->hilos_esperando = queue_create();
+	hilo->hilos_a_esperar= queue_create();
 }
 
 void inicializar() {
@@ -208,14 +208,6 @@ void cerrar_hilo(hilo_t* hilo) {
 	log_info(logger, "El hilo %i del programa %i llegó a EXIT.", hilo->tid, hilo->pid);
 	sem_wait(multiprogramacion_sem);
 	GRADO_MULTIPROGRAMACION--;
-	sem_post(multiprogramacion_sem);
-	hilo_t* hilo_esperando = queue_pop(hilo->hilos_esperando);
-
-	while (hilo_esperando != NULL) {
-		printf("hilo que estaba esperando: %i\n", hilo_esperando->tid);
-		encolar_hilo_en_ready(hilo_esperando);
-		hilo_esperando = queue_pop(hilo->hilos_esperando);
-	}
 }
 
 void encolar_hilo_en_ready(hilo_t* hilo) {

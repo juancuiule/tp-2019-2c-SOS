@@ -1823,3 +1823,31 @@
 [INFO] 00:16:10:89 SUSE/(11586:11598): El hilo 0 del programa 11588 llegó a EXEC.
 [INFO] 00:16:10:98 SUSE/(11586:11599): El hilo 0 del programa 11588 llegó a BLOCKED
 [INFO] 00:16:10:107 SUSE/(11586:11601): El hilo 0 del programa 11588 llegó a EXIT.
+[INFO] 11:21:27:491 SUSE/(2176:2176): Se ha iniciado el servidor.
+[INFO] 11:22:15:684 SUSE/(2176:2264): El hilo 0 del programa 2263 llegó a NEW
+[INFO] 11:22:15:684 SUSE/(2176:2264): El hilo 0 del programa 2263 llegó a READY
+[INFO] 11:22:15:684 SUSE/(2176:2265): El hilo 1 del programa 2263 llegó a NEW
+[INFO] 11:22:15:684 SUSE/(2176:2265): El hilo 1 del programa 2263 llegó a READY
+[INFO] 11:22:15:685 SUSE/(2176:2266): El hilo 2 del programa 2263 llegó a NEW
+[INFO] 11:22:15:685 SUSE/(2176:2266): El hilo 2 del programa 2263 llegó a READY
+[INFO] 11:22:15:685 SUSE/(2176:2267): El hilo 3 del programa 2263 llegó a NEW
+[INFO] 11:22:15:685 SUSE/(2176:2267): El hilo 3 del programa 2263 llegó a READY
+[INFO] 11:22:15:686 SUSE/(2176:2269): El hilo 0 del programa 2263 llegó a EXEC.
+[INFO] 11:22:15:686 SUSE/(2176:2268): El hilo 0 del programa 2263 llegó a BLOCKED
+[INFO] 11:22:15:687 SUSE/(2176:2270): El hilo 0 del programa 2263 llegó a BLOCKED
+[INFO] 11:22:15:687 SUSE/(2176:2272): El hilo 0 del programa 2263 llegó a BLOCKED
+[INFO] 11:22:15:689 SUSE/(2176:2274): El hilo 0 del programa 2263 llegó a EXIT.
+[INFO] 11:27:13:493 SUSE/(2610:2610): Se ha iniciado el servidor.
+[INFO] 11:27:16:450 SUSE/(2610:2613): El hilo 0 del programa 2612 llegó a NEW
+[INFO] 11:27:16:450 SUSE/(2610:2613): El hilo 0 del programa 2612 llegó a READY
+[INFO] 11:27:16:450 SUSE/(2610:2614): El hilo 1 del programa 2612 llegó a NEW
+[INFO] 11:27:16:450 SUSE/(2610:2614): El hilo 1 del programa 2612 llegó a READY
+[INFO] 11:27:16:451 SUSE/(2610:2615): El hilo 2 del programa 2612 llegó a NEW
+[INFO] 11:27:16:451 SUSE/(2610:2615): El hilo 2 del programa 2612 llegó a READY
+[INFO] 11:27:16:452 SUSE/(2610:2616): El hilo 3 del programa 2612 llegó a NEW
+[INFO] 11:27:16:452 SUSE/(2610:2616): El hilo 3 del programa 2612 llegó a READY
+[INFO] 11:27:16:453 SUSE/(2610:2617): El hilo 0 del programa 2612 llegó a BLOCKED
+[INFO] 11:27:16:454 SUSE/(2610:2620): El hilo 0 del programa 2612 llegó a EXEC.
+[INFO] 11:27:16:454 SUSE/(2610:2619): El hilo 0 del programa 2612 llegó a BLOCKED
+[INFO] 11:27:16:455 SUSE/(2610:2621): El hilo 0 del programa 2612 llegó a BLOCKED
+[INFO] 11:27:16:456 SUSE/(2610:2623): El hilo 0 del programa 2612 llegó a EXIT.

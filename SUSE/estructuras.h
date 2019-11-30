@@ -18,7 +18,7 @@ typedef struct {
 	long long tiempo_ultima_llegada_a_exec;
 	double estimacion_anterior;
 	double rafaga_anterior;
-	t_queue* hilos_esperando;
+	t_queue* hilos_a_esperar;
 } __attribute__((packed)) hilo_t;
 
 typedef struct {

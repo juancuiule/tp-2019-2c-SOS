@@ -32959,3 +32959,33 @@
 [INFO] 00:16:16:63 SUSE/(11586:11587): 	tiempo de ejecución: 5966 ms
 [INFO] 00:16:16:64 SUSE/(11586:11587): 	tiempo de espera: 0 ms
 [INFO] 00:16:16:64 SUSE/(11586:11587): 	tiempo de uso de CPU: 0 ms
+[INFO] 11:21:37:525 SUSE/(2176:2177): Grado de multiprogramación: 0
+[INFO] 11:21:47:541 SUSE/(2176:2177): Grado de multiprogramación: 0
+[INFO] 11:21:57:542 SUSE/(2176:2177): Grado de multiprogramación: 0
+[INFO] 11:22:07:543 SUSE/(2176:2177): Grado de multiprogramación: 0
+[INFO] 11:22:17:543 SUSE/(2176:2177): Grado de multiprogramación: 3
+[INFO] 11:22:17:544 SUSE/(2176:2177): Métricas del hilo 0: 
+[INFO] 11:22:17:544 SUSE/(2176:2177): 	tiempo de ejecución: 1858 ms
+[INFO] 11:22:17:544 SUSE/(2176:2177): 	tiempo de espera: 0 ms
+[INFO] 11:22:17:544 SUSE/(2176:2177): 	tiempo de uso de CPU: 0 ms
+[INFO] 11:22:17:544 SUSE/(2176:2177): Métricas del hilo 0: 
+[INFO] 11:22:17:544 SUSE/(2176:2177): 	tiempo de ejecución: 1857 ms
+[INFO] 11:22:17:544 SUSE/(2176:2177): 	tiempo de espera: 0 ms
+[INFO] 11:22:17:544 SUSE/(2176:2177): 	tiempo de uso de CPU: 0 ms
+[INFO] 11:22:17:544 SUSE/(2176:2177): Métricas del hilo 0: 
+[INFO] 11:22:17:544 SUSE/(2176:2177): 	tiempo de ejecución: 1856 ms
+[INFO] 11:22:17:544 SUSE/(2176:2177): 	tiempo de espera: 0 ms
+[INFO] 11:22:17:544 SUSE/(2176:2177): 	tiempo de uso de CPU: 0 ms
+[INFO] 11:22:27:544 SUSE/(2176:2177): Grado de multiprogramación: 3
+[INFO] 11:22:27:544 SUSE/(2176:2177): Métricas del hilo 0: 
+[INFO] 11:22:27:544 SUSE/(2176:2177): 	tiempo de ejecución: 11858 ms
+[INFO] 11:22:27:544 SUSE/(2176:2177): 	tiempo de espera: 0 ms
+[INFO] 11:22:27:544 SUSE/(2176:2177): 	tiempo de uso de CPU: 0 ms
+[INFO] 11:22:27:544 SUSE/(2176:2177): Métricas del hilo 0: 
+[INFO] 11:22:27:544 SUSE/(2176:2177): 	tiempo de ejecución: 11858 ms
+[INFO] 11:22:27:544 SUSE/(2176:2177): 	tiempo de espera: 0 ms
+[INFO] 11:22:27:544 SUSE/(2176:2177): 	tiempo de uso de CPU: 0 ms
+[INFO] 11:22:27:544 SUSE/(2176:2177): Métricas del hilo 0: 
+[INFO] 11:22:27:544 SUSE/(2176:2177): 	tiempo de ejecución: 11857 ms
+[INFO] 11:22:27:544 SUSE/(2176:2177): 	tiempo de espera: 0 ms
+[INFO] 11:22:27:544 SUSE/(2176:2177): 	tiempo de uso de CPU: 0 ms
