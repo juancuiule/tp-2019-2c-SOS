@@ -86,7 +86,6 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 				}
 			}
 		}
-		log_info(logger, "dir to send: %i", segment->base + dir);
 		add_fixed_to_body(r_body, sizeof(uint32_t), segment->base + dir);
 		response = create_response(SUCCESS, r_body);
 	} else {
@@ -184,14 +183,13 @@ void respond_map(muse_body* body, char* id, int socket_cliente) {
 
 	log_info(logger, "El cliente con id: %s hizo map a: %s, de %i bytes, flag: %i", id, path, length, flags);
 
-
 	process_table* table = get_table_for_process(id);
 	muse_body* r_body = create_body();
 	muse_response* response;
 	void* dir;
 
 	// min amount of frames to ask for the segment
-	int frames_to_ask = ceil((double) length / PAGE_SIZE);
+	int frames_to_ask = ceil((double) (length + sizeof(bool) + sizeof(uint32_t)) / PAGE_SIZE);
 	process_segment *segment;
 
 	if (table != NULL) {
@@ -207,7 +205,6 @@ void respond_map(muse_body* body, char* id, int socket_cliente) {
 		dir = alloc_in_segment(segment, free_dir, length);
 		add_process_segment(id, segment);
 
-		log_info(logger, "dir to send en MMAP: %i", segment->base + dir);
 		add_fixed_to_body(r_body, sizeof(uint32_t), segment->base + dir);
 		response = create_response(SUCCESS, r_body);
 		send_response(response, socket_cliente);

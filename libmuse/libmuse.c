@@ -128,7 +128,6 @@ uint32_t muse_map(char *path, size_t length, int flags) {
 	uint32_t dir;
 	memcpy(&dir, response_body->content, sizeof(uint32_t));
 
-	log_info(logger, "dir: %u", dir);
 	return dir;
 }
 

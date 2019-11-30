@@ -160,17 +160,8 @@ void* find_free_dir(process_segment* segment, int size) {
 
 	t_page* page = malloc(sizeof(t_page));
 	memcpy(page, pages, sizeof(t_page));
-	log_info(seg_logger, "page->frame: %i", page->frame_number);
 	while (read_pages < number_of_pages) {
 		memcpy(page, pages + read_pages * sizeof(t_page), sizeof(t_page));
-		log_info(
-			seg_logger,
-			"read_pages %i, frame: %i, number_of_pages %i, offset: %i",
-			read_pages,
-			page->frame_number,
-			number_of_pages,
-			read_pages * sizeof(t_page)
-		);
 		void* frame = MEMORY[page->frame_number];
 
 		while ((offset % PAGE_SIZE) < (PAGE_SIZE - sizeof(bool) - sizeof(uint32_t))) {
@@ -248,7 +239,7 @@ int find_free_frame(t_bitarray* bitmap) {
 	int var;
 	for (var = 0; var < (MEMORY_SIZE / PAGE_SIZE); ++var) {
 		bool is_used = bitarray_test_bit(bitmap, var);
-		log_info(seg_logger, "i = %i, is_used?: %i", var, is_used);
+//		log_info(seg_logger, "i = %i, is_used?: %i", var, is_used);
 		if (!is_used) {
 			return var;
 		}
@@ -312,6 +303,12 @@ int free_space_at_the_end(process_segment* segment) {
 	}
 	return last_free_space;
 }
+//
+//void copy_in_segment(process_segment* segment, int dir, int size, void* value) {
+//	void* pages = segment->pages;
+//
+//
+//}
 
 void* alloc_in_segment(process_segment* segment, int dir, uint32_t size) {
 	void* pages = segment->pages;
@@ -320,6 +317,7 @@ void* alloc_in_segment(process_segment* segment, int dir, uint32_t size) {
 	int allocd = 0;
 	int last_allocd = 0;
 
+	log_info(seg_logger, "Se hace un alloc a %i.", dir);
 	log_info(seg_logger, "dir_in_segment: %i, base: %i", dir_in_segment, base);
 	int offset = base;
 	int pages_read = 0;
@@ -327,11 +325,9 @@ void* alloc_in_segment(process_segment* segment, int dir, uint32_t size) {
 	void* frame;
 	while (allocd < size) {
 		memcpy(page, segment->pages + ((dir_in_segment / PAGE_SIZE) + pages_read) * sizeof(t_page), sizeof(t_page));
+		frame = MEMORY[page->frame_number];
 
 		// falta chequear que la pagina este en memoria
-
-		// get frame
-		frame = MEMORY[page->frame_number];
 		// falta chequear que el frame esta libre en esa base
 
 		if (allocd == 0) {
@@ -346,9 +342,7 @@ void* alloc_in_segment(process_segment* segment, int dir, uint32_t size) {
 		allocd += last_allocd;
 		pages_read += 1;
 	}
-	log_debug(seg_logger, "frame_number: %i, last_allocd: %i", page->frame_number, last_allocd);
 	memcpy(frame + last_allocd, &t, sizeof(bool));
-	// hay que revisar el free_space_after para seguir viendo si queda algo en las próximas páginas
 	int free_space_after = PAGE_SIZE - last_allocd - sizeof(bool)- sizeof(uint32_t);
 	if (pages_read == 1) {
 		// se leyó una sola, con lo cual hay que restar la base
