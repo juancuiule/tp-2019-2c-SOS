@@ -168,7 +168,7 @@ int cli_open(const char *path, struct fuse_file_info *fi)
 		return -err;
 	}
 
-	int blk;
+	uint32_t blk;
 	dslz_res_open(respuesta.payload, &blk);
 
 	//Me guardo en fi el nro de blk
@@ -369,6 +369,40 @@ int cli_unlink(const char *path)
 	return 0;
 }
 
+int cli_getxattr (const char *path, const char *name, char *value, size_t size)
+{
+	log_msje_info("Operacion GETXATTR sobre path [ %s ]", path);
+	return 0;
+}
+
+int cli_truncate(const char *path, off_t newsize)
+{
+	log_msje_info("Operacion TRUNCATE sobre el archivo ");
+
+	//enviar paquete a sac server
+	package_t paquete, respuesta;
+	paquete = slz_cod_truncate(path, newsize);
+
+	if(!paquete_enviar(sac_server.fd, paquete))
+		log_msje_error("No se pudo enviar el paquete");
+	else
+		log_msje_info("Se envio operacion write al server");
+
+	//...espero respuesta de server
+	respuesta = paquete_recibir(sac_server.fd);
+
+	if(respuesta.header.cod_operacion == COD_ERROR){
+		int err;
+		log_msje_error("truncate me llego cod error");
+		dslz_res_error(respuesta.payload, &err);
+		return -err;
+	}
+
+	return 0;
+
+}
+
+//int cli_setattr
 void set_sac_fd(socket_t socket)
 {
 	sac_server = socket;
@@ -387,5 +421,8 @@ struct fuse_operations cli_oper = {
 		.rmdir = cli_rmdir,
 		.mknod = cli_mknod,
 		.write = cli_write,
-		.unlink = cli_unlink
+		.unlink = cli_unlink,
+		.getxattr = cli_getxattr,
+		.truncate = cli_truncate
+
 };

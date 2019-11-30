@@ -6,5 +6,5 @@ void convert_to_timespec(uint64_t millsecs, struct timespec* ts)
 	int s = (int) secs;
 
 	ts->tv_sec = s;
-	ts->tv_nsec = (secs -s) * 1000000000;
+	ts->tv_nsec = (secs -s) * 1000000;
 }
