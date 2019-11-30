@@ -55,7 +55,7 @@ hilo_t* crear_nuevo_hilo(int tid, int pid) {
 	hilo->tiempo_cpu = 0;
 	hilo->estimacion_anterior = 0;
 	hilo->rafaga_anterior = 0;
-	hilo->hilos_esperando = queue_create();
+	hilo->hilos_a_esperar = list_create();
 	return hilo;
 }
 
@@ -65,13 +65,13 @@ int ejecutar_operacion(int tid, int operacion) {
 	t_paquete* paquete = crear_paquete(operacion);
 
 	if (operacion == 3) {
-		int tid_hilo_invocando = tid;
-		hilo_t* hilo_invocando = crear_nuevo_hilo(tid_hilo_invocando, pid);
+		int tid_hilo_a_esperar = tid;
+		hilo_t* hilo_a_esperar = crear_nuevo_hilo(tid_hilo_a_esperar, pid);
 		tid = hilolay_get_tid();
 		hilo_t* hilo = crear_nuevo_hilo(tid, pid);
+		list_add(hilo->hilos_a_esperar, hilo_a_esperar);
 		agregar_a_paquete(paquete, hilo, sizeof(hilo_t));
 		enviar_paquete(paquete, conexion_con_suse);
-		queue_push(hilo->hilos_esperando, hilo_invocando);
 		return 0;
 	}
 
@@ -105,7 +105,7 @@ int conectarse_a_suse() {
 	bzero((char *)&cliente, sizeof((char *)&cliente));
 
 	cliente.sin_family = AF_INET;
-	cliente.sin_port = htons(8524);
+	cliente.sin_port = htons(5003);
 	bcopy((char *)servidor->h_addr, (char *)&cliente.sin_addr.s_addr, sizeof(servidor->h_length));
 
 	if(connect(conexion,(struct sockaddr *)&cliente, sizeof(cliente)) < 0)

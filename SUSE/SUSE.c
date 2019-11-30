@@ -63,6 +63,25 @@ programa_t* obtener_programa_de_hilo(int tid) {
 	return list_find(programas, (void*)es_programa_hilo_buscado);
 }
 
+void eliminar_hilo_de_hilos_a_esperar(hilo_t* hilo_que_espera, int tid) {
+
+	bool es_hilo_buscado(hilo_t* un_hilo) {
+		return un_hilo->tid == tid;
+	}
+
+	if (!list_is_empty(hilo_que_espera))
+		list_remove_by_condition(hilo_que_espera->hilos_a_esperar, es_hilo_buscado);
+}
+
+bool no_espera_mas_hilos(hilo_t* hilo) {
+	return list_is_empty(hilo->hilos_a_esperar);
+}
+
+void validar_si_esta_esperando_hilos(hilo_t* hilo) {
+	if (list_is_empty(hilo->hilos_a_esperar))
+		encolar_hilo_en_ready(hilo);
+}
+
 void atender_cliente(int cliente_fd) {
 	int pedido;
 	int offset = 0;
@@ -94,7 +113,6 @@ void atender_cliente(int cliente_fd) {
 			if (GRADO_MULTIPROGRAMACION < MAX_MULTIPROG) {
 				hilo = queue_pop(cola_new);
 				encolar_hilo_en_ready(hilo);
-
 			}
 
 			break;
@@ -115,6 +133,12 @@ void atender_cliente(int cliente_fd) {
 			break;
 		case 4:
 			cerrar_hilo(hilo);
+
+			if (!queue_is_empty(cola_blocked)) {
+				list_iterate(cola_blocked->elements, eliminar_hilo_de_hilos_a_esperar);
+				list_iterate(cola_blocked->elements, validar_si_esta_esperando_hilos);
+			}
+
 			break;
 	}
 

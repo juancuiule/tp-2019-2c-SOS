@@ -32989,3 +32989,37 @@
 [INFO] 11:22:27:544 SUSE/(2176:2177): 	tiempo de ejecución: 11857 ms
 [INFO] 11:22:27:544 SUSE/(2176:2177): 	tiempo de espera: 0 ms
 [INFO] 11:22:27:544 SUSE/(2176:2177): 	tiempo de uso de CPU: 0 ms
+[INFO] 12:00:27:192 SUSE/(3370:3371): Grado de multiprogramación: 0
+[INFO] 12:00:37:194 SUSE/(3370:3371): Grado de multiprogramación: 0
+[INFO] 12:00:47:194 SUSE/(3370:3371): Grado de multiprogramación: 0
+[INFO] 12:00:57:197 SUSE/(3370:3371): Grado de multiprogramación: 0
+[INFO] 12:01:07:205 SUSE/(3370:3371): Grado de multiprogramación: 0
+[INFO] 12:01:17:206 SUSE/(3370:3371): Grado de multiprogramación: 0
+[INFO] 12:01:27:206 SUSE/(3370:3371): Grado de multiprogramación: 0
+[INFO] 12:01:57:976 SUSE/(3453:3454): Grado de multiprogramación: 0
+[INFO] 12:02:07:976 SUSE/(3453:3454): Grado de multiprogramación: 0
+[INFO] 12:02:17:977 SUSE/(3453:3454): Grado de multiprogramación: 0
+[INFO] 12:02:27:978 SUSE/(3453:3454): Grado de multiprogramación: 0
+[INFO] 12:02:37:978 SUSE/(3453:3454): Grado de multiprogramación: 0
+[INFO] 12:02:47:980 SUSE/(3453:3454): Grado de multiprogramación: 0
+[INFO] 12:02:57:981 SUSE/(3453:3454): Grado de multiprogramación: 0
+[INFO] 12:03:07:986 SUSE/(3453:3454): Grado de multiprogramación: 0
+[INFO] 12:03:17:987 SUSE/(3453:3454): Grado de multiprogramación: 0
+[INFO] 12:03:45:599 SUSE/(3525:3526): Grado de multiprogramación: 0
+[INFO] 12:03:55:604 SUSE/(3525:3526): Grado de multiprogramación: 0
+[INFO] 12:04:05:607 SUSE/(3525:3526): Grado de multiprogramación: 0
+[INFO] 12:04:15:608 SUSE/(3525:3526): Grado de multiprogramación: 0
+[INFO] 12:04:25:609 SUSE/(3525:3526): Grado de multiprogramación: 0
+[INFO] 12:09:00:487 SUSE/(3778:3779): Grado de multiprogramación: 5
+[INFO] 12:09:00:487 SUSE/(3778:3779): Métricas del hilo 0: 
+[INFO] 12:09:00:487 SUSE/(3778:3779): 	tiempo de ejecución: 7002 ms
+[INFO] 12:09:00:487 SUSE/(3778:3779): 	tiempo de espera: 0 ms
+[INFO] 12:09:00:487 SUSE/(3778:3779): 	tiempo de uso de CPU: 0 ms
+[INFO] 12:09:00:487 SUSE/(3778:3779): Métricas del hilo 0: 
+[INFO] 12:09:00:487 SUSE/(3778:3779): 	tiempo de ejecución: 7001 ms
+[INFO] 12:09:00:487 SUSE/(3778:3779): 	tiempo de espera: 0 ms
+[INFO] 12:09:00:487 SUSE/(3778:3779): 	tiempo de uso de CPU: 0 ms
+[INFO] 12:09:00:487 SUSE/(3778:3779): Métricas del hilo 0: 
+[INFO] 12:09:00:487 SUSE/(3778:3779): 	tiempo de ejecución: 7000 ms
+[INFO] 12:09:00:487 SUSE/(3778:3779): 	tiempo de espera: 0 ms
+[INFO] 12:09:00:487 SUSE/(3778:3779): 	tiempo de uso de CPU: 0 ms
