@@ -233,7 +233,7 @@ int get_free_blk_data_dir()
 
 	log_msje_info("Buscando un blk de datos libre, recorro bitmap...");
 
-	sem_wait(mutex_bitmap);
+	sem_wait(&mutex_bitmap);
 	for(datablk_index = first_datablk; datablk_index < last_datablk; datablk_index++)
 	{
 		taken = bitarray_test_bit(sac_bitarray, datablk_index);
@@ -242,7 +242,7 @@ int get_free_blk_data_dir()
 			break;
 		}
 	}
-	sem_post(mutex_bitmap);
+	sem_post(&mutex_bitmap);
 
 	if(taken)//todos ocupados
 		return -1;
@@ -394,7 +394,7 @@ size_t fs_write_file(uint32_t node_blk, char *buffer, size_t size, off_t offset)
 	/*
 	 * Escritura en varios bloques
 	 */
-	sem_wait(mutex_nodo[node_blk]);
+	sem_wait(&mutex_nodo[node_blk]);
 	int escrito = 0;
 	int size_to_write = size;
 	int size_missing = 0;
@@ -432,7 +432,7 @@ size_t fs_write_file(uint32_t node_blk, char *buffer, size_t size, off_t offset)
 	}
 
 	file_node->file_size += escrito;
-	sem_post(mutex_nodo[node_blk]);
+	sem_post(&mutex_nodo[node_blk]);
 
 	log_msje_info("Se escribio [ %d ] bytes", escrito);
 	return escrito;
@@ -614,4 +614,18 @@ int fs_get_max_filesize()
 	int a = get_first_blk_data_index();
 	int b = get_last_blk_data_index();
 	return (b - a) * BLOCKSIZE;
+}
+
+bool fs_is_empty_directory(int node)
+{
+	t_list *filenames = list_create();
+	fs_get_child_filenames_of(node, filenames);
+	return list_is_empty(filenames);
+}
+
+void fs_rename_file(int node_to_set, char *new_name)
+{
+	sem_wait(&mutex_nodo[node_to_set]);
+	strcpy(sac_nodetable[node_to_set].fname, new_name);
+	sem_post(&mutex_nodo[node_to_set]);
 }

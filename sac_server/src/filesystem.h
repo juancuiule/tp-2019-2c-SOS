@@ -108,5 +108,6 @@ bool node_has_blk_ind_assigned(int node, int blk_ind);
 int fs_get_next_index_blk_indsimple_to_assign(int node);
 int fs_get_next_index_blk_data_to_assign(int blk_ind);
 int fs_get_max_filesize();
-
+bool fs_is_empty_directory(int node);
+void fs_rename_file(int node_to_set, char *new_name);
 #endif /* FILESYSTEM_H_ */

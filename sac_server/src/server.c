@@ -4,6 +4,7 @@ int atender_conexiones(int cliente_fd)
 {
 	package_t paquete;
 	char *path;
+	char *newpath;
 	char *buffer;
 	uint32_t blk;
 	int flags;
@@ -81,6 +82,11 @@ int atender_conexiones(int cliente_fd)
 				log_msje_info("Me llego operacion truncate");
 				dslz_cod_truncate(paquete.payload, &path, &offset);
 				sac_truncate(path, offset, cliente_fd);
+				break;
+			case COD_RENAME:
+				log_msje_info("Me llego operacion rename");
+				dslz_cod_rename(paquete.payload, &path, &newpath);
+				sac_rename(path, newpath, cliente_fd);
 				break;
 			case COD_DESC:
 				log_msje_info("El cliente en el socket [ %d ] se desconecto", cliente_fd);

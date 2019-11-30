@@ -442,3 +442,90 @@ void sac_truncate(char *path, off_t newsize, int cliente_fd)
 
 }
 
+void sac_rename(char *path, char *newpath, int cliente_fd)
+{
+	log_msje_info("SAC RENAME path = [ %s ]", path);
+	log_msje_info("to new name = [ %s ]", newpath);
+	package_t paquete;
+	int error;
+	bool valid_to_rename = false;
+
+	int node_to_set = fs_get_blk_by_fullpath(path);
+	int node_new_path = fs_get_blk_by_fullpath(newpath);
+
+	if (node_to_set == -1)
+	{
+		error = ENOENT;
+	}
+	else
+	{
+		char *prev_path = get_lastfile_previous_path(newpath);
+		int father_newpath = fs_get_blk_by_fullpath(prev_path);
+
+		if (father_newpath == -1)
+		{
+			error = ENOENT; //No such file or directory of new path
+		}
+		else
+		{
+			if(node_new_path == -1)//no existe el nombre
+			{
+				valid_to_rename = true;
+			}
+			else //existe
+			{
+				if(sac_nodetable[node_to_set].state == 1)// file
+				{
+					if(sac_nodetable[node_new_path].state == 2)//dir
+					{
+						error = EISDIR;
+					}
+					else//both file
+					{
+						valid_to_rename = true;
+					}
+
+				}
+				else if(sac_nodetable[node_to_set].state == 2) //dir
+				{
+					if(sac_nodetable[node_new_path].state == 2)//dir
+					{
+						if(!fs_is_empty_directory(node_new_path))
+						{
+							error = ENOTEMPTY;
+						}
+						else//empty dir
+						{
+							valid_to_rename = true;
+						}
+					}
+					else
+					{
+						error = ENOTDIR;
+					}
+				}
+			}
+
+		}
+
+	}
+	if(valid_to_rename)
+	{
+		char* newname = get_last_filename_from_path(newpath);
+		fs_rename_file(node_to_set, newname);
+
+		log_msje_info("Exito operacion rename sobre disco");
+		paquete = slz_simple_res(COD_RENAME);
+		paquete_enviar(cliente_fd, paquete);
+		return;
+	}
+	else
+	{
+		log_msje_error("rename: [ %s ]", strerror(error));
+		paquete = slz_res_error(error);
+		paquete_enviar(cliente_fd, paquete);
+		return;
+	}
+
+}
+

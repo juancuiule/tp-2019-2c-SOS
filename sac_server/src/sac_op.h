@@ -33,5 +33,6 @@ void sac_mknod(char *path, int cliente_fd);
 void sac_write(char *path, char *buffer, uint32_t blk, size_t size, off_t offset, int cliente_fd);
 void sac_unlink(char *path, int cliente_fd);
 void sac_truncate(char *path, off_t newsize, int cliente_fd);
+void sac_rename(char *path, char* newpath, int cliente_fd);
 
 #endif /* SAC_OP_H_ */
