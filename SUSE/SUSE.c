@@ -101,6 +101,10 @@ void atender_cliente(int cliente_fd) {
 	hilo->pid = pid;
 	char* proximo;
 
+	bool es_hilo_buscado(hilo_t* un_hilo) {
+		return un_hilo->tid == hilo->tid;
+	}
+
 	programa_t* programa = malloc(sizeof(programa_t));
 	programa = obtener_programa(pid);
 	hilo_t* proximo_hilo = malloc(sizeof(hilo_t));
@@ -129,7 +133,9 @@ void atender_cliente(int cliente_fd) {
 			free(proximo);
 			break;
 		case 3:
-			bloquear_hilo(hilo);
+			if (!list_any_satisfy(cola_blocked->elements, es_hilo_buscado))
+				bloquear_hilo(hilo);
+
 			break;
 		case 4:
 			cerrar_hilo(hilo);

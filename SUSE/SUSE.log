@@ -2056,3 +2056,42 @@
 [INFO] 01:26:39:177 SUSE/(8450:8501): El hilo 0 del programa 8490 llegó a EXIT.
 [INFO] 01:26:39:177 SUSE/(8450:8501): El hilo 0 del programa 8490 llegó a READY
 [INFO] 01:26:39:177 SUSE/(8450:8501): El hilo 0 del programa 8490 llegó a READY
+[INFO] 01:28:34:110 SUSE/(8584:8584): Se ha iniciado el servidor.
+[INFO] 01:29:16:181 SUSE/(8584:8593): El hilo 0 del programa 8592 llegó a NEW
+[INFO] 01:29:16:181 SUSE/(8584:8593): El hilo 0 del programa 8592 llegó a READY
+[INFO] 01:29:16:182 SUSE/(8584:8594): El hilo 1 del programa 8592 llegó a NEW
+[INFO] 01:29:16:182 SUSE/(8584:8594): El hilo 1 del programa 8592 llegó a READY
+[INFO] 01:29:16:183 SUSE/(8584:8595): El hilo 2 del programa 8592 llegó a NEW
+[INFO] 01:29:16:183 SUSE/(8584:8595): El hilo 2 del programa 8592 llegó a READY
+[INFO] 01:29:16:183 SUSE/(8584:8596): El hilo 3 del programa 8592 llegó a NEW
+[INFO] 01:29:16:184 SUSE/(8584:8596): El hilo 3 del programa 8592 llegó a READY
+[INFO] 01:29:16:184 SUSE/(8584:8597): El hilo 0 del programa 8592 llegó a BLOCKED
+[INFO] 01:29:16:185 SUSE/(8584:8599): El hilo 0 del programa 8592 llegó a BLOCKED
+[INFO] 01:29:16:185 SUSE/(8584:8600): El hilo 0 del programa 8592 llegó a EXEC.
+[INFO] 01:29:16:186 SUSE/(8584:8601): El hilo 0 del programa 8592 llegó a BLOCKED
+[INFO] 01:29:16:187 SUSE/(8584:8603): El hilo 0 del programa 8592 llegó a EXIT.
+[INFO] 01:29:16:187 SUSE/(8584:8603): El hilo 0 del programa 8592 llegó a READY
+[INFO] 01:29:16:187 SUSE/(8584:8603): El hilo 0 del programa 8592 llegó a READY
+[INFO] 01:49:22:778 SUSE/(8984:8984): Se ha iniciado el servidor.
+[INFO] 01:49:40:886 SUSE/(8984:9012): El hilo 0 del programa 9011 llegó a NEW
+[INFO] 01:49:40:886 SUSE/(8984:9012): El hilo 0 del programa 9011 llegó a READY
+[INFO] 01:49:40:886 SUSE/(8984:9013): El hilo 1 del programa 9011 llegó a NEW
+[INFO] 01:49:40:886 SUSE/(8984:9013): El hilo 1 del programa 9011 llegó a READY
+[INFO] 01:49:40:887 SUSE/(8984:9014): El hilo 2 del programa 9011 llegó a NEW
+[INFO] 01:49:40:887 SUSE/(8984:9014): El hilo 2 del programa 9011 llegó a READY
+[INFO] 01:49:40:888 SUSE/(8984:9015): El hilo 3 del programa 9011 llegó a NEW
+[INFO] 01:49:40:888 SUSE/(8984:9015): El hilo 3 del programa 9011 llegó a READY
+[INFO] 01:49:40:889 SUSE/(8984:9019): El hilo 0 del programa 9011 llegó a EXEC.
+[INFO] 01:49:40:891 SUSE/(8984:9022): El hilo 0 del programa 9011 llegó a EXIT.
+[INFO] 01:51:21:161 SUSE/(9098:9098): Se ha iniciado el servidor.
+[INFO] 01:51:24:127 SUSE/(9098:9101): El hilo 0 del programa 9100 llegó a NEW
+[INFO] 01:51:24:127 SUSE/(9098:9101): El hilo 0 del programa 9100 llegó a READY
+[INFO] 01:51:24:127 SUSE/(9098:9102): El hilo 1 del programa 9100 llegó a NEW
+[INFO] 01:51:24:127 SUSE/(9098:9102): El hilo 1 del programa 9100 llegó a READY
+[INFO] 01:51:24:128 SUSE/(9098:9103): El hilo 2 del programa 9100 llegó a NEW
+[INFO] 01:51:24:128 SUSE/(9098:9103): El hilo 2 del programa 9100 llegó a READY
+[INFO] 01:51:24:128 SUSE/(9098:9104): El hilo 3 del programa 9100 llegó a NEW
+[INFO] 01:51:24:128 SUSE/(9098:9104): El hilo 3 del programa 9100 llegó a READY
+[INFO] 01:51:24:128 SUSE/(9098:9105): El hilo 0 del programa 9100 llegó a BLOCKED
+[INFO] 01:51:24:128 SUSE/(9098:9106): El hilo 0 del programa 9100 llegó a EXEC.
+[INFO] 01:51:24:131 SUSE/(9098:9111): El hilo 0 del programa 9100 llegó a EXIT.
