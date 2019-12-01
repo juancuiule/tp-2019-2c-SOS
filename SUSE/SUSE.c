@@ -21,6 +21,21 @@ int main() {
 	return EXIT_SUCCESS;
 }
 
+/*
+void imprimir_hilo(hilo_t* hilo) {
+	if (hilo != NULL)
+		printf("%d ", hilo->tid);
+}
+
+void imprimir_programa(programa_t* programa) {
+	printf("programa: %i\n", programa->pid);
+	printf("\thilo en ejecución: ");
+	imprimir_hilo(programa->hilo_en_exec);
+	printf("\t hilos bloqueados: ");
+	list_iterate(programa->cola_ready->elements, imprimir_hilo);
+}
+*/
+
 long long current_timestamp() {
     struct timeval te;
     gettimeofday(&te, NULL);
@@ -188,11 +203,14 @@ void logear_metricas() {
 	}
 
 	void logear_metricas_hilo(hilo_t* hilo) {
-		log_info(logger_metricas, "Métricas del hilo %i: ", hilo->tid);
-		long long tiempo_ejecucion = tiempo_de_ejecucion(hilo);
-		log_info(logger_metricas, "\ttiempo de ejecución: %lld ms", tiempo_ejecucion);
-		log_info(logger_metricas, "\ttiempo de espera: %lld ms", hilo->tiempo_espera);
-		log_info(logger_metricas, "\ttiempo de uso de CPU: %lld ms", hilo->tiempo_cpu);
+		if (hilo != NULL) {
+			log_info(logger_metricas, "Métricas del hilo %i: ", hilo->tid);
+			long long tiempo_ejecucion = tiempo_de_ejecucion(hilo);
+			log_info(logger_metricas, "\ttiempo de ejecución: %lld ms", tiempo_ejecucion);
+			log_info(logger_metricas, "\ttiempo de espera: %lld ms", hilo->tiempo_espera);
+			log_info(logger_metricas, "\ttiempo de uso de CPU: %lld ms", hilo->tiempo_cpu);
+		}
+
 	}
 
 	void logear_metricas_hilos_programa(programa_t* programa) {
@@ -209,7 +227,7 @@ void logear_metricas() {
 		log_info(logger_metricas, "Grado de multiprogramación: %i", GRADO_MULTIPROGRAMACION);
 		list_iterate(cola_new->elements, (void*)logear_metricas_hilo);
 		list_iterate(cola_blocked->elements, (void*)logear_metricas_hilo);
-		//list_iterate(programas, (void*)logear_metricas_hilos_programa);
+		list_iterate(programas, (void*)logear_metricas_hilos_programa);
 	}
 }
 
@@ -259,6 +277,12 @@ void encolar_hilo_en_ready(hilo_t* hilo) {
 }
 
 void bloquear_hilo(hilo_t* hilo) {
+	bool hilo_encontrado(hilo_t* un_hilo) {
+		return un_hilo->tid == hilo->tid;
+	}
+
+	programa_t* programa_del_hilo = obtener_programa(hilo->pid);
+	list_remove_by_condition(programa_del_hilo->cola_ready->elements, hilo_encontrado);
 	queue_push(cola_blocked, hilo);
 	log_info(logger, "El hilo %d del programa %i llegó a BLOCKED", hilo->tid, hilo->pid);
 }
