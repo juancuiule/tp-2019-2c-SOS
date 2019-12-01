@@ -8,6 +8,9 @@
 #ifndef ESTRUCTURAS_H_
 #define ESTRUCTURAS_H_
 
+#include <commons/collections/list.h>
+#include <commons/collections/queue.h>
+
 typedef struct {
 	int tid;
 	int pid;

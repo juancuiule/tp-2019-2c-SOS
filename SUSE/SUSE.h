@@ -10,31 +10,9 @@
 #include <time.h>
 #include <sys/time.h>
 #include "estructuras.h"
-
-int servidor_fd;
-int tid_hilo_buscado;
-int pid_programa_buscado;
-int tid_hilo_anterior;
-int tid_siguiente_hilo;
-
-int PID = 0;
-int TID = 0;
-int GRADO_MULTIPROGRAMACION = 0;
-
-t_log* logger;
-t_log* logger_metricas;
-
-t_list* programas;
-t_queue* cola_new;
-t_queue* cola_blocked;
-t_queue* cola_exit;
-
-sem_t* tid_sem;
-sem_t* pid_sem;
-sem_t* multiprogramacion_sem;
+#include "logging.h"
 
 void inicializar();
-void logear_metricas();
 void atender_cliente(int);
 void atender_nuevo_cliente(int);
 void llega_nuevo_hilo(hilo_t*);

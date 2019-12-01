@@ -6,18 +6,24 @@
 C_SRCS += \
 ../SUSE.c \
 ../configuracion.c \
+../inicializacion.c \
+../logging.c \
 ../semaforos.c \
 ../utils.c 
 
 OBJS += \
 ./SUSE.o \
 ./configuracion.o \
+./inicializacion.o \
+./logging.o \
 ./semaforos.o \
 ./utils.o 
 
 C_DEPS += \
 ./SUSE.d \
 ./configuracion.d \
+./inicializacion.d \
+./logging.d \
 ./semaforos.d \
 ./utils.d 
 

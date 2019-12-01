@@ -1,4 +1,5 @@
 #include "SUSE.h"
+#include "globales.h"
 
 int main() {
 	int cliente_fd;
@@ -33,25 +34,6 @@ void inicializar_metricas_hilo(hilo_t* hilo) {
 	hilo->tiempo_cpu = 0;
 	hilo->tiempo_espera = 0;
 	hilo->hilos_a_esperar= queue_create();
-}
-
-void inicializar() {
-	logger = log_create("../SUSE.log", "SUSE", 1, LOG_LEVEL_DEBUG);
-	logger_metricas = log_create("../METRICAS.log", "SUSE", 1, LOG_LEVEL_DEBUG);
-
-	programas = list_create();
-	cola_new = queue_create();
-	cola_blocked = queue_create();
-	cola_exit = queue_create();
-
-	tid_sem = malloc(sizeof(sem_t));
-	sem_init(tid_sem, 0 , 1);
-
-	pid_sem = malloc(sizeof(sem_t));
-	sem_init(pid_sem, 0, 1);
-
-	multiprogramacion_sem = malloc(sizeof(sem_t));
-	sem_init(multiprogramacion_sem, 0, 1);
 }
 
 bool es_programa_hilo_buscado(programa_t* programa) {
@@ -188,39 +170,7 @@ void ejecutar_nuevo_hilo(hilo_t* hilo) {
 	free(hilo_anterior);
 }
 
-void logear_metricas() {
-	long long tiempo_de_ejecucion(hilo_t* hilo) {
-		return current_timestamp() - hilo->tiempo_creacion;
-	}
 
-	void logear_metricas_hilo(hilo_t* hilo) {
-		if (hilo != NULL) {
-			log_info(logger_metricas, "Métricas del hilo %i: ", hilo->tid);
-			long long tiempo_ejecucion = tiempo_de_ejecucion(hilo);
-			log_info(logger_metricas, "\ttiempo de ejecución: %lld ms", tiempo_ejecucion);
-			log_info(logger_metricas, "\ttiempo de espera: %lld ms", hilo->tiempo_espera);
-			log_info(logger_metricas, "\ttiempo de uso de CPU: %lld ms", hilo->tiempo_cpu);
-		}
-
-	}
-
-	void logear_metricas_hilos_programa(programa_t* programa) {
-		hilo_t* hilo_en_ejecucion = malloc(sizeof(hilo_t));
-		hilo_en_ejecucion = programa->hilo_en_exec;
-		t_list* hilos_programa = list_create();
-		list_add(hilos_programa, hilo_en_ejecucion);
-		list_add_all(hilos_programa, programa->cola_ready->elements);
-		list_iterate(hilos_programa, (void*)logear_metricas_hilo);
-	}
-
-	while (1) {
-		sleep(METRICS_TIMER);
-		log_info(logger_metricas, "Grado de multiprogramación: %i", GRADO_MULTIPROGRAMACION);
-		list_iterate(cola_new->elements, (void*)logear_metricas_hilo);
-		list_iterate(cola_blocked->elements, (void*)logear_metricas_hilo);
-		list_iterate(programas, (void*)logear_metricas_hilos_programa);
-	}
-}
 
 void agregar_programa(hilo_t* hilo) {
 	programa_t* programa = malloc(sizeof(programa_t));
