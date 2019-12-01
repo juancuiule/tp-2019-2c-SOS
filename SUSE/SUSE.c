@@ -21,21 +21,6 @@ int main() {
 	return EXIT_SUCCESS;
 }
 
-/*
-void imprimir_hilo(hilo_t* hilo) {
-	if (hilo != NULL)
-		printf("%d ", hilo->tid);
-}
-
-void imprimir_programa(programa_t* programa) {
-	printf("programa: %i\n", programa->pid);
-	printf("\thilo en ejecución: ");
-	imprimir_hilo(programa->hilo_en_exec);
-	printf("\t hilos bloqueados: ");
-	list_iterate(programa->cola_ready->elements, imprimir_hilo);
-}
-*/
-
 long long current_timestamp() {
     struct timeval te;
     gettimeofday(&te, NULL);
@@ -165,10 +150,7 @@ void atender_cliente(int cliente_fd) {
 			break;
 	}
 
-	//free(hilo);
-	//free(proximo);
 	free(proximo_hilo);
-	//free(programa);
 	free(buffer);
 }
 
@@ -282,9 +264,6 @@ void encolar_hilo_en_ready(hilo_t* hilo) {
 	if (GRADO_MULTIPROGRAMACION == MAX_MULTIPROG)
 		log_warning(logger, "Se ha alcanzado el grado máximo de multiprogramación");
 
-	//free(programa->hilo_en_exec);
-	//queue_destroy(programa->cola_ready);
-	//free(programa);
 }
 
 void bloquear_hilo(hilo_t* hilo) {
@@ -313,11 +292,8 @@ hilo_t* siguiente_hilo_a_ejecutar(programa_t* programa) {
 
 	list_sort(hilos, comparador);
 	siguiente = list_get(hilos, 0);
-	//list_destroy(hilos);
 	return siguiente;
 }
-
-
 
 void liberar() {
 

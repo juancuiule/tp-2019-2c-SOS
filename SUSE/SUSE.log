@@ -2393,3 +2393,19 @@
 [INFO] 04:43:07:45 SUSE/(15365:15402): El hilo 1 del programa 15389 llegó a EXEC.
 [INFO] 04:43:07:46 SUSE/(15365:15404): El hilo 0 del programa 0 llegó a EXEC.
 [INFO] 04:43:07:48 SUSE/(15365:15407): El hilo 0 del programa 15389 llegó a EXIT.
+[INFO] 19:17:39:12 SUSE/(28107:28107): Se ha iniciado el servidor.
+[INFO] 19:17:47:65 SUSE/(28107:28133): El hilo 0 del programa 28132 llegó a NEW
+[INFO] 19:17:47:66 SUSE/(28107:28133): El hilo 0 del programa 28132 llegó a READY
+[INFO] 19:17:47:66 SUSE/(28107:28134): El hilo 1 del programa 28132 llegó a NEW
+[INFO] 19:17:47:66 SUSE/(28107:28134): El hilo 1 del programa 28132 llegó a READY
+[INFO] 19:17:47:66 SUSE/(28107:28135): El hilo 2 del programa 28132 llegó a NEW
+[INFO] 19:17:47:66 SUSE/(28107:28135): El hilo 2 del programa 28132 llegó a READY
+[INFO] 19:17:47:67 SUSE/(28107:28136): El hilo 3 del programa 28132 llegó a NEW
+[INFO] 19:17:47:67 SUSE/(28107:28136): El hilo 3 del programa 28132 llegó a READY
+[INFO] 19:17:47:68 SUSE/(28107:28137): El hilo 0 del programa 28132 llegó a BLOCKED
+[INFO] 19:17:47:68 SUSE/(28107:28140): El hilo 1 del programa 28132 llegó a EXEC.
+[INFO] 19:17:47:68 SUSE/(28107:28141): El hilo 1 del programa 28132 llegó a EXEC.
+[INFO] 19:17:47:70 SUSE/(28107:28143): El hilo 0 del programa 0 llegó a EXEC.
+[INFO] 19:17:47:72 SUSE/(28107:28144): El hilo 0 del programa 28132 llegó a EXIT.
+[INFO] 19:17:47:73 SUSE/(28107:28144): El hilo 0 del programa 28132 llegó a READY
+[INFO] 19:17:47:73 SUSE/(28107:28144): El hilo 0 del programa 0 llegó a EXEC.
