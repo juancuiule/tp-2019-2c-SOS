@@ -83,6 +83,8 @@ void atender_cliente(int cliente_fd) {
 	hilo->pid = pid;
 	char* proximo;
 
+	semaforo_t* semaforo = malloc(sizeof(semaforo_t));
+
 	bool es_hilo_buscado(hilo_t* un_hilo) {
 		return un_hilo->tid == hilo->tid;
 	}
@@ -128,7 +130,12 @@ void atender_cliente(int cliente_fd) {
 			}
 
 			ejecutar_nuevo_hilo(hilo);
-
+			break;
+		case 5:
+			semaforo_wait(semaforo);
+			break;
+		case 6:
+			semaforo_signal(semaforo);
 			break;
 	}
 

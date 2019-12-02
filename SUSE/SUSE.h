@@ -11,6 +11,7 @@
 #include <sys/time.h>
 #include "estructuras.h"
 #include "logging.h"
+#include "semaforos.h"
 
 void inicializar();
 void atender_cliente(int);

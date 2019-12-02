@@ -28,10 +28,32 @@ int suse_close(int tid){
 }
 
 int suse_wait(int tid, char *sem_name){
+	conexion_con_suse = conectarse_a_suse();
+	int pid = getpid();
+	t_paquete* paquete = crear_paquete(5);
+	hilo_t* hilo = crear_nuevo_hilo(tid, pid);
+	agregar_a_paquete(paquete, hilo, sizeof(hilo_t));
+	semaforo_t* semaforo = malloc(sizeof(semaforo_t));
+	semaforo->id = malloc(100);
+	strcpy(semaforo->id, sem_name);
+	semaforo->valor = 0;
+	agregar_a_paquete(paquete, semaforo, sizeof(semaforo_t));
+	enviar_paquete(paquete, conexion_con_suse);
 	return 0;
 }
 
 int suse_signal(int tid, char *sem_name){
+	conexion_con_suse = conectarse_a_suse();
+	int pid = getpid();
+	t_paquete* paquete = crear_paquete(6);
+	hilo_t* hilo = crear_nuevo_hilo(tid, pid);
+	agregar_a_paquete(paquete, hilo, sizeof(hilo_t));
+	semaforo_t* semaforo = malloc(sizeof(semaforo_t));
+	semaforo->id = malloc(sizeof(semaforo_t));
+	strcpy(semaforo->id, sem_name);
+	semaforo->valor = 0;
+	agregar_a_paquete(paquete, semaforo, sizeof(semaforo_t));
+	enviar_paquete(paquete, conexion_con_suse);
 	return 0;
 }
 

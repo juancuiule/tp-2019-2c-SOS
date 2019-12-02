@@ -39,9 +39,4 @@ typedef enum {
 	SIGNAL
 } operacion;
 
-typedef struct {
-	char* id;
-	int valor;
-} semaforo_t;
-
 #endif /* ESTRUCTURAS_H_ */

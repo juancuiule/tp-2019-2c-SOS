@@ -6,6 +6,7 @@
  */
 
 #include "semaforos.h"
+#include "configuracion.h"
 
 void inicializar_semaforos(semaforo_t* semaforos) {
 	SEM_IDS = malloc(sizeof(char));
@@ -18,14 +19,17 @@ void inicializar_semaforos(semaforo_t* semaforos) {
 	}
 
 	free(SEM_IDS);
+
 }
 
-void semaforo_wait(semaforo_t semaforo) {
-	semaforo.valor--;
+void semaforo_wait(semaforo_t* semaforo) {
+	if (semaforo->valor > 0)
+		semaforo->valor--;
 
-	while (semaforo.valor != 0);
+	printf("recibi un wait\n");
 }
 
-void semaforo_signal(semaforo_t semaforo) {
-	semaforo.valor++;
+void semaforo_signal(semaforo_t* semaforo) {
+	semaforo->valor++;
+	printf("recibi un signal\n");
 }

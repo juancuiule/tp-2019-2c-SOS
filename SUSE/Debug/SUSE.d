@@ -1,5 +1,5 @@
 SUSE.o: ../SUSE.c ../SUSE.h ../utils.h ../configuracion.h \
- ../estructuras.h ../logging.h ../globales.h
+ ../estructuras.h ../logging.h ../semaforos.h ../globales.h
 
 ../SUSE.h:
 
@@ -10,5 +10,7 @@ SUSE.o: ../SUSE.c ../SUSE.h ../utils.h ../configuracion.h \
 ../estructuras.h:
 
 ../logging.h:
+
+../semaforos.h:
 
 ../globales.h:
