@@ -81,6 +81,7 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 						t_page *new_page = create_page(frame_number);
 						add_page_to_segment(segment, new_page);
 					}
+					log_warning(logger, "asdf size: %i", segment->size);
 					int free_dir = find_free_dir(segment, tam_pedido);
 					dir = alloc_in_segment(segment, free_dir, tam_pedido);
 				} else {
@@ -162,19 +163,22 @@ void respond_cpy(muse_body* body, char* id, int socket_cliente) {
 	memcpy(val, body->content + sizeof(uint32_t) + sizeof(int), size);
 
 	log_info(logger, "El cliente con id: %s hizo cpy a dst: %u, %i bytes", id, dst, size);
-	process_table* t = get_table_for_process(id);
+	process_table* table = get_table_for_process(id);
 
-	if (t != NULL) {
+	if (table != NULL) {
 		process_segment *segment;
-		if (t->number_of_segments == 0) {
+		print_process(table);
+		if (table->number_of_segments == 0) {
 			send_response_status(socket_cliente, ERROR);
 		} else {
-			segment = segment_by_dir(t, dst);
+			segment = segment_by_dir(table, dst);
 			log_info(logger, "segmento->base %i", segment->base);
+			log_info(logger, "segmento->size %i", segment->size);
 			int dir_de_pagina = dst - segment->base;
 			log_info(logger, "dir de pagina %i", dir_de_pagina);
 
-			memcpy(segment->pages + dir_de_pagina, val, size);
+			cpy_to_dir(segment, dir_de_pagina);
+//			memcpy(segment->pages + dir_de_pagina, val, size);
 			send_response_status(socket_cliente, SUCCESS);
 		}
 	} else {

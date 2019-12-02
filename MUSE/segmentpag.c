@@ -69,17 +69,42 @@ void add_page_to_segment(process_segment* segment, t_page* page) {
 		segment->pages = realloc(segment->pages, new_size);
 	}
 
-
 	memcpy(segment->pages + offset, page, sizeof(t_page));
 	segment->size += PAGE_SIZE;
 
-//	for (int var = 0; var < number_of_pages + 1; ++var) {
-//		t_page* the_page = malloc(sizeof(t_page));
-//		memcpy(the_page, segment->pages + var * sizeof(t_page), sizeof(t_page));
-//		log_debug(seg_logger, "Page added frame: %i", the_page->frame_number);
-//	}
+	for (int var = 0; var < number_of_pages + 1; ++var) {
+		t_page* the_page = malloc(sizeof(t_page));
+		memcpy(the_page, segment->pages + var * sizeof(t_page), sizeof(t_page));
+		log_debug(seg_logger, "Page added frame: %i", the_page->frame_number);
+	}
 
 	log_debug(seg_logger, "Se agrego una página al segmento con base: %i, nuevo size: %i", segment->base, segment->size);
+}
+
+void print_process(process_table* table) {
+	log_info(seg_logger, "Proceso:");
+	log_info(seg_logger, "cantidad de segmentos: %i", table->number_of_segments);
+	log_info(seg_logger, "process id: %s", table->process);
+	process_segment* seg = malloc(sizeof(process_segment));
+	for (int var = 0; var < table->number_of_segments; ++var) {
+		memcpy(seg, table->segments + var * sizeof(process_segment), sizeof(process_segment));
+		print_segment(seg);
+	}
+	free(seg);
+}
+
+void print_segment(process_segment* segment) {
+	log_info(seg_logger, "Segmento:");
+	log_info(seg_logger, "base: %i", segment->base);
+	log_info(seg_logger, "size: %i", segment->size);
+	log_info(seg_logger, "type: %s", segment->type == HEAP ? "HEAP" : "MMAP");
+}
+
+void cpy_to_dir(process_segment* segment, uint32_t dir) {
+	print_segment(segment);
+	int number_of_pages = segment->size / PAGE_SIZE;
+	int page = floor((double) dir / PAGE_SIZE);
+	log_debug(seg_logger, "la dir va a la pagina nro: %i de %i", page + 1, number_of_pages);
 }
 
 process_segment* find_segment_with_space(process_table* table , int size) {
@@ -95,12 +120,15 @@ process_segment* find_segment_with_space(process_table* table , int size) {
 	void* segments = table->segments;
 	int i = 0;
 	while (i < table->number_of_segments) {
-		memcpy(segment, segments + i * sizeof(process_segment), sizeof(process_segment));
+		uint32_t seg_pointer = segments + i * sizeof(process_segment);
+		memcpy(segment, seg_pointer, sizeof(process_segment));
 		if (is_heap(segment) && has_space(segment)) {
-			return table->segments + i * sizeof(process_segment);
+			free(segment);
+			return seg_pointer;
 		}
 		i++;
 	}
+	free(segment);
 	return NULL;
 }
 
@@ -109,9 +137,11 @@ process_segment* segment_by_dir(process_table* table, int dir) {
 	void* segments = table->segments;
 	int i = 0;
 	while (i < table->number_of_segments) {
-		memcpy(segment, segments + i * sizeof(process_segment), sizeof(process_segment));
+		uint32_t seg_pointer = segments + i * sizeof(process_segment);
+		memcpy(segment, seg_pointer, sizeof(process_segment));
 		if (segment->base < dir && (segment->base + segment->size) > dir) {
-			return segment;
+			free(segment);
+			return seg_pointer;
 		}
 		i++;
 	}
@@ -124,16 +154,9 @@ process_segment* find_extensible_heap_segment(process_table* table) {
 	void* segments = table->segments;
 	int offset = (table->number_of_segments - 1) * sizeof(process_segment);
 	memcpy(segment, segments + offset, sizeof(process_segment));
-
-	log_info(
-		seg_logger,
-		"last seg, base: %i, fin: %i, type: %s",
-		segment->base,
-		segment->base + segment->size,
-		segment->type == HEAP ? "HEAP" : "MMAP"
-	);
 	if (segment->type == HEAP) {
-		return segment;
+		free(segment);
+		return segments + offset;
 	} else {
 		return NULL;
 	}
@@ -311,12 +334,6 @@ int free_space_at_the_end(process_segment* segment) {
 	}
 	return last_free_space;
 }
-//
-//void copy_in_segment(process_segment* segment, int dir, int size, void* value) {
-//	void* pages = segment->pages;
-//
-//
-//}
 
 void* alloc_in_segment(process_segment* segment, int dir, uint32_t size) {
 	void* pages = segment->pages;
@@ -326,6 +343,7 @@ void* alloc_in_segment(process_segment* segment, int dir, uint32_t size) {
 	int last_allocd = 0;
 
 	log_info(seg_logger, "Se hace un alloc a %i.", dir);
+	log_error(seg_logger, "el size es %i.", segment->size);
 	log_info(seg_logger, "dir_in_segment: %i, base: %i", dir_in_segment, base);
 	int offset = base;
 	int pages_read = 0;
