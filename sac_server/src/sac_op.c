@@ -466,6 +466,8 @@ void sac_rename(char *path, char *newpath, int cliente_fd)
 	package_t paquete;
 	int error;
 	bool valid_to_rename = false;
+	bool want_to_move_to_dir = false;
+	int father_newpath;
 
 	int node_to_set = fs_get_blk_by_fullpath(path);
 	int node_new_path = fs_get_blk_by_fullpath(newpath);
@@ -477,7 +479,7 @@ void sac_rename(char *path, char *newpath, int cliente_fd)
 	else
 	{
 		char *prev_path = get_lastfile_previous_path(newpath);
-		int father_newpath = fs_get_blk_by_fullpath(prev_path);
+		father_newpath = fs_get_blk_by_fullpath(prev_path);
 
 		if (father_newpath == -1)
 		{
@@ -488,6 +490,8 @@ void sac_rename(char *path, char *newpath, int cliente_fd)
 			if(node_new_path == -1)//no existe el nombre
 			{
 				valid_to_rename = true;
+
+				if(sac_nodetable[father_newpath].state == 2) { want_to_move_to_dir = true; }
 			}
 			else //existe
 			{
@@ -529,7 +533,15 @@ void sac_rename(char *path, char *newpath, int cliente_fd)
 	if(valid_to_rename)
 	{
 		char* newname = get_last_filename_from_path(newpath);
+		if(want_to_move_to_dir)
+		{
+			sac_nodetable[node_to_set].parent_dir_block = father_newpath;
+		}
+
 		fs_rename_file(node_to_set, newname);
+		//actualizo mis nodos
+		int inicio_tabla_nodos = 1 + sac_header->size_bitmap;
+		memcpy(disk_blk_pointer + inicio_tabla_nodos , sac_nodetable, GFILEBYTABLE*BLOCKSIZE);
 
 		log_msje_info("Exito operacion rename sobre disco");
 		paquete = slz_simple_res(COD_RENAME);

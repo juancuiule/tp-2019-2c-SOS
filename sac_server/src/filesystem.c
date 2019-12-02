@@ -45,6 +45,8 @@ void fs_set_config()
 	for(int i = 0 ; i < GFILEBYTABLE; i++){
 		sem_init(&mutex_nodo[i], 0, 1);
 	}
+	first_data_blk = 1 + GFILEBYTABLE + sac_header->size_bitmap;
+	sac_blocks = disk_size / BLOCKSIZE;
 
 }
 
@@ -53,7 +55,9 @@ bool fs_map_disk_in_memory(char *disk_name)
 	disk_size = get_filesize(disk_name);
 
 	disk_fd = open(disk_name, O_RDWR, 0);
+	log_msje_error("open: [ %s ]", strerror(errno));
 	disk_addr = mmap(NULL, disk_size, PROT_READ | PROT_WRITE, MAP_SHARED, disk_fd, 0);
+	log_msje_error("mmap disk: [ %s ]", strerror(errno));
 	disk_blk_pointer = (GBlock *)disk_addr;
 
 	return disk_blk_pointer != MAP_FAILED;
@@ -202,30 +206,13 @@ void fs_get_child_filenames_of(uint32_t blk_father, t_list *filenames)
 
 }
 
-//desc: devuelve el indice donde se encuentra el primer bloque de datos en el disco
-static int get_first_blk_data_index()
-{
-	// 1 BLK HEADER + 1024 BLKS NODOS + BITMAP BLKS
-	int blks_metadata = 1 + 1024 + sac_header->size_bitmap;
-
-	//Blk de datos comienza uno siguiente dsps de blk metadata
-	return blks_metadata + 1;
-}
-
-//desc: devuelve el indice donde se encuentra el ultimo bloque de datos en el disco
-static int get_last_blk_data_index()
-{
-	//Cant de bloques total, el ultimo
-	return disk_size / BLOCKSIZE;
-}
-
 //desc: devuelve direccion de un bloque de datos libre
 int get_free_blk_data_dir()
 {
-	int first_datablk = get_first_blk_data_index();
-	log_msje_info("Primer bloque de datos es [ %d ]", first_datablk);
-	int last_datablk = get_last_blk_data_index();
-	log_msje_info("Ultimo bloque de datos es [ %d ]", last_datablk);
+	//int first_datablk = get_first_blk_data_index();
+	log_msje_info("Primer bloque de datos es [ %d ]", first_data_blk);
+	//int last_datablk = get_last_blk_data_index();
+	log_msje_info("Ultimo bloque de datos es [ %d ]", sac_blocks);
 
 	int datablk_index;
 	bool taken = true;//ocupado
@@ -233,7 +220,7 @@ int get_free_blk_data_dir()
 	log_msje_info("Buscando un blk de datos libre, recorro bitmap...");
 
 	sem_wait(&mutex_bitmap);
-	for(datablk_index = first_datablk; datablk_index < last_datablk; datablk_index++)
+	for(datablk_index = first_data_blk; datablk_index < sac_blocks; datablk_index++)
 	{
 		taken = bitarray_test_bit(sac_bitarray, datablk_index);
 		if(!taken){
@@ -357,7 +344,7 @@ size_t fs_read_file(char *buf, size_t size, off_t offset, uint32_t node_blk)
 }
 
 
-size_t fs_write_file(uint32_t node_blk, char *buffer, size_t size, off_t offset)
+size_t fs_write_file(uint32_t node_blk, void *buffer, size_t size, off_t offset)
 {
 	log_msje_info("Preparando para escribir blk de datos");
 	log_msje_info("Cantidad de bytes por escribir [ %d ]", size);
@@ -548,7 +535,7 @@ int fs_get_cant_blks_datos_asignados(int node)
 
 		int j=0;
 		int blk = blk_is->blk_datos[j];
-		while( blk >= get_first_blk_data_index() && blk <= get_last_blk_data_index())
+		while( blk >= first_data_blk && blk <= sac_blocks)
 		{
 			cont++;
 			j++;
@@ -599,7 +586,7 @@ int fs_get_next_index_blk_data_to_assign(int blk_ind)
 
 	int pos = 0;
 	int blk = blk_is->blk_datos[pos];
-	while( blk >= get_first_blk_data_index() && blk <= get_last_blk_data_index())
+	while( blk >= first_data_blk && blk <= sac_blocks)
 	{
 		pos++;
 		blk = blk_is->blk_datos[pos];
@@ -610,9 +597,7 @@ int fs_get_next_index_blk_data_to_assign(int blk_ind)
 
 int fs_get_max_filesize()
 {
-	int a = get_first_blk_data_index();
-	int b = get_last_blk_data_index();
-	return (b - a) * BLOCKSIZE;
+	return (sac_blocks - first_data_blk) * BLOCKSIZE;
 }
 
 bool fs_is_empty_directory(int node)
@@ -641,7 +626,7 @@ void fs_remove_all_blocks_of(int node)
 
 		int j=0;
 		int blk = blk_is->blk_datos[j];
-		while( blk >= get_first_blk_data_index() && blk <= get_last_blk_data_index())
+		while( blk >= first_data_blk && blk <= sac_blocks)
 		{
 			bitarray_clean_bit(sac_bitarray, blk);
 			blk_is->blk_datos[j] = 0;

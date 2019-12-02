@@ -62,6 +62,8 @@ GHeader *sac_header;
 t_bitarray *sac_bitarray;
 GFile *sac_nodetable;//mi tabla de nodos
 
+int first_data_blk;
+int sac_blocks;
 
 typedef struct blk_candidato{
 	int the_blk;
@@ -98,9 +100,15 @@ int fs_get_blk_ind_with_data_blk();
 
 size_t fs_read_file(char *buf, size_t size, off_t offset, uint32_t node_blk);
 
-size_t fs_write_file(uint32_t node_blk, char *buffer, size_t size, off_t offset);
+size_t fs_write_file(uint32_t node_blk, void *buffer, size_t size, off_t offset);
 
 void fs_truncate_file(int node, off_t newsize);
+
+void fs_rename_file(int node_to_set, char *new_name);
+
+void fs_delete_file(int node_to_set);
+
+void fs_remove_dir(int node_to_set);
 
 int fs_get_cant_blks_datos_asignados(int node);
 bool node_has_blk_assigned(int node, int blk_data);
@@ -109,9 +117,7 @@ int fs_get_next_index_blk_indsimple_to_assign(int node);
 int fs_get_next_index_blk_data_to_assign(int blk_ind);
 int fs_get_max_filesize();
 bool fs_is_empty_directory(int node);
-void fs_rename_file(int node_to_set, char *new_name);
+
 void fs_remove_all_blocks_of(int node);
-void fs_delete_file(int node_to_set);
-void fs_remove_dir(int node_to_set);
 
 #endif /* FILESYSTEM_H_ */
