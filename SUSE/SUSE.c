@@ -65,7 +65,7 @@ void validar_si_esta_esperando_hilos(hilo_t* hilo) {
 }
 
 void atender_cliente(int cliente_fd) {
-	int pedido;
+	int pedido, valor_semaforo;
 	int offset = 0;
 	int opcode, size, tid, pid;
 	int tamanio;
@@ -132,10 +132,17 @@ void atender_cliente(int cliente_fd) {
 			ejecutar_nuevo_hilo(hilo);
 			break;
 		case 5:
-			semaforo_wait(semaforo);
+
+			if (semaforo_wait(semaforo) == 0)
+				bloquear_hilo(hilo);
+
 			break;
 		case 6:
 			semaforo_signal(semaforo);
+
+			if (semaforo->valor > 0)
+				encolar_hilo_en_ready(hilo);
+
 			break;
 	}
 
@@ -177,8 +184,6 @@ void ejecutar_nuevo_hilo(hilo_t* hilo) {
 	free(hilo_anterior);
 }
 
-
-
 void agregar_programa(hilo_t* hilo) {
 	programa_t* programa = malloc(sizeof(programa_t));
 	programa->pid = hilo->pid;
@@ -209,10 +214,19 @@ void cerrar_hilo(hilo_t* hilo) {
 }
 
 void encolar_hilo_en_ready(hilo_t* hilo) {
+
+	bool hilo_encontrado(hilo_t* un_hilo) {
+		return un_hilo->tid == hilo->tid;
+	}
+
 	programa_t* programa = malloc(sizeof(programa_t));
 	programa->cola_ready = queue_create();
 	programa->hilo_en_exec = malloc(sizeof(hilo_t));
 	programa = obtener_programa(hilo->pid);
+
+	if (list_any_satisfy(cola_blocked->elements, hilo_encontrado))
+		list_remove_by_condition(cola_blocked->elements, hilo_encontrado);
+
 	queue_push(programa->cola_ready, hilo);
 	hilo->tiempo_ultima_llegada_a_ready = current_timestamp();
 	log_info(logger, "El hilo %d del programa %d llegó a READY", hilo->tid, hilo->pid);

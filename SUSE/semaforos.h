@@ -18,7 +18,7 @@ typedef struct {
 semaforo_t* semaforos;
 
 void inicializar_semaforos(semaforo_t*);
-void semaforo_wait(semaforo_t*);
-void semaforo_signal(semaforo_t*);
+int semaforo_wait(semaforo_t*);
+int semaforo_signal(semaforo_t*);
 
 #endif /* SEMAFOROS_H_ */

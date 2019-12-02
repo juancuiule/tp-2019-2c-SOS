@@ -22,14 +22,17 @@ void inicializar_semaforos(semaforo_t* semaforos) {
 
 }
 
-void semaforo_wait(semaforo_t* semaforo) {
+int semaforo_wait(semaforo_t* semaforo) {
 	if (semaforo->valor > 0)
 		semaforo->valor--;
 
 	printf("recibi un wait\n");
+	return semaforo->valor;
 }
 
-void semaforo_signal(semaforo_t* semaforo) {
+int semaforo_signal(semaforo_t* semaforo) {
 	semaforo->valor++;
 	printf("recibi un signal\n");
+	return semaforo->valor;
 }
+
