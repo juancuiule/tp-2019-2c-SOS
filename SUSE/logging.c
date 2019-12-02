@@ -23,7 +23,6 @@ void logear_metricas() {
 			log_info(logger_metricas, "\ttiempo de espera: %lld ms", hilo->tiempo_espera);
 			log_info(logger_metricas, "\ttiempo de uso de CPU: %lld ms", hilo->tiempo_cpu);
 		}
-
 	}
 
 	void logear_metricas_hilos_programa(programa_t* programa) {
@@ -31,7 +30,7 @@ void logear_metricas() {
 		hilo_en_ejecucion = programa->hilo_en_exec;
 		t_list* hilos_programa = list_create();
 		list_add(hilos_programa, hilo_en_ejecucion);
-		list_add_all(hilos_programa, programa->cola_ready->elements);
+		list_add_all(hilos_programa, programa->hilos_en_ready);
 		list_iterate(hilos_programa, (void*)logear_metricas_hilo);
 	}
 

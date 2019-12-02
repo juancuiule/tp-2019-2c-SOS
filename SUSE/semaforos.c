@@ -26,13 +26,13 @@ int semaforo_wait(semaforo_t* semaforo) {
 	if (semaforo->valor > 0)
 		semaforo->valor--;
 
-	printf("recibi un wait\n");
+	printf("recibi un wait (semáforo = 0)\n");
 	return semaforo->valor;
 }
 
 int semaforo_signal(semaforo_t* semaforo) {
 	semaforo->valor++;
-	printf("recibi un signal\n");
+	printf("recibi un signal (semáforo = %i)\n", semaforo->valor);
 	return semaforo->valor;
 }
 

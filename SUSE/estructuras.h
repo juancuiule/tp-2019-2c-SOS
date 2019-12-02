@@ -26,7 +26,7 @@ typedef struct {
 
 typedef struct {
 	int pid;
-	t_queue* cola_ready;
+	t_list* hilos_en_ready;
 	hilo_t* hilo_en_exec;
 } programa_t;
 

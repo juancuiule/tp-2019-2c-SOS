@@ -86,7 +86,7 @@ void atender_cliente(int cliente_fd) {
 	semaforo_t* semaforo = malloc(sizeof(semaforo_t));
 
 	bool es_hilo_buscado(hilo_t* un_hilo) {
-		return un_hilo->tid == hilo->tid;
+		return un_hilo->tid == hilo->tid && un_hilo->pid == hilo->pid;
 	}
 
 	programa_t* programa = malloc(sizeof(programa_t));
@@ -162,12 +162,12 @@ programa_t* obtener_programa(int pid) {
 void ejecutar_nuevo_hilo(hilo_t* hilo) {
 
 	bool hilo_encontrado(hilo_t* un_hilo) {
-		return un_hilo->tid == hilo->tid;
+		return un_hilo->tid == hilo->tid && un_hilo->pid == hilo->pid;
 	}
 
 	hilo_t* hilo_anterior = malloc(sizeof(hilo_t));
 	programa_t* programa = malloc(sizeof(programa_t));
-	programa->cola_ready = queue_create();
+	programa->hilos_en_ready = list_create();
 	programa->hilo_en_exec = malloc(sizeof(hilo_t));
 	programa = obtener_programa(hilo->pid);
 
@@ -180,14 +180,14 @@ void ejecutar_nuevo_hilo(hilo_t* hilo) {
 	siguiente_hilo->tiempo_ultima_llegada_a_exec = current_timestamp();
 	siguiente_hilo->tiempo_espera += current_timestamp() - hilo->tiempo_ultima_llegada_a_ready;
 	programa->hilo_en_exec = siguiente_hilo;
-	list_remove_by_condition(programa->cola_ready->elements, hilo_encontrado);
+	list_remove_by_condition(programa->hilos_en_ready, hilo_encontrado);
 	free(hilo_anterior);
 }
 
 void agregar_programa(hilo_t* hilo) {
 	programa_t* programa = malloc(sizeof(programa_t));
 	programa->pid = hilo->pid;
-	programa->cola_ready = queue_create();
+	programa->hilos_en_ready = list_create();
 	programa->hilo_en_exec = NULL;
 	list_add(programas, programa);
 	PID++;
@@ -206,7 +206,6 @@ void encolar_hilo_en_new(hilo_t* hilo) {
 
 void cerrar_hilo(hilo_t* hilo) {
 	programa_t* programa = obtener_programa(hilo->pid);
-
 	queue_push(cola_exit, hilo);
 	log_info(logger, "El hilo %i del programa %i llegó a EXIT.", hilo->tid, hilo->pid);
 	sem_wait(multiprogramacion_sem);
@@ -216,18 +215,18 @@ void cerrar_hilo(hilo_t* hilo) {
 void encolar_hilo_en_ready(hilo_t* hilo) {
 
 	bool hilo_encontrado(hilo_t* un_hilo) {
-		return un_hilo->tid == hilo->tid;
+		return un_hilo->tid == hilo->tid && un_hilo->pid == hilo->pid;
 	}
 
 	programa_t* programa = malloc(sizeof(programa_t));
-	programa->cola_ready = queue_create();
+	programa->hilos_en_ready = list_create();
 	programa->hilo_en_exec = malloc(sizeof(hilo_t));
 	programa = obtener_programa(hilo->pid);
 
 	if (list_any_satisfy(cola_blocked->elements, hilo_encontrado))
 		list_remove_by_condition(cola_blocked->elements, hilo_encontrado);
 
-	queue_push(programa->cola_ready, hilo);
+	list_add(programa->hilos_en_ready, hilo);
 	hilo->tiempo_ultima_llegada_a_ready = current_timestamp();
 	log_info(logger, "El hilo %d del programa %d llegó a READY", hilo->tid, hilo->pid);
 	GRADO_MULTIPROGRAMACION++;
@@ -238,12 +237,13 @@ void encolar_hilo_en_ready(hilo_t* hilo) {
 }
 
 void bloquear_hilo(hilo_t* hilo) {
+
 	bool hilo_encontrado(hilo_t* un_hilo) {
-		return un_hilo->tid == hilo->tid;
+		return un_hilo->tid == hilo->tid && un_hilo->pid == hilo->pid;
 	}
 
 	programa_t* programa_del_hilo = obtener_programa(hilo->pid);
-	list_remove_by_condition(programa_del_hilo->cola_ready->elements, hilo_encontrado);
+	list_remove_by_condition(programa_del_hilo->hilos_en_ready, hilo_encontrado);
 	queue_push(cola_blocked, hilo);
 	log_info(logger, "El hilo %d del programa %i llegó a BLOCKED", hilo->tid, hilo->pid);
 }
@@ -251,7 +251,7 @@ void bloquear_hilo(hilo_t* hilo) {
 hilo_t* siguiente_hilo_a_ejecutar(programa_t* programa) {
 	hilo_t* siguiente = malloc(sizeof(hilo_t));
 	t_list* hilos = list_create();
-	hilos = programa->cola_ready->elements;
+	hilos = programa->hilos_en_ready;
 
 	double estimacion(hilo_t* hilo) {
 		return (1 - ALPHA_SJF) * hilo->estimacion_anterior + ALPHA_SJF * hilo->rafaga_anterior;
@@ -273,7 +273,7 @@ void liberar() {
 	}
 
 	void liberar_hilos_programa(programa_t* programa) {
-		queue_destroy(programa->cola_ready);
+		list_destroy(programa->hilos_en_ready);
 		free(programa->hilo_en_exec);
 	}
 
