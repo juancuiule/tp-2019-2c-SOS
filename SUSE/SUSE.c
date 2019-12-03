@@ -7,9 +7,8 @@ int main() {
 
 	configurar();
 	inicializar();
-	inicializar_semaforos();
+	inicializar_diccionario_semaforos();
 
-	//imprimir_semaforos();
 	servidor_fd = iniciar_servidor();
 
 	pthread_create(&hilo_metricas, NULL, (void*)logear_metricas, NULL);
@@ -85,11 +84,8 @@ void atender_cliente(int cliente_fd) {
 
 	if (opcode == 5 || opcode == 6) {
 		recv(cliente_fd, &tamanio_nombre_semaforo, sizeof(tamanio_nombre_semaforo), MSG_WAITALL);
-		printf("El tamaño del nombre del semáforo es: %i\n", tamanio_nombre_semaforo);
 		recv(cliente_fd, nombre_semaforo, tamanio_nombre_semaforo, MSG_WAITALL);
-		//printf("El nombre del semáforo es: %s\n", nombre_semaforo);
-		semaforo_t* semaforo = malloc(sizeof(semaforo_t));
-		semaforo = obtener_semaforo(nombre_semaforo);
+		sem_value = dictionary_get(diccionario_semaforos, nombre_semaforo);
 	}
 
 	hilo_t* hilo = malloc(sizeof(hilo_t));
@@ -97,8 +93,6 @@ void atender_cliente(int cliente_fd) {
 	hilo->tid = tid;
 	hilo->pid = pid;
 	char* proximo;
-
-	semaforo_t* semaforo = malloc(sizeof(semaforo_t));
 
 	bool es_hilo_buscado(hilo_t* un_hilo) {
 		return un_hilo->tid == hilo->tid && un_hilo->pid == hilo->pid;
@@ -147,10 +141,10 @@ void atender_cliente(int cliente_fd) {
 			ejecutar_nuevo_hilo(hilo);
 			break;
 		case 5:
-			semaforo_wait(semaforo);
+			semaforo_wait(nombre_semaforo);
 			break;
 		case 6:
-			semaforo_signal(semaforo);
+			semaforo_signal(nombre_semaforo);
 			break;
 	}
 
@@ -189,7 +183,6 @@ void ejecutar_nuevo_hilo(hilo_t* hilo) {
 	siguiente_hilo->tiempo_espera += current_timestamp() - hilo->tiempo_ultima_llegada_a_ready;
 	programa->hilo_en_exec = siguiente_hilo;
 	list_remove_by_condition(programa->hilos_en_ready, hilo_encontrado);
-	free(hilo_anterior);
 }
 
 void agregar_programa(hilo_t* hilo) {

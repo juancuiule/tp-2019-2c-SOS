@@ -97,9 +97,9 @@ int ejecutar_operacion_semaforo(int tid, char* sem_name, int operacion) {
 	agregar_a_paquete(paquete, hilo, sizeof(hilo_t));
 	enviar_paquete(paquete, conexion_con_suse);
 	int tamanio = string_length(sem_name);
-	printf("el tamaño del nombre es %i\n", tamanio);
+	//printf("el tamaño del nombre es %i\n", tamanio);
 	send(conexion_con_suse, &tamanio, sizeof(tamanio), MSG_WAITALL);
-	printf("el nombre es %s\n", sem_name);
+	//printf("el nombre es %s\n", sem_name);
 	send(conexion_con_suse, sem_name, tamanio, MSG_WAITALL);
 	return 0;
 }

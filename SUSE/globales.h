@@ -12,6 +12,7 @@
 #include <commons/log.h>
 #include <commons/collections/queue.h>
 #include <commons/collections/list.h>
+#include "semaforos.h"
 
 int servidor_fd;
 int tid_hilo_buscado;
@@ -34,5 +35,7 @@ t_queue* cola_exit;
 sem_t* tid_sem;
 sem_t* pid_sem;
 sem_t* multiprogramacion_sem;
+
+sem_value_t* sem_value;
 
 #endif /* GLOBALES_H_ */

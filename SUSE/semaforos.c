@@ -7,52 +7,50 @@
 
 #include "semaforos.h"
 #include "configuracion.h"
+#include "globales.h"
 
-void inicializar_semaforos() {
-	lista_de_semaforos = list_create();
-	semaforo_t* semaforo = malloc(sizeof(semaforo_t));
-	semaforo->id = string_new();
+void inicializar_diccionario_semaforos() {
+	diccionario_semaforos = dictionary_create();
+	sem_value_t* sem_value = malloc(sizeof(sem_value_t));
 	int i = 0;
 
 	while (SEM_IDS[i] != NULL) {
-		semaforo->id = SEM_IDS[i];
-		semaforo->valor = atoi(SEM_INIT[i]);
-		semaforo->valor_maximo = atoi(SEM_MAX[i]);
-		list_add(lista_de_semaforos, semaforo);
+		sem_value->valor = atoi(SEM_INIT[i]);
+		sem_value->valor_maximo = atoi(SEM_MAX[i]);
+		dictionary_put(diccionario_semaforos, SEM_IDS[i], sem_value);
+		sem_value = malloc(sizeof(sem_value_t));
 		i++;
-		printf("%s = %i\n", semaforo->id, semaforo->valor);
 	}
-}
-
-semaforo_t* obtener_semaforo(char* nombre_semaforo) {
-
-	bool es_semaforo_buscado(semaforo_t* semaforo) {
-		return strcmp(nombre_semaforo, semaforo->id);
-	}
-
-	return list_find(lista_de_semaforos, (void*)es_semaforo_buscado);
 }
 
 int semaforo_wait(char* nombre_semaforo) {
-	semaforo_t* semaforo = malloc(sizeof(semaforo_t));
-	semaforo = obtener_semaforo(nombre_semaforo);
+	sem_value_t* sem_value = malloc(sizeof(sem_value_t));
+	sem_value = dictionary_get(diccionario_semaforos, nombre_semaforo);
 
-	if (semaforo->valor > 0)
-		semaforo->valor--;
+	if (sem_value->valor > 0)
+		sem_value->valor--;
 
-	printf("wait (%s = %i)\n", semaforo->id, semaforo->valor);
+	dictionary_put(diccionario_semaforos, nombre_semaforo, sem_value);
+
+	/*semaforo_t* semaforo_actualizado = malloc(sizeof(semaforo_t));
+	semaforo_actualizado->id = string_new();
+	strcpy(semaforo_actualizado->id, nombre_semaforo);
+	semaforo_actualizado->valor = semaforo->valor;
+	semaforo_actualizado->valor_maximo = semaforo->valor_maximo;
+	int indice = obtener_indice_semaforo(nombre_semaforo);
+	list_replace(lista_de_semaforos, indice, semaforo_actualizado);*/
 	return 0;
 }
 
 int semaforo_signal(char* nombre_semaforo) {
-	semaforo_t* semaforo = malloc(sizeof(semaforo_t));
-	semaforo = obtener_semaforo(nombre_semaforo);
+	sem_value_t* sem_value = malloc(sizeof(sem_value_t));
+	sem_value = dictionary_get(diccionario_semaforos, nombre_semaforo);
 
-	if (semaforo->valor < semaforo->valor_maximo)
-		semaforo->valor++;
+	if (sem_value->valor > 0)
+		sem_value->valor++;
 
-	printf("signal (%s = %i)\n", semaforo->id, semaforo->valor);
-	return semaforo->valor;
+	dictionary_put(diccionario_semaforos, nombre_semaforo, sem_value);
+	return sem_value->valor;
 }
 
 
