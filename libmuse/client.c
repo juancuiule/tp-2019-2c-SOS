@@ -10,19 +10,21 @@ int main(void) {
 	int init_result = muse_init((int) getpid(), IP, PORT);
 
 	if (init_result != -1) {
-		uint32_t my_memory = muse_alloc(15);
-		uint32_t mem3 = muse_alloc(10);
+		uint32_t my_memory = muse_alloc(30);
+		uint32_t mem3 = muse_alloc(15);
 
 		log_info(logger, "my_memory: %u", my_memory);
 		log_info(logger, "mem3: %u", mem3);
-		char* x = "Hola juan";
+		char* x = "Hola, como va?";
 		char** y = malloc(strlen(x) + 1);
 
-		muse_cpy(mem3, &x, 10);
-		muse_get(y, mem3, 10);
+		muse_cpy(mem3, &x, 15);
+		muse_get(y, mem3, 15);
 		printf("y: %s \n", *y);
 
 		muse_free(mem3);
+
+
 
 //		uint32_t my_memory = muse_alloc(65);
 //		uint32_t another_memory = muse_alloc(35);
@@ -46,3 +48,17 @@ int main(void) {
 		return EXIT_FAILURE;
 	}
 }
+
+//uint32_t my_memory = muse_alloc(15);
+//uint32_t mem3 = muse_alloc(10);
+//
+//log_info(logger, "my_memory: %u", my_memory);
+//log_info(logger, "mem3: %u", mem3);
+//char* x = "Hola juan";
+//char** y = malloc(strlen(x) + 1);
+//
+//muse_cpy(mem3, &x, 10);
+//muse_get(y, mem3, 10);
+//printf("y: %s \n", *y);
+//
+//muse_free(mem3);

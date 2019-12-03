@@ -101,10 +101,10 @@ void print_segment(process_segment* segment) {
 	log_info(seg_logger, "size: %i", segment->size);
 	log_info(seg_logger, "type: %s", segment->type == HEAP ? "HEAP" : "MMAP");
 
-	int offset = 0;
-	while(offset < segment->size) {
+	int read = 0;
+	while(read < segment->size / PAGE_SIZE) {
 		t_page* page = malloc(sizeof(t_page));
-		memcpy(page, segment->pages + offset, sizeof(t_page));
+		memcpy(page, segment->pages + read * sizeof(t_page), sizeof(t_page));
 		log_info(seg_logger, "frame_number: %i", page->frame_number);
 		void* frame = MEMORY[page->frame_number];
 
@@ -119,7 +119,7 @@ void print_segment(process_segment* segment) {
 			log_info(seg_logger, "frame_number: %i, frame_offset: %i, is_free: %i, data_size: %i", page->frame_number, frame_offset, is_free, data_size);
 			frame_offset += data_size;
 		}
-		offset += PAGE_SIZE;
+		read++;
 	}
 }
 
@@ -175,13 +175,11 @@ void cpy_to_dir(process_segment* segment, uint32_t dir, void* val, int size) {
 	t_page* page = malloc(sizeof(t_page));
 
 	memcpy(page, segment->pages + page_number * sizeof(t_page), sizeof(t_page));
-
-	// Hay que ver si la pagina esta en memoria o en swap
-
 	void* frame = MEMORY[page->frame_number];
 
-	bool is_free = false;
-	uint32_t data_size = 0;
+	bool is_free;
+	uint32_t data_size;
+
 	memcpy(&is_free, frame + offset, sizeof(bool));
 	offset += sizeof(bool);
 	memcpy(&data_size, frame + offset, sizeof(uint32_t));
@@ -192,14 +190,28 @@ void cpy_to_dir(process_segment* segment, uint32_t dir, void* val, int size) {
 	} else if (data_size < size) {
 		// No hay espacio suficiente
 	} else {
-		if (PAGE_SIZE - offset < size - copied) {
-			// está no es la última pagina/frame que voy a usar
+		while (copied < size) {
+			log_info(seg_logger, "offset = %i, copied = %i, size = %i", offset);
+			if (PAGE_SIZE - offset < size - copied) {
+				// está no es la última pagina/frame que voy a usar
+				uint32_t can_copy = PAGE_SIZE - offset; // espacio que puedo usar
+				log_info(seg_logger, "No entra en lo que queda de esta pagina");
+				log_info(seg_logger, "tengo que guardar: %i y tengo solo %i", size - copied, PAGE_SIZE - offset);
+				memcpy(frame + offset, &(val) + copied, can_copy);
+				copied += can_copy;
+				offset = 0;
 
-		} else {
-//			log_debug(seg_logger, "leo la metadata: val %i, size %i, offset %i", (int) val, size, offset);
-			memcpy(frame + offset, &val, size);
+				// next page
+				memcpy(page, segment->pages + (page_number + 1) * sizeof(t_page), sizeof(t_page));
+				frame = MEMORY[page->frame_number];
+			} else {
+				memcpy(frame + offset, &(val) + copied, size - copied);
+				copied += size - copied; // es lo mismo que decir copied = size
+			}
 		}
 	}
+
+
 
 //	for(int n = page_number; n < number_of_pages; n++) {
 //		 else {
@@ -476,7 +488,7 @@ void* alloc_in_segment(process_segment* segment, int dir, uint32_t size) {
 		next_block_offset = frame + base + last_allocd + metadata_size;
 		free_space_after -= base;
 	} else {
-		next_block_offset = frame + base + last_allocd;
+		next_block_offset = frame + last_allocd;
 	}
 	memcpy(next_block_offset, &t, sizeof(bool));
 	memcpy(next_block_offset + sizeof(bool), &(free_space_after), sizeof(uint32_t));

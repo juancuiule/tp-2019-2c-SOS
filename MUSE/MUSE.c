@@ -160,7 +160,7 @@ void respond_cpy(muse_body* body, char* id, int socket_cliente) {
 	void** val = malloc(size);
 	memcpy(val, body->content + sizeof(uint32_t) + sizeof(int), size);
 
-	log_info(logger, "El cliente con id: %s hizo cpy a dst: %u, %i bytes, val: %i", id, dst, size, (int) *val);
+	log_info(logger, "El cliente con id: %s hizo cpy a dst: %u, %i bytes, val: %i", id, dst, size, (char) *val);
 	process_table* table = get_table_for_process(id);
 
 	if (table != NULL) {
