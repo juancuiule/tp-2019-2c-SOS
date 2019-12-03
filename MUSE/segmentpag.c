@@ -124,37 +124,55 @@ void print_segment(process_segment* segment) {
 }
 
 void* get_from_dir(process_segment* segment, uint32_t dir, int size) {
-	print_segment(segment);
+	log_info(seg_logger, "dir: %i, size: %i", dir, size);
+
+	void** value = malloc(size);
+
 	int number_of_pages = segment->size / PAGE_SIZE;
 
-	int metadata_dir = dir - sizeof(bool) - sizeof(uint32_t);
+	int metadata_dir = dir - metadata_size;
 
 	int page_number = floor((double) metadata_dir / PAGE_SIZE);
 	int offset_in_frame = metadata_dir - page_number * PAGE_SIZE;
 
-	log_debug(seg_logger, "get_from_dir => la dir va a la pagina nro: %i de %i, y el offset en frame es: %i", page_number + 1, number_of_pages, offset_in_frame);
-
-	int copied = 0;
-	int offset = offset_in_frame;
+	int saved_to_send = 0;
 	t_page* page = malloc(sizeof(t_page));
 
 	memcpy(page, segment->pages + page_number * sizeof(t_page), sizeof(t_page));
-
-	// Hay que ver si la pagina esta en memoria o en swap
-
 	void* frame = MEMORY[page->frame_number];
 
-	bool is_free = false;
-	uint32_t data_size = 0;
-	memcpy(&is_free, frame + offset, sizeof(bool));
-	offset += sizeof(bool);
-	memcpy(&data_size, frame + offset, sizeof(uint32_t));
-	offset += sizeof(uint32_t);
+	bool is_free;
+	uint32_t data_size;
 
-	void** value = malloc(size);
+	memcpy(&is_free, frame + offset_in_frame, sizeof(bool));
+	offset_in_frame += sizeof(bool);
+	memcpy(&data_size, frame + offset_in_frame, sizeof(uint32_t));
+	offset_in_frame += sizeof(uint32_t);
+	log_info(seg_logger, "is_free %i, data_size: %i", is_free, data_size);
 
-	memcpy(value, frame + offset, size);
 
+	if (is_free) {
+		// no hay un malloc hecho... se quieren traer datos de espacio no asignado
+	} else if (data_size < size) {
+		// se quiere traer algo que excede el espacio asignado
+	} else {
+		while (saved_to_send < size) {
+			if (PAGE_SIZE - offset_in_frame < size - saved_to_send) {
+				uint32_t can_copy = PAGE_SIZE - offset_in_frame;
+				memcpy(value + saved_to_send, frame + offset_in_frame, can_copy);
+
+				page_number = page_number + 1;
+				offset_in_frame = 0;
+				saved_to_send += can_copy;
+
+				memcpy(page, segment->pages + page_number * sizeof(t_page), sizeof(t_page));
+				frame = MEMORY[page->frame_number];
+			} else {
+				memcpy(value + saved_to_send, frame + offset_in_frame, size - saved_to_send);
+				saved_to_send += size - saved_to_send;
+			}
+		}
+	}
 	return *value;
 }
 
@@ -202,7 +220,8 @@ void cpy_to_dir(process_segment* segment, uint32_t dir, void* val, int size) {
 				offset = 0;
 
 				// next page
-				memcpy(page, segment->pages + (page_number + 1) * sizeof(t_page), sizeof(t_page));
+				page_number++;
+				memcpy(page, segment->pages + page_number * sizeof(t_page), sizeof(t_page));
 				frame = MEMORY[page->frame_number];
 			} else {
 				memcpy(frame + offset, &(val) + copied, size - copied);

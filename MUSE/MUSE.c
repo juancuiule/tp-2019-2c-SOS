@@ -130,7 +130,6 @@ void respond_get(muse_body* body, char* id, int socket_cliente) {
 			process_segment *segment = segment_by_dir(table, src);
 			int dir_de_pagina = src - segment->base;
 			val = get_from_dir(segment, dir_de_pagina, size);
-			log_info(logger, "encontre el val y es: %i", val);
 			add_to_body(r_body, size, &val);
 
 			response = create_response(SUCCESS, r_body);
@@ -160,7 +159,7 @@ void respond_cpy(muse_body* body, char* id, int socket_cliente) {
 	void** val = malloc(size);
 	memcpy(val, body->content + sizeof(uint32_t) + sizeof(int), size);
 
-	log_info(logger, "El cliente con id: %s hizo cpy a dst: %u, %i bytes, val: %i", id, dst, size, (char) *val);
+	log_info(logger, "El cliente con id: %s hizo cpy a dst: %u, %i bytes", id, dst, size);
 	process_table* table = get_table_for_process(id);
 
 	if (table != NULL) {
