@@ -10,26 +10,17 @@ int main(void) {
 	int init_result = muse_init((int) getpid(), IP, PORT);
 
 	if (init_result != -1) {
-		uint32_t my_memory = muse_alloc(65);
-		uint32_t map_dir = muse_map("/Downloads", 25, MAP_PRIVATE);
-		uint32_t another_memory = muse_alloc(75);
-		uint32_t mem3 = muse_alloc(40);
+		uint32_t my_memory = muse_alloc(15);
+		uint32_t mem3 = muse_alloc(10);
 
 		log_info(logger, "my_memory: %u", my_memory);
-		log_info(logger, "map_dir: %u", map_dir);
-		log_info(logger, "another_memory: %u", another_memory);
 		log_info(logger, "mem3: %u", mem3);
-		int x = 10;
-		int* y = malloc(4);
+		char* x = "Hola juan";
+		char** y = malloc(strlen(x) + 1);
 
-		muse_cpy(mem3, &x, 4);
-		muse_get(y, mem3, 4);
-		printf("y: %d \n", *y);
-
-		x = 1998;
-		muse_cpy(mem3, &x, 4);
-		muse_get(y, mem3, 4);
-		printf("y: %d \n", *y);
+		muse_cpy(mem3, &x, 10);
+		muse_get(y, mem3, 10);
+		printf("y: %s \n", *y);
 
 		muse_free(mem3);
 
