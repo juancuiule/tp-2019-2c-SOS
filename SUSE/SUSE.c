@@ -68,7 +68,8 @@ void atender_cliente(int cliente_fd) {
 	int pedido, valor_semaforo;
 	int offset = 0;
 	int opcode, size, tid, pid;
-	int tamanio;
+	int tamanio, tamanio_nombre_semaforo;
+	char* nombre_semaforo = string_new();
 	opcode = recibir_cod_op(cliente_fd);
 	void* buffer = recibir_buffer(&size, cliente_fd);
 	memcpy(&tamanio, buffer + offset, sizeof(int));
@@ -77,6 +78,14 @@ void atender_cliente(int cliente_fd) {
 	offset += sizeof(int);
 	memcpy(&pid, buffer + offset, sizeof(int));
 	offset += sizeof(int);
+
+	if (opcode == 5 || opcode == 6) {
+		memcpy(&tamanio_nombre_semaforo, buffer + offset, sizeof(int));
+		offset += sizeof(int);
+		memcpy(&nombre_semaforo, buffer + offset, tamanio_nombre_semaforo);
+		offset += tamanio_nombre_semaforo;
+	}
+
 	hilo_t* hilo = malloc(sizeof(hilo_t));
 	inicializar_metricas_hilo(hilo);
 	hilo->tid = tid;
@@ -135,6 +144,7 @@ void atender_cliente(int cliente_fd) {
 
 			if (semaforo_wait(semaforo) == 0)
 				bloquear_hilo(hilo);
+
 
 			break;
 		case 6:

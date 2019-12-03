@@ -33,11 +33,8 @@ int suse_wait(int tid, char *sem_name){
 	t_paquete* paquete = crear_paquete(5);
 	hilo_t* hilo = crear_nuevo_hilo(tid, pid);
 	agregar_a_paquete(paquete, hilo, sizeof(hilo_t));
-	semaforo_t* semaforo = malloc(sizeof(semaforo_t));
-	semaforo->id = string_new();
-	strcpy(semaforo->id, sem_name);
-	semaforo->valor = 0;
-	agregar_a_paquete(paquete, semaforo, sizeof(semaforo_t));
+	//agregar_a_paquete(paquete, string_length(sem_name), sizeof(int));
+	agregar_a_paquete(paquete, sem_name, string_length(sem_name));
 	enviar_paquete(paquete, conexion_con_suse);
 	return 0;
 }
@@ -48,11 +45,7 @@ int suse_signal(int tid, char *sem_name){
 	t_paquete* paquete = crear_paquete(6);
 	hilo_t* hilo = crear_nuevo_hilo(tid, pid);
 	agregar_a_paquete(paquete, hilo, sizeof(hilo_t));
-	semaforo_t* semaforo = malloc(sizeof(semaforo_t));
-	semaforo->id = string_new();
-	strcpy(semaforo->id, sem_name);
-	semaforo->valor = 0;
-	agregar_a_paquete(paquete, semaforo, sizeof(semaforo_t));
+	agregar_a_paquete(paquete, sem_name, string_length(sem_name));
 	enviar_paquete(paquete, conexion_con_suse);
 	return 0;
 }
