@@ -12,20 +12,23 @@ int main(void) {
 	if (init_result != -1) {
 		uint32_t my_memory = muse_alloc(65);
 		uint32_t map_dir = muse_map("/Downloads", 80, MAP_PRIVATE);
-		uint32_t another_memory = muse_alloc(35);
+		uint32_t another_memory = muse_alloc(120);
+		uint32_t algo_de_20 = muse_alloc(20); // tendría que ir al lado de my_memory
 
 		log_info(logger, "my_memory: %u", my_memory);
 		log_info(logger, "map_dir: %u", map_dir);
 		log_info(logger, "another_memory: %u", another_memory);
+		log_info(logger, "algo_de_20: %u", algo_de_20);
 
-		int x = 1998;
-		int* y = malloc(4);
+		char* x = "Style too own civil out along. Perfectly offending attempted add arranging age gentleman concluded. Get who uncommonly ";
+		uint32_t x_size = strlen(x) + 1;
+		int* y = malloc(x_size);
 
-		muse_cpy(another_memory, &x, 4);
-		muse_get(y, another_memory, 4);
-		printf("y: %d \n", *y);
+		muse_cpy(another_memory, &x, x_size);
+		muse_get(y, another_memory, x_size);
+		printf("y: %s \n", *y);
 
-		muse_free(my_memory);
+//		muse_free(my_memory);
 
 		muse_close();
 

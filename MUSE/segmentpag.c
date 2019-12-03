@@ -20,7 +20,7 @@ void init_structures(int m_size, int p_size) {
 	for(i = 0; i < frames; i++) {
 		void* new_frame = malloc(p_size);
 		bool is_free = true;
-		uint32_t size = p_size - sizeof(bool) - sizeof(uint32_t);
+		uint32_t size = p_size - metadata_size;
 		memcpy(new_frame, &is_free, sizeof(bool));
 		memcpy(new_frame + sizeof(bool), &size, sizeof(uint32_t));
 		*(MEMORY + i) = new_frame;
@@ -115,24 +115,22 @@ void print_segment(process_segment* segment) {
 			frame_offset += sizeof(bool);
 			memcpy(&data_size, frame + frame_offset, sizeof(uint32_t));
 			frame_offset += sizeof(uint32_t);
-			log_info(seg_logger, "frame_number: %i, frame_offset: %i, is_free: %i, data_size: %i", page->frame_number, frame_offset, is_free, data_size);
 			frame_offset += data_size;
+			log_info(seg_logger, "frame_number: %i, is_free: %i, data_size: %i", page->frame_number, is_free, data_size);
 		}
+		read += (int) floor((double) frame_offset / PAGE_SIZE);
 		frame_offset = frame_offset % PAGE_SIZE;
-		read += ceil((double) data_size / PAGE_SIZE);
 	}
 }
 
 void* get_from_dir(process_segment* segment, uint32_t dir, int size) {
-	log_info(seg_logger, "dir: %i, size: %i", dir, size);
-
 	void** value = malloc(size);
 
 	int number_of_pages = segment->size / PAGE_SIZE;
 
 	int metadata_dir = dir - metadata_size;
 
-	int page_number = floor((double) metadata_dir / PAGE_SIZE);
+	int page_number = (int) floor((double) metadata_dir / PAGE_SIZE);
 	int offset_in_frame = metadata_dir - page_number * PAGE_SIZE;
 
 	int saved_to_send = 0;
@@ -152,9 +150,9 @@ void* get_from_dir(process_segment* segment, uint32_t dir, int size) {
 
 
 	if (is_free) {
-		// no hay un malloc hecho... se quieren traer datos de espacio no asignado
+		log_error(seg_logger, "no hay un malloc hecho... se quieren traer datos de espacio no asignado");
 	} else if (data_size < size) {
-		// se quiere traer algo que excede el espacio asignado
+		log_error(seg_logger, "se quiere traer algo que excede el espacio asignado");
 	} else {
 		while (saved_to_send < size) {
 			if (PAGE_SIZE - offset_in_frame < size - saved_to_send) {
@@ -177,15 +175,15 @@ void* get_from_dir(process_segment* segment, uint32_t dir, int size) {
 }
 
 void cpy_to_dir(process_segment* segment, uint32_t dir, void* val, int size) {
-	log_debug(seg_logger, "dir: %i, val: %i, size: %i", dir, val, size);
 	int number_of_pages = segment->size / PAGE_SIZE;
 
-	int metadata_dir = dir - sizeof(bool) - sizeof(uint32_t);
+	// "retrocedo" para poder ver si esta libre y cuanto espacio tiene ese bloque
+	int metadata_dir = dir - metadata_size;
 
-	int page_number = floor((double) metadata_dir / PAGE_SIZE);
+	// pagina en la cual esta la metadata
+	int page_number = (int) floor((double) metadata_dir / PAGE_SIZE);
 	int offset_in_frame = metadata_dir - page_number * PAGE_SIZE;
 
-	log_debug(seg_logger, "la dir va a la pagina nro: %i de %i, y el offset en frame es: %i", page_number + 1, number_of_pages, offset_in_frame);
 	// Hay que chequear si la dir es valida.
 
 	int copied = 0;
@@ -211,10 +209,10 @@ void cpy_to_dir(process_segment* segment, uint32_t dir, void* val, int size) {
 		while (copied < size) {
 			log_info(seg_logger, "offset = %i, copied = %i, size = %i", offset);
 			if (PAGE_SIZE - offset < size - copied) {
-				// está no es la última pagina/frame que voy a usar
-				uint32_t can_copy = PAGE_SIZE - offset; // espacio que puedo usar
-				log_info(seg_logger, "No entra en lo que queda de esta pagina");
-				log_info(seg_logger, "tengo que guardar: %i y tengo solo %i", size - copied, PAGE_SIZE - offset);
+				// espacio que puedo usar
+				uint32_t can_copy = PAGE_SIZE - offset;
+
+				// copio en el frame lo que puedo copiar
 				memcpy(frame + offset, &(val) + copied, can_copy);
 				copied += can_copy;
 				offset = 0;
@@ -225,10 +223,11 @@ void cpy_to_dir(process_segment* segment, uint32_t dir, void* val, int size) {
 				frame = MEMORY[page->frame_number];
 			} else {
 				memcpy(frame + offset, &(val) + copied, size - copied);
-				copied += size - copied; // es lo mismo que decir copied = size
+				copied += size - copied; // es lo mismo que decir copied = size => se copio todo
 			}
 		}
 	}
+	free(page);
 }
 
 process_segment* find_segment_with_space(process_table* table , int size) {
@@ -302,8 +301,9 @@ int last_position(char* process) {
 }
 
 void* find_free_dir(process_segment* segment, int size) {
-	log_info(seg_logger, "find_free_dir");
+	log_info(seg_logger, "find_free_dir, size: %i", size);
 	print_segment(segment);
+
 	void* pages = segment->pages;
 	int number_of_pages = segment->size / PAGE_SIZE;
 
@@ -322,17 +322,18 @@ void* find_free_dir(process_segment* segment, int size) {
 		memcpy(page, pages + read_pages * sizeof(t_page), sizeof(t_page));
 		void* frame = MEMORY[page->frame_number];
 
-		while ((offset % PAGE_SIZE) < (PAGE_SIZE - sizeof(bool) - sizeof(uint32_t))) {
+		while ((offset % PAGE_SIZE) < (PAGE_SIZE - metadata_size)) {
 			memcpy(&is_free, frame + offset % PAGE_SIZE, sizeof(bool));
 			offset += sizeof(bool);
 			memcpy(&data_size, frame + offset % PAGE_SIZE, sizeof(uint32_t));
 			offset += sizeof(uint32_t);
 
+			log_error(seg_logger, "frame_number: %i, is_free: %i, data_size: %i", page->frame_number, is_free, data_size);
 
 			if (is_free) {
 				if (free_dir == -1) {
 					// vuelvo al inicio de esa free dir
-					free_dir = offset - sizeof(bool) - sizeof(uint32_t);
+					free_dir = offset - metadata_size;
 					free_space = data_size;
 				} else {
 					// sumo data_size y lo que podría ocupar pisando la metadata
@@ -359,8 +360,10 @@ void* find_free_dir(process_segment* segment, int size) {
 				break;
 			}
 		}
+//		read += (int) floor((double) frame_offset / PAGE_SIZE);
 //		frame_offset = frame_offset % PAGE_SIZE;
-		read_pages += ceil((double) data_size / PAGE_SIZE);
+		read_pages += (int) floor((double) offset / PAGE_SIZE);
+		offset = offset % PAGE_SIZE;
 	}
 	return -1;
 }
@@ -431,7 +434,7 @@ int free_space_at_the_end(process_segment* segment) {
 		memcpy(page, pages + read_pages * sizeof(t_page), sizeof(t_page));
 		void* frame = MEMORY[page->frame_number];
 
-		while ((offset % PAGE_SIZE) < (PAGE_SIZE - sizeof(bool) - sizeof(uint32_t))) {
+		while ((offset % PAGE_SIZE) < (PAGE_SIZE - metadata_size)) {
 			memcpy(&is_free, frame + offset % PAGE_SIZE, sizeof(bool));
 			offset += sizeof(bool);
 			memcpy(&data_size, frame + offset % PAGE_SIZE, sizeof(uint32_t));
@@ -487,7 +490,7 @@ void* alloc_in_segment(process_segment* segment, int dir, uint32_t size) {
 		if (allocd == 0) {
 			memcpy(frame + offset, &f, sizeof(bool));
 			offset += sizeof(bool);
-			last_allocd = min(size, PAGE_SIZE - base - sizeof(bool) - sizeof(uint32_t));
+			last_allocd = min(size, PAGE_SIZE - base - metadata_size);
 			memcpy(frame + offset, &(size), sizeof(uint32_t));
 			offset += sizeof(uint32_t);
 			log_info(seg_logger, "size: %i, offset: %i", size, offset);
@@ -500,7 +503,6 @@ void* alloc_in_segment(process_segment* segment, int dir, uint32_t size) {
 		log_info(seg_logger, "allocd = %i, pages_read = %i, dir_in_segment: %i, frame_number: %i", allocd, pages_read, dir_in_segment, page->frame_number);
 	}
 	int free_space_after = PAGE_SIZE - last_allocd - metadata_size;
-	log_info(seg_logger, "free_space_afte: %i", free_space_after);
 	int next_block_offset;
 	if (pages_read == 1) {
 		// si se leyo una sola página hay que sumar el bloque de metadata al offset
@@ -510,8 +512,9 @@ void* alloc_in_segment(process_segment* segment, int dir, uint32_t size) {
 	} else {
 		next_block_offset = last_allocd;
 	}
-	log_info(seg_logger, "next_block_offset = %i", next_block_offset);
 
+	log_info(seg_logger, "free_space_afte: %i", free_space_after);
+	log_info(seg_logger, "next_block_offset = %i", next_block_offset);
 
 	memcpy(frame + next_block_offset, &t, sizeof(bool));
 	memcpy(frame + next_block_offset + sizeof(bool), &(free_space_after), sizeof(uint32_t));
