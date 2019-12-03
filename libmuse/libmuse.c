@@ -40,8 +40,6 @@ void muse_close() {
 }
 
 uint32_t muse_alloc(uint32_t tam) {
-	log_info(logger, "muse_alloc: tam = %i", tam);
-	
 	muse_header* header = create_header(ALLOC);
 	muse_body* body = create_body();
 	add_fixed_to_body(body, sizeof(uint32_t), tam);
@@ -54,6 +52,8 @@ uint32_t muse_alloc(uint32_t tam) {
 
 	uint32_t dir;
 	memcpy(&dir, response_body->content, sizeof(uint32_t));
+
+	log_info(logger, "muse_alloc: tam = %i, dir: %i", tam, dir);
 
 	return dir;
 }
@@ -68,11 +68,10 @@ void muse_free(uint32_t dir) {
 	muse_package* package = create_package(header, body);
 	send_package(package, conexion);
 
-	int status = recv_response_status(conexion); // check status?
+	int status = recv_response_status(conexion);
 	muse_body* response_body = recv_body(conexion);	
 
 	return;
-	
 }
 
 int muse_get(void* dst, uint32_t src, size_t n) {

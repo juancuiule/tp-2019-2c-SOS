@@ -59,6 +59,7 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 				int free_dir = find_free_dir(segment, tam_pedido);
 				log_info(logger, "free dir: %i", free_dir);
 				dir = alloc_in_segment(segment, free_dir, tam_pedido);
+
 			} else {
 				log_warning(logger, "No hay uno con espacio");
 
@@ -118,7 +119,7 @@ void respond_get(muse_body* body, char* id, int socket_cliente) {
 
 	if (table != NULL) {
 		if (table->number_of_segments == 0) {
-			log_info(logger, "El proceso %s no tiene segmentos, es un seg fault?");
+			log_error(logger, "El proceso %s no tiene segmentos");
 			response = create_response(ERROR, r_body);
 		} else {
 			process_segment *segment = segment_by_dir(table, src);
@@ -129,7 +130,7 @@ void respond_get(muse_body* body, char* id, int socket_cliente) {
 			response = create_response(SUCCESS, r_body);
 		}
 	} else {
-		log_info(logger, "El proceso %s no tiene tabla, falto hacer init?");
+		log_error(logger, "El proceso %s no tiene tabla");
 		response = create_response(ERROR, r_body);
 	}
 	send_response(response, socket_cliente);
@@ -139,10 +140,27 @@ void respond_free(muse_body* body, char* id, int socket_cliente) {
 	uint32_t dir_to_free;
 	memcpy(&dir_to_free, body->content, sizeof(uint32_t));
 
-	 log_debug(logger, "El cliente con id: %s hizo free a la dir: %u", id, dir_to_free);
+	log_debug(logger, "El cliente con id: %s hizo free a la dir: %u", id, dir_to_free);
 
-	// free(dir_to_free);
-	send_response_status(socket_cliente, SUCCESS);
+	process_table* table = get_table_for_process(id);
+	muse_body* r_body = create_body();
+	muse_response* response;
+
+	if (table != NULL) {
+		if (table->number_of_segments == 0) {
+			log_error(logger, "El proceso %s no tiene segmentos");
+			send_response_status(socket_cliente, ERROR);
+		} else {
+			process_segment *segment = segment_by_dir(table, dir_to_free);
+			int dir_de_pagina = dir_to_free - segment->base;
+			free_dir(segment, dir_de_pagina);
+
+			send_response_status(socket_cliente, SUCCESS);
+		}
+	} else {
+		log_error(logger, "El proceso %s no tiene tabla");
+		send_response_status(socket_cliente, ERROR);
+	}
 }
 
 void respond_cpy(muse_body* body, char* id, int socket_cliente) {	
@@ -243,7 +261,6 @@ int respond_to_client(int cliente_fd) {
 		int cod_op = recv_muse_op_code(cliente_fd);
 		char* id = recv_muse_id(cliente_fd);
 		muse_body* body = recv_body(cliente_fd);
-//		log_bitarray();
 		switch(cod_op) {
 			case INIT_MUSE:
 				respond_init(body, id, cliente_fd);

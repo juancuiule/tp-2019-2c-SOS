@@ -11,7 +11,8 @@ int main(void) {
 
 	if (init_result != -1) {
 		uint32_t my_memory = muse_alloc(65);
-		uint32_t map_dir = muse_map("/Downloads", 80, MAP_PRIVATE);
+		size_t file_size = 80;
+		uint32_t map_dir = muse_map("hola.txt", file_size, MAP_PRIVATE);
 		uint32_t another_memory = muse_alloc(120);
 		uint32_t algo_de_20 = muse_alloc(20); // tendría que ir al lado de my_memory
 
@@ -27,6 +28,18 @@ int main(void) {
 		muse_cpy(another_memory, &x, x_size);
 		muse_get(y, another_memory, x_size);
 		printf("y: %s \n", *y);
+
+		muse_free(my_memory);
+		my_memory = muse_alloc(65);
+		log_info(logger, "my_memory: %u", my_memory);
+
+		char* p = "un ejemplo";
+		uint32_t p_size = strlen(p) + 1;
+		int* q = malloc(p_size);
+
+		muse_cpy(my_memory, &p, p_size);
+		muse_get(q, my_memory, p_size);
+		printf("q: %s \n", *q);
 
 		muse_free(my_memory);
 		muse_free(map_dir);

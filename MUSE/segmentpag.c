@@ -122,6 +122,41 @@ void print_segment(process_segment* segment) {
 	}
 }
 
+void free_dir(process_segment* segment, uint32_t dir) {
+	int number_of_pages = segment->size / PAGE_SIZE;
+	int metadata_dir = dir - metadata_size;
+
+	int page_number = (int) floor((double) metadata_dir / PAGE_SIZE);
+	int offset_in_frame = metadata_dir - page_number * PAGE_SIZE;
+
+	t_page* page = malloc(sizeof(t_page));
+
+	memcpy(page, segment->pages + page_number * sizeof(t_page), sizeof(t_page));
+	void* frame = MEMORY[page->frame_number];
+
+	bool is_free;
+	uint32_t data_size;
+
+	memcpy(&is_free, frame + offset_in_frame, sizeof(bool));
+	offset_in_frame += sizeof(bool);
+
+	if (is_free) {
+		log_error(seg_logger, "Ya estaba sin asignar");
+	} else {
+		memcpy(&data_size, frame + offset_in_frame, sizeof(uint32_t));
+		offset_in_frame += sizeof(uint32_t);
+
+		offset_in_frame -= metadata_size;
+
+		// free
+		memcpy(frame + offset_in_frame, &t, sizeof(bool));
+		offset_in_frame += sizeof(bool);
+		// falta dejar el frame libre...
+		// bitarray_clean_bit(frame_usage_bitmap, page->frame_number);
+	}
+
+}
+
 void* get_from_dir(process_segment* segment, uint32_t dir, int size) {
 	void** value = malloc(size);
 
