@@ -58,5 +58,6 @@ t_dictionary* diccionario_tid;
 void* serializar(hilo_t);
 int ejecutar_operacion(int, int);
 hilo_t* crear_nuevo_hilo(int, int);
+int ejecutar_operacion_semaforo(int, char*, int);
 
 #endif /* LIBSUSE_H_ */

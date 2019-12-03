@@ -9,16 +9,20 @@
 #define SEMAFOROS_H_
 
 #include <stdio.h>
+#include <commons/collections/list.h>
 
 typedef struct {
 	char* id;
 	int valor;
+	int valor_maximo;
 } semaforo_t;
 
-semaforo_t* semaforos;
+t_list* lista_de_semaforos;
 
-void inicializar_semaforos(semaforo_t*);
-int semaforo_wait(semaforo_t*);
-int semaforo_signal(semaforo_t*);
+void inicializar_semaforos();
+void imprimir_semaforos();
+int semaforo_wait(char* nombre_semaforo);
+int semaforo_signal(char* nombre_semaforo);
+semaforo_t* obtener_semaforo(char*);
 
 #endif /* SEMAFOROS_H_ */

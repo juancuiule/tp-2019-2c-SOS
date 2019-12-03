@@ -5,8 +5,11 @@ int main() {
 	int cliente_fd;
 	pthread_t hilo_clientes, hilo_metricas;
 
-	inicializar();
 	configurar();
+	inicializar();
+	inicializar_semaforos();
+
+	//imprimir_semaforos();
 	servidor_fd = iniciar_servidor();
 
 	pthread_create(&hilo_metricas, NULL, (void*)logear_metricas, NULL);
@@ -33,7 +36,7 @@ void inicializar_metricas_hilo(hilo_t* hilo) {
 	hilo->tiempo_creacion = current_timestamp();
 	hilo->tiempo_cpu = 0;
 	hilo->tiempo_espera = 0;
-	hilo->hilos_a_esperar= queue_create();
+	hilo->hilos_a_esperar = queue_create();
 }
 
 bool es_programa_hilo_buscado(programa_t* programa) {
@@ -68,7 +71,8 @@ void atender_cliente(int cliente_fd) {
 	int pedido, valor_semaforo;
 	int offset = 0;
 	int opcode, size, tid, pid;
-	int tamanio, tamanio_nombre_semaforo;
+	int tamanio;
+	int tamanio_nombre_semaforo = 41;
 	char* nombre_semaforo = string_new();
 	opcode = recibir_cod_op(cliente_fd);
 	void* buffer = recibir_buffer(&size, cliente_fd);
@@ -80,10 +84,12 @@ void atender_cliente(int cliente_fd) {
 	offset += sizeof(int);
 
 	if (opcode == 5 || opcode == 6) {
-		memcpy(&tamanio_nombre_semaforo, buffer + offset, sizeof(int));
-		offset += sizeof(int);
-		memcpy(&nombre_semaforo, buffer + offset, tamanio_nombre_semaforo);
-		offset += tamanio_nombre_semaforo;
+		recv(cliente_fd, &tamanio_nombre_semaforo, sizeof(tamanio_nombre_semaforo), MSG_WAITALL);
+		printf("El tamaño del nombre del semáforo es: %i\n", tamanio_nombre_semaforo);
+		recv(cliente_fd, nombre_semaforo, tamanio_nombre_semaforo, MSG_WAITALL);
+		//printf("El nombre del semáforo es: %s\n", nombre_semaforo);
+		semaforo_t* semaforo = malloc(sizeof(semaforo_t));
+		semaforo = obtener_semaforo(nombre_semaforo);
 	}
 
 	hilo_t* hilo = malloc(sizeof(hilo_t));
@@ -141,18 +147,10 @@ void atender_cliente(int cliente_fd) {
 			ejecutar_nuevo_hilo(hilo);
 			break;
 		case 5:
-
-			if (semaforo_wait(semaforo) == 0)
-				bloquear_hilo(hilo);
-
-
+			semaforo_wait(semaforo);
 			break;
 		case 6:
 			semaforo_signal(semaforo);
-
-			if (semaforo->valor > 0)
-				encolar_hilo_en_ready(hilo);
-
 			break;
 	}
 

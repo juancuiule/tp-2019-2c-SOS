@@ -17,6 +17,5 @@ void configurar() {
 	SEM_INIT = config_get_array_value(config, "SEM_INIT");
 	SEM_MAX = config_get_array_value(config, "SEM_MAX");
 	ALPHA_SJF = config_get_double_value(config, "ALPHA_SJF");
-
 	config_metricas_sistema = config_create("../METRICAS_SISTEMA");
 }

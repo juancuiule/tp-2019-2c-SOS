@@ -19,8 +19,8 @@ char* LISTEN_PORT;
 int METRICS_TIMER;
 int MAX_MULTIPROG;
 char** SEM_IDS;
-int* SEM_INIT;
-int* SEM_MAX;
+char** SEM_INIT;
+char** SEM_MAX;
 double ALPHA_SJF;
 
 t_config* config_metricas_sistema;

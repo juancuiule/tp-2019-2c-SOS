@@ -28,26 +28,11 @@ int suse_close(int tid){
 }
 
 int suse_wait(int tid, char *sem_name){
-	conexion_con_suse = conectarse_a_suse();
-	int pid = getpid();
-	t_paquete* paquete = crear_paquete(5);
-	hilo_t* hilo = crear_nuevo_hilo(tid, pid);
-	agregar_a_paquete(paquete, hilo, sizeof(hilo_t));
-	//agregar_a_paquete(paquete, string_length(sem_name), sizeof(int));
-	agregar_a_paquete(paquete, sem_name, string_length(sem_name));
-	enviar_paquete(paquete, conexion_con_suse);
-	return 0;
+	return ejecutar_operacion_semaforo(tid, sem_name, 5);
 }
 
 int suse_signal(int tid, char *sem_name){
-	conexion_con_suse = conectarse_a_suse();
-	int pid = getpid();
-	t_paquete* paquete = crear_paquete(6);
-	hilo_t* hilo = crear_nuevo_hilo(tid, pid);
-	agregar_a_paquete(paquete, hilo, sizeof(hilo_t));
-	agregar_a_paquete(paquete, sem_name, string_length(sem_name));
-	enviar_paquete(paquete, conexion_con_suse);
-	return 0;
+	return ejecutar_operacion_semaforo(tid, sem_name, 6);
 }
 
 static struct hilolay_operations hiloops = {
@@ -101,6 +86,21 @@ int ejecutar_operacion(int tid, int operacion) {
 		return atoi(proximo);
 	}
 
+	return 0;
+}
+
+int ejecutar_operacion_semaforo(int tid, char* sem_name, int operacion) {
+	conexion_con_suse = conectarse_a_suse();
+	int pid = getpid();
+	t_paquete* paquete = crear_paquete(operacion);
+	hilo_t* hilo = crear_nuevo_hilo(tid, pid);
+	agregar_a_paquete(paquete, hilo, sizeof(hilo_t));
+	enviar_paquete(paquete, conexion_con_suse);
+	int tamanio = string_length(sem_name);
+	printf("el tamaño del nombre es %i\n", tamanio);
+	send(conexion_con_suse, &tamanio, sizeof(tamanio), MSG_WAITALL);
+	printf("el nombre es %s\n", sem_name);
+	send(conexion_con_suse, sem_name, tamanio, MSG_WAITALL);
 	return 0;
 }
 
