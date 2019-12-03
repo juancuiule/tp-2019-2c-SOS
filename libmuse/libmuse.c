@@ -17,7 +17,13 @@ int muse_init(int id, char* ip, int puerto) {
 
 	if (conexion != -1) {
 		send_muse_op_code(conexion, INIT_MUSE);
-		return 0;
+//		int status = recv_response_status(conexion);
+
+//		if (status == ERROR) {
+//			return -1;
+//		} else {
+			return 0;
+//		}
 	} else {
 		return -1;
 	}
@@ -109,6 +115,8 @@ int muse_cpy(uint32_t dst, void* src, int n) {
 
 	int status = recv_response_status(conexion);
 	muse_body* response_body = recv_body(conexion);
+
+	// chequear resultado...
 
 	free(value);
     return 0;

@@ -44,20 +44,12 @@ typedef struct {
 	bool flag; // bit de presencia
 } t_page;
 
+int metadata_size;
+
 //typedef struct {
 //	uint32_t size;
 //	bool is_free;
 //} frame_metadata;
-//
-//typedef struct {
-//	frame_metadata* metadata;
-//	void* data;
-//} frame_block;
-//
-//typedef struct {
-//	int frame_number;
-//	t_list* blocks; // frame_block(s)
-//} frame;
 
 void init_structures();
 t_page *create_page(int frame_number);

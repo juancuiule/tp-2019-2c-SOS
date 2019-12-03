@@ -28,7 +28,10 @@ int main(void) {
 		muse_get(y, another_memory, x_size);
 		printf("y: %s \n", *y);
 
-//		muse_free(my_memory);
+		muse_free(my_memory);
+		muse_free(map_dir);
+		muse_free(another_memory);
+		muse_free(algo_de_20);
 
 		muse_close();
 

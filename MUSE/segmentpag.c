@@ -8,7 +8,7 @@ int metadata_size = sizeof(bool) + sizeof(uint32_t);
 void init_structures(int m_size, int p_size) {
 	int frames = m_size / p_size;
 	tables = list_create();
-	seg_logger = log_create("./logs/segmentpag.log", "segmentpag", 1, LOG_LEVEL_DEBUG);
+	seg_logger = log_create("./logs/segmentpag.log", "segmentpag", 1, LOG_LEVEL_ERROR);
 	int bitmap_size_in_bytes = ceil((double) frames / 8);
 	bitmap_pointer = malloc(bitmap_size_in_bytes);
 	frame_usage_bitmap = bitarray_create_with_mode(bitmap_pointer, bitmap_size_in_bytes, LSB_FIRST);
@@ -24,7 +24,6 @@ void init_structures(int m_size, int p_size) {
 		memcpy(new_frame, &is_free, sizeof(bool));
 		memcpy(new_frame + sizeof(bool), &size, sizeof(uint32_t));
 		*(MEMORY + i) = new_frame;
-		// free(new_frame);
 	}
 }
 
@@ -150,9 +149,9 @@ void* get_from_dir(process_segment* segment, uint32_t dir, int size) {
 
 
 	if (is_free) {
-		log_error(seg_logger, "no hay un malloc hecho... se quieren traer datos de espacio no asignado");
+		log_error(seg_logger, "No hay un malloc hecho... se quieren traer datos de espacio no asignado");
 	} else if (data_size < size) {
-		log_error(seg_logger, "se quiere traer algo que excede el espacio asignado");
+		log_error(seg_logger, "Se quiere traer algo que excede el espacio asignado");
 	} else {
 		while (saved_to_send < size) {
 			if (PAGE_SIZE - offset_in_frame < size - saved_to_send) {
@@ -327,8 +326,6 @@ void* find_free_dir(process_segment* segment, int size) {
 			offset += sizeof(bool);
 			memcpy(&data_size, frame + offset % PAGE_SIZE, sizeof(uint32_t));
 			offset += sizeof(uint32_t);
-
-			log_error(seg_logger, "frame_number: %i, is_free: %i, data_size: %i", page->frame_number, is_free, data_size);
 
 			if (is_free) {
 				if (free_dir == -1) {
