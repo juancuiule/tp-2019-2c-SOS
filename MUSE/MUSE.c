@@ -118,22 +118,21 @@ void respond_get(muse_body* body, char* id, int socket_cliente) {
 	void* val = malloc(size);
 
 	log_info(logger, "El cliente con id: %s hizo get a la src: %u de %i bytes", id, src, size);
-	process_table* t = get_table_for_process(id);
+	process_table* table = get_table_for_process(id);
 	muse_body* r_body = create_body();
 	muse_response* response;
 
-	if (t != NULL) {
-		if (t->number_of_segments == 0) {
+	if (table != NULL) {
+		if (table->number_of_segments == 0) {
 			log_info(logger, "El proceso %s no tiene segmentos, es un seg fault?");
 			response = create_response(ERROR, r_body);
 		} else {
-			process_segment *segment = segment_by_dir(t, src);
-			log_info(logger, "segmento->base %i", segment->base);
+			process_segment *segment = segment_by_dir(table, src);
 			int dir_de_pagina = src - segment->base;
-			log_info(logger, "dir de pagina %i", dir_de_pagina);
+			val = get_from_dir(segment, dir_de_pagina, size);
+			log_info(logger, "encontre el val y es: %i", val);
+			add_to_body(r_body, size, &val);
 
-			memcpy(val, segment->pages + dir_de_pagina, size);
-			add_to_body(r_body, size, val);
 			response = create_response(SUCCESS, r_body);
 		}
 	} else {
@@ -141,7 +140,6 @@ void respond_get(muse_body* body, char* id, int socket_cliente) {
 		response = create_response(ERROR, r_body);
 	}
 	send_response(response, socket_cliente);
-	free(val);
 }
 
 void respond_free(muse_body* body, char* id, int socket_cliente) {
@@ -159,15 +157,14 @@ void respond_cpy(muse_body* body, char* id, int socket_cliente) {
 	memcpy(&dst, body->content, sizeof(uint32_t));	
 	int size;
 	memcpy(&size, body->content + sizeof(uint32_t), sizeof(int));
-	void* val = malloc(size);
+	void** val = malloc(size);
 	memcpy(val, body->content + sizeof(uint32_t) + sizeof(int), size);
 
-	log_info(logger, "El cliente con id: %s hizo cpy a dst: %u, %i bytes", id, dst, size);
+	log_info(logger, "El cliente con id: %s hizo cpy a dst: %u, %i bytes, val: %i", id, dst, size, (int) *val);
 	process_table* table = get_table_for_process(id);
 
 	if (table != NULL) {
 		process_segment *segment;
-		print_process(table);
 		if (table->number_of_segments == 0) {
 			send_response_status(socket_cliente, ERROR);
 		} else {
@@ -175,17 +172,14 @@ void respond_cpy(muse_body* body, char* id, int socket_cliente) {
 			log_info(logger, "segmento->base %i", segment->base);
 			log_info(logger, "segmento->size %i", segment->size);
 			int dir_de_pagina = dst - segment->base;
-			log_info(logger, "dir de pagina %i", dir_de_pagina);
 
-			cpy_to_dir(segment, dir_de_pagina);
-//			memcpy(segment->pages + dir_de_pagina, val, size);
+			cpy_to_dir(segment, dir_de_pagina, *val, size);
 			send_response_status(socket_cliente, SUCCESS);
 		}
 	} else {
 		log_info(logger, "El proceso %s no tiene tabla, falto hacer init?");
 		send_response_status(socket_cliente, ERROR);
 	}
-	free(val);
 }
 
 void respond_map(muse_body* body, char* id, int socket_cliente) {

@@ -100,11 +100,91 @@ void print_segment(process_segment* segment) {
 	log_info(seg_logger, "type: %s", segment->type == HEAP ? "HEAP" : "MMAP");
 }
 
-void cpy_to_dir(process_segment* segment, uint32_t dir) {
+void* get_from_dir(process_segment* segment, uint32_t dir, int size) {
 	print_segment(segment);
 	int number_of_pages = segment->size / PAGE_SIZE;
-	int page = floor((double) dir / PAGE_SIZE);
-	log_debug(seg_logger, "la dir va a la pagina nro: %i de %i", page + 1, number_of_pages);
+
+	int metadata_dir = dir - sizeof(bool) - sizeof(uint32_t);
+
+	int page_number = floor((double) metadata_dir / PAGE_SIZE);
+	int offset_in_frame = metadata_dir - page_number * PAGE_SIZE;
+
+	log_debug(seg_logger, "get_from_dir => la dir va a la pagina nro: %i de %i, y el offset en frame es: %i", page_number + 1, number_of_pages, offset_in_frame);
+
+	int copied = 0;
+	int offset = offset_in_frame;
+	t_page* page = malloc(sizeof(t_page));
+
+	memcpy(page, segment->pages + page_number * sizeof(t_page), sizeof(t_page));
+
+	// Hay que ver si la pagina esta en memoria o en swap
+
+	void* frame = MEMORY[page->frame_number];
+
+	bool is_free = false;
+	uint32_t data_size = 0;
+	memcpy(&is_free, frame + offset, sizeof(bool));
+	offset += sizeof(bool);
+	memcpy(&data_size, frame + offset, sizeof(uint32_t));
+	offset += sizeof(uint32_t);
+
+	void** value = malloc(size);
+
+	memcpy(value, frame + offset, size);
+
+	return *value;
+}
+
+void cpy_to_dir(process_segment* segment, uint32_t dir, void* val, int size) {
+	//	print_segment(segment);
+	log_debug(seg_logger, "dir: %i, val: %i, size: %i", dir, val, size);
+	int number_of_pages = segment->size / PAGE_SIZE;
+
+	int metadata_dir = dir - sizeof(bool) - sizeof(uint32_t);
+
+	int page_number = floor((double) metadata_dir / PAGE_SIZE);
+	int offset_in_frame = metadata_dir - page_number * PAGE_SIZE;
+
+	log_debug(seg_logger, "la dir va a la pagina nro: %i de %i, y el offset en frame es: %i", page_number + 1, number_of_pages, offset_in_frame);
+	// Hay que chequear si la dir es valida.
+
+	int copied = 0;
+	int offset = offset_in_frame;
+	t_page* page = malloc(sizeof(t_page));
+
+	memcpy(page, segment->pages + page_number * sizeof(t_page), sizeof(t_page));
+
+	// Hay que ver si la pagina esta en memoria o en swap
+
+	void* frame = MEMORY[page->frame_number];
+
+	bool is_free = false;
+	uint32_t data_size = 0;
+	memcpy(&is_free, frame + offset, sizeof(bool));
+	offset += sizeof(bool);
+	memcpy(&data_size, frame + offset, sizeof(uint32_t));
+	offset += sizeof(uint32_t);
+
+	if (is_free) {
+		// No hay un malloc hecho...
+	} else if (data_size < size) {
+		// No hay espacio suficiente
+	} else {
+		if (PAGE_SIZE - offset < size - copied) {
+			// está no es la última pagina/frame que voy a usar
+
+		} else {
+//			log_debug(seg_logger, "leo la metadata: val %i, size %i, offset %i", (int) val, size, offset);
+			memcpy(frame + offset, &val, size);
+		}
+	}
+
+//	for(int n = page_number; n < number_of_pages; n++) {
+//		 else {
+//
+//			memcpy(frame + offset, )
+//		}
+//	}
 }
 
 process_segment* find_segment_with_space(process_table* table , int size) {
@@ -343,7 +423,6 @@ void* alloc_in_segment(process_segment* segment, int dir, uint32_t size) {
 	int last_allocd = 0;
 
 	log_info(seg_logger, "Se hace un alloc a %i.", dir);
-	log_error(seg_logger, "el size es %i.", segment->size);
 	log_info(seg_logger, "dir_in_segment: %i, base: %i", dir_in_segment, base);
 	int offset = base;
 	int pages_read = 0;

@@ -74,6 +74,7 @@ void* alloc_in_segment(process_segment* segment, int dir, uint32_t size);
 void* find_free_dir(process_segment* segment, int size);
 int free_space_at_the_end(process_segment* segment);
 void clear_bitmap(int bits);
-void cpy_to_dir(process_segment* segment, uint32_t dir);
+void cpy_to_dir(process_segment* segment, uint32_t dir, void* val, int size);
+void* get_from_dir(process_segment* segment, uint32_t dir, int size);
 
 #endif

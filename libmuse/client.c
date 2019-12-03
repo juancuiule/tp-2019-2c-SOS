@@ -19,13 +19,19 @@ int main(void) {
 		log_info(logger, "map_dir: %u", map_dir);
 		log_info(logger, "another_memory: %u", another_memory);
 		log_info(logger, "mem3: %u", mem3);
-		int x = 1998;
-		int*y = malloc(4);
+		int x = 10;
+		int* y = malloc(4);
 
 		muse_cpy(mem3, &x, 4);
-//		muse_get(y, my_memory, 4);
-//		printf("y: %d \n", *y);
-//		muse_free(my_memory);
+		muse_get(y, mem3, 4);
+		printf("y: %d \n", *y);
+
+		x = 1998;
+		muse_cpy(mem3, &x, 4);
+		muse_get(y, mem3, 4);
+		printf("y: %d \n", *y);
+
+		muse_free(mem3);
 
 //		uint32_t my_memory = muse_alloc(65);
 //		uint32_t another_memory = muse_alloc(35);

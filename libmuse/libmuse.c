@@ -88,22 +88,29 @@ int muse_get(void* dst, uint32_t src, size_t n) {
 	memcpy(&r_size, response_body->content, sizeof(size_t));
 
 	memcpy(dst, response_body->content + sizeof(size_t), r_size);
+
     return 0;
 }
 
 int muse_cpy(uint32_t dst, void* src, int n) {
-	log_info(logger, "muse_cpy a: %u, de %i bytes", dst, n);
+	void** value = malloc(n);
+	memcpy(value, src, n);
+
+	log_info(logger, "muse_cpy a: %u, de %i bytes, value %i", dst, n, *value);
+
 
 	muse_header* header = create_header(CPY);
 	muse_body* body = create_body();
 	add_fixed_to_body(body, sizeof(uint32_t), dst);
-	add_to_body(body, n, src);
+	add_to_body(body, n, value);
 
 	muse_package* package = create_package(header, body);
 	send_package(package, conexion);
 
 	int status = recv_response_status(conexion);
 	muse_body* response_body = recv_body(conexion);
+
+	free(value);
     return 0;
 }
 

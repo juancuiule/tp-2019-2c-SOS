@@ -37,6 +37,7 @@ muse_body* create_body() {
 }
 
 void add_to_body(muse_body* body, int size, void* value) {
+
 	body->content = realloc(
 		body->content, // *ptr
 		body->content_size + // prev size
