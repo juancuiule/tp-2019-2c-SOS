@@ -7,7 +7,6 @@
 #include "configuracion.h"
 #include <commons/string.h>
 #include <stdbool.h>
-#include <time.h>
 #include <sys/time.h>
 #include "estructuras.h"
 #include "logging.h"

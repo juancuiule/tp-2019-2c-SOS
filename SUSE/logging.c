@@ -10,17 +10,17 @@
 #include "globales.h"
 #include "configuracion.h"
 
-long long tiempo_de_ejecucion(hilo_t* hilo) {
-	return current_timestamp() - hilo->tiempo_creacion;
+long tiempo_de_ejecucion(hilo_t* hilo) {
+	return tiempo_actual() - hilo->tiempo_creacion;
 }
 
 void logear_metricas_hilo(hilo_t* hilo) {
 	if (hilo != NULL) {
 		log_info(logger_metricas, "Métricas del hilo %i: ", hilo->tid);
-		long long tiempo_ejecucion = tiempo_de_ejecucion(hilo);
-		log_info(logger_metricas, "\ttiempo de ejecución: %lld ms", tiempo_ejecucion);
-		log_info(logger_metricas, "\ttiempo de espera: %lld ms", hilo->tiempo_espera);
-		log_info(logger_metricas, "\ttiempo de uso de CPU: %lld ms", hilo->tiempo_cpu);
+		long tiempo_ejecucion = tiempo_de_ejecucion(hilo);
+		log_info(logger_metricas, "\ttiempo de ejecución: %ld ms", tiempo_ejecucion);
+		log_info(logger_metricas, "\ttiempo de espera: %ld ms", hilo->tiempo_espera);
+		log_info(logger_metricas, "\ttiempo de uso de CPU: %ld ms", hilo->tiempo_cpu);
 	}
 }
 
@@ -46,6 +46,5 @@ void logear_metricas() {
 		list_iterate(cola_blocked->elements, (void*)logear_metricas_hilo);
 		list_iterate(programas, (void*)logear_metricas_hilos_programa);
 		dictionary_iterator(diccionario_semaforos, logear_valor_semaforo);
-
 	}
 }

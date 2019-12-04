@@ -24,18 +24,18 @@ int main() {
 	return EXIT_SUCCESS;
 }
 
-long long current_timestamp() {
-    struct timeval te;
-    gettimeofday(&te, NULL);
-    long long milliseconds = te.tv_sec*1000LL + te.tv_usec/1000;
-    return milliseconds;
+long tiempo_actual() {
+    struct timeval tiempo_actual;
+    gettimeofday(&tiempo_actual, NULL);
+    long microsegundos = tiempo_actual.tv_usec/1000;
+    return microsegundos;
 }
 
 void inicializar_metricas_hilo(hilo_t* hilo) {
-	hilo->tiempo_creacion = current_timestamp();
+	hilo->tiempo_creacion = 0;
 	hilo->tiempo_cpu = 0;
 	hilo->tiempo_espera = 0;
-	hilo->hilos_a_esperar = queue_create();
+	hilo->hilos_a_esperar = list_create();
 }
 
 bool es_programa_hilo_buscado(programa_t* programa) {
@@ -153,13 +153,6 @@ void atender_cliente(int cliente_fd) {
 			semaforo_signal(nombre_semaforo);
 			break;
 	}
-
-	/*
-	free(nombre_semaforo);
-	free(hilo);
-	free(proximo_hilo);
-	free(buffer);
-	*/
 }
 
 bool es_programa_buscado(programa_t* programa) {
@@ -189,8 +182,8 @@ void ejecutar_nuevo_hilo(hilo_t* hilo) {
 	hilo_t* siguiente_hilo = siguiente_hilo_a_ejecutar(programa);
 
 	log_info(logger, "El hilo %i del programa %i llegó a EXEC.", siguiente_hilo->tid, siguiente_hilo->pid);
-	siguiente_hilo->tiempo_ultima_llegada_a_exec = current_timestamp();
-	siguiente_hilo->tiempo_espera += current_timestamp() - hilo->tiempo_ultima_llegada_a_ready;
+	siguiente_hilo->tiempo_ultima_llegada_a_exec = tiempo_actual();
+	siguiente_hilo->tiempo_espera += tiempo_actual() - hilo->tiempo_ultima_llegada_a_ready;
 	programa->hilo_en_exec = siguiente_hilo;
 	list_remove_by_condition(programa->hilos_en_ready, hilo_encontrado);
 }
@@ -210,7 +203,7 @@ void atender_nuevo_cliente(int cliente_fd) {
 }
 
 void encolar_hilo_en_new(hilo_t* hilo) {
-	hilo->tiempo_creacion = current_timestamp();
+	hilo->tiempo_creacion = tiempo_actual();
 	queue_push(cola_new, hilo);
 	log_info(logger, "El hilo %i del programa %i llegó a NEW", hilo->tid, hilo->pid);
 }
@@ -238,7 +231,7 @@ void encolar_hilo_en_ready(hilo_t* hilo) {
 		list_remove_by_condition(cola_blocked->elements, hilo_encontrado);
 
 	list_add(programa->hilos_en_ready, hilo);
-	hilo->tiempo_ultima_llegada_a_ready = current_timestamp();
+	hilo->tiempo_ultima_llegada_a_ready = tiempo_actual();
 	log_info(logger, "El hilo %d del programa %d llegó a READY", hilo->tid, hilo->pid);
 	GRADO_MULTIPROGRAMACION++;
 
