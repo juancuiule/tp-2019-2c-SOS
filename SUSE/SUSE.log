@@ -5042,3 +5042,35 @@
 [INFO] 11:04:30:722 SUSE/(21299:21362): El hilo 3 del programa 21358 llegó a NEW
 [INFO] 11:04:30:723 SUSE/(21299:21368): El hilo 0 del programa 21358 llegó a BLOCKED
 [INFO] 11:04:30:723 SUSE/(21299:21369): El hilo 1 del programa 21358 llegó a EXEC.
+[INFO] 23:53:03:383 SUSE/(28982:28982): Se ha iniciado el servidor.
+[INFO] 23:53:07:568 SUSE/(28982:28985): El hilo 0 del programa 28984 llegó a NEW
+[INFO] 23:53:07:568 SUSE/(28982:28985): El hilo 0 del programa 28984 llegó a READY
+[INFO] 23:53:07:569 SUSE/(28982:28986): El hilo 1 del programa 28984 llegó a NEW
+[INFO] 23:53:07:569 SUSE/(28982:28986): El hilo 1 del programa 28984 llegó a READY
+[INFO] 23:53:07:570 SUSE/(28982:28987): El hilo 2 del programa 28984 llegó a NEW
+[INFO] 23:53:07:570 SUSE/(28982:28987): El hilo 2 del programa 28984 llegó a READY
+[INFO] 23:53:07:571 SUSE/(28982:28988): El hilo 3 del programa 28984 llegó a NEW
+[INFO] 23:53:07:571 SUSE/(28982:28988): El hilo 3 del programa 28984 llegó a READY
+[INFO] 23:53:07:572 SUSE/(28982:28994): El hilo 0 del programa 28984 llegó a BLOCKED
+[INFO] 23:53:07:573 SUSE/(28982:28997): El hilo 1 del programa 28984 llegó a EXEC.
+[INFO] 23:53:07:574 SUSE/(28982:29002): El hilo 1 del programa 28984 llegó a EXEC.
+[INFO] 23:53:07:574 SUSE/(28982:29001): El hilo 1 del programa 28984 llegó a EXIT.
+[INFO] 23:53:07:574 SUSE/(28982:29001): El hilo 0 del programa 28984 llegó a READY
+[INFO] 23:53:07:574 SUSE/(28982:29001): El hilo 1 del programa 28984 llegó a EXEC.
+[INFO] 23:57:01:80 SUSE/(29154:29154): Se ha iniciado el servidor.
+[INFO] 23:57:04:565 SUSE/(29154:29157): El hilo 0 del programa 29156 llegó a NEW
+[INFO] 23:57:04:565 SUSE/(29154:29157): El hilo 0 del programa 29156 llegó a READY
+[INFO] 23:57:04:566 SUSE/(29154:29158): El hilo 1 del programa 29156 llegó a NEW
+[INFO] 23:57:04:566 SUSE/(29154:29158): El hilo 1 del programa 29156 llegó a READY
+[INFO] 23:57:04:567 SUSE/(29154:29159): El hilo 2 del programa 29156 llegó a NEW
+[INFO] 23:57:04:567 SUSE/(29154:29159): El hilo 2 del programa 29156 llegó a READY
+[INFO] 23:57:04:568 SUSE/(29154:29160): El hilo 3 del programa 29156 llegó a NEW
+[INFO] 23:57:04:568 SUSE/(29154:29160): El hilo 3 del programa 29156 llegó a READY
+[INFO] 23:57:04:569 SUSE/(29154:29166): El hilo 0 del programa 29156 llegó a BLOCKED
+[INFO] 23:57:04:570 SUSE/(29154:29167): El hilo 1 del programa 29156 llegó a EXEC.
+[INFO] 23:57:04:570 SUSE/(29154:29168): El hilo 1 del programa 29156 llegó a EXEC.
+[INFO] 23:57:04:570 SUSE/(29154:29169): El hilo 1 del programa 29156 llegó a EXEC.
+[INFO] 23:57:04:571 SUSE/(29154:29174): El hilo 1 del programa 29156 llegó a EXEC.
+[INFO] 23:57:04:571 SUSE/(29154:29173): El hilo 1 del programa 29156 llegó a EXIT.
+[INFO] 23:57:04:571 SUSE/(29154:29173): El hilo 0 del programa 29156 llegó a READY
+[INFO] 23:57:04:571 SUSE/(29154:29173): El hilo 1 del programa 29156 llegó a EXEC.

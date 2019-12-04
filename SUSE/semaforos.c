@@ -31,14 +31,6 @@ int semaforo_wait(char* nombre_semaforo) {
 		sem_value->valor--;
 
 	dictionary_put(diccionario_semaforos, nombre_semaforo, sem_value);
-
-	/*semaforo_t* semaforo_actualizado = malloc(sizeof(semaforo_t));
-	semaforo_actualizado->id = string_new();
-	strcpy(semaforo_actualizado->id, nombre_semaforo);
-	semaforo_actualizado->valor = semaforo->valor;
-	semaforo_actualizado->valor_maximo = semaforo->valor_maximo;
-	int indice = obtener_indice_semaforo(nombre_semaforo);
-	list_replace(lista_de_semaforos, indice, semaforo_actualizado);*/
 	return 0;
 }
 
