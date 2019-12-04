@@ -11,7 +11,7 @@
 
 void inicializar_diccionario_semaforos() {
 	diccionario_semaforos = dictionary_create();
-	sem_value_t* sem_value = malloc(sizeof(sem_value_t));
+	sem_value = malloc(sizeof(sem_value_t));
 	int i = 0;
 
 	while (SEM_IDS[i] != NULL) {

@@ -30,5 +30,5 @@ void inicializar() {
 	multiprogramacion_sem = malloc(sizeof(sem_t));
 	sem_init(multiprogramacion_sem, 0, 1);
 
-	sem_value_t* sem_value_t = malloc(sizeof(sem_value_t));
+	sem_value = malloc(sizeof(sem_value_t));
 }

@@ -2,7 +2,7 @@
 #include "globales.h"
 
 int main() {
-	int cliente_fd;
+	int cliente_fd = 0;
 	pthread_t hilo_clientes, hilo_metricas;
 
 	configurar();
@@ -67,12 +67,16 @@ void validar_si_esta_esperando_hilos(hilo_t* hilo) {
 }
 
 void atender_cliente(int cliente_fd) {
-	int pedido, valor_semaforo;
+	int pedido = 0;
+	int valor_semaforo = 0;
 	int offset = 0;
-	int opcode, size, tid, pid;
-	int tamanio;
-	int tamanio_nombre_semaforo = 41;
-	char* nombre_semaforo = string_new();
+	int opcode = 0;
+	int size = 0;
+	int tid = 0;
+	int pid = 0;
+	int tamanio = 0;
+	char* tamanio_nombre_semaforo = malloc(4);
+	char* nombre_semaforo = malloc(100);
 	opcode = recibir_cod_op(cliente_fd);
 	void* buffer = recibir_buffer(&size, cliente_fd);
 	memcpy(&tamanio, buffer + offset, sizeof(int));
@@ -83,8 +87,10 @@ void atender_cliente(int cliente_fd) {
 	offset += sizeof(int);
 
 	if (opcode == 5 || opcode == 6) {
-		recv(cliente_fd, &tamanio_nombre_semaforo, sizeof(tamanio_nombre_semaforo), MSG_WAITALL);
-		recv(cliente_fd, nombre_semaforo, tamanio_nombre_semaforo, MSG_WAITALL);
+		recv(cliente_fd, tamanio_nombre_semaforo, sizeof(tamanio_nombre_semaforo), MSG_WAITALL);
+		printf("tamaño: %s\n", tamanio_nombre_semaforo);
+		recv(cliente_fd, nombre_semaforo, atoi(tamanio_nombre_semaforo), MSG_WAITALL);
+		printf("nombre del semáforo: %s\n", nombre_semaforo);
 		sem_value = dictionary_get(diccionario_semaforos, nombre_semaforo);
 	}
 
