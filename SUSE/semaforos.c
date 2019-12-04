@@ -35,7 +35,6 @@ int semaforo_wait(char* nombre_semaforo) {
 }
 
 int semaforo_signal(char* nombre_semaforo) {
-	sem_value_t* sem_value = malloc(sizeof(sem_value_t));
 	sem_value = dictionary_get(diccionario_semaforos, nombre_semaforo);
 
 	if (sem_value->valor > 0)

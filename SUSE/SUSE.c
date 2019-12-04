@@ -75,7 +75,7 @@ void atender_cliente(int cliente_fd) {
 	int tid = 0;
 	int pid = 0;
 	int tamanio = 0;
-	char* tamanio_nombre_semaforo = malloc(4);
+	int tamanio_nombre_semaforo = 0;
 	char* nombre_semaforo = malloc(100);
 	opcode = recibir_cod_op(cliente_fd);
 	void* buffer = recibir_buffer(&size, cliente_fd);
@@ -87,9 +87,9 @@ void atender_cliente(int cliente_fd) {
 	offset += sizeof(int);
 
 	if (opcode == 5 || opcode == 6) {
-		recv(cliente_fd, tamanio_nombre_semaforo, sizeof(tamanio_nombre_semaforo), MSG_WAITALL);
-		printf("tamaño: %s\n", tamanio_nombre_semaforo);
-		recv(cliente_fd, nombre_semaforo, atoi(tamanio_nombre_semaforo), MSG_WAITALL);
+		recv(cliente_fd, &tamanio_nombre_semaforo, sizeof(int), MSG_WAITALL);
+		printf("tamaño: %i\n", tamanio_nombre_semaforo);
+		recv(cliente_fd, nombre_semaforo, tamanio_nombre_semaforo, MSG_WAITALL);
 		printf("nombre del semáforo: %s\n", nombre_semaforo);
 		sem_value = dictionary_get(diccionario_semaforos, nombre_semaforo);
 	}
@@ -154,8 +154,12 @@ void atender_cliente(int cliente_fd) {
 			break;
 	}
 
+	/*
+	free(nombre_semaforo);
+	free(hilo);
 	free(proximo_hilo);
 	free(buffer);
+	*/
 }
 
 bool es_programa_buscado(programa_t* programa) {
