@@ -39,7 +39,9 @@ static struct hilolay_operations hiloops = {
 		.suse_create = &suse_create,
 		.suse_schedule_next = &suse_schedule_next,
 		.suse_join = &suse_join,
-		.suse_close = &suse_close
+		.suse_close = &suse_close,
+		.suse_wait = &suse_wait,
+		.suse_signal = &suse_signal
 };
 
 void hilolay_init(void){
