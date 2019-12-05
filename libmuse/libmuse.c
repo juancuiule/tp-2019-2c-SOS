@@ -33,9 +33,9 @@ int muse_init(int id, char* ip, int puerto) {
 void muse_close() {
 	log_info(logger, "muse_close");
 
+	send_muse_op_code(conexion, DISCONNECT_MUSE);
 	log_destroy(logger);
 	config_destroy(config);
-	send_muse_op_code(conexion, DISCONNECT_MUSE);
 
 	free_connection(conexion);
 }
@@ -103,8 +103,7 @@ int muse_cpy(uint32_t dst, void* src, int n) {
 	void** value = malloc(n);
 	memcpy(value, src, n);
 
-	log_info(logger, "muse_cpy a: %u, de %i bytes, value %i", dst, n, *value);
-
+	log_info(logger, "muse_cpy a: %u, de %i bytes", dst, n);
 
 	muse_header* header = create_header(CPY);
 	muse_body* body = create_body();

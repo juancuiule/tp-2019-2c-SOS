@@ -148,7 +148,8 @@ void free_dir(process_segment* segment, uint32_t dir) {
 }
 
 void* get_from_dir(process_segment* segment, uint32_t dir, int size) {
-	int metadata_dir = dir - metadata_size;
+	int dir_de_pagina = dir - segment->base;
+	int metadata_dir = dir_de_pagina - metadata_size;
 
 	bool is_free;
 	uint32_t data_size;

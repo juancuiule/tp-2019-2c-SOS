@@ -1,5 +1,6 @@
 #include "utils.h"
 #include "network.h"
+#include <netdb.h>
 
 muse_package* create_package(muse_header* header, muse_body* body) {
 	muse_package* package = malloc(sizeof(muse_package));
@@ -16,7 +17,19 @@ muse_response* create_response(response_status status, muse_body* body) {
 }
 
 muse_header* create_header(muse_op_code code) {
-	char* ip = "127.0.0.1"; // getip acá
+	char host_buffer[256];
+	char* ip_buffer;
+	struct hostent* host_entry;
+	int hostname;
+
+	hostname = gethostname(host_buffer, sizeof(host_buffer));
+	host_entry = gethostbyname(host_buffer);
+	ip_buffer = inet_ntoa(*((struct in_addr*) host_entry->h_addr_list[0]));
+
+	//log_info(logger, "host_buffer: %s", host_buffer);
+	//log_info(logger, "ip_buffer: %s", ip_buffer);
+
+	char* ip = ip_buffer;
 	int ip_size = strlen(ip) + 1;
 
 	muse_header* header = malloc(sizeof(muse_header));
@@ -178,19 +191,20 @@ char* recv_muse_id(int socket_cliente) {
 	int pid = recv_int(socket_cliente);
 	int ip_size;
 
+	char* ip = recv_buffer(&ip_size, socket_cliente);
+		int ip_length = strlen(ip);
+
+	char* separador = "-";
+	int separador_length = strlen(separador);
+
 	char pid_str[11];
 	snprintf(pid_str, sizeof pid_str, "%i", pid);
-	int len1 = strlen(pid_str);
+	int pid_length = strlen(pid_str);
 
-	char* separador = "/";
-	int len2 = strlen(separador);
+	char *id = malloc(ip_length + separador_length + pid_length + 1);
 
-	char* ip = recv_buffer(&ip_size, socket_cliente);
-	int len3 = strlen(ip);
-
-	char *id = malloc(len1 + len2 + len3 + 1);
-	memcpy(id, pid_str, len1);
-    memcpy(id + len1, separador, len2);
-	memcpy(id + len1 + len2, ip, len3 + 1);
+	memcpy(id, ip, ip_length);
+	memcpy(id + ip_length, separador, separador_length);
+	memcpy(id + ip_length + 1, pid_str, pid_length + 1);
 	return id;
 }

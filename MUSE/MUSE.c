@@ -6,6 +6,7 @@ void respond_init(muse_body* body, char* id, int socket_cliente) {
 
 	if (table == NULL) {
 		create_process_table(id);
+		log_debug(logger, "Se creo una process_table para %s", id);
 		send_response_status(socket_cliente, SUCCESS);
 	} else {
 		log_error(logger, "Ya hay una tabla de segmentos para este proceso");
@@ -17,10 +18,7 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 	uint32_t tam_pedido;
 	memcpy(&tam_pedido, body->content, sizeof(uint32_t));
 
-	// min amount of frames to ask for the segment
-	int frames_to_ask;
-
-	log_debug(logger, "El cliente con id: %s hizo muse_malloc con %u", id, tam_pedido);
+	log_debug(logger, "El cliente con id: %s hizo muse_malloc de %u", id, tam_pedido);
 
 	process_table* table = get_table_for_process(id);
 	process_segment *segment;
@@ -29,18 +27,22 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 	muse_response* response;
 	void* dir;
 
-	if (table != NULL) {
-		log_info(logger, "El cliente con id: %s tiene tabla de proceso con %i segmentos", id, table->number_of_segments);
-		if (table->number_of_segments == 0) {
-			frames_to_ask = ceil((double) (tam_pedido + metadata_size * 2) / PAGE_SIZE);
+	int pages_needed;
 
-			log_info(logger, "No hay ningún segmento para el proceso: %s", id);
-			log_info(logger, "Se crea uno con base 0 y %i páginas para hacer un alloc de %i", frames_to_ask, tam_pedido);
+	if (table != NULL) {
+		// log_info(logger, "El cliente con id: %s tiene tabla de proceso con %i segmentos", id, table->number_of_segments);
+
+		if (table->number_of_segments == 0) {
+			// tamaño pedido + metadata para ese tamaño + metadata para el espacio que queda...
+			pages_needed = ceil((double) (tam_pedido + metadata_size * 2) / PAGE_SIZE);
+
+			// log_info(logger, "No hay ningún segmento para el proceso: %s", id);
+			// log_info(logger, "Se crea uno con base 0 y %i páginas para hacer un alloc de %i", pages_needed, tam_pedido);
 
 			int new_base = last_position(id);
 			segment = create_segment(HEAP, new_base);
 
-			for (int var = 0; var < frames_to_ask; var++) {
+			for (int var = 0; var < pages_needed; var++) {
 				int frame_number = find_free_frame(frame_usage_bitmap);
 				t_page *new_page = create_page(frame_number);
 				add_page_to_segment(segment, new_page);
@@ -49,52 +51,51 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 
 			add_process_segment(id, segment);
 		} else {
-			log_info(logger, "Hay segmentos para el proceso: %s", id);
-			log_info(logger, "Se busca uno para hacer un alloc de %i", tam_pedido);
+			// log_info(logger, "Hay segmentos para el proceso: %s", id);
+			// log_info(logger, "Se busca uno para hacer un alloc de %i", tam_pedido);
 
 			segment = find_segment_with_space(table, tam_pedido);
 
 			if (segment != NULL) {
-				log_info(logger, "Hay uno con espacio, la base es: %i, size es: %i", segment->base, segment->size);
+				// log_info(logger, "Hay uno con espacio, la base es: %i, size es: %i", segment->base, segment->size);
 				int free_dir = find_free_dir(segment, tam_pedido);
-				log_info(logger, "free dir: %i", free_dir);
 				dir = alloc_in_segment(segment, free_dir, tam_pedido);
 
 			} else {
-				log_warning(logger, "No hay uno con espacio");
+				// log_warning(logger, "No hay uno con espacio");
 
-				log_info(logger, "Busco si hay alguno extensible");
+				// log_info(logger, "Busco si hay alguno extensible");
 				segment = find_extensible_heap_segment(table);
 
 				if (segment != NULL) {
-					log_info(logger, "Se puede extender el que tiene como base: %i, y size: %i", segment->base, segment->size);
+					// log_info(logger, "Se puede extender el que tiene como base: %i, y size: %i", segment->base, segment->size);
 
 					int free_space = free_space_at_the_end(segment);
-					log_debug(logger, "free_space: %i", free_space);
-					frames_to_ask = ceil((double) (tam_pedido - free_space + metadata_size) / PAGE_SIZE);
-					log_debug(logger, "frames_to_ask: %i", frames_to_ask);
+
+					// tamaño pedido - el espacio que hay + metadata para lo que queda
+					// (ya se tiene en cuenta el espacio para la metadata de este bloque porque ya existe)
+					pages_needed = ceil((double) (tam_pedido - free_space + metadata_size) / PAGE_SIZE);
 
 					// esto lo puse antes y con esa cuenta loca porque en si los frames no estan
 					// inicializados (con metadata) no podemos saber cuanto espacio queda...
 					// HAY QUE CAMBIARLO...
 					int free_dir = find_free_dir(segment, free_space - metadata_size);
 
-					log_debug(logger, "free_dir: %i", free_dir);
-					for (int var = 0; var < frames_to_ask; var++) {
+					for (int var = 0; var < pages_needed; var++) {
 						int frame_number = find_free_frame(frame_usage_bitmap);
 						t_page *new_page = create_page(frame_number);
 						add_page_to_segment(segment, new_page);
 					}
-					print_segment(segment);
 					dir = alloc_in_segment(segment, free_dir, tam_pedido);
 				} else {
-					frames_to_ask = ceil((double) (tam_pedido + metadata_size * 2) / PAGE_SIZE);
-					log_warning(logger, "No se puede extender ninguno");
+					pages_needed = ceil((double) (tam_pedido + metadata_size * 2) / PAGE_SIZE);
+					// log_warning(logger, "No se puede extender ninguno");
 
 					int new_base = last_position(id);
-					log_debug(logger, "Se crea un nuevo segmento desde la base: %i", new_base);
+
+					// log_info(logger, "Se crea uno con base %i y %i páginas para hacer un alloc de %i", new_base, pages_needed, tam_pedido);
 					segment = create_segment(HEAP, new_base);
-					for (int var = 0; var < frames_to_ask; var++) {
+					for (int var = 0; var < pages_needed; var++) {
 						int frame_number = find_free_frame(frame_usage_bitmap);
 						t_page *new_page = create_page(frame_number);
 						add_page_to_segment(segment, new_page);
@@ -123,6 +124,7 @@ void respond_get(muse_body* body, char* id, int socket_cliente) {
 	void* val = malloc(size);
 
 	log_debug(logger, "El cliente con id: %s hizo get a la src: %u de %i bytes", id, src, size);
+
 	process_table* table = get_table_for_process(id);
 	muse_body* r_body = create_body();
 	muse_response* response;
@@ -133,8 +135,7 @@ void respond_get(muse_body* body, char* id, int socket_cliente) {
 			response = create_response(ERROR, r_body);
 		} else {
 			process_segment *segment = segment_by_dir(table, src);
-			int dir_de_pagina = src - segment->base;
-			val = get_from_dir(segment, dir_de_pagina, size);
+			val = get_from_dir(segment, src, size);
 			add_to_body(r_body, size, &val);
 
 			response = create_response(SUCCESS, r_body);
