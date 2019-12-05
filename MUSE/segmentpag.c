@@ -148,110 +148,46 @@ void free_dir(process_segment* segment, uint32_t dir) {
 }
 
 void* get_from_dir(process_segment* segment, uint32_t dir, int size) {
-	void** value = malloc(size);
-
-	int number_of_pages = segment->size / PAGE_SIZE;
-
 	int metadata_dir = dir - metadata_size;
-
-	int page_number = (int) floor((double) metadata_dir / PAGE_SIZE);
-	int offset_in_frame = metadata_dir - page_number * PAGE_SIZE;
-
-	int saved_to_send = 0;
-	t_page* page = malloc(sizeof(t_page));
-
-	memcpy(page, segment->pages + page_number * sizeof(t_page), sizeof(t_page));
-	void* frame = MEMORY[page->frame_number];
 
 	bool is_free;
 	uint32_t data_size;
 
-	memcpy(&is_free, frame + offset_in_frame, sizeof(bool));
-	offset_in_frame += sizeof(bool);
-	memcpy(&data_size, frame + offset_in_frame, sizeof(uint32_t));
-	offset_in_frame += sizeof(uint32_t);
-	log_info(seg_logger, "is_free %i, data_size: %i", is_free, data_size);
+	uint32_t data_dir = get_metadata_from_segment(segment, metadata_dir, &is_free, &data_size);
 
+	void** data = malloc(size);
 
 	if (is_free) {
 		log_error(seg_logger, "No hay un malloc hecho... se quieren traer datos de espacio no asignado");
 	} else if (data_size < size) {
 		log_error(seg_logger, "Se quiere traer algo que excede el espacio asignado");
 	} else {
-		while (saved_to_send < size) {
-			if (PAGE_SIZE - offset_in_frame < size - saved_to_send) {
-				uint32_t can_copy = PAGE_SIZE - offset_in_frame;
-				memcpy(value + saved_to_send, frame + offset_in_frame, can_copy);
-
-				page_number = page_number + 1;
-				offset_in_frame = 0;
-				saved_to_send += can_copy;
-
-				memcpy(page, segment->pages + page_number * sizeof(t_page), sizeof(t_page));
-				frame = MEMORY[page->frame_number];
-			} else {
-				memcpy(value + saved_to_send, frame + offset_in_frame, size - saved_to_send);
-				saved_to_send += size - saved_to_send;
-			}
-		}
+		get_from_segment(segment, data_dir, size, data);
+		log_error(seg_logger, "hace el get a data_dir: %i, size: %i, data: %i", data_dir, size, *data);
 	}
-	return *value;
+	return *data;
 }
 
 void cpy_to_dir(process_segment* segment, uint32_t dir, void* val, int size) {
-	int number_of_pages = segment->size / PAGE_SIZE;
-
 	// "retrocedo" para poder ver si esta libre y cuanto espacio tiene ese bloque
 	int metadata_dir = dir - metadata_size;
+	log_info(seg_logger, "metadata_dir: %i", metadata_dir);
 
-	// pagina en la cual esta la metadata
-	int page_number = (int) floor((double) metadata_dir / PAGE_SIZE);
-	int offset_in_frame = metadata_dir - page_number * PAGE_SIZE;
 
 	// Hay que chequear si la dir es valida.
-
-	int copied = 0;
-	int offset = offset_in_frame;
-	t_page* page = malloc(sizeof(t_page));
-
-	memcpy(page, segment->pages + page_number * sizeof(t_page), sizeof(t_page));
-	void* frame = MEMORY[page->frame_number];
-
 	bool is_free;
 	uint32_t data_size;
 
-	memcpy(&is_free, frame + offset, sizeof(bool));
-	offset += sizeof(bool);
-	memcpy(&data_size, frame + offset, sizeof(uint32_t));
-	offset += sizeof(uint32_t);
+	uint32_t data_dir = get_metadata_from_segment(segment, metadata_dir, &is_free, &data_size);
 
 	if (is_free) {
 		log_error(seg_logger, "No hay un malloc hecho...");
 	} else if (data_size < size) {
 		log_error(seg_logger, "No hay espacio suficiente...");
 	} else {
-		while (copied < size) {
-			log_info(seg_logger, "offset = %i, copied = %i, size = %i", offset);
-			if (PAGE_SIZE - offset < size - copied) {
-				// espacio que puedo usar
-				uint32_t can_copy = PAGE_SIZE - offset;
-
-				// copio en el frame lo que puedo copiar
-				memcpy(frame + offset, &(val) + copied, can_copy);
-				copied += can_copy;
-				offset = 0;
-
-				// next page
-				page_number++;
-				memcpy(page, segment->pages + page_number * sizeof(t_page), sizeof(t_page));
-				frame = MEMORY[page->frame_number];
-			} else {
-				memcpy(frame + offset, &(val) + copied, size - copied);
-				copied += size - copied; // es lo mismo que decir copied = size => se copio todo
-			}
-		}
+		log_info(seg_logger, "data_dir: %i, val: %i", data_dir, val);
+		set_in_segment(segment, data_dir, size, &val);
 	}
-	free(page);
 }
 
 process_segment* find_segment_with_space(process_table* table , int size) {

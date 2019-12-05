@@ -17,13 +17,14 @@ int muse_init(int id, char* ip, int puerto) {
 
 	if (conexion != -1) {
 		send_muse_op_code(conexion, INIT_MUSE);
-//		int status = recv_response_status(conexion);
+		int status = recv_response_status(conexion);
+		muse_body* response_body = recv_body(conexion);
 
-//		if (status == ERROR) {
-//			return -1;
-//		} else {
+		if (status == SUCCESS) {
 			return 0;
-//		}
+		} else {
+			return -1;
+		}
 	} else {
 		return -1;
 	}
@@ -92,8 +93,9 @@ int muse_get(void* dst, uint32_t src, size_t n) {
 	size_t r_size;
 	memcpy(&r_size, response_body->content, sizeof(size_t));
 
-	memcpy(dst, response_body->content + sizeof(size_t), r_size);
+	log_info(logger, "llegaron: %i bytes", r_size);
 
+	memcpy(dst, response_body->content + sizeof(size_t), r_size);
     return 0;
 }
 

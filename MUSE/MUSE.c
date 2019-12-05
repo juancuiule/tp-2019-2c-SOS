@@ -2,15 +2,15 @@
 
 void respond_init(muse_body* body, char* id, int socket_cliente) {
 	log_debug(logger, "El cliente con id: %s hizo init", id);
-//	process_table* table = get_table_for_process(id);
+	process_table* table = get_table_for_process(id);
 
-//	if (table == NULL) {
+	if (table == NULL) {
 		create_process_table(id);
-//		send_response_status(socket_cliente, SUCCESS);
-//	} else {
-//		log_error(logger, "Ya hay una tabla de segmentos para este proceso");
-//		send_response_status(socket_cliente, ERROR);
-//	}
+		send_response_status(socket_cliente, SUCCESS);
+	} else {
+		log_error(logger, "Ya hay una tabla de segmentos para este proceso");
+		send_response_status(socket_cliente, ERROR);
+	}
 }
 
 void respond_alloc(muse_body* body, char* id, int socket_cliente) {

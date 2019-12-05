@@ -11,14 +11,20 @@ int main(void) {
 
 	if (init_result != -1) {
 
-		uint32_t mem = muse_alloc(15);
-		uint32_t mem2 = muse_alloc(2);
-//		uint32_t mem3 = muse_alloc(10);
+		uint32_t mem = muse_alloc(4);
+		sleep(1);
+		uint32_t mem2 = muse_alloc(10);
 
 		log_info(logger, "mem: %u", mem);
 		log_info(logger, "mem2: %u", mem2);
-//		log_info(logger, "mem3: %u", mem3);
 
+		int x = 1998;
+		int* y = malloc(4);
+
+		muse_cpy(mem, &x, 4);
+		muse_get(y, mem, 4);
+
+		log_info(logger, "y: %d", *y);
 		muse_close();
 
 		return 0;

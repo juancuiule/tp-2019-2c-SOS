@@ -25,7 +25,7 @@ muse_header* create_header(muse_op_code code) {
 	header->id->ip_size = ip_size;
 	header->id->ip = malloc(ip_size);
 	memcpy(header->id->ip, ip, ip_size);
-	header->id->pid = 1;
+	header->id->pid = getpid();
 	return header;
 }
 
@@ -37,7 +37,6 @@ muse_body* create_body() {
 }
 
 void add_to_body(muse_body* body, int size, void* value) {
-
 	body->content = realloc(
 		body->content, // *ptr
 		body->content_size + // prev size
