@@ -38,7 +38,6 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 			log_info(logger, "Se crea uno con base 0 y %i páginas para hacer un alloc de %i", frames_to_ask, tam_pedido);
 
 			int new_base = last_position(id);
-			log_info(logger, "new_base: %i", new_base);
 			segment = create_segment(HEAP, new_base);
 
 			for (int var = 0; var < frames_to_ask; var++) {
@@ -47,10 +46,6 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 				add_page_to_segment(segment, new_page);
 			}
 			dir = alloc_in_segment(segment, 0, tam_pedido);
-
-			bool is_f;
-			int s;
-			get_metadata_from_segment(segment, dir + tam_pedido, &is_f, &s);
 
 			add_process_segment(id, segment);
 		} else {
@@ -75,18 +70,27 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 					log_info(logger, "Se puede extender el que tiene como base: %i, y size: %i", segment->base, segment->size);
 
 					int free_space = free_space_at_the_end(segment);
+					log_debug(logger, "free_space: %i", free_space);
 					frames_to_ask = ceil((double) (tam_pedido - free_space + metadata_size) / PAGE_SIZE);
+					log_debug(logger, "frames_to_ask: %i", frames_to_ask);
 
+					// esto lo puse antes y con esa cuenta loca porque en si los frames no estan
+					// inicializados (con metadata) no podemos saber cuanto espacio queda...
+					// HAY QUE CAMBIARLO...
+					int free_dir = find_free_dir(segment, free_space - metadata_size);
+
+					log_debug(logger, "free_dir: %i", free_dir);
 					for (int var = 0; var < frames_to_ask; var++) {
 						int frame_number = find_free_frame(frame_usage_bitmap);
 						t_page *new_page = create_page(frame_number);
 						add_page_to_segment(segment, new_page);
 					}
-					int free_dir = find_free_dir(segment, tam_pedido);
+					print_segment(segment);
 					dir = alloc_in_segment(segment, free_dir, tam_pedido);
 				} else {
 					frames_to_ask = ceil((double) (tam_pedido + metadata_size * 2) / PAGE_SIZE);
 					log_warning(logger, "No se puede extender ninguno");
+
 					int new_base = last_position(id);
 					log_debug(logger, "Se crea un nuevo segmento desde la base: %i", new_base);
 					segment = create_segment(HEAP, new_base);

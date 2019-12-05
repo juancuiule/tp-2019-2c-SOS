@@ -13,9 +13,11 @@ int main(void) {
 
 		uint32_t mem = muse_alloc(15);
 		uint32_t mem2 = muse_alloc(2);
+//		uint32_t mem3 = muse_alloc(10);
 
 		log_info(logger, "mem: %u", mem);
 		log_info(logger, "mem2: %u", mem2);
+//		log_info(logger, "mem3: %u", mem3);
 
 		muse_close();
 

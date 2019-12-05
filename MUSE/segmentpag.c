@@ -19,6 +19,8 @@ void init_structures(int m_size, int p_size) {
 	int i;
 	for(i = 0; i < frames; i++) {
 		void* new_frame = malloc(p_size);
+		memset(new_frame, 1, sizeof(bool));
+		memset(new_frame + sizeof(bool), NULL, p_size - sizeof(bool));
 //		bool is_free = true;
 //		uint32_t size = p_size - metadata_size;
 //		memcpy(new_frame, &is_free, sizeof(bool));
@@ -334,7 +336,7 @@ void* find_free_dir(process_segment* segment, int size) {
 		log_info(seg_logger, "dir: %i, is_free: %i, size: %i", dir, is_free, block_size);
 
 		if (is_free) {
-			if (block_size > (size + metadata_size)) {
+			if (block_size >= (size + metadata_size)) {
 				log_error(seg_logger, "block_size: %i", block_size);
 				log_error(seg_logger, "size + metadata_size: %i", size + metadata_size);
 				return dir;
@@ -442,6 +444,7 @@ void* clear_in_segment(process_segment* segment, uint32_t dir, uint32_t size) {
 	return segment->base + page_number * PAGE_SIZE + offset;
 }
 
+
 void* set_in_segment(process_segment* segment, uint32_t dir, uint32_t size, void* value) {
 	void* pages = segment->pages;
 	int offset = dir % PAGE_SIZE;
@@ -501,6 +504,8 @@ void* set_metadata_in_segment(process_segment* segment, uint32_t dir, bool is_fr
 	return next_dir;
 }
 
+
+
 uint32_t alloc_in_segment(process_segment* segment, uint32_t process_dir, uint32_t size) {
 	uint32_t dir = process_dir - segment->base;
 //	log_debug(seg_logger, "alloc_in_segment, size: %i, dir: %i", size, dir);
@@ -514,7 +519,13 @@ uint32_t alloc_in_segment(process_segment* segment, uint32_t process_dir, uint32
 	allocated_end_dir = clear_in_segment(segment, metadata_end_dir, size);
 	log_debug(seg_logger, "allocated_end_dir: %i", allocated_end_dir);
 
-	int free_space_after = PAGE_SIZE - (allocated_end_dir + metadata_size) % PAGE_SIZE;
+	int last_space_used = (allocated_end_dir + metadata_size) % PAGE_SIZE;
+	int free_space_after = PAGE_SIZE - last_space_used;
+
+	if (last_space_used == 0) {
+		free_space_after = 0;
+	}
+
 	log_debug(seg_logger, "free_space_after: %i", free_space_after);
 
 	free_metadata_end_dir = set_metadata_in_segment(segment, allocated_end_dir, true, free_space_after);
