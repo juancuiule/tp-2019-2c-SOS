@@ -32,12 +32,13 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 	if (table != NULL) {
 		log_info(logger, "El cliente con id: %s tiene tabla de proceso con %i segmentos", id, table->number_of_segments);
 		if (table->number_of_segments == 0) {
-			frames_to_ask = ceil((double) (tam_pedido + metadata_size) / PAGE_SIZE);
+			frames_to_ask = ceil((double) (tam_pedido + metadata_size * 2) / PAGE_SIZE);
 
 			log_info(logger, "No hay ningún segmento para el proceso: %s", id);
 			log_info(logger, "Se crea uno con base 0 y %i páginas para hacer un alloc de %i", frames_to_ask, tam_pedido);
 
 			int new_base = last_position(id);
+			log_info(logger, "new_base: %i", new_base);
 			segment = create_segment(HEAP, new_base);
 
 			for (int var = 0; var < frames_to_ask; var++) {
@@ -45,8 +46,12 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 				t_page *new_page = create_page(frame_number);
 				add_page_to_segment(segment, new_page);
 			}
-			int free_dir = find_free_dir(segment, tam_pedido);
-			dir = alloc_in_segment(segment, free_dir, tam_pedido);
+			dir = alloc_in_segment(segment, 0, tam_pedido);
+
+			bool is_f;
+			int s;
+			get_metadata_from_segment(segment, dir + tam_pedido, &is_f, &s);
+
 			add_process_segment(id, segment);
 		} else {
 			log_info(logger, "Hay segmentos para el proceso: %s", id);
@@ -70,7 +75,7 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 					log_info(logger, "Se puede extender el que tiene como base: %i, y size: %i", segment->base, segment->size);
 
 					int free_space = free_space_at_the_end(segment);
-					frames_to_ask = ceil((double) (tam_pedido - free_space) / PAGE_SIZE);
+					frames_to_ask = ceil((double) (tam_pedido - free_space + metadata_size) / PAGE_SIZE);
 
 					for (int var = 0; var < frames_to_ask; var++) {
 						int frame_number = find_free_frame(frame_usage_bitmap);
@@ -80,7 +85,7 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 					int free_dir = find_free_dir(segment, tam_pedido);
 					dir = alloc_in_segment(segment, free_dir, tam_pedido);
 				} else {
-					frames_to_ask = ceil((double) (tam_pedido + metadata_size) / PAGE_SIZE);
+					frames_to_ask = ceil((double) (tam_pedido + metadata_size * 2) / PAGE_SIZE);
 					log_warning(logger, "No se puede extender ninguno");
 					int new_base = last_position(id);
 					log_debug(logger, "Se crea un nuevo segmento desde la base: %i", new_base);
@@ -103,6 +108,7 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 		response = create_response(ERROR, r_body);
 	}
 	send_response(response, socket_cliente);
+	print_process(table);
 }
 
 void respond_get(muse_body* body, char* id, int socket_cliente) {

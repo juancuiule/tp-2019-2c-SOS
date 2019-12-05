@@ -62,12 +62,16 @@ int find_free_frame(t_bitarray* bitmap);
 process_segment* find_segment_with_space(process_table* table, int size);
 process_segment* segment_by_dir(process_table* table, int dir);
 process_segment* find_extensible_heap_segment(process_table* table);
-void* alloc_in_segment(process_segment* segment, int dir, uint32_t size);
-void* find_free_dir(process_segment* segment, int size);
 int free_space_at_the_end(process_segment* segment);
 void clear_bitmap(int bits);
 void cpy_to_dir(process_segment* segment, uint32_t dir, void* val, int size);
 void* get_from_dir(process_segment* segment, uint32_t dir, int size);
 void free_dir(process_segment* segment, uint32_t dir);
+
+
+uint32_t alloc_in_segment(process_segment* segment, uint32_t dir, uint32_t size);
+void* find_free_dir(process_segment* segment, int size);
+
+void* get_metadata_from_segment(process_segment* segment, uint32_t dir, bool* is_free, uint32_t* size);
 
 #endif

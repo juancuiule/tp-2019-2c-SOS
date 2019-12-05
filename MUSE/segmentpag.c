@@ -8,7 +8,7 @@ int metadata_size = sizeof(bool) + sizeof(uint32_t);
 void init_structures(int m_size, int p_size) {
 	int frames = m_size / p_size;
 	tables = list_create();
-	seg_logger = log_create("./logs/segmentpag.log", "segmentpag", 1, LOG_LEVEL_ERROR);
+	seg_logger = log_create("./logs/segmentpag.log", "segmentpag", 1, LOG_LEVEL_DEBUG);
 	int bitmap_size_in_bytes = ceil((double) frames / 8);
 	bitmap_pointer = malloc(bitmap_size_in_bytes);
 	frame_usage_bitmap = bitarray_create_with_mode(bitmap_pointer, bitmap_size_in_bytes, LSB_FIRST);
@@ -19,10 +19,10 @@ void init_structures(int m_size, int p_size) {
 	int i;
 	for(i = 0; i < frames; i++) {
 		void* new_frame = malloc(p_size);
-		bool is_free = true;
-		uint32_t size = p_size - metadata_size;
-		memcpy(new_frame, &is_free, sizeof(bool));
-		memcpy(new_frame + sizeof(bool), &size, sizeof(uint32_t));
+//		bool is_free = true;
+//		uint32_t size = p_size - metadata_size;
+//		memcpy(new_frame, &is_free, sizeof(bool));
+//		memcpy(new_frame + sizeof(bool), &size, sizeof(uint32_t));
 		*(MEMORY + i) = new_frame;
 	}
 }
@@ -76,7 +76,7 @@ void add_page_to_segment(process_segment* segment, t_page* page) {
 	for (int var = 0; var < number_of_pages + 1; ++var) {
 		t_page* the_page = malloc(sizeof(t_page));
 		memcpy(the_page, segment->pages + var * sizeof(t_page), sizeof(t_page));
-		log_debug(seg_logger, "Page added frame: %i", the_page->frame_number);
+//		log_debug(seg_logger, "Page added frame: %i", the_page->frame_number);
 	}
 
 	log_debug(seg_logger, "Se agrego una página al segmento con base: %i, nuevo size: %i", segment->base, segment->size);
@@ -101,24 +101,12 @@ void print_segment(process_segment* segment) {
 	log_info(seg_logger, "type: %s", segment->type == HEAP ? "HEAP" : "MMAP");
 
 	int read = 0;
-	int frame_offset = 0;
-	while(read < segment->size / PAGE_SIZE) {
-		t_page* page = malloc(sizeof(t_page));
-		memcpy(page, segment->pages + read * sizeof(t_page), sizeof(t_page));
-		log_info(seg_logger, "frame_number: %i", page->frame_number);
-		void* frame = MEMORY[page->frame_number];
+	while (read < segment->size) {
 		bool is_free;
-		uint32_t data_size;
-		while (frame_offset < PAGE_SIZE) {
-			memcpy(&is_free, frame + frame_offset, sizeof(bool));
-			frame_offset += sizeof(bool);
-			memcpy(&data_size, frame + frame_offset, sizeof(uint32_t));
-			frame_offset += sizeof(uint32_t);
-			frame_offset += data_size;
-			log_info(seg_logger, "frame_number: %i, is_free: %i, data_size: %i", page->frame_number, is_free, data_size);
-		}
-		read += (int) floor((double) frame_offset / PAGE_SIZE);
-		frame_offset = frame_offset % PAGE_SIZE;
+		uint32_t size;
+		read = get_metadata_from_segment(segment, read, &is_free, &size);
+		log_info(seg_logger, "dir: %i, is_free: %i, size: %i", read, is_free, size);
+		read += size;
 	}
 }
 
@@ -336,66 +324,26 @@ int last_position(char* process) {
 
 void* find_free_dir(process_segment* segment, int size) {
 	log_info(seg_logger, "find_free_dir, size: %i", size);
-	print_segment(segment);
+	uint32_t dir = 0;
+	uint32_t next_dir = 0;
+	while (dir < segment->size) {
+		bool is_free;
+		int block_size;
+		next_dir = get_metadata_from_segment(segment, dir, &is_free, &block_size);
 
-	void* pages = segment->pages;
-	int number_of_pages = segment->size / PAGE_SIZE;
+		log_info(seg_logger, "dir: %i, is_free: %i, size: %i", dir, is_free, block_size);
 
-	int read_pages = 0;
-	int offset = 0;
-	int free_space = 0;
-	int data_size;
-
-	bool is_free;
-	int free_dir = -1;
-
-	log_info(seg_logger, "number_of_pages: %i", number_of_pages);
-
-	t_page* page = malloc(sizeof(t_page));
-	while (read_pages < number_of_pages) {
-		memcpy(page, pages + read_pages * sizeof(t_page), sizeof(t_page));
-		void* frame = MEMORY[page->frame_number];
-
-		while ((offset % PAGE_SIZE) < (PAGE_SIZE - metadata_size)) {
-			memcpy(&is_free, frame + offset % PAGE_SIZE, sizeof(bool));
-			offset += sizeof(bool);
-			memcpy(&data_size, frame + offset % PAGE_SIZE, sizeof(uint32_t));
-			offset += sizeof(uint32_t);
-
-			if (is_free) {
-				if (free_dir == -1) {
-					// vuelvo al inicio de esa free dir
-					free_dir = offset - metadata_size;
-					free_space = data_size;
-				} else {
-					// sumo data_size y lo que podría ocupar pisando la metadata
-					free_space += data_size + sizeof(bool) + sizeof(uint32_t);
-				}
-				log_info(seg_logger, "free_space: %i, size: %i", free_space, size);
-				if (free_space >= size) {
-					// ver cuanto espacio tiene
-					// si el espacio alcanza esa es la dir
-					return free_dir;
-				} else {
-					// si no alcanza hay que ver si el prox bloque de frame esta libre
-					offset += data_size;
-				}
+		if (is_free) {
+			if (block_size > (size + metadata_size)) {
+				log_error(seg_logger, "block_size: %i", block_size);
+				log_error(seg_logger, "size + metadata_size: %i", size + metadata_size);
+				return dir;
 			} else {
-				// si no está libre no puede entrar acá...
-				offset += data_size;
-				// reseteo la free dir porque va a ser otra
-				free_dir = -1;
-				// reseteo el espacio libre
-				free_space = 0;
+				dir = next_dir + block_size;
 			}
-			if (offset >= (read_pages + 1) * PAGE_SIZE) {
-				break;
-			}
+		} else {
+			dir = next_dir + block_size;
 		}
-//		read += (int) floor((double) frame_offset / PAGE_SIZE);
-//		frame_offset = frame_offset % PAGE_SIZE;
-		read_pages += (int) floor((double) offset / PAGE_SIZE);
-		offset = offset % PAGE_SIZE;
 	}
 	return -1;
 }
@@ -433,7 +381,7 @@ int find_free_frame(t_bitarray* bitmap) {
 	int var;
 	for (var = 0; var < (MEMORY_SIZE / PAGE_SIZE); ++var) {
 		bool is_used = bitarray_test_bit(bitmap, var);
-		log_info(seg_logger, "i = %i, is_used?: %i", var, is_used);
+//		log_info(seg_logger, "i = %i, is_used?: %i", var, is_used);
 		if (!is_used) {
 			return var;
 		}
@@ -450,105 +398,134 @@ int max(int x, int y) {
 }
 
 int free_space_at_the_end(process_segment* segment) {
-	void* pages = segment->pages;
-	int number_of_pages = segment->size / PAGE_SIZE;
-
-	int read_pages = 0;
-	int offset = 0;
-	int last_free_space = 0;
-	int data_size;
-	
-	bool first_free = true;
-	bool is_free;
-
-	t_page* page = malloc(sizeof(t_page));
-	while (read_pages < number_of_pages) {
-		memcpy(page, pages + read_pages * sizeof(t_page), sizeof(t_page));
-		void* frame = MEMORY[page->frame_number];
-
-		while ((offset % PAGE_SIZE) < (PAGE_SIZE - metadata_size)) {
-			memcpy(&is_free, frame + offset % PAGE_SIZE, sizeof(bool));
-			offset += sizeof(bool);
-			memcpy(&data_size, frame + offset % PAGE_SIZE, sizeof(uint32_t));
-			offset += sizeof(uint32_t);
-
-			if (is_free) {
-				if (first_free) {
-					last_free_space += data_size;
-					first_free = false;
-				} else {
-					last_free_space += data_size + sizeof(bool) + sizeof(uint32_t);
-				}
-				offset += data_size;
-				if (offset == segment->size) {
-					log_info(seg_logger, "El espacio libre es: %i", last_free_space);
-					break;
-				}
+	uint32_t dir = 0;
+	uint32_t next_dir = 0;
+	while (dir < segment->size) {
+		bool is_free;
+		int block_size;
+		next_dir = get_metadata_from_segment(segment, dir, &is_free, &block_size);
+		if (is_free) {
+			if (next_dir + block_size == segment->size) {
+				log_error(seg_logger, "last_free_size_is: %i", block_size);
+				return block_size;
 			} else {
-				last_free_space = 0;
-				first_free = true;
-				offset += data_size;
+				dir = next_dir + block_size;
 			}
-			if (offset >= (read_pages + 1) * PAGE_SIZE) {
-				break;
-			}
+		} else {
+			dir = next_dir + block_size;
 		}
-		read_pages++;
 	}
-	return last_free_space;
+	return -1;
 }
 
-void* alloc_in_segment(process_segment* segment, int dir, uint32_t size) {
+void* clear_in_segment(process_segment* segment, uint32_t dir, uint32_t size) {
 	void* pages = segment->pages;
-	int base = dir % PAGE_SIZE;
-	int dir_in_segment = dir - base;
-	int allocd = 0;
-	int last_allocd = 0;
+	int offset = dir % PAGE_SIZE;
+	int page_number = (dir - offset) / PAGE_SIZE;
 
-	log_info(seg_logger, "Se hace un alloc a %i.", dir);
-	log_info(seg_logger, "dir_in_segment: %i, base: %i", dir_in_segment, base);
-	int offset = base;
-	int pages_read = 0;
 	t_page* page = malloc(sizeof(t_page));
 	void* frame;
-	while (allocd < size) {
-		memcpy(page, segment->pages + ((dir_in_segment / PAGE_SIZE) + pages_read) * sizeof(t_page), sizeof(t_page));
 
+	int size_allocd = 0;
+	while (size_allocd < size) {
+		memcpy(page, segment->pages + page_number * sizeof(t_page), sizeof(t_page));
 		frame = MEMORY[page->frame_number];
 
-		// falta chequear que la pagina este en memoria
-		// falta chequear que el frame esta libre en esa base
-
-		if (allocd == 0) {
-			memcpy(frame + offset, &f, sizeof(bool));
-			offset += sizeof(bool);
-			last_allocd = min(size, PAGE_SIZE - base - metadata_size);
-			memcpy(frame + offset, &(size), sizeof(uint32_t));
-			offset += sizeof(uint32_t);
-			log_info(seg_logger, "size: %i, offset: %i", size, offset);
-		} else {
-			last_allocd = min(size - allocd, PAGE_SIZE);
-			memset(frame, 0, last_allocd);
-		}
-		allocd += last_allocd;
-		pages_read += 1;
-		log_info(seg_logger, "allocd = %i, pages_read = %i, dir_in_segment: %i, frame_number: %i", allocd, pages_read, dir_in_segment, page->frame_number);
-	}
-	int free_space_after = PAGE_SIZE - last_allocd - metadata_size;
-	int next_block_offset;
-	if (pages_read == 1) {
-		// si se leyo una sola página hay que sumar el bloque de metadata al offset
-		// y restar la base del espacio libre restante
-		next_block_offset = base + last_allocd + metadata_size;
-		free_space_after = free_space_after - base - metadata_size;
-	} else {
-		next_block_offset = last_allocd;
+		int to_alloc = min(size - size_allocd, PAGE_SIZE - offset % PAGE_SIZE);
+		memset(frame + offset, NULL, to_alloc);
+		size_allocd += to_alloc;
+		offset += to_alloc;
+		page_number += offset / PAGE_SIZE;
+		offset = offset % PAGE_SIZE;
 	}
 
-	log_info(seg_logger, "free_space_afte: %i", free_space_after);
-	log_info(seg_logger, "next_block_offset = %i", next_block_offset);
+	return segment->base + page_number * PAGE_SIZE + offset;
+}
 
-	memcpy(frame + next_block_offset, &t, sizeof(bool));
-	memcpy(frame + next_block_offset + sizeof(bool), &(free_space_after), sizeof(uint32_t));
-	return dir_in_segment + offset;
+void* set_in_segment(process_segment* segment, uint32_t dir, uint32_t size, void* value) {
+	void* pages = segment->pages;
+	int offset = dir % PAGE_SIZE;
+	int page_number = (dir - offset) / PAGE_SIZE;
+
+	t_page* page = malloc(sizeof(t_page));
+	void* frame;
+
+	int size_allocd = 0;
+	while (size_allocd < size) {
+		memcpy(page, segment->pages + page_number * sizeof(t_page), sizeof(t_page));
+		frame = MEMORY[page->frame_number];
+		int to_alloc = min(size - size_allocd, PAGE_SIZE - offset % PAGE_SIZE);
+		memcpy(frame + offset, value + size_allocd, to_alloc);
+		size_allocd += to_alloc;
+		offset += to_alloc;
+		page_number += offset / PAGE_SIZE;
+		offset = offset % PAGE_SIZE;
+	}
+
+	return segment->base + page_number * PAGE_SIZE + offset;
+}
+
+void* get_from_segment(process_segment* segment, uint32_t dir, uint32_t size, void* to) {
+	void* pages = segment->pages;
+	int offset = dir % PAGE_SIZE;
+	int page_number = (dir - offset) / PAGE_SIZE;
+
+	t_page* page = malloc(sizeof(t_page));
+	void* frame;
+
+	int copied = 0;
+	while (copied < size) {
+		memcpy(page, segment->pages + page_number * sizeof(t_page), sizeof(t_page));
+		frame = MEMORY[page->frame_number];
+		int to_copy = min(size - copied, PAGE_SIZE - offset % PAGE_SIZE);
+		memcpy(to + copied, frame + offset, to_copy);
+		copied += to_copy;
+		offset += to_copy;
+		page_number += offset / PAGE_SIZE;
+		offset = offset % PAGE_SIZE;
+	}
+	return segment->base + page_number * PAGE_SIZE + offset;
+}
+
+void* get_metadata_from_segment(process_segment* segment, uint32_t dir, bool* is_free, uint32_t* size) {
+	uint32_t next_dir = dir;
+	next_dir = get_from_segment(segment, next_dir, sizeof(bool), is_free);
+	next_dir = get_from_segment(segment, next_dir, sizeof(uint32_t), size);
+	return next_dir;
+}
+
+void* set_metadata_in_segment(process_segment* segment, uint32_t dir, bool is_free, uint32_t size) {
+	uint32_t next_dir = dir;
+	next_dir = set_in_segment(segment, next_dir, sizeof(bool), &is_free);
+	next_dir = set_in_segment(segment, next_dir, sizeof(uint32_t), &size);
+	return next_dir;
+}
+
+uint32_t alloc_in_segment(process_segment* segment, uint32_t process_dir, uint32_t size) {
+	uint32_t dir = process_dir - segment->base;
+//	log_debug(seg_logger, "alloc_in_segment, size: %i, dir: %i", size, dir);
+	uint32_t metadata_end_dir;
+	uint32_t allocated_end_dir;
+	uint32_t free_metadata_end_dir;
+
+	metadata_end_dir = set_metadata_in_segment(segment, dir, false, size);
+	log_debug(seg_logger, "metadata_end_dir: %i", metadata_end_dir);
+
+	allocated_end_dir = clear_in_segment(segment, metadata_end_dir, size);
+	log_debug(seg_logger, "allocated_end_dir: %i", allocated_end_dir);
+
+	int free_space_after = PAGE_SIZE - (allocated_end_dir + metadata_size) % PAGE_SIZE;
+	log_debug(seg_logger, "free_space_after: %i", free_space_after);
+
+	free_metadata_end_dir = set_metadata_in_segment(segment, allocated_end_dir, true, free_space_after);
+	log_debug(seg_logger, "free_metadata_end_dir: %i", free_metadata_end_dir);
+
+//	bool is_f;
+//	int s;
+//	get_metadata_from_segment(segment, dir, &is_f, &s);
+//	log_debug(seg_logger, "used, is_f: %i, s: %i", is_f, s);
+//	get_metadata_from_segment(segment, allocated_end_dir, &is_f, &s);
+//	log_debug(seg_logger, "free, is_f: %i, s: %i", is_f, s);
+
+	return process_dir + metadata_end_dir;
 }
