@@ -11,28 +11,28 @@ int conexion_con_suse;
 
 int suse_create(int tid){
 	if (tid > max_tid) max_tid = tid;
-	return ejecutar_operacion(tid, 1);
+	return ejecutar_operacion(tid, CREATE);
 }
 
 int suse_schedule_next(void){
 	int next;
-	return ejecutar_operacion(next, 2);
+	return ejecutar_operacion(next, SCHEDULE_NEXT);
 }
 
 int suse_join(int tid){
-	return ejecutar_operacion(tid, 3);
+	return ejecutar_operacion(tid, JOIN);
 }
 
 int suse_close(int tid){
-	return ejecutar_operacion(tid, 4);
+	return ejecutar_operacion(tid, CLOSE);
 }
 
 int suse_wait(int tid, char *sem_name){
-	return ejecutar_operacion_semaforo(tid, sem_name, 5);
+	return ejecutar_operacion_semaforo(tid, sem_name, WAIT);
 }
 
 int suse_signal(int tid, char *sem_name){
-	return ejecutar_operacion_semaforo(tid, sem_name, 6);
+	return ejecutar_operacion_semaforo(tid, sem_name, SIGNAL);
 }
 
 static struct hilolay_operations hiloops = {

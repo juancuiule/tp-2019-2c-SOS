@@ -109,7 +109,7 @@ void atender_cliente(int cliente_fd) {
 	hilo_t* proximo_hilo = malloc(sizeof(hilo_t));
 
 	switch (opcode) {
-		case 1:
+		case CREATE:
 			encolar_hilo_en_new(hilo);
 			agregar_programa(hilo);
 
@@ -119,7 +119,7 @@ void atender_cliente(int cliente_fd) {
 			}
 
 			break;
-		case 2:
+		case SCHEDULE_NEXT:
 
 			if (hilo->tid != tid_hilo_anterior) {
 				tid_hilo_anterior = hilo->tid;
@@ -131,12 +131,12 @@ void atender_cliente(int cliente_fd) {
 			send(cliente_fd, proximo, sizeof(proximo), MSG_WAITALL);
 			free(proximo);
 			break;
-		case 3:
+		case JOIN:
 			if (!list_any_satisfy(cola_blocked->elements, es_hilo_buscado))
 				bloquear_hilo(hilo);
 
 			break;
-		case 4:
+		case CLOSE:
 			cerrar_hilo(hilo);
 
 			if (!queue_is_empty(cola_blocked)) {
@@ -146,10 +146,10 @@ void atender_cliente(int cliente_fd) {
 
 			ejecutar_nuevo_hilo(hilo);
 			break;
-		case 5:
+		case WAIT:
 			semaforo_wait(nombre_semaforo);
 			break;
-		case 6:
+		case SIGNAL:
 			semaforo_signal(nombre_semaforo);
 			break;
 	}
