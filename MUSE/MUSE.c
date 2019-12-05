@@ -237,6 +237,7 @@ void respond_map(muse_body* body, char* id, int socket_cliente) {
 		int free_dir = find_free_dir(segment, length);
 		dir = alloc_in_segment(segment, free_dir, length);
 		add_process_segment(id, segment);
+
 		add_fixed_to_body(r_body, sizeof(uint32_t), segment->base + dir);
 		response = create_response(SUCCESS, r_body);
 		send_response(response, socket_cliente);
@@ -277,39 +278,30 @@ int respond_to_client(int cliente_fd) {
 				respond_init(body, id, cliente_fd);
 				break;
 			case ALLOC:
-				// log_info(logger, "muse_alloc.");
 				respond_alloc(body, id, cliente_fd);
 				break;
 			case FREE:
-				// log_info(logger, "muse_free.");
 				respond_free(body, id, cliente_fd);
 				break;
 			case GET:
-				// log_info(logger, "muse_get.");
 				respond_get(body, id, cliente_fd);
 				break;
 			case CPY:
-				// log_info(logger, "muse_copy.");
 				respond_cpy(body, id, cliente_fd);
 				break;
 			case MAP:
-				// log_info(logger, "muse_map.");
 				respond_map(body, id, cliente_fd);
 				break;
 			case SYNC:
-				// log_info(logger, "muse_sync.");
 				respond_sync(body, id, cliente_fd);
 				break;
 			case UNMAP:
-				// log_info(logger, "muse_unmap.");
 				respond_unmap(body, id, cliente_fd);
 				break;
 			case DISCONNECT_MUSE:
-				// log_info(logger, "El cliente se desconecto.");
 				return EXIT_FAILURE;
 				break;
 			default:
-				// log_warning(logger, "Operacion desconocida. No quieras meter la pata");
 				break;
 		}
 	}

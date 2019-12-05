@@ -54,8 +54,6 @@ uint32_t muse_alloc(uint32_t tam) {
 	uint32_t dir;
 	memcpy(&dir, response_body->content, sizeof(uint32_t));
 
-	log_info(logger, "muse_alloc: tam = %i, dir: %i", tam, dir);
-
 	return dir;
 }
 
