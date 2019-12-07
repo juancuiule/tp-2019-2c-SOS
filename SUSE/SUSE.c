@@ -13,13 +13,16 @@ int main() {
 
 	//pthread_create(&hilo_metricas, NULL, (void*)logear_metricas, NULL);
 
+	printf("antes del while\n");
+
 	while(1) {
 		cliente_fd = esperar_cliente(servidor_fd);
 		pthread_create(&hilo_clientes, NULL, (void*)atender_cliente, cliente_fd);
 		//pthread_join(hilo_clientes, NULL);
-
 		// TODO: ver porque se está cerrando SUSE.
 	}
+
+	printf("despues del while\n");
 
 	//pthread_join(hilo_metricas, NULL);
 	liberar();
@@ -126,7 +129,7 @@ void atender_cliente(int cliente_fd) {
 				sacar_de_ready(programa, proximo_hilo);
 				programa->hilo_en_exec = proximo_hilo;
 				tid_proximo_hilo = proximo_hilo->tid;
-				log_info(logger, "El hilo %i llegó a EXEC", tid_proximo_hilo);
+				log_info(logger, "El hilo %i del programa %i llegó a EXEC", tid_proximo_hilo, pid);
 				send(cliente_fd, &tid_proximo_hilo, sizeof(int), MSG_WAITALL);
 				break;
 			case JOIN:
@@ -146,8 +149,8 @@ void atender_cliente(int cliente_fd) {
 				senal_hilo_finalizado = 99;
 				send(cliente_fd, &senal_hilo_finalizado, sizeof(int), MSG_WAITALL);
 
-				if (pid == 0)
-					pthread_exit(pthread_self());
+			//	if (pid == 0)
+				//	pthread_exit(pthread_self());
 
 				break;
 			case WAIT:
