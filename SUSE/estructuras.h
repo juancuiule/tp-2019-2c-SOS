@@ -20,8 +20,8 @@ typedef struct {
 	long tiempo_creacion;
 	long tiempo_ultima_llegada_a_ready;
 	long tiempo_ultima_llegada_a_exec;
-	double estimacion_anterior;
-	double rafaga_anterior;
+	long long estimacion_anterior;
+	long long rafaga_anterior;
 	int tid_hilo_esperando;
 } __attribute__((packed)) hilo_t;
 

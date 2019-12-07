@@ -10,7 +10,7 @@ int max_tid = 0;
 int conexion_con_suse;
 
 int suse_create(int tid){
-	conexion_con_suse = conectarse_a_suse();
+	//conexion_con_suse = conectarse_a_suse();
 	int opcode = CREATE;
 	int pid = getpid();
 	void* buffer = malloc(3 * sizeof(int));
@@ -22,9 +22,9 @@ int suse_create(int tid){
 }
 
 int suse_schedule_next(void){
-	printf("replanificando...\n");
+	//printf("me conecto desde suse_schedule_next con el socket (antes del send) %i\n", conexion_con_suse);
 	int next;
-	conexion_con_suse = conectarse_a_suse();
+	//conexion_con_suse = conectarse_a_suse();
 	int opcode = SCHEDULE_NEXT;
 	int pid = getpid();
 	void* buffer = malloc(2 * sizeof(int));
@@ -37,7 +37,7 @@ int suse_schedule_next(void){
 
 int suse_join(int tid){
 	int tid_hilo_a_bloquear;
-	conexion_con_suse = conectarse_a_suse();
+	//conexion_con_suse = conectarse_a_suse();
 	int opcode = JOIN;
 	int pid = getpid();
 	tid_hilo_a_bloquear = hilolay_get_tid();
@@ -51,7 +51,7 @@ int suse_join(int tid){
 }
 
 int suse_close(int tid){
-	conexion_con_suse = conectarse_a_suse();
+	//conexion_con_suse = conectarse_a_suse();
 	int opcode = CLOSE;
 	int pid = getpid();
 	void* buffer = malloc(3 * sizeof(int));
@@ -61,9 +61,8 @@ int suse_close(int tid){
 	send(conexion_con_suse, buffer, 3 * sizeof(int), MSG_WAITALL);
 	int senal_hilo_finalizado;
 	recv(conexion_con_suse, &senal_hilo_finalizado, sizeof(int), MSG_WAITALL);
-	printf("recibi la señal de hilo finalizado: %i\n", senal_hilo_finalizado);
-	suse_schedule_next();
-	printf("se invocó a suse_schedule_next\n");
+	//suse_schedule_next();
+	//printf("SUSE close\n");
 	return 0;
 }
 
@@ -86,6 +85,7 @@ static struct hilolay_operations hiloops = {
 
 void hilolay_init(void){
 	conexion_con_suse = conectarse_a_suse();
+	//printf("me conecto desde init con socket %i\n", conexion_con_suse);
 	int opcode = INIT;
 	int pid = getpid();
 	void* buffer = malloc(2 * sizeof(int));

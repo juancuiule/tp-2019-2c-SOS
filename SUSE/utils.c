@@ -9,6 +9,7 @@
 
 int iniciar_servidor(void)
 {
+	//printf("entro a iniciar_servidor\n");
 	int socket_servidor;
     struct addrinfo hints, *servinfo, *p;
 
@@ -25,6 +26,7 @@ int iniciar_servidor(void)
             continue;
 
         if (bind(socket_servidor, p->ai_addr, p->ai_addrlen) == -1) {
+        	printf("fallo el bind\n");
             close(socket_servidor);
             continue;
         }
@@ -45,7 +47,7 @@ int esperar_cliente(int socket_servidor)
 	int socket_cliente = accept(socket_servidor, (void*) &dir_cliente, &tam_direccion);
 
 	//log_info(logger, "Se conecto un cliente!");
-
+	//printf("socket: %i\n", socket_cliente);
 	return socket_cliente;
 }
 

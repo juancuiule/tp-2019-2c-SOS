@@ -11,15 +11,17 @@ int main() {
 
 	servidor_fd = iniciar_servidor();
 
-	pthread_create(&hilo_metricas, NULL, (void*)logear_metricas, NULL);
+	//pthread_create(&hilo_metricas, NULL, (void*)logear_metricas, NULL);
 
 	while(1) {
 		cliente_fd = esperar_cliente(servidor_fd);
 		pthread_create(&hilo_clientes, NULL, (void*)atender_cliente, cliente_fd);
-		pthread_join(hilo_clientes, NULL);
+		//pthread_join(hilo_clientes, NULL);
+
+		// TODO: ver porque se está cerrando SUSE.
 	}
 
-	pthread_join(hilo_metricas, NULL);
+	//pthread_join(hilo_metricas, NULL);
 	liberar();
 	return EXIT_SUCCESS;
 }
@@ -60,6 +62,14 @@ hilo_t* crear_hilo(int pid, int tid) {
 	return hilo;
 }
 
+void sacar_de_ready(programa_t* programa, hilo_t* hilo) {
+	bool es_hilo_buscado(hilo_t* un_hilo) {
+		return hilo->tid == un_hilo->tid && hilo->pid == un_hilo->pid;
+	}
+
+	list_remove_by_condition(programa->hilos_en_ready, es_hilo_buscado);
+}
+
 void atender_cliente(int cliente_fd) {
 	int pedido;
 	int valor_semaforo;
@@ -81,57 +91,73 @@ void atender_cliente(int cliente_fd) {
 	hilo_t* hilo_esperando = malloc(sizeof(hilo_t));
 	programa_t* programa = malloc(sizeof(programa_t));
 
-	recv(cliente_fd, &opcode, sizeof(int), MSG_WAITALL);
-	recv(cliente_fd, &pid, sizeof(int), MSG_WAITALL);
+	while(1) {
 
-	switch (opcode) {
-		case INIT:
-			agregar_programa(pid);
-			log_info(logger, "Llegó el programa %i", pid);
-			break;
-		case CREATE:
-			recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
-			hilo = crear_hilo(pid, tid);
-			encolar_hilo_en_new(hilo);
+		//TODO: salir del while al recibir close OK
 
-			if (GRADO_MULTIPROGRAMACION < MAX_MULTIPROG) {
-				hilo = queue_pop(cola_new);
-				encolar_hilo_en_ready(hilo);
-			}
+		recv(cliente_fd, &opcode, sizeof(int), MSG_WAITALL);
+		recv(cliente_fd, &pid, sizeof(int), MSG_WAITALL);
 
+		switch (opcode) {
+			case INIT:
+				agregar_programa(pid);
+				log_info(logger, "Llegó el programa %i", pid);
+				break;
+			case CREATE:
+				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
+				hilo = crear_hilo(pid, tid);
+				encolar_hilo_en_new(hilo);
+
+				if (GRADO_MULTIPROGRAMACION < MAX_MULTIPROG) {
+					hilo = queue_pop(cola_new);
+					encolar_hilo_en_ready(hilo);
+				}
+
+				break;
+			case SCHEDULE_NEXT:
+				//tomar el hilo en exec y mandarlo a READY. OK
+				programa = obtener_programa(pid);
+
+				if (programa->hilo_en_exec != NULL)
+					list_add(programa->hilos_en_ready, programa->hilo_en_exec);
+
+				proximo_hilo = siguiente_hilo_a_ejecutar(pid);
+
+				sacar_de_ready(programa, proximo_hilo);
+				programa->hilo_en_exec = proximo_hilo;
+				tid_proximo_hilo = proximo_hilo->tid;
+				log_info(logger, "El hilo %i llegó a EXEC", tid_proximo_hilo);
+				send(cliente_fd, &tid_proximo_hilo, sizeof(int), MSG_WAITALL);
+				break;
+			case JOIN:
+				recv(cliente_fd, &tid_hilo_a_bloquear, sizeof(int), MSG_WAITALL);
+				recv(cliente_fd, &tid_hilo_a_esperar, sizeof(int), MSG_WAITALL);
+				hilo_a_bloquear = crear_hilo(pid, tid_hilo_a_bloquear);
+				hilo_a_bloquear->tid_hilo_esperando = tid_hilo_a_esperar;
+				//hilo_a_bloquear->rafaga_anterior = tiempo_actual() - hilo_a_bloquear->tiempo_ultima_llegada_a_exec;
+				bloquear_hilo(hilo_a_bloquear);
+				break;
+			case CLOSE:
+				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
+				hilo = crear_hilo(pid, tid);
+				cerrar_hilo(hilo);
+				hilo_esperando = crear_hilo(hilo->pid, hilo->tid_hilo_esperando);
+				encolar_hilo_en_ready(hilo_esperando);
+				senal_hilo_finalizado = 99;
+				send(cliente_fd, &senal_hilo_finalizado, sizeof(int), MSG_WAITALL);
+
+				if (pid == 0)
+					pthread_exit(pthread_self());
+
+				break;
+			case WAIT:
+				semaforo_wait(nombre_semaforo);
 			break;
-		case SCHEDULE_NEXT:
-			proximo_hilo = siguiente_hilo_a_ejecutar(pid);
-			programa = obtener_programa(pid);
-			programa->hilo_en_exec = proximo_hilo;
-			tid_proximo_hilo = proximo_hilo->tid;
-			send(cliente_fd, &tid_proximo_hilo, sizeof(int), MSG_WAITALL);
+			case SIGNAL:
+				semaforo_signal(nombre_semaforo);
 			break;
-		case JOIN:
-			recv(cliente_fd, &tid_hilo_a_bloquear, sizeof(int), MSG_WAITALL);
-			recv(cliente_fd, &tid_hilo_a_esperar, sizeof(int), MSG_WAITALL);
-			hilo_a_bloquear = crear_hilo(pid, tid_hilo_a_bloquear);
-			hilo_a_bloquear->tid_hilo_esperando = tid_hilo_a_esperar;
-			//hilo_a_bloquear->rafaga_anterior = tiempo_actual() - hilo_a_bloquear->tiempo_ultima_llegada_a_exec;
-			bloquear_hilo(hilo_a_bloquear);
-			break;
-		case CLOSE:
-			recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
-			hilo = crear_hilo(pid, tid);
-			cerrar_hilo(hilo);
-			hilo_esperando = crear_hilo(hilo->pid, hilo->tid_hilo_esperando);
-			encolar_hilo_en_ready(hilo_esperando);
-			senal_hilo_finalizado = 99;
-			send(cliente_fd, &senal_hilo_finalizado, sizeof(int), MSG_WAITALL);
-			break;
-		case WAIT:
-			semaforo_wait(nombre_semaforo);
-			break;
-		case SIGNAL:
-			semaforo_signal(nombre_semaforo);
-			break;
+		}
 	}
-
 }
 
 bool es_programa_buscado(programa_t* programa) {
@@ -253,8 +279,9 @@ hilo_t* siguiente_hilo_a_ejecutar(int pid) {
 	programa_t* programa = obtener_programa(pid);
 	hilos = programa->hilos_en_ready;
 
-	double estimacion(hilo_t* hilo) {
-		return (1 - ALPHA_SJF) * hilo->estimacion_anterior + ALPHA_SJF * hilo->rafaga_anterior;
+	long long estimacion(hilo_t* hilo) {
+		long long estimacion = (1 - ALPHA_SJF) * hilo->estimacion_anterior + ALPHA_SJF * hilo->rafaga_anterior;
+		 return estimacion;
 	}
 
 	bool comparador(hilo_t* hilo1, hilo_t* hilo2) {
@@ -262,8 +289,11 @@ hilo_t* siguiente_hilo_a_ejecutar(int pid) {
 	}
 
 	list_sort(hilos, comparador);
-	siguiente = list_get(hilos, 0);
-	siguiente->estimacion_anterior = estimacion(siguiente);
+
+	if (!list_is_empty(hilos)) {
+		siguiente = list_get(hilos, 0);
+		siguiente->estimacion_anterior = estimacion(siguiente);
+	}
 	return siguiente;
 }
 
