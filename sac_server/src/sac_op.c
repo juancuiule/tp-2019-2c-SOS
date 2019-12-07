@@ -157,15 +157,6 @@ void sac_mknod(char *path, int cliente_fd)
 }
 
 
-void sac_releasedir(char *path, intptr_t dir, int cliente_fd)
-{
-	log_msje_info("SAC CLOSEDIR Path = [ %s ]", path);
-	package_t paquete = paquete = slz_simple_res(COD_RELEASEDIR);
-	//paquete = slz_res_error(ENOENT);
-    paquete_enviar(cliente_fd, paquete);
-
-}
-
 void sac_open(char *path, int flags, int cliente_fd)
 {
 	log_msje_info("SAC OPEN Path = [ %s ]", path);
@@ -227,28 +218,6 @@ void sac_read(char *path, uint32_t blk, size_t size, off_t offset, int cliente_f
 	paquete = slz_res_read(buffer, leido);
     paquete_enviar(cliente_fd, paquete);
     free(buffer);
-}
-
-void sac_release(char *path, int fd, int cliente_fd)
-{
-	log_msje_info("SAC RELEASE Path = [ %s ]", path);
-	package_t paquete;
-
-	int res, err;
-	//ejecuto operacion
-	res = close(fd);
-
-    if (res == -1) {
-    	log_msje_error("close: [ %s ]", strerror(errno));
-    	err = errno;
-    	paquete = slz_res_error(err);
-    }
-    else {
-    	log_msje_info("Exito operacion close sobre fs local");
-    	paquete = slz_simple_res(COD_RELEASE);
-    }
-
-    paquete_enviar(cliente_fd, paquete);
 }
 
 void sac_mkdir(char *path, int cliente_fd)
@@ -370,7 +339,6 @@ void sac_write(char *path, char *buffer, uint32_t blk, size_t size, off_t offset
 	package_t paquete;
 
 	int escrito;
-
 	escrito = fs_write_file(blk, buffer, size, offset);
 
     log_msje_info("Exito operacion write sobre disco");
@@ -539,6 +507,8 @@ void sac_rename(char *path, char *newpath, int cliente_fd)
 		}
 
 		fs_rename_file(node_to_set, newname);
+		sac_nodetable[node_to_set].m_date = get_current_time();
+
 		//actualizo mis nodos
 		int inicio_tabla_nodos = 1 + sac_header->size_bitmap;
 		memcpy(disk_blk_pointer + inicio_tabla_nodos , sac_nodetable, GFILEBYTABLE*BLOCKSIZE);

@@ -2,6 +2,7 @@
 
 sem_t mutex_bitmap;
 sem_t mutex_nodo[GFILEBYTABLE];
+sem_t mutex_nodo_libre;
 
 //El header se encuentra en el primer bloque de mi disco
 static void set_sac_header()
@@ -45,6 +46,8 @@ void fs_set_config()
 	for(int i = 0 ; i < GFILEBYTABLE; i++){
 		sem_init(&mutex_nodo[i], 0, 1);
 	}
+	sem_init(&mutex_nodo_libre, 0, 1);
+
 	first_data_blk = 1 + GFILEBYTABLE + sac_header->size_bitmap;
 	sac_blocks = disk_size / BLOCKSIZE;
 
@@ -55,9 +58,9 @@ bool fs_map_disk_in_memory(char *disk_name)
 	disk_size = get_filesize(disk_name);
 
 	disk_fd = open(disk_name, O_RDWR, 0);
-	log_msje_error("open: [ %s ]", strerror(errno));
+	log_msje_info("open: [ %s ]", strerror(errno));
 	disk_addr = mmap(NULL, disk_size, PROT_READ | PROT_WRITE, MAP_SHARED, disk_fd, 0);
-	log_msje_error("mmap disk: [ %s ]", strerror(errno));
+	log_msje_info("mmap disk: [ %s ]", strerror(errno));
 	disk_blk_pointer = (GBlock *)disk_addr;
 
 	return disk_blk_pointer != MAP_FAILED;
@@ -175,10 +178,12 @@ int fs_get_blk_by_fullpath(char *fullpath)
 //desc: Devuelve un blk nodo libre o EDQUOT si no hay mas nodos libres
 int fs_get_free_blk_node()
 {
+	sem_wait(&mutex_nodo_libre);
 	int node = 0;
 	while(sac_nodetable[node].state != 0 && node < MAX_FILE_NUMBER){
 		node++;
 	}
+	sem_post(&mutex_nodo_libre);
 
 	if(node >= MAX_FILE_NUMBER)
 		return EDQUOT; //Disc quota exceeded
@@ -240,7 +245,9 @@ int get_free_blk_data_dir()
 
 void set_free_blk_data_bitmap(int bk_number)
 {
+	sem_wait(&mutex_bitmap);
 	bitarray_clean_bit(sac_bitarray, bk_number);
+	sem_post(&mutex_bitmap);
 }
 
 
@@ -402,7 +409,7 @@ size_t fs_write_file(uint32_t node_blk, void *buffer, size_t size, off_t offset)
 		//Cargo el blk dato correspondiente
 		int nro_blk_data = blk_indsimple->blk_datos[bk_data];
 
-		void* blk_addr = (void *)(disk_blk_pointer +nro_blk_data);
+		GBlock* blk_addr = disk_blk_pointer +nro_blk_data;
 
 		if(size_to_write > free_space_in_blk)
 		{
@@ -411,13 +418,14 @@ size_t fs_write_file(uint32_t node_blk, void *buffer, size_t size, off_t offset)
 		}
 
 		//Escribo
-		memcpy((char *)blk_addr + offs, buffer + buf_offs, size_to_write);
+		memcpy((void *)blk_addr + offs, buffer + buf_offs, size_to_write);
 
 		escrito += size_to_write;
 		buf_offs += escrito;
 	}
 
 	file_node->file_size += escrito;
+	file_node->m_date = get_current_time();
 	sem_post(&mutex_nodo[node_blk]);
 
 	log_msje_info("Se escribio [ %d ] bytes", escrito);
@@ -436,6 +444,7 @@ void fs_truncate_file(int node, off_t newsize)
 
 	if(newsize >= file_node->file_size)
 	{
+		sem_wait(&mutex_nodo[node]);
 		int blks_already_assigned = fs_get_cant_blks_datos_asignados(node);
 		int blks_needed = roundup(newsize / BLOCKSIZE);
 
@@ -473,6 +482,7 @@ void fs_truncate_file(int node, off_t newsize)
 				blks_to_assign--;
 			}
 		}
+		sem_post(&mutex_nodo[node]);
 	}
 	else
 	{
@@ -618,6 +628,7 @@ void fs_remove_all_blocks_of(int node)
 {
 	GFile *file_node = (GFile *)sac_nodetable + node;
 
+	sem_wait(&mutex_bitmap);
 	int i=0;
 	int blk_ind;
 	while((blk_ind = file_node->blk_indirect[i]) != 0)
@@ -638,6 +649,7 @@ void fs_remove_all_blocks_of(int node)
 		file_node->blk_indirect[i] = 0;
 		i++;
 	}
+	sem_post(&mutex_bitmap);
 
 }
 
