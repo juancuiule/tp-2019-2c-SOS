@@ -25,4 +25,6 @@ void inicializar() {
 	sem_init(&sem_metricas, 0, 1);
 
 	pthread_mutex_init(&mutex_multiprogramacion, NULL);
+
+	sem_value = malloc(sizeof(sem_value_t));
 }

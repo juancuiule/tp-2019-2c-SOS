@@ -38,4 +38,6 @@ sem_t* sem_metricas;
 
 pthread_mutex_t mutex_multiprogramacion;
 
+sem_value_t* sem_value;
+
 #endif /* GLOBALES_H_ */
