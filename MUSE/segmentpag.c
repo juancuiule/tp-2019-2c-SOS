@@ -114,35 +114,37 @@ void print_segment(process_segment* segment) {
 
 void free_dir(process_segment* segment, uint32_t dir) {
 	int number_of_pages = segment->size / PAGE_SIZE;
-	int metadata_dir = dir - metadata_size;
+	int page_dir = dir - segment->base;
+	int metadata_dir = page_dir - metadata_size;
+
+	log_info(seg_logger, "metadata_dir: %i", metadata_dir);
 
 	int page_number = (int) floor((double) metadata_dir / PAGE_SIZE);
 	int offset_in_frame = metadata_dir - page_number * PAGE_SIZE;
 
-	t_page* page = malloc(sizeof(t_page));
-
-	memcpy(page, segment->pages + page_number * sizeof(t_page), sizeof(t_page));
-	void* frame = MEMORY[page->frame_number];
-
 	bool is_free;
 	uint32_t data_size;
 
-	memcpy(&is_free, frame + offset_in_frame, sizeof(bool));
-	offset_in_frame += sizeof(bool);
+	get_metadata_from_segment(segment, metadata_dir, &is_free, &data_size);
 
 	if (is_free) {
 		log_error(seg_logger, "Ya estaba sin asignar");
 	} else {
-		memcpy(&data_size, frame + offset_in_frame, sizeof(uint32_t));
-		offset_in_frame += sizeof(uint32_t);
-
-		offset_in_frame -= metadata_size;
-
-		// free
-		memcpy(frame + offset_in_frame, &t, sizeof(bool));
-		offset_in_frame += sizeof(bool);
-		// falta dejar el frame libre...
-		// bitarray_clean_bit(frame_usage_bitmap, page->frame_number);
+		log_info(seg_logger, "metadata_dir: %i, metadata_size %i, data_size: %i", metadata_dir, metadata_size, data_size);
+		int offset = metadata_dir + metadata_size + data_size;
+		bool next_is_free = true;
+		uint32_t next_data_size;
+		uint32_t new_data_size = data_size;
+		while (offset < segment->size && next_is_free) {
+			log_info(seg_logger, "offset: %i", offset);
+			get_metadata_from_segment(segment, offset, &next_is_free, &next_data_size);
+			offset += next_data_size + metadata_size;
+			if (next_is_free) {
+				new_data_size += next_data_size + metadata_size;
+			}
+		}
+		log_info(seg_logger, "new_data_size: %i", new_data_size);
+		set_metadata_in_segment(segment, metadata_dir, true, new_data_size);
 	}
 
 }
@@ -475,5 +477,5 @@ uint32_t alloc_in_segment(process_segment* segment, uint32_t process_dir, uint32
 //	get_metadata_from_segment(segment, allocated_end_dir, &is_f, &s);
 //	log_debug(seg_logger, "free, is_f: %i, s: %i", is_f, s);
 
-	return process_dir + metadata_end_dir;
+	return segment->base + metadata_end_dir;
 }

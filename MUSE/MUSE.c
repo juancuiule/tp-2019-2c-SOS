@@ -68,7 +68,7 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 				segment = find_extensible_heap_segment(table);
 
 				if (segment != NULL) {
-					// log_info(logger, "Se puede extender el que tiene como base: %i, y size: %i", segment->base, segment->size);
+//					log_info(logger, "Se puede extender el que tiene como base: %i, y size: %i", segment->base, segment->size);
 
 					int free_space = free_space_at_the_end(segment);
 
@@ -87,6 +87,7 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 						add_page_to_segment(segment, new_page);
 					}
 					dir = alloc_in_segment(segment, free_dir, tam_pedido);
+					log_warning(logger, "dir: %i", dir);
 				} else {
 					pages_needed = ceil((double) (tam_pedido + metadata_size * 2) / PAGE_SIZE);
 					// log_warning(logger, "No se puede extender ninguno");
@@ -163,8 +164,7 @@ void respond_free(muse_body* body, char* id, int socket_cliente) {
 			send_response_status(socket_cliente, ERROR);
 		} else {
 			process_segment *segment = segment_by_dir(table, dir_to_free);
-			int dir_de_pagina = dir_to_free - segment->base;
-			free_dir(segment, dir_de_pagina);
+			free_dir(segment, dir_to_free);
 
 			send_response_status(socket_cliente, SUCCESS);
 		}

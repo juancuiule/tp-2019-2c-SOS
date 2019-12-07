@@ -10,23 +10,25 @@ int main(void) {
 	int init_result = muse_init((int) getpid(), IP, PORT);
 
 	if (init_result != -1) {
-
 		uint32_t mem = muse_alloc(4);
-		sleep(1);
 		uint32_t mem2 = muse_alloc(10);
 
 		log_info(logger, "mem: %u", mem);
 		log_info(logger, "mem2: %u", mem2);
 
-		int x = 1998;
-		int* y = malloc(4);
+		muse_free(mem2);
+		muse_free(mem);
 
-		muse_cpy(mem, &x, 4);
-		muse_get(y, mem, 4);
+//		int x = 1998;
+//		int* y = malloc(4);
+//
+//		muse_cpy(mem, &x, 4);
+//		muse_get(y, mem, 4);
+//
+//		log_info(logger, "y: %d", *y);
+//		muse_free(mem);
 
-		log_info(logger, "y: %d", *y);
 		muse_close();
-
 		return 0;
 	} else {
 		return EXIT_FAILURE;

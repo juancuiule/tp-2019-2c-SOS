@@ -77,4 +77,6 @@ void* set_in_segment(process_segment* segment, uint32_t dir, uint32_t size, void
 void* get_metadata_from_segment(process_segment* segment, uint32_t dir, bool* is_free, uint32_t* size);
 void* get_from_segment(process_segment* segment, uint32_t dir, uint32_t size, void* to);
 
+void* set_metadata_in_segment(process_segment* segment, uint32_t dir, bool is_free, uint32_t size);
+
 #endif
