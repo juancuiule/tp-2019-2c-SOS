@@ -2,10 +2,11 @@
 
 uint64_t get_current_time()
 {
-	struct timeval tv;
-	gettimeofday(&tv, NULL);
-
-	return ((tv.tv_sec) * 1000) + ((tv.tv_usec) / 1000);
+	time_t un_time = time(NULL);
+	struct tm current_time = *localtime(&un_time);
+	time_t result = mktime(&current_time);
+	uint64_t time_millis = result * 1000LL;
+	return time_millis;
 }
 
 size_t get_filesize(char *filename)

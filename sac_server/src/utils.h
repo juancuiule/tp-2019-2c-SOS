@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <commons/string.h>
 #include <sys/time.h>
+#include <time.h>
 #include <stdint.h>
 #include <string.h>
 
