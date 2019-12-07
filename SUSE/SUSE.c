@@ -13,8 +13,6 @@ int main() {
 
 	//pthread_create(&hilo_metricas, NULL, (void*)logear_metricas, NULL);
 
-	printf("antes del while\n");
-
 	while(1) {
 		cliente_fd = esperar_cliente(servidor_fd);
 		pthread_create(&hilo_clientes, NULL, (void*)atender_cliente, cliente_fd);
@@ -73,6 +71,14 @@ void sacar_de_ready(programa_t* programa, hilo_t* hilo) {
 	list_remove_by_condition(programa->hilos_en_ready, es_hilo_buscado);
 }
 
+bool finalizado(hilo_t* hilo) {
+	bool es_hilo_buscado(hilo_t* un_hilo) {
+		return hilo->tid == un_hilo->tid && hilo->pid == un_hilo->pid;
+	}
+
+	return list_any_satisfy(cola_exit->elements, es_hilo_buscado);
+}
+
 void atender_cliente(int cliente_fd) {
 	int pedido;
 	int valor_semaforo;
@@ -129,7 +135,10 @@ void atender_cliente(int cliente_fd) {
 				sacar_de_ready(programa, proximo_hilo);
 				programa->hilo_en_exec = proximo_hilo;
 				tid_proximo_hilo = proximo_hilo->tid;
-				log_info(logger, "El hilo %i del programa %i llegó a EXEC", tid_proximo_hilo, pid);
+
+				if (!finalizado(proximo_hilo))
+					log_info(logger, "El hilo %i del programa %i llegó a EXEC", tid_proximo_hilo, pid);
+
 				send(cliente_fd, &tid_proximo_hilo, sizeof(int), MSG_WAITALL);
 				break;
 			case JOIN:
@@ -143,15 +152,13 @@ void atender_cliente(int cliente_fd) {
 			case CLOSE:
 				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
 				hilo = crear_hilo(pid, tid);
+				programa_t* programa = obtener_programa(pid);
+				//sacar_de_ready(programa, hilo);
 				cerrar_hilo(hilo);
 				hilo_esperando = crear_hilo(hilo->pid, hilo->tid_hilo_esperando);
-				encolar_hilo_en_ready(hilo_esperando);
-				senal_hilo_finalizado = 99;
-				send(cliente_fd, &senal_hilo_finalizado, sizeof(int), MSG_WAITALL);
-
-			//	if (pid == 0)
-				//	pthread_exit(pthread_self());
-
+				//encolar_hilo_en_ready(hilo_esperando);
+				//senal_hilo_finalizado = 99;
+				//send(cliente_fd, &senal_hilo_finalizado, sizeof(int), MSG_WAITALL);
 				break;
 			case WAIT:
 				semaforo_wait(nombre_semaforo);
@@ -226,7 +233,7 @@ void desbloquear_hilo(hilo_t* hilo) {
 void cerrar_hilo(hilo_t* hilo) {
 	programa_t* programa = obtener_programa(hilo->pid);
 	queue_push(cola_exit, hilo);
-	log_info(logger, "El hilo %i del programa %i llegó a EXIT.", hilo->tid, hilo->pid);
+	log_info(logger, "El hilo %i del programa %i llegó a EXIT", hilo->tid, hilo->pid);
 	pthread_mutex_lock(&mutex_multiprogramacion);
 	GRADO_MULTIPROGRAMACION--;
 	pthread_mutex_unlock(&mutex_multiprogramacion);
