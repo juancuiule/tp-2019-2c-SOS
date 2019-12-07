@@ -16,7 +16,7 @@ long tiempo_de_ejecucion(hilo_t* hilo) {
 
 void logear_metricas_hilo(hilo_t* hilo) {
 	if (hilo != NULL) {
-		log_info(logger_metricas, "Métricas del hilo %i: ", hilo->tid);
+		log_info(logger_metricas, "Métricas del hilo %i del programa %i: ", hilo->tid, hilo->pid);
 		long tiempo_ejecucion = tiempo_de_ejecucion(hilo);
 		log_info(logger_metricas, "\ttiempo de ejecución: %ld ms", tiempo_ejecucion);
 		log_info(logger_metricas, "\ttiempo de espera: %ld ms", hilo->tiempo_espera);

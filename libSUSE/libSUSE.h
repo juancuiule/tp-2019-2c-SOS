@@ -28,7 +28,7 @@ typedef struct {
 	int tiempo_cpu;
 	float estimacion_anterior;
 	float rafaga_anterior;
-	t_list* hilos_a_esperar;
+	int tid_hilo_esperando;
 } __attribute__((packed)) hilo_t;
 
 typedef struct {
@@ -38,6 +38,7 @@ typedef struct {
 } programa_t;
 
 typedef enum {
+	INIT,
 	CREATE,
 	SCHEDULE_NEXT,
 	JOIN,

@@ -10,21 +10,64 @@ int max_tid = 0;
 int conexion_con_suse;
 
 int suse_create(int tid){
-	if (tid > max_tid) max_tid = tid;
-	return ejecutar_operacion(tid, CREATE);
+	printf("se ejecuta suse_create\n");
+	conexion_con_suse = conectarse_a_suse();
+	int opcode = CREATE;
+	int pid = getpid();
+	void* buffer = malloc(3 * sizeof(int));
+	memcpy(buffer, &opcode, sizeof(int));
+	memcpy(buffer + 4, &pid, sizeof(int));
+	memcpy(buffer + 8, &tid, sizeof(int));
+	send(conexion_con_suse, buffer, 3 * sizeof(int), MSG_WAITALL);
+	return 0;
 }
 
 int suse_schedule_next(void){
+	printf("se ejecuta suse_schedule_next\n");
 	int next;
-	return ejecutar_operacion(next, SCHEDULE_NEXT);
+	conexion_con_suse = conectarse_a_suse();
+	int opcode = SCHEDULE_NEXT;
+	int pid = getpid();
+	int tid = hilolay_get_tid();
+	void* buffer = malloc(3 * sizeof(int));
+	memcpy(buffer, &opcode, sizeof(int));
+	memcpy(buffer + 4, &pid, sizeof(int));
+	memcpy(buffer + 8, &tid, sizeof(int));
+	send(conexion_con_suse, buffer, 3 * sizeof(int), MSG_WAITALL);
+	recv(conexion_con_suse, &next, sizeof(int), MSG_WAITALL);
+	printf("el next devuelto por SUSE es: %i\n");
+	return next;
 }
 
 int suse_join(int tid){
-	return ejecutar_operacion(tid, JOIN);
+	printf("se ejecuta suse_join\n");
+	int tid_hilo_a_bloquear;
+	conexion_con_suse = conectarse_a_suse();
+	int opcode = JOIN;
+	int pid = getpid();
+	tid_hilo_a_bloquear = hilolay_get_tid();
+	void* buffer = malloc(4 * sizeof(int));
+	memcpy(buffer, &opcode, sizeof(int));
+	memcpy(buffer + 4, &pid, sizeof(int));
+	memcpy(buffer + 8, &tid_hilo_a_bloquear, sizeof(int));
+	memcpy(buffer + 12, &tid, sizeof(int));
+	send(conexion_con_suse, buffer, 4 * sizeof(int), MSG_WAITALL);
+	return 0;
 }
 
 int suse_close(int tid){
-	return ejecutar_operacion(tid, CLOSE);
+	printf("se ejecuta suse_close\n");
+	conexion_con_suse = conectarse_a_suse();
+	int opcode = CLOSE;
+	int pid = getpid();
+	void* buffer = malloc(3 * sizeof(int));
+	memcpy(buffer, &opcode, sizeof(int));
+	memcpy(buffer + 4, &pid, sizeof(int));
+	memcpy(buffer + 8, &tid, sizeof(int));
+	send(conexion_con_suse, buffer, 3 * sizeof(int), MSG_WAITALL);
+	int senal_hilo_finalizado;
+	recv(conexion_con_suse, &senal_hilo_finalizado, sizeof(int), MSG_WAITALL);
+	return 0;
 }
 
 int suse_wait(int tid, char *sem_name){
@@ -45,6 +88,14 @@ static struct hilolay_operations hiloops = {
 };
 
 void hilolay_init(void){
+	printf("se ejecuta hilolay_init\n");
+	conexion_con_suse = conectarse_a_suse();
+	int opcode = INIT;
+	int pid = getpid();
+	void* buffer = malloc(2 * sizeof(int));
+	memcpy(buffer, &opcode, sizeof(int));
+	memcpy(buffer + sizeof(int), &pid, sizeof(int));
+	send(conexion_con_suse, buffer, 2 * sizeof(int), MSG_WAITALL);
 	init_internal(&hiloops);
 }
 
@@ -57,7 +108,7 @@ hilo_t* crear_nuevo_hilo(int tid, int pid) {
 	hilo->tiempo_cpu = 0;
 	hilo->estimacion_anterior = 0;
 	hilo->rafaga_anterior = 0;
-	hilo->hilos_a_esperar = list_create();
+	hilo->tid_hilo_esperando = 0;
 	return hilo;
 }
 
@@ -71,7 +122,7 @@ int ejecutar_operacion(int tid, int operacion) {
 		hilo_t* hilo_a_esperar = crear_nuevo_hilo(tid_hilo_a_esperar, pid);
 		tid = hilolay_get_tid();
 		hilo_t* hilo = crear_nuevo_hilo(tid, pid);
-		list_add(hilo->hilos_a_esperar, hilo_a_esperar);
+		list_add(hilo->tid_hilo_esperando, hilo_a_esperar);
 		agregar_a_paquete(paquete, hilo, sizeof(hilo_t));
 		enviar_paquete(paquete, conexion_con_suse);
 		return 0;
@@ -84,7 +135,6 @@ int ejecutar_operacion(int tid, int operacion) {
 	if (operacion == 2) {
 		char* proximo = string_new();
 		recv(conexion_con_suse, proximo, sizeof(proximo), MSG_WAITALL);
-		printf("Próximo hilo a ejecutar: %s\n", proximo);
 		return atoi(proximo);
 	}
 
@@ -99,9 +149,7 @@ int ejecutar_operacion_semaforo(int tid, char* sem_name, int operacion) {
 	agregar_a_paquete(paquete, hilo, sizeof(hilo_t));
 	enviar_paquete(paquete, conexion_con_suse);
 	int tamanio = string_length(sem_name);
-	printf("el tamaño del nombre es %i\n", tamanio);
 	send(conexion_con_suse, &tamanio, sizeof(int), MSG_WAITALL);
-	printf("el nombre es %s\n", sem_name);
 	send(conexion_con_suse, sem_name, tamanio, MSG_WAITALL);
 	return 0;
 }
