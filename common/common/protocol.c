@@ -201,25 +201,6 @@ package_t slz_cod_readdir(const char *path, uint32_t dir)
 	return paquete;
 }
 
-//desc: arma un paquete para la operacion releasedir
-package_t slz_cod_releasedir(const char *path, intptr_t dir)
-{
-	log_msje_info("ENVIO REALESEDIR POINTER ADRESS DIR: [ %d ]", dir);
-
-	package_t paquete;
-	int tam_path = strlen(path);
-	int tam_payload = sizeof(int) + tam_path + sizeof(intptr_t);
-
-	paquete.header = header_get('C', COD_RELEASEDIR, tam_payload);
-	paquete.payload = malloc(tam_payload);
-
-	memcpy(paquete.payload              		,&tam_path  ,sizeof(int));
-	memcpy(paquete.payload+sizeof(int)			,path		,tam_path);
-	memcpy(paquete.payload+sizeof(int)+tam_path	,&dir		,sizeof(intptr_t));
-
-	return paquete;
-}
-
 package_t slz_cod_open(const char *path, int flags)
 {
 	package_t paquete;
@@ -259,26 +240,6 @@ package_t slz_cod_read(const char *path, uint32_t blk_num, size_t size, off_t of
 
 	return paquete;
 }
-
-package_t slz_cod_release(const char *path, int fd)
-{
-	package_t paquete;
-	int tam_path = strlen(path);
-	int tam_payload = sizeof(int) + tam_path + sizeof(int);
-
-	paquete.header = header_get('C', COD_RELEASE, tam_payload);
-	paquete.payload = malloc(tam_payload);
-
-	int offs=0;
-	memcpy(paquete.payload, &tam_path  ,sizeof(int));
-	offs+=sizeof(int);
-	memcpy(paquete.payload+offs, path, tam_path);
-	offs+=tam_path;
-	memcpy(paquete.payload+offs, &fd, sizeof(int));
-
-	return paquete;
-}
-
 
 package_t slz_cod_write(const char *path, const char *buffer, uint32_t blk, size_t size, off_t offset)
 {

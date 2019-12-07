@@ -119,32 +119,6 @@ int cli_readdir(const char *path, void *buf, fuse_fill_dir_t filler, off_t offse
 }
 
 //OK
-int cli_releasedir(const char *path, struct fuse_file_info *fi)
-{
-	log_msje_info("Operacion RELEASEDIR sobre path [ %s ]", path);
-
-	package_t paquete, respuesta;
-	paquete = slz_cod_releasedir(path, (uint32_t)fi->fh);
-
-	if(!paquete_enviar(sac_server.fd, paquete))
-		log_msje_error("No se pudo enviar el paquete cod realesedir");
-	else
-		log_msje_info("Se envio operacion releasedir al server");
-
-	//...espero respuesta de server
-	respuesta = paquete_recibir(sac_server.fd);
-
-	if(respuesta.header.cod_operacion == COD_ERROR){
-		int err;
-		log_msje_error("releasedir me llego cod error");
-		dslz_res_error(respuesta.payload, &err);
-		return -err;
-	}
-
-	return 0;
-}
-
-//OK
 int cli_open(const char *path, struct fuse_file_info *fi)
 {
 	log_msje_info("Operacion OPEN sobre path [ %s ]", path);
@@ -205,31 +179,6 @@ int cli_read(const char *path, char *buf, size_t size, off_t offset, struct fuse
 	dslz_res_read(respuesta.payload, buf, &leido);
 
 	return leido;
-}
-
-int cli_release(const char *path, struct fuse_file_info *fi)
-{
-	log_msje_info("Operacion RELEASE sobre path [ %s ]", path);
-
-	package_t paquete, respuesta;
-	paquete = slz_cod_release(path, fi->fh);
-
-	if(!paquete_enviar(sac_server.fd, paquete))
-		log_msje_error("No se pudo enviar el paquete cod release");
-	else
-		log_msje_info("Se envio operacion release al server");
-
-	//espero respuesta de server
-	respuesta = paquete_recibir(sac_server.fd);
-
-	if(respuesta.header.cod_operacion == COD_ERROR){
-		int err;
-		log_msje_error("release me llego cod error");
-		dslz_res_error(respuesta.payload, &err);
-		return -err;
-	}
-
-	return 0;
 }
 
 int cli_flush(const char *path, struct fuse_file_info *fi)
@@ -369,12 +318,6 @@ int cli_unlink(const char *path)
 	return 0;
 }
 
-int cli_getxattr (const char *path, const char *name, char *value, size_t size)
-{
-	log_msje_info("Operacion GETXATTR sobre path [ %s ]", path);
-	return 0;
-}
-
 int cli_truncate(const char *path, off_t newsize)
 {
 	log_msje_info("Operacion TRUNCATE sobre el archivo ");
@@ -438,17 +381,14 @@ struct fuse_operations cli_oper = {
 		.getattr = cli_getattr,
 		.opendir = cli_opendir,
 		.readdir = cli_readdir,
-		//.releasedir = cli_releasedir,
 		.open = cli_open,
 		.read = cli_read,
-		.release = cli_release,
 		.flush = cli_flush,
 		.mkdir = cli_mkdir,
 		.rmdir = cli_rmdir,
 		.mknod = cli_mknod,
 		.write = cli_write,
 		.unlink = cli_unlink,
-		.getxattr = cli_getxattr,
 		.truncate = cli_truncate,
 		.rename = cli_rename
 };
