@@ -1,6 +1,23 @@
 #include "client.h"
 #include "unistd.h"
 
+void recursiva(int num) {
+	if (num == 0) {
+		return;
+	}
+
+	uint32_t ptr = muse_alloc(4);
+	muse_cpy(ptr, &num, 4);
+	printf("%d\n", num);
+
+	recursiva(num - 1);
+
+	num = 0;
+	muse_get(&num, ptr, 4);
+	printf("%d\n", num);
+	muse_free(ptr);
+}
+
 int main(void) {
 	config = config_create("./program.config");
 
@@ -10,24 +27,7 @@ int main(void) {
 	int init_result = muse_init((int) getpid(), IP, PORT);
 
 	if (init_result != -1) {
-		uint32_t mem = muse_alloc(4);
-		uint32_t mem2 = muse_alloc(10);
-
-		log_info(logger, "mem: %u", mem);
-		log_info(logger, "mem2: %u", mem2);
-
-		muse_free(mem2);
-		muse_free(mem);
-
-//		int x = 1998;
-//		int* y = malloc(4);
-//
-//		muse_cpy(mem, &x, 4);
-//		muse_get(y, mem, 4);
-//
-//		log_info(logger, "y: %d", *y);
-//		muse_free(mem);
-
+		recursiva(10);
 		muse_close();
 		return 0;
 	} else {

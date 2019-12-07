@@ -9,7 +9,7 @@
 int conexion;
 
 int muse_init(int id, char* ip, int puerto) {
-	logger = log_create("./logs/libmuse.log", "libmuse", 1, LOG_LEVEL_INFO);
+	logger = log_create("./logs/libmuse.log", "libmuse", 1, LOG_LEVEL_ERROR);
 
 	log_info(logger, "Conectandome a %s:%s", ip, puerto);
 

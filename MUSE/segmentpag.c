@@ -117,8 +117,6 @@ void free_dir(process_segment* segment, uint32_t dir) {
 	int page_dir = dir - segment->base;
 	int metadata_dir = page_dir - metadata_size;
 
-	log_info(seg_logger, "metadata_dir: %i", metadata_dir);
-
 	int page_number = (int) floor((double) metadata_dir / PAGE_SIZE);
 	int offset_in_frame = metadata_dir - page_number * PAGE_SIZE;
 
@@ -130,20 +128,17 @@ void free_dir(process_segment* segment, uint32_t dir) {
 	if (is_free) {
 		log_error(seg_logger, "Ya estaba sin asignar");
 	} else {
-		log_info(seg_logger, "metadata_dir: %i, metadata_size %i, data_size: %i", metadata_dir, metadata_size, data_size);
 		int offset = metadata_dir + metadata_size + data_size;
 		bool next_is_free = true;
 		uint32_t next_data_size;
 		uint32_t new_data_size = data_size;
 		while (offset < segment->size && next_is_free) {
-			log_info(seg_logger, "offset: %i", offset);
 			get_metadata_from_segment(segment, offset, &next_is_free, &next_data_size);
 			offset += next_data_size + metadata_size;
 			if (next_is_free) {
 				new_data_size += next_data_size + metadata_size;
 			}
 		}
-		log_info(seg_logger, "new_data_size: %i", new_data_size);
 		set_metadata_in_segment(segment, metadata_dir, true, new_data_size);
 	}
 
@@ -166,7 +161,6 @@ void* get_from_dir(process_segment* segment, uint32_t dir, int size) {
 		log_error(seg_logger, "Se quiere traer algo que excede el espacio asignado");
 	} else {
 		get_from_segment(segment, data_dir, size, data);
-		log_error(seg_logger, "hace el get a data_dir: %i, size: %i, data: %i", data_dir, size, *data);
 	}
 	return *data;
 }
@@ -174,8 +168,6 @@ void* get_from_dir(process_segment* segment, uint32_t dir, int size) {
 void cpy_to_dir(process_segment* segment, uint32_t dir, void* val, int size) {
 	// "retrocedo" para poder ver si esta libre y cuanto espacio tiene ese bloque
 	int metadata_dir = dir - metadata_size;
-	log_info(seg_logger, "metadata_dir: %i", metadata_dir);
-
 
 	// Hay que chequear si la dir es valida.
 	bool is_free;
