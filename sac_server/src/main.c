@@ -4,6 +4,9 @@ int main(int argc, char *argv[]) {
 	log_iniciar("sac.log", "SAC SERVER", true);
 	log_msje_info("Iniciando SAC Server");
 
+	t_config* config = config_create(CONFG_PATH);
+	int sac_port = config_get_int_value(config, "SAC_PORT");
+
 	//Obtengo el disco.bin por parametros
 	char *disk_name;
 	if (argc == 2)
@@ -24,7 +27,7 @@ int main(int argc, char *argv[]) {
 		return EXIT_FAILURE;
 	}
 
-	servidor_iniciar();
+	servidor_iniciar(sac_port);
 
 	fs_munmap_disk();
 	log_liberar();

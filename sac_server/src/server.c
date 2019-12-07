@@ -8,7 +8,6 @@ int atender_conexiones(int cliente_fd)
 	char *buffer;
 	uint32_t blk;
 	int flags;
-	int fd;
 	size_t size;
 	off_t offset;
 
@@ -28,11 +27,6 @@ int atender_conexiones(int cliente_fd)
 				dslz_cod_readdir(paquete.payload, &path, &blk);
 				sac_readdir(path, blk, cliente_fd);
 				break;
-			case COD_RELEASEDIR:
-				log_msje_info("Me llego operacion releasedir");
-				dslz_cod_releasedir(paquete.payload, &path, &blk);
-				sac_releasedir(path, blk, cliente_fd);
-				break;
 			case COD_OPEN:
 				log_msje_info("Me llego operacion open");
 				dslz_cod_open(paquete.payload, &path, &flags);
@@ -47,11 +41,6 @@ int atender_conexiones(int cliente_fd)
 				log_msje_info("Me llego operacion read");
 				dslz_cod_read(paquete.payload, &path, &blk, &size, &offset);
 				sac_read(path, blk, size, offset, cliente_fd);
-				break;
-			case COD_RELEASE:
-				log_msje_info("Me llego operacion release");
-				dslz_cod_release(paquete.payload, &path, &fd);
-				sac_release(path,fd, cliente_fd);
 				break;
 			case COD_MKDIR:
 				log_msje_info("Me llego operacion mkdir");
@@ -100,10 +89,10 @@ int atender_conexiones(int cliente_fd)
 	return EXIT_SUCCESS;
 }
 
-void servidor_iniciar()
+void servidor_iniciar(int sac_port)
 {
-	int sac_fd = crear_servidor(SAC_PORT);
-	log_msje_info("Se creo el socket servidor [ %d ] en el puerto [ %d ]", sac_fd, SAC_PORT);
+	int sac_fd = crear_servidor(sac_port);
+	log_msje_info("Se creo el socket servidor [ %d ] en el puerto [ %d ]", sac_fd, sac_port);
 
 	socket_t cliente;
 	pthread_t thread_conexiones;

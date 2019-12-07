@@ -1,10 +1,3 @@
-/*
- * server.h
- *
- *  Created on: 7 nov. 2019
- *      Author: utnso
- */
-
 #ifndef SERVER_H_
 #define SERVER_H_
 
@@ -18,6 +11,6 @@
 #define SAC_PORT 8048
 #define COD_PROCESO 'S'
 
-void servidor_iniciar();
+void servidor_iniciar(int port);
 
 #endif /* SERVER_H_ */
