@@ -54,8 +54,6 @@ int suse_close(int tid){
 	memcpy(buffer + 4, &pid, sizeof(int));
 	memcpy(buffer + 8, &tid, sizeof(int));
 	send(conexion_con_suse, buffer, 3 * sizeof(int), MSG_WAITALL);
-	//int senal_hilo_finalizado;
-	//recv(conexion_con_suse, &senal_hilo_finalizado, sizeof(int), MSG_WAITALL);
 	return 0;
 }
 

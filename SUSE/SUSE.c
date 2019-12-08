@@ -24,11 +24,11 @@ int main() {
 	return EXIT_SUCCESS;
 }
 
-long tiempo_actual() {
-    struct timeval tiempo_actual;
-    gettimeofday(&tiempo_actual, NULL);
-    long microsegundos = tiempo_actual.tv_usec/1000;
-    return microsegundos;
+uint64_t tiempo_actual() {
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
+	unsigned long long tiempo = (((unsigned long long )tv.tv_sec) * 1000 + ((unsigned long) tv.tv_usec) / 1000);
+	return (uint64_t)tiempo;
 }
 
 void inicializar_metricas_hilo(hilo_t* hilo) {
@@ -127,7 +127,6 @@ void atender_cliente(int cliente_fd) {
 					list_add(programa->hilos_en_ready, programa->hilo_en_exec);
 
 				proximo_hilo = siguiente_hilo_a_ejecutar(pid);
-
 				sacar_de_ready(programa, proximo_hilo);
 				programa->hilo_en_exec = proximo_hilo;
 				tid_proximo_hilo = proximo_hilo->tid;
@@ -153,8 +152,6 @@ void atender_cliente(int cliente_fd) {
 				cerrar_hilo(hilo);
 				hilo_esperando = crear_hilo(hilo->pid, hilo->tid_hilo_esperando);
 				//encolar_hilo_en_ready(hilo_esperando);
-				//senal_hilo_finalizado = 99;
-				//send(cliente_fd, &senal_hilo_finalizado, sizeof(int), MSG_WAITALL);
 				break;
 			case WAIT:
 				semaforo_wait(nombre_semaforo);
