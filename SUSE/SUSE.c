@@ -19,8 +19,6 @@ int main() {
 		// TODO: ver porque se está cerrando SUSE. OK
 	}
 
-	printf("despues del while\n");
-
 	pthread_join(hilo_metricas, NULL);
 	liberar();
 	return EXIT_SUCCESS;
