@@ -11,18 +11,17 @@ int main() {
 
 	servidor_fd = iniciar_servidor();
 
-	//pthread_create(&hilo_metricas, NULL, (void*)logear_metricas, NULL);
+	pthread_create(&hilo_metricas, NULL, (void*)logear_metricas, NULL);
 
 	while(1) {
 		cliente_fd = esperar_cliente(servidor_fd);
 		pthread_create(&hilo_clientes, NULL, (void*)atender_cliente, cliente_fd);
-		//pthread_join(hilo_clientes, NULL);
-		// TODO: ver porque se está cerrando SUSE.
+		// TODO: ver porque se está cerrando SUSE. OK
 	}
 
 	printf("despues del while\n");
 
-	//pthread_join(hilo_metricas, NULL);
+	pthread_join(hilo_metricas, NULL);
 	liberar();
 	return EXIT_SUCCESS;
 }
