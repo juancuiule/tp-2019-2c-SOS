@@ -93,6 +93,7 @@ void atender_cliente(int cliente_fd) {
 	int tamanio;
 	int tamanio_nombre_semaforo;
 	int senal_hilo_finalizado;
+	int socket_esta_conectado;
 	char* nombre_semaforo = malloc(100);
 	hilo_t* hilo = malloc(sizeof(hilo_t));
 	hilo_t* hilo_a_bloquear = malloc(sizeof(hilo_t));
@@ -100,13 +101,11 @@ void atender_cliente(int cliente_fd) {
 	hilo_t* hilo_esperando = malloc(sizeof(hilo_t));
 	programa_t* programa = malloc(sizeof(programa_t));
 
-	while(1) {
+	socket_esta_conectado = recv(cliente_fd, &opcode, sizeof(int), MSG_WAITALL);
+	recv(cliente_fd, &pid, sizeof(int), MSG_WAITALL);
 
-		//TODO: salir del while al recibir close OK
-
-		recv(cliente_fd, &opcode, sizeof(int), MSG_WAITALL);
-		recv(cliente_fd, &pid, sizeof(int), MSG_WAITALL);
-
+	while(socket_esta_conectado > 0) {
+		//TODO: salir del while al recibir close
 		switch (opcode) {
 			case INIT:
 				agregar_programa(pid);
@@ -167,6 +166,9 @@ void atender_cliente(int cliente_fd) {
 				semaforo_signal(nombre_semaforo);
 			break;
 		}
+
+		socket_esta_conectado = recv(cliente_fd, &opcode, sizeof(int), MSG_WAITALL);
+		recv(cliente_fd, &pid, sizeof(int), MSG_WAITALL);
 	}
 }
 
