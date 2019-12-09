@@ -91,7 +91,7 @@ void atender_cliente(int cliente_fd) {
 	int tamanio_id_semaforo;
 	int senal_hilo_finalizado;
 	int socket_esta_conectado;
-	char* id_semaforo = malloc(100);
+	char* id_semaforo = malloc(3);
 	hilo_t* hilo = malloc(sizeof(hilo_t));
 	hilo_t* hilo_a_bloquear = malloc(sizeof(hilo_t));
 	hilo_t* proximo_hilo = malloc(sizeof(hilo_t));
@@ -155,17 +155,15 @@ void atender_cliente(int cliente_fd) {
 				break;
 			case WAIT:
 				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
-				log_info(logger, "Recibí un wait del hilo %i del programa %i", tid, pid);
 				recv(cliente_fd, &tamanio_id_semaforo, sizeof(int), MSG_WAITALL);
-				recv(cliente_fd, id_semaforo, tamanio_id_semaforo, MSG_WAITALL);
-				printf("semáforo %s tamaño %i\n", id_semaforo, tamanio_id_semaforo);
+				recv(cliente_fd, id_semaforo, tamanio_id_semaforo, 0);
+				semaforo_wait(id_semaforo);
 			break;
 			case SIGNAL:
 				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
-				log_info(logger, "Recibí un signal del hilo %i del programa %i", tid, pid);
 				recv(cliente_fd, &tamanio_id_semaforo, sizeof(int), MSG_WAITALL);
-				recv(cliente_fd, id_semaforo, tamanio_id_semaforo, MSG_WAITALL);
-				printf("semáforo %s tamaño %i\n ", id_semaforo, tamanio_id_semaforo);
+				recv(cliente_fd, id_semaforo, tamanio_id_semaforo, 0);
+				semaforo_signal(id_semaforo);
 			break;
 		}
 

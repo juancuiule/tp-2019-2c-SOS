@@ -30,8 +30,10 @@ int semaforo_wait(char* nombre_semaforo) {
 	if (sem_value->valor > 0)
 		sem_value->valor--;
 
+	printf("%s = %i\n", nombre_semaforo, sem_value->valor);
+
 	dictionary_put(diccionario_semaforos, nombre_semaforo, sem_value);
-	return 0;
+	return sem_value->valor;
 }
 
 int semaforo_signal(char* nombre_semaforo) {
@@ -39,6 +41,8 @@ int semaforo_signal(char* nombre_semaforo) {
 
 	if (sem_value->valor > 0)
 		sem_value->valor++;
+
+	printf("%s = %i\n", nombre_semaforo, sem_value->valor);
 
 	dictionary_put(diccionario_semaforos, nombre_semaforo, sem_value);
 	return sem_value->valor;
