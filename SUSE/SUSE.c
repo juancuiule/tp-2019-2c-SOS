@@ -89,7 +89,6 @@ void atender_cliente(int cliente_fd) {
 	int pid;
 	int tamanio;
 	int tamanio_id_semaforo;
-	int senal_hilo_finalizado;
 	int socket_esta_conectado;
 	char* id_semaforo = malloc(3);
 	hilo_t* hilo = malloc(sizeof(hilo_t));
@@ -157,13 +156,19 @@ void atender_cliente(int cliente_fd) {
 				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
 				recv(cliente_fd, &tamanio_id_semaforo, sizeof(int), MSG_WAITALL);
 				recv(cliente_fd, id_semaforo, tamanio_id_semaforo, 0);
-				semaforo_wait(id_semaforo);
+				valor_semaforo = semaforo_wait(id_semaforo);
+
+				if (valor_semaforo == 0) {
+					hilo_a_bloquear = crear_hilo(pid, tid);
+					bloquear_hilo(hilo_a_bloquear);
+				}
+
 			break;
 			case SIGNAL:
 				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
 				recv(cliente_fd, &tamanio_id_semaforo, sizeof(int), MSG_WAITALL);
 				recv(cliente_fd, id_semaforo, tamanio_id_semaforo, 0);
-				semaforo_signal(id_semaforo);
+				valor_semaforo = semaforo_signal(id_semaforo);
 			break;
 		}
 
@@ -279,9 +284,6 @@ void bloquear_hilo(hilo_t* hilo) {
 		list_remove_by_condition(programa_del_hilo->hilos_en_ready, hilo_encontrado);
 
 	queue_push(cola_blocked, hilo);
-	pthread_mutex_lock(&mutex_multiprogramacion);
-	GRADO_MULTIPROGRAMACION--;
-	pthread_mutex_unlock(&mutex_multiprogramacion);
 	log_info(logger, "El hilo %i del programa %i llegó a BLOCKED", hilo->tid, hilo->pid);
 }
 
