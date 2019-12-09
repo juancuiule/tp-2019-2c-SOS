@@ -28921,3 +28921,88 @@
 [INFO] 17:31:58:487 SUSE/(4529:4544): El hilo 3 del programa 4543 llegó a EXIT
 [INFO] 17:33:02:350 SUSE/(4624:4624): Se ha iniciado el servidor.
 [INFO] 17:33:05:671 SUSE/(4624:4637): Llegó el programa 4636
+[INFO] 23:54:37:722 SUSE/(7853:7853): Se ha iniciado el servidor.
+[INFO] 23:54:45:612 SUSE/(7853:7866): Llegó el programa 7865
+[INFO] 23:54:45:612 SUSE/(7853:7866): El hilo 0 del programa 7865 llegó a NEW
+[INFO] 23:54:45:612 SUSE/(7853:7866): El hilo 0 del programa 7865 llegó a READY
+[INFO] 23:54:45:612 SUSE/(7853:7866): El hilo 1 del programa 7865 llegó a NEW
+[INFO] 23:54:45:612 SUSE/(7853:7866): El hilo 1 del programa 7865 llegó a READY
+[INFO] 23:54:45:612 SUSE/(7853:7866): El hilo 2 del programa 7865 llegó a NEW
+[INFO] 23:54:45:612 SUSE/(7853:7866): El hilo 2 del programa 7865 llegó a READY
+[INFO] 23:54:45:612 SUSE/(7853:7866): El hilo 3 del programa 7865 llegó a NEW
+[INFO] 23:54:45:612 SUSE/(7853:7866): El hilo 3 del programa 7865 llegó a READY
+[INFO] 23:54:45:612 SUSE/(7853:7866): El hilo 0 del programa 7865 llegó a BLOCKED
+[INFO] 23:54:45:612 SUSE/(7853:7866): El hilo 1 del programa 7865 llegó a EXEC
+[INFO] 23:54:45:612 SUSE/(7853:7866): El hilo 2 del programa 7865 llegó a EXEC
+[INFO] 23:54:45:613 SUSE/(7853:7866): El hilo 3 del programa 7865 llegó a EXEC
+[INFO] 23:54:45:613 SUSE/(7853:7866): El hilo 1 del programa 7865 llegó a EXEC
+[INFO] 23:54:45:613 SUSE/(7853:7866): El hilo 2 del programa 7865 llegó a EXEC
+[INFO] 23:54:45:613 SUSE/(7853:7866): El hilo 3 del programa 7865 llegó a EXEC
+[INFO] 23:54:45:616 SUSE/(7853:7866): El hilo 1 del programa 7865 llegó a EXEC
+[INFO] 23:54:45:616 SUSE/(7853:7866): El hilo 2 del programa 7865 llegó a EXEC
+[INFO] 23:54:45:616 SUSE/(7853:7866): El hilo 3 del programa 7865 llegó a EXEC
+[INFO] 23:54:45:617 SUSE/(7853:7866): El hilo 1 del programa 7865 llegó a EXEC
+[INFO] 23:54:45:617 SUSE/(7853:7866): El hilo 2 del programa 7865 llegó a EXEC
+[INFO] 23:54:45:617 SUSE/(7853:7866): El hilo 3 del programa 7865 llegó a EXEC
+[INFO] 23:54:45:617 SUSE/(7853:7866): El hilo 1 del programa 7865 llegó a EXEC
+[INFO] 23:54:45:617 SUSE/(7853:7866): El hilo 2 del programa 7865 llegó a EXEC
+[INFO] 23:54:45:617 SUSE/(7853:7866): El hilo 3 del programa 7865 llegó a EXEC
+[INFO] 23:54:45:618 SUSE/(7853:7866): El hilo 1 del programa 7865 llegó a EXEC
+[INFO] 23:55:37:961 SUSE/(7901:7901): Se ha iniciado el servidor.
+[INFO] 23:56:23:656 SUSE/(9426:9426): Se ha iniciado el servidor.
+[INFO] 00:30:57:512 SUSE/(4719:4719): Se ha iniciado el servidor.
+[INFO] 00:31:09:162 SUSE/(4719:4733): Llegó el programa 4732
+[INFO] 00:31:09:162 SUSE/(4719:4733): El hilo 0 del programa 4732 llegó a NEW
+[INFO] 00:31:09:162 SUSE/(4719:4733): El hilo 0 del programa 4732 llegó a READY
+[INFO] 00:31:09:162 SUSE/(4719:4733): El hilo 1 del programa 4732 llegó a NEW
+[INFO] 00:31:09:162 SUSE/(4719:4733): El hilo 1 del programa 4732 llegó a READY
+[INFO] 00:31:09:162 SUSE/(4719:4733): El hilo 2 del programa 4732 llegó a NEW
+[INFO] 00:31:09:162 SUSE/(4719:4733): El hilo 2 del programa 4732 llegó a READY
+[INFO] 00:31:09:162 SUSE/(4719:4733): El hilo 3 del programa 4732 llegó a NEW
+[INFO] 00:31:09:162 SUSE/(4719:4733): El hilo 3 del programa 4732 llegó a READY
+[INFO] 00:31:09:162 SUSE/(4719:4733): El hilo 0 del programa 4732 llegó a BLOCKED
+[INFO] 00:31:09:162 SUSE/(4719:4733): El hilo 1 del programa 4732 llegó a EXEC
+[INFO] 00:31:09:163 SUSE/(4719:4733): El hilo 2 del programa 4732 llegó a EXEC
+[INFO] 00:31:09:163 SUSE/(4719:4733): El hilo 3 del programa 4732 llegó a EXEC
+[INFO] 00:31:09:163 SUSE/(4719:4733): El hilo 1 del programa 4732 llegó a EXEC
+[INFO] 00:31:09:163 SUSE/(4719:4733): El hilo 2 del programa 4732 llegó a EXEC
+[INFO] 00:31:09:163 SUSE/(4719:4733): El hilo 3 del programa 4732 llegó a EXEC
+[INFO] 00:31:09:163 SUSE/(4719:4733): El hilo 1 del programa 4732 llegó a EXEC
+[INFO] 00:31:09:164 SUSE/(4719:4733): El hilo 2 del programa 4732 llegó a EXEC
+[INFO] 00:31:09:164 SUSE/(4719:4733): El hilo 3 del programa 4732 llegó a EXEC
+[INFO] 00:31:09:164 SUSE/(4719:4733): El hilo 1 del programa 4732 llegó a EXEC
+[INFO] 00:31:09:164 SUSE/(4719:4733): El hilo 2 del programa 4732 llegó a EXEC
+[INFO] 00:31:09:164 SUSE/(4719:4733): El hilo 3 del programa 4732 llegó a EXEC
+[INFO] 00:31:09:164 SUSE/(4719:4733): El hilo 1 del programa 4732 llegó a EXEC
+[INFO] 00:31:09:165 SUSE/(4719:4733): El hilo 2 del programa 4732 llegó a EXEC
+[INFO] 00:31:09:165 SUSE/(4719:4733): El hilo 3 del programa 4732 llegó a EXEC
+[INFO] 00:31:09:165 SUSE/(4719:4733): El hilo 1 del programa 4732 llegó a EXEC
+[INFO] 00:31:57:604 SUSE/(4769:4769): Se ha iniciado el servidor.
+[INFO] 00:33:27:144 SUSE/(10534:10534): Se ha iniciado el servidor.
+[INFO] 00:33:33:710 SUSE/(10534:10547): Llegó el programa 10546
+[INFO] 00:33:33:710 SUSE/(10534:10547): El hilo 0 del programa 10546 llegó a NEW
+[INFO] 00:33:33:710 SUSE/(10534:10547): El hilo 0 del programa 10546 llegó a READY
+[INFO] 00:33:33:710 SUSE/(10534:10547): El hilo 1 del programa 10546 llegó a NEW
+[INFO] 00:33:33:710 SUSE/(10534:10547): El hilo 1 del programa 10546 llegó a READY
+[INFO] 00:33:33:710 SUSE/(10534:10547): El hilo 2 del programa 10546 llegó a NEW
+[INFO] 00:33:33:710 SUSE/(10534:10547): El hilo 2 del programa 10546 llegó a READY
+[INFO] 00:33:33:710 SUSE/(10534:10547): El hilo 3 del programa 10546 llegó a NEW
+[INFO] 00:33:33:710 SUSE/(10534:10547): El hilo 3 del programa 10546 llegó a READY
+[INFO] 00:33:33:710 SUSE/(10534:10547): El hilo 0 del programa 10546 llegó a BLOCKED
+[INFO] 00:33:33:710 SUSE/(10534:10547): El hilo 1 del programa 10546 llegó a EXEC
+[INFO] 00:33:33:710 SUSE/(10534:10547): El hilo 2 del programa 10546 llegó a EXEC
+[INFO] 00:33:33:710 SUSE/(10534:10547): El hilo 3 del programa 10546 llegó a EXEC
+[INFO] 00:33:33:710 SUSE/(10534:10547): El hilo 1 del programa 10546 llegó a EXEC
+[INFO] 00:33:33:711 SUSE/(10534:10547): El hilo 2 del programa 10546 llegó a EXEC
+[INFO] 00:33:33:711 SUSE/(10534:10547): El hilo 3 del programa 10546 llegó a EXEC
+[INFO] 00:33:33:711 SUSE/(10534:10547): El hilo 1 del programa 10546 llegó a EXEC
+[INFO] 00:33:33:711 SUSE/(10534:10547): El hilo 2 del programa 10546 llegó a EXEC
+[INFO] 00:33:33:711 SUSE/(10534:10547): El hilo 3 del programa 10546 llegó a EXEC
+[INFO] 00:33:33:711 SUSE/(10534:10547): El hilo 1 del programa 10546 llegó a EXEC
+[INFO] 00:33:33:711 SUSE/(10534:10547): El hilo 2 del programa 10546 llegó a EXEC
+[INFO] 00:33:33:712 SUSE/(10534:10547): El hilo 3 del programa 10546 llegó a EXEC
+[INFO] 00:33:33:712 SUSE/(10534:10547): El hilo 1 del programa 10546 llegó a EXEC
+[INFO] 00:33:33:712 SUSE/(10534:10547): El hilo 2 del programa 10546 llegó a EXEC
+[INFO] 00:33:33:712 SUSE/(10534:10547): El hilo 3 del programa 10546 llegó a EXEC
+[INFO] 00:33:33:712 SUSE/(10534:10547): El hilo 1 del programa 10546 llegó a EXEC
+[INFO] 00:34:19:954 SUSE/(10583:10583): Se ha iniciado el servidor.

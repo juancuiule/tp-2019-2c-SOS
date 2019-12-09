@@ -154,10 +154,24 @@ void atender_cliente(int cliente_fd) {
 				//encolar_hilo_en_ready(hilo_esperando);
 				break;
 			case WAIT:
-				semaforo_wait(nombre_semaforo);
+				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
+				printf("operacion: %i\n", opcode);
+				printf("PID: %i\n", pid);
+				printf("TID: %i\n", tid);
+				recv(cliente_fd, &tamanio_nombre_semaforo, sizeof(int), MSG_WAITALL);
+				printf("el tamaño del nombre del semáforo es %i\n", tamanio_nombre_semaforo);
+				recv(cliente_fd, nombre_semaforo, tamanio_nombre_semaforo, MSG_WAITALL);
+				printf("nombre del semaforo: %s\n", nombre_semaforo);
+				//semaforo_wait(nombre_semaforo);
 			break;
 			case SIGNAL:
-				semaforo_signal(nombre_semaforo);
+				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
+				printf("signal del hilo %i\n", tid);
+				recv(cliente_fd, &tamanio_nombre_semaforo, sizeof(int), MSG_WAITALL);
+				printf("el tamaño del nombre del semáforo es %i\n", tamanio_nombre_semaforo);
+				recv(cliente_fd, nombre_semaforo, tamanio_nombre_semaforo, MSG_WAITALL);
+				printf("nombre del semaforo: %s\n", nombre_semaforo);
+				//semaforo_signal(nombre_semaforo);
 			break;
 		}
 

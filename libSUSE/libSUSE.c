@@ -33,9 +33,9 @@ int suse_schedule_next(void){
 }
 
 int suse_join(int tid){
-	int tid_hilo_a_bloquear;
 	int opcode = JOIN;
 	int pid = getpid();
+	int tid_hilo_a_bloquear;
 	tid_hilo_a_bloquear = hilolay_get_tid();
 	void* buffer = malloc(4 * sizeof(int));
 	memcpy(buffer, &opcode, sizeof(int));
@@ -58,11 +58,31 @@ int suse_close(int tid){
 }
 
 int suse_wait(int tid, char *sem_name){
-	return ejecutar_operacion_semaforo(tid, sem_name, WAIT);
+	int tamanio_nombre = string_length(sem_name);
+	int opcode = WAIT;
+	int pid = getpid();
+	void* buffer = malloc(4 * sizeof(int) + tamanio_nombre);
+	memcpy(buffer, &opcode, sizeof(int));
+	memcpy(buffer + 4, &pid, sizeof(int));
+	memcpy(buffer + 8, &tid, sizeof(int));
+	memcpy(buffer + 12, &tamanio_nombre, sizeof(int));
+	memcpy(buffer + 12 + tamanio_nombre, sem_name, tamanio_nombre);
+	send(conexion_con_suse, buffer, 12 + tamanio_nombre, MSG_WAITALL);
+	return 0;
 }
 
 int suse_signal(int tid, char *sem_name){
-	return ejecutar_operacion_semaforo(tid, sem_name, SIGNAL);
+	int tamanio_nombre = string_length(sem_name);
+	int opcode = SIGNAL;
+	int pid = getpid();
+	void* buffer = malloc(4 * sizeof(int) + tamanio_nombre);
+	memcpy(buffer, &opcode, sizeof(int));
+	memcpy(buffer + 4, &pid, sizeof(int));
+	memcpy(buffer + 8, &tid, sizeof(int));
+	memcpy(buffer + 12, &tamanio_nombre, sizeof(int));
+	memcpy(buffer + 12 + tamanio_nombre, sem_name, tamanio_nombre);
+	send(conexion_con_suse, buffer, 12 + tamanio_nombre, MSG_WAITALL);
+	return 0;
 }
 
 static struct hilolay_operations hiloops = {
@@ -97,7 +117,7 @@ hilo_t* crear_nuevo_hilo(int tid, int pid) {
 	hilo->tid_hilo_esperando = 0;
 	return hilo;
 }
-
+/*
 int ejecutar_operacion(int tid, int operacion) {
 	conexion_con_suse = conectarse_a_suse();
 	int pid = getpid();
@@ -126,7 +146,7 @@ int ejecutar_operacion(int tid, int operacion) {
 
 	return 0;
 }
-
+*/
 int ejecutar_operacion_semaforo(int tid, char* sem_name, int operacion) {
 	conexion_con_suse = conectarse_a_suse();
 	int pid = getpid();

@@ -26,10 +26,11 @@ int iniciar_servidor(void)
             continue;
 
         if (bind(socket_servidor, p->ai_addr, p->ai_addrlen) == -1) {
-        	printf("fallo el bind\n");
+        	printf("Falló el bind\n");
             close(socket_servidor);
             continue;
         }
+
         break;
     }
 
