@@ -58,30 +58,34 @@ int suse_close(int tid){
 }
 
 int suse_wait(int tid, char *sem_name){
-	int tamanio_nombre = string_length(sem_name);
 	int opcode = WAIT;
 	int pid = getpid();
-	void* buffer = malloc(4 * sizeof(int) + tamanio_nombre);
+	int tamanio_id = strlen(sem_name);
+	printf("el tamaño de %s a enviar es %i\n", sem_name, tamanio_id);
+	void* buffer = malloc(12 + tamanio_id);
 	memcpy(buffer, &opcode, sizeof(int));
 	memcpy(buffer + 4, &pid, sizeof(int));
 	memcpy(buffer + 8, &tid, sizeof(int));
-	memcpy(buffer + 12, &tamanio_nombre, sizeof(int));
-	memcpy(buffer + 12 + tamanio_nombre, sem_name, tamanio_nombre);
-	send(conexion_con_suse, buffer, 12 + tamanio_nombre, MSG_WAITALL);
+	memcpy(buffer + 12, &tamanio_id, sizeof(int));
+	memcpy(buffer + 12 + tamanio_id, sem_name, tamanio_id);
+	send(conexion_con_suse, buffer, 12 + tamanio_id, 0);
+	printf("le envié el id %s de tamaño %i\n", sem_name, tamanio_id);
 	return 0;
 }
 
 int suse_signal(int tid, char *sem_name){
-	int tamanio_nombre = string_length(sem_name);
 	int opcode = SIGNAL;
 	int pid = getpid();
-	void* buffer = malloc(4 * sizeof(int) + tamanio_nombre);
+	int tamanio_id = strlen(sem_name);
+	printf("el tamaño de %s a enviar es %i\n", sem_name, tamanio_id);
+	void* buffer = malloc(16);
 	memcpy(buffer, &opcode, sizeof(int));
 	memcpy(buffer + 4, &pid, sizeof(int));
 	memcpy(buffer + 8, &tid, sizeof(int));
-	memcpy(buffer + 12, &tamanio_nombre, sizeof(int));
-	memcpy(buffer + 12 + tamanio_nombre, sem_name, tamanio_nombre);
-	send(conexion_con_suse, buffer, 12 + tamanio_nombre, MSG_WAITALL);
+	memcpy(buffer + 12, &tamanio_id, sizeof(int));
+	memcpy(buffer + 12 + tamanio_id, sem_name, tamanio_id);
+	send(conexion_con_suse, buffer, 16, 0);
+	printf("envié el semáforo %s de tamaño %i\n", sem_name, tamanio_id);
 	return 0;
 }
 

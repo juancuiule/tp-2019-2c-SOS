@@ -41,4 +41,26 @@ typedef enum {
 	SIGNAL
 } operacion;
 
+typedef struct {
+	int tid;
+	int tamanio_id;
+	char* id_semaforo;
+} wait_t;
+
+typedef struct {
+	int tid;
+	int tamanio_id;
+	char* id_semaforo;
+} signal_t;
+
+
+
+
+
+
+
+
+
+
+
 #endif /* ESTRUCTURAS_H_ */

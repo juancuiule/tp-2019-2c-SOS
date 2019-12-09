@@ -88,10 +88,10 @@ void atender_cliente(int cliente_fd) {
 	int tid_hilo_a_bloquear;
 	int pid;
 	int tamanio;
-	int tamanio_nombre_semaforo;
+	int tamanio_id_semaforo;
 	int senal_hilo_finalizado;
 	int socket_esta_conectado;
-	char* nombre_semaforo = malloc(100);
+	char* id_semaforo = malloc(100);
 	hilo_t* hilo = malloc(sizeof(hilo_t));
 	hilo_t* hilo_a_bloquear = malloc(sizeof(hilo_t));
 	hilo_t* proximo_hilo = malloc(sizeof(hilo_t));
@@ -155,23 +155,17 @@ void atender_cliente(int cliente_fd) {
 				break;
 			case WAIT:
 				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
-				printf("operacion: %i\n", opcode);
-				printf("PID: %i\n", pid);
-				printf("TID: %i\n", tid);
-				recv(cliente_fd, &tamanio_nombre_semaforo, sizeof(int), MSG_WAITALL);
-				printf("el tamaño del nombre del semáforo es %i\n", tamanio_nombre_semaforo);
-				recv(cliente_fd, nombre_semaforo, tamanio_nombre_semaforo, MSG_WAITALL);
-				printf("nombre del semaforo: %s\n", nombre_semaforo);
-				//semaforo_wait(nombre_semaforo);
+				log_info(logger, "Recibí un wait del hilo %i del programa %i", tid, pid);
+				recv(cliente_fd, &tamanio_id_semaforo, sizeof(int), MSG_WAITALL);
+				recv(cliente_fd, id_semaforo, tamanio_id_semaforo, MSG_WAITALL);
+				printf("semáforo %s tamaño %i\n", id_semaforo, tamanio_id_semaforo);
 			break;
 			case SIGNAL:
 				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
-				printf("signal del hilo %i\n", tid);
-				recv(cliente_fd, &tamanio_nombre_semaforo, sizeof(int), MSG_WAITALL);
-				printf("el tamaño del nombre del semáforo es %i\n", tamanio_nombre_semaforo);
-				recv(cliente_fd, nombre_semaforo, tamanio_nombre_semaforo, MSG_WAITALL);
-				printf("nombre del semaforo: %s\n", nombre_semaforo);
-				//semaforo_signal(nombre_semaforo);
+				log_info(logger, "Recibí un signal del hilo %i del programa %i", tid, pid);
+				recv(cliente_fd, &tamanio_id_semaforo, sizeof(int), MSG_WAITALL);
+				recv(cliente_fd, id_semaforo, tamanio_id_semaforo, MSG_WAITALL);
+				printf("semáforo %s tamaño %i\n ", id_semaforo, tamanio_id_semaforo);
 			break;
 		}
 

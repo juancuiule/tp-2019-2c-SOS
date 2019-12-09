@@ -48,6 +48,18 @@ typedef enum {
 } operacion;
 
 typedef struct {
+	int tid;
+	int tamanio_id;
+	char* id_semaforo;
+} wait_t;
+
+typedef struct {
+	int tid;
+	int tamanio_id;
+	char* id_semaforo;
+} signal_t;
+
+typedef struct {
 	char* id;
 	int valor;
 } semaforo_t;
