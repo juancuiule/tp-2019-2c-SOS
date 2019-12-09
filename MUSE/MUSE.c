@@ -336,5 +336,7 @@ int main(void) {
 		int cliente_fd = recibir_cliente(server_fd);
 	    r1 = pthread_create(&hilo, NULL, (void*) respond_to_client, (void*) cliente_fd);
 	}
+
+	fclose(swap_file);
 	return EXIT_SUCCESS;
 }

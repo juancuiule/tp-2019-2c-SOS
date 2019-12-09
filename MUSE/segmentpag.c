@@ -3,8 +3,6 @@
 bool t = true;
 bool f = false;
 
-int metadata_size = sizeof(bool) + sizeof(uint32_t);
-
 void init_structures(int m_size, int p_size) {
 	int frames = m_size / p_size;
 	tables = list_create();
@@ -27,6 +25,9 @@ void init_structures(int m_size, int p_size) {
 //		memcpy(new_frame + sizeof(bool), &size, sizeof(uint32_t));
 		*(MEMORY + i) = new_frame;
 	}
+
+	swap_file = fopen("swap_file", "wr");
+	fseek(swap_file, SWAP_SIZE, SEEK_SET);
 }
 
 void clear_bitmap(int bits) {
