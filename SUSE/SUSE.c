@@ -24,6 +24,26 @@ int main() {
 	return EXIT_SUCCESS;
 }
 
+void mostrar_hilos_en_ready(programa_t* programa) {
+	printf("hilos en ready: \n");
+
+	bool imprimir_tid(hilo_t* hilo) {
+		printf("hilo %i\n", hilo->tid);
+	}
+
+	list_iterate(programa->hilos_en_ready, imprimir_tid);
+}
+
+void mostrar_hilos_en_exit() {
+	printf("hilos en exit: \n");
+
+	bool imprimir_tid(hilo_t* hilo) {
+		printf("hilo %i\n", hilo->tid);
+	}
+
+	list_iterate(cola_exit->elements, imprimir_tid);
+}
+
 uint64_t tiempo_actual() {
 	struct timeval tv;
 	gettimeofday(&tv, NULL);
@@ -170,10 +190,11 @@ void atender_cliente(int cliente_fd) {
 				hilo_a_bloquear = crear_hilo(pid, tid_hilo_a_bloquear);
 				hilo_a_bloquear->tid_hilo_a_esperar = tid_hilo_a_esperar;
 				hilo_a_esperar = crear_hilo(pid, tid_hilo_a_esperar);
+				programa = obtener_programa(pid);
 
 				if (!finalizado(hilo_a_esperar)) {
+					sacar_de_ready(programa, hilo_a_bloquear);
 					bloquear_hilo(hilo_a_bloquear);
-					printf("el hilo %i se bloqueó hasta que finalice el hilo %i\n", tid_hilo_a_bloquear, tid_hilo_a_esperar);
 				}
 
 				break;
@@ -269,6 +290,7 @@ void encolar_hilo_en_new(hilo_t* hilo) {
 
 void cerrar_hilo(hilo_t* hilo) {
 	programa_t* programa = obtener_programa(hilo->pid);
+	programa->hilo_en_exec = NULL;
 	queue_push(cola_exit, hilo);
 	log_info(logger, "El hilo %i del programa %i llegó a EXIT", hilo->tid, hilo->pid);
 	pthread_mutex_lock(&mutex_multiprogramacion);

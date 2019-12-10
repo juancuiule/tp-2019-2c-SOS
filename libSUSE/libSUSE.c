@@ -43,7 +43,6 @@ int suse_join(int tid){
 	memcpy(buffer + 8, &tid_hilo_a_bloquear, sizeof(int));
 	memcpy(buffer + 12, &tid, sizeof(int));
 	send(conexion_con_suse, buffer, 4 * sizeof(int), MSG_WAITALL);
-	printf("el hilo %i se bloqueó hasta que termine el hilo %i\n", tid_hilo_a_bloquear, tid);
 	return 0;
 }
 
@@ -55,7 +54,6 @@ int suse_close(int tid){
 	memcpy(buffer + 4, &pid, sizeof(int));
 	memcpy(buffer + 8, &tid, sizeof(int));
 	send(conexion_con_suse, buffer, 3 * sizeof(int), MSG_WAITALL);
-	printf("terminó el hilo %i\n", tid);
 	return 0;
 }
 
@@ -63,14 +61,12 @@ int suse_wait(int tid, char *sem_name){
 	int opcode = WAIT;
 	int pid = getpid();
 	int tamanio_id = strlen(sem_name);
-	//printf("semáforo a enviar: %s (tamaño: %i)\n", sem_name, tamanio_id);
 	void* buffer = malloc(4 * sizeof(int));
 	memcpy(buffer, &opcode, sizeof(int));
 	memcpy(buffer + 4, &pid, sizeof(int));
 	memcpy(buffer + 8, &tid, sizeof(int));
 	memcpy(buffer + 12, &tamanio_id, sizeof(int));
 	send(conexion_con_suse, buffer, 4 * sizeof(int), MSG_WAITALL);
-	//printf("semáforo enviado : %s (tamaño: %i)\n", sem_name, tamanio_id);
 	send(conexion_con_suse, sem_name, tamanio_id, MSG_WAITALL);
 	return 0;
 }
@@ -79,14 +75,12 @@ int suse_signal(int tid, char *sem_name){
 	int opcode = SIGNAL;
 	int pid = getpid();
 	int tamanio_id = strlen(sem_name);
-	//printf("semáforo a enviar: %s (tamaño: %i)\n", sem_name, tamanio_id);
 	void* buffer = malloc(4 * sizeof(int));
 	memcpy(buffer, &opcode, sizeof(int));
 	memcpy(buffer + 4, &pid, sizeof(int));
 	memcpy(buffer + 8, &tid, sizeof(int));
 	memcpy(buffer + 12, &tamanio_id, sizeof(int));
 	send(conexion_con_suse, buffer, 4 * sizeof(int), MSG_WAITALL);
-	//printf("semáforo enviado : %s (tamaño: %i)\n", sem_name, tamanio_id);
 	send(conexion_con_suse, sem_name, tamanio_id, MSG_WAITALL);
 	return 0;
 }
