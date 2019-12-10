@@ -18,7 +18,7 @@ void inicializar() {
 
 	programas = list_create();
 	cola_new = queue_create();
-	cola_blocked = queue_create();
+	cola_blocked = list_create();
 	cola_exit = queue_create();
 
 	sem_init(&sem_atender_clientes, 0, 1);

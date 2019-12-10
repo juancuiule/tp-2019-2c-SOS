@@ -76,6 +76,15 @@ bool finalizado(hilo_t* hilo) {
 	return list_any_satisfy(cola_exit->elements, es_hilo_buscado);
 }
 
+void desbloquear_hilo(hilo_t* hilo) {
+	bool es_hilo_buscado(hilo_t* un_hilo) {
+		return hilo->tid == un_hilo->tid && hilo->pid == un_hilo->pid;
+	}
+
+	list_remove_by_condition(cola_blocked, es_hilo_buscado);
+	encolar_hilo_en_ready(hilo);
+}
+
 void atender_cliente(int cliente_fd) {
 	int pedido;
 	int valor_semaforo;
@@ -85,6 +94,7 @@ void atender_cliente(int cliente_fd) {
 	int tid;
 	int tid_proximo_hilo;
 	int tid_hilo_a_esperar;
+	int tid_hilo_esperando;
 	int tid_hilo_a_bloquear;
 	int pid;
 	int tamanio;
@@ -93,8 +103,10 @@ void atender_cliente(int cliente_fd) {
 	char* id_semaforo = malloc(3);
 	hilo_t* hilo = malloc(sizeof(hilo_t));
 	hilo_t* hilo_a_bloquear = malloc(sizeof(hilo_t));
+	hilo_t* hilo_a_desbloquear = malloc(sizeof(hilo_t));
 	hilo_t* proximo_hilo = malloc(sizeof(hilo_t));
 	hilo_t* hilo_esperando = malloc(sizeof(hilo_t));
+	hilo_t* hilo_a_esperar = malloc(sizeof(hilo_t));
 	programa_t* programa = malloc(sizeof(programa_t));
 
 	socket_esta_conectado = recv(cliente_fd, &opcode, sizeof(int), MSG_WAITALL);
@@ -115,6 +127,9 @@ void atender_cliente(int cliente_fd) {
 				if (GRADO_MULTIPROGRAMACION < MAX_MULTIPROG) {
 					hilo = queue_pop(cola_new);
 					encolar_hilo_en_ready(hilo);
+					pthread_mutex_lock(&mutex_multiprogramacion);
+					GRADO_MULTIPROGRAMACION++;
+					pthread_mutex_unlock(&mutex_multiprogramacion);
 				}
 
 				break;
@@ -140,17 +155,22 @@ void atender_cliente(int cliente_fd) {
 				recv(cliente_fd, &tid_hilo_a_esperar, sizeof(int), MSG_WAITALL);
 				hilo_a_bloquear = crear_hilo(pid, tid_hilo_a_bloquear);
 				hilo_a_bloquear->tid_hilo_esperando = tid_hilo_a_esperar;
-				//hilo_a_bloquear->rafaga_anterior = tiempo_actual() - hilo_a_bloquear->tiempo_ultima_llegada_a_exec;
-				bloquear_hilo(hilo_a_bloquear);
+				hilo_a_esperar = crear_hilo(pid, tid_hilo_a_esperar);
+
+				if (!finalizado(hilo_a_esperar))
+					bloquear_hilo(hilo_a_bloquear);
+
 				break;
 			case CLOSE:
 				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
 				hilo = crear_hilo(pid, tid);
 				programa_t* programa = obtener_programa(pid);
-				//sacar_de_ready(programa, hilo);
 				cerrar_hilo(hilo);
 				hilo_esperando = crear_hilo(hilo->pid, hilo->tid_hilo_esperando);
-				//encolar_hilo_en_ready(hilo_esperando);
+
+				if (!finalizado(hilo_esperando))
+					desbloquear_hilo(hilo_esperando);
+
 				break;
 			case WAIT:
 				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
@@ -160,8 +180,11 @@ void atender_cliente(int cliente_fd) {
 
 				if (valor_semaforo == 0) {
 					hilo_a_bloquear = crear_hilo(pid, tid);
+					log_info(logger, "El hilo %i hizo un wait al semáforo %s (valor actual = %i)", tid, id_semaforo, valor_semaforo);
 					bloquear_hilo(hilo_a_bloquear);
 				}
+				else
+					log_info(logger, "El hilo %i hizo un wait al semáforo %s (valor actual = %i)", tid, id_semaforo, valor_semaforo);
 
 			break;
 			case SIGNAL:
@@ -169,6 +192,8 @@ void atender_cliente(int cliente_fd) {
 				recv(cliente_fd, &tamanio_id_semaforo, sizeof(int), MSG_WAITALL);
 				recv(cliente_fd, id_semaforo, tamanio_id_semaforo, 0);
 				valor_semaforo = semaforo_signal(id_semaforo);
+				log_info(logger, "El hilo %i hizo un signal al semáforo %s (valor actual = %i)", tid, id_semaforo, valor_semaforo);
+				hilo_a_desbloquear = crear_hilo(pid, tid);
 			break;
 		}
 
@@ -229,14 +254,6 @@ void encolar_hilo_en_new(hilo_t* hilo) {
 	log_info(logger, "El hilo %i del programa %i llegó a NEW", hilo->tid, hilo->pid);
 }
 
-void desbloquear_hilo(hilo_t* hilo) {
-	bool hilo_encontrado(hilo_t* un_hilo) {
-		return un_hilo->tid == hilo->tid && un_hilo->pid == hilo->pid;
-	}
-
-	list_remove_by_condition(cola_blocked->elements, hilo_encontrado);
-}
-
 void cerrar_hilo(hilo_t* hilo) {
 	programa_t* programa = obtener_programa(hilo->pid);
 	queue_push(cola_exit, hilo);
@@ -257,15 +274,12 @@ void encolar_hilo_en_ready(hilo_t* hilo) {
 	programa->hilo_en_exec = malloc(sizeof(hilo_t));
 	programa = obtener_programa(hilo->pid);
 
-	if (list_any_satisfy(cola_blocked->elements, hilo_encontrado))
-		list_remove_by_condition(cola_blocked->elements, hilo_encontrado);
+	if (list_any_satisfy(cola_blocked, hilo_encontrado))
+		list_remove_by_condition(cola_blocked, hilo_encontrado);
 
 	list_add(programa->hilos_en_ready, hilo);
 	hilo->tiempo_ultima_llegada_a_ready = tiempo_actual();
 	log_info(logger, "El hilo %d del programa %d llegó a READY", hilo->tid, hilo->pid);
-	pthread_mutex_lock(&mutex_multiprogramacion);
-	GRADO_MULTIPROGRAMACION++;
-	pthread_mutex_unlock(&mutex_multiprogramacion);
 
 	if (GRADO_MULTIPROGRAMACION == MAX_MULTIPROG)
 		log_warning(logger, "Se ha alcanzado el grado máximo de multiprogramación");
@@ -283,7 +297,7 @@ void bloquear_hilo(hilo_t* hilo) {
 	if (!list_is_empty(programa_del_hilo->hilos_en_ready))
 		list_remove_by_condition(programa_del_hilo->hilos_en_ready, hilo_encontrado);
 
-	queue_push(cola_blocked, hilo);
+	list_add(cola_blocked, hilo);
 	log_info(logger, "El hilo %i del programa %i llegó a BLOCKED", hilo->tid, hilo->pid);
 }
 
@@ -313,6 +327,10 @@ hilo_t* siguiente_hilo_a_ejecutar(int pid) {
 
 void liberar() {
 
+	void liberar_hilo(hilo_t* hilo) {
+		free(hilo);
+	}
+
 	void liberar_programa(programa_t* programa) {
 		free(programa);
 	}
@@ -327,6 +345,10 @@ void liberar() {
 	log_destroy(logger_metricas);
 	list_iterate(programas, liberar_hilos_programa);
 	list_destroy_and_destroy_elements(programas, liberar_programa);
+	list_destroy_and_destroy_elements(cola_new->elements, liberar_hilo);
+	list_destroy_and_destroy_elements(cola_blocked, liberar_hilo);
+	list_destroy_and_destroy_elements(cola_exit->elements, liberar_hilo);
+	dictionary_destroy(diccionario_semaforos);
 }
 
 
