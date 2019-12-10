@@ -69,6 +69,7 @@ void sacar_de_ready(programa_t* programa, hilo_t* hilo) {
 }
 
 bool finalizado(hilo_t* hilo) {
+
 	bool es_hilo_buscado(hilo_t* un_hilo) {
 		return hilo->tid == un_hilo->tid && hilo->pid == un_hilo->pid;
 	}
@@ -77,12 +78,22 @@ bool finalizado(hilo_t* hilo) {
 }
 
 void desbloquear_hilo(hilo_t* hilo) {
+
 	bool es_hilo_buscado(hilo_t* un_hilo) {
 		return hilo->tid == un_hilo->tid && hilo->pid == un_hilo->pid;
 	}
 
 	list_remove_by_condition(cola_blocked, es_hilo_buscado);
 	encolar_hilo_en_ready(hilo);
+}
+
+hilo_t* obtener_hilo(t_list* lista_de_hilos, int pid, int tid) {
+
+	bool es_hilo_buscado(hilo_t* hilo) {
+		return hilo->pid == pid && hilo->tid == tid;
+	}
+
+	return list_find(lista_de_hilos, es_hilo_buscado);
 }
 
 void atender_cliente(int cliente_fd) {
@@ -108,6 +119,8 @@ void atender_cliente(int cliente_fd) {
 	hilo_t* hilo_esperando = malloc(sizeof(hilo_t));
 	hilo_t* hilo_a_esperar = malloc(sizeof(hilo_t));
 	programa_t* programa = malloc(sizeof(programa_t));
+	programa->hilo_en_exec = malloc(sizeof(hilo_t));
+	programa->hilos_en_ready = list_create();
 
 	socket_esta_conectado = recv(cliente_fd, &opcode, sizeof(int), MSG_WAITALL);
 	recv(cliente_fd, &pid, sizeof(int), MSG_WAITALL);
@@ -167,10 +180,10 @@ void atender_cliente(int cliente_fd) {
 			case CLOSE:
 				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
 				hilo = crear_hilo(pid, tid);
+				cerrar_hilo(hilo);
 				programa_t* programa = obtener_programa(pid);
 				hilo_esperando = crear_hilo(hilo->pid, hilo->tid_hilo_a_esperar);
 				desbloquear_hilo(hilo_esperando);
-				cerrar_hilo(hilo);
 				break;
 			case WAIT:
 				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
