@@ -100,7 +100,7 @@ void atender_cliente(int cliente_fd) {
 	int tamanio;
 	int tamanio_id_semaforo;
 	int socket_esta_conectado;
-	char* id_semaforo = malloc(3);
+	char* id_semaforo;
 	hilo_t* hilo = malloc(sizeof(hilo_t));
 	hilo_t* hilo_a_bloquear = malloc(sizeof(hilo_t));
 	hilo_t* hilo_a_desbloquear = malloc(sizeof(hilo_t));
@@ -113,6 +113,7 @@ void atender_cliente(int cliente_fd) {
 	recv(cliente_fd, &pid, sizeof(int), MSG_WAITALL);
 
 	while(socket_esta_conectado > 0) {
+		id_semaforo = string_new();
 		//TODO: salir del while al recibir close
 		switch (opcode) {
 			case INIT:
