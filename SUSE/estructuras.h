@@ -22,7 +22,7 @@ typedef struct {
 	long tiempo_ultima_llegada_a_exec;
 	long long estimacion_anterior;
 	long long rafaga_anterior;
-	int tid_hilo_esperando;
+	int tid_hilo_a_esperar;
 } __attribute__((packed)) hilo_t;
 
 typedef struct {

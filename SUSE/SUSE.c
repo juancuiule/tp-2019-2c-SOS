@@ -11,7 +11,7 @@ int main() {
 
 	servidor_fd = iniciar_servidor();
 
-	pthread_create(&hilo_metricas, NULL, (void*)logear_metricas, NULL);
+	//pthread_create(&hilo_metricas, NULL, (void*)logear_metricas, NULL);
 
 	while(1) {
 		cliente_fd = esperar_cliente(servidor_fd);
@@ -19,7 +19,7 @@ int main() {
 		// TODO: ver porque se está cerrando SUSE. OK
 	}
 
-	pthread_join(hilo_metricas, NULL);
+	//pthread_join(hilo_metricas, NULL);
 	liberar();
 	return EXIT_SUCCESS;
 }
@@ -56,7 +56,7 @@ hilo_t* crear_hilo(int pid, int tid) {
 	hilo->tiempo_ultima_llegada_a_ready = 0;
 	hilo->estimacion_anterior = 0;
 	hilo->rafaga_anterior = 0;
-	hilo->tid_hilo_esperando = 0;
+	hilo->tid_hilo_a_esperar = 0;
 	return hilo;
 }
 
@@ -155,23 +155,22 @@ void atender_cliente(int cliente_fd) {
 				recv(cliente_fd, &tid_hilo_a_bloquear, sizeof(int), MSG_WAITALL);
 				recv(cliente_fd, &tid_hilo_a_esperar, sizeof(int), MSG_WAITALL);
 				hilo_a_bloquear = crear_hilo(pid, tid_hilo_a_bloquear);
-				hilo_a_bloquear->tid_hilo_esperando = tid_hilo_a_esperar;
+				hilo_a_bloquear->tid_hilo_a_esperar = tid_hilo_a_esperar;
 				hilo_a_esperar = crear_hilo(pid, tid_hilo_a_esperar);
 
-				if (!finalizado(hilo_a_esperar))
+				if (!finalizado(hilo_a_esperar)) {
 					bloquear_hilo(hilo_a_bloquear);
+					printf("el hilo %i se bloqueó hasta que finalice el hilo %i\n", tid_hilo_a_bloquear, tid_hilo_a_esperar);
+				}
 
 				break;
 			case CLOSE:
 				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
 				hilo = crear_hilo(pid, tid);
 				programa_t* programa = obtener_programa(pid);
+				hilo_esperando = crear_hilo(hilo->pid, hilo->tid_hilo_a_esperar);
+				desbloquear_hilo(hilo_esperando);
 				cerrar_hilo(hilo);
-				hilo_esperando = crear_hilo(hilo->pid, hilo->tid_hilo_esperando);
-
-				if (!finalizado(hilo_esperando))
-					desbloquear_hilo(hilo_esperando);
-
 				break;
 			case WAIT:
 				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);

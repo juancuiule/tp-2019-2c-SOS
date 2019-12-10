@@ -43,6 +43,7 @@ int suse_join(int tid){
 	memcpy(buffer + 8, &tid_hilo_a_bloquear, sizeof(int));
 	memcpy(buffer + 12, &tid, sizeof(int));
 	send(conexion_con_suse, buffer, 4 * sizeof(int), MSG_WAITALL);
+	printf("el hilo %i se bloqueó hasta que termine el hilo %i\n", tid_hilo_a_bloquear, tid);
 	return 0;
 }
 
@@ -54,6 +55,7 @@ int suse_close(int tid){
 	memcpy(buffer + 4, &pid, sizeof(int));
 	memcpy(buffer + 8, &tid, sizeof(int));
 	send(conexion_con_suse, buffer, 3 * sizeof(int), MSG_WAITALL);
+	printf("terminó el hilo %i\n", tid);
 	return 0;
 }
 
@@ -118,7 +120,7 @@ hilo_t* crear_nuevo_hilo(int tid, int pid) {
 	hilo->tiempo_cpu = 0;
 	hilo->estimacion_anterior = 0;
 	hilo->rafaga_anterior = 0;
-	hilo->tid_hilo_esperando = 0;
+	hilo->tid_hilo_a_esperar = 0;
 	return hilo;
 }
 /*
