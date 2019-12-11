@@ -410,7 +410,7 @@ hilo_t* siguiente_hilo_a_ejecutar(int pid) {
 
 	long long estimacion(hilo_t* hilo) {
 		long long estimacion = (1 - ALPHA_SJF) * hilo->estimacion_anterior + ALPHA_SJF * hilo->rafaga_anterior;
-		 return estimacion;
+		return estimacion;
 	}
 
 	bool comparador(hilo_t* hilo1, hilo_t* hilo2) {
@@ -437,19 +437,23 @@ void liberar() {
 	}
 
 	void liberar_hilos_programa(programa_t* programa) {
-		list_destroy(programa->hilos_en_ready);
+		list_destroy_and_(programa->hilos_en_ready);
 		free(programa->hilo_en_exec);
+	}
+
+	void liberar_diccionario(t_dictionary* diccionario) {
+		free(diccionario);
 	}
 
 	config_destroy(config);
 	log_destroy(logger);
 	log_destroy(logger_metricas);
-	list_iterate(programas, liberar_hilos_programa);
+	list_destroy_and_destroy_elements(programas, liberar_hilos_programa);
 	list_destroy_and_destroy_elements(programas, liberar_programa);
 	list_destroy_and_destroy_elements(cola_new->elements, liberar_hilo);
 	list_destroy_and_destroy_elements(cola_blocked, liberar_hilo);
 	list_destroy_and_destroy_elements(cola_exit, liberar_hilo);
-	dictionary_destroy(diccionario_semaforos);
+	dictionary_destroy_and_destroy_elements(diccionario_semaforos, liberar_diccionario);
 }
 
 
