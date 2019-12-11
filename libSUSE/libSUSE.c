@@ -17,7 +17,6 @@ int suse_create(int tid){
 	memcpy(buffer + 4, &pid, sizeof(int));
 	memcpy(buffer + 8, &tid, sizeof(int));
 	send(conexion_con_suse, buffer, 3 * sizeof(int), MSG_WAITALL);
-	printf("CREO EL HILO %i\n", tid);
 	return 0;
 }
 
@@ -30,7 +29,6 @@ int suse_schedule_next(void){
 	memcpy(buffer + 4, &pid, sizeof(int));
 	send(conexion_con_suse, buffer, 2 * sizeof(int), MSG_WAITALL);
 	recv(conexion_con_suse, &next, sizeof(int), MSG_WAITALL);
-	printf("SIGUIENTE HILO A EJECUTAR: %i\n", next);
 	return next;
 }
 
@@ -45,7 +43,6 @@ int suse_join(int tid){
 	memcpy(buffer + 8, &tid_hilo_a_bloquear, sizeof(int));
 	memcpy(buffer + 12, &tid, sizeof(int));
 	send(conexion_con_suse, buffer, 4 * sizeof(int), MSG_WAITALL);
-	printf("BLOQUEO HILO %i ESPERANDO HILO %i\n", tid_hilo_a_bloquear, tid);
 	return 0;
 }
 
@@ -57,7 +54,6 @@ int suse_close(int tid){
 	memcpy(buffer + 4, &pid, sizeof(int));
 	memcpy(buffer + 8, &tid, sizeof(int));
 	send(conexion_con_suse, buffer, 3 * sizeof(int), MSG_WAITALL);
-	printf("CIERRO EL HILO %i\n", tid);
 	return 0;
 }
 
