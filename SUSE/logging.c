@@ -37,12 +37,50 @@ void logear_valor_semaforo(char* id, sem_value_t* sem_value) {
 	log_info(logger_metricas, "%s = %i", id, sem_value->valor);
 }
 
+int cantidad_de_hilos_en_new_de_programa(programa_t* programa) {
+
+	bool es_de_programa(hilo_t* hilo) {
+		return hilo->pid == programa->pid;
+	}
+
+	return list_count_satisfying(cola_new->elements, es_de_programa);
+}
+
+int cantidad_de_hilos_en_ready_de_programa(programa_t* programa) {
+	return list_size(programa->hilos_en_ready);
+}
+
+int cantidad_de_hilos_en_exec_de_programa(programa_t* programa) {
+	if (programa->hilo_en_exec == NULL)
+		return 0;
+	else
+		return 1;
+}
+
+int cantidad_de_hilos_en_blocked_de_programa(programa_t* programa) {
+	bool es_de_programa(hilo_t* hilo) {
+		return hilo->pid == programa->pid;
+	}
+
+	return list_count_satisfying(cola_blocked, es_de_programa);
+}
+
+void logear_estados_programa(programa_t* programa) {
+	log_info(logger, "Programa %i:", programa->pid);
+	log_info(logger, "\tHilos en NEW: %i", cantidad_de_hilos_en_new_de_programa(programa));
+	log_info(logger, "\tHilos en READY: %i", cantidad_de_hilos_en_ready_de_programa(programa));
+	log_info(logger, "\tHilos en EXEC: %i", cantidad_de_hilos_en_exec_de_programa(programa));
+	log_info(logger, "\tHilos en BLOCKED: %i", cantidad_de_hilos_en_blocked_de_programa(programa));
+}
+
 void logear_metricas() {
-	log_info(logger_metricas, "Grado de multiprogramación: %i", GRADO_MULTIPROGRAMACION);
+	log_info(logger, "Métricas del sistema:");
+	log_info(logger, "Grado de multiprogramación: %i", GRADO_MULTIPROGRAMACION);
+	dictionary_iterator(diccionario_semaforos, logear_valor_semaforo);
+	list_iterate(programas, logear_estados_programa);
 	list_iterate(cola_new->elements, (void*)logear_metricas_hilo);
 	list_iterate(cola_blocked, (void*)logear_metricas_hilo);
 	list_iterate(programas, (void*)logear_metricas_hilos_programa);
-	dictionary_iterator(diccionario_semaforos, logear_valor_semaforo);
 }
 
 void logear_metricas_timer() {

@@ -11,7 +11,7 @@ int main() {
 
 	servidor_fd = iniciar_servidor();
 
-	pthread_create(&hilo_metricas, NULL, (void*)logear_metricas_timer, NULL);
+	//pthread_create(&hilo_metricas, NULL, (void*)logear_metricas_timer, NULL);
 
 	while(1) {
 		cliente_fd = esperar_cliente(servidor_fd);
@@ -19,7 +19,7 @@ int main() {
 		// TODO: ver porque se está cerrando SUSE. OK
 	}
 
-	pthread_join(hilo_metricas, NULL);
+	//pthread_join(hilo_metricas, NULL);
 	liberar();
 	return EXIT_SUCCESS;
 }
@@ -261,6 +261,9 @@ void atender_cliente(int cliente_fd) {
 				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
 				hilo = crear_hilo(pid, tid);
 				programa_t* programa = obtener_programa(pid);
+				pthread_mutex_lock(&mutex_multiprogramacion);
+				GRADO_MULTIPROGRAMACION--;
+				pthread_mutex_unlock(&mutex_multiprogramacion);
 				cerrar_hilo(hilo);
 				hilo_esperando = crear_hilo(hilo->pid, hilo->tid_hilo_a_esperar);
 				desbloquear_hilo(hilo_esperando);
@@ -362,9 +365,6 @@ void cerrar_hilo(hilo_t* hilo) {
 	list_add(cola_exit, hilo);
 	log_info(logger, "El hilo %i del programa %i llegó a EXIT", hilo->tid, hilo->pid);
 	logear_metricas();
-	pthread_mutex_lock(&mutex_multiprogramacion);
-	GRADO_MULTIPROGRAMACION--;
-	pthread_mutex_unlock(&mutex_multiprogramacion);
 }
 
 void encolar_hilo_en_ready(hilo_t* hilo) {
