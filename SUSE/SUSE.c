@@ -24,24 +24,78 @@ int main() {
 	return EXIT_SUCCESS;
 }
 
-void mostrar_hilos_en_ready(programa_t* programa) {
-	printf("hilos en ready: \n");
+void imprimir_estados(int pid) {
+	programa_t* programa = obtener_programa(pid);
+	imprimir_hilos_en_new();
+	imprimir_hilos_en_ready(programa);
+
+	if (programa->hilo_en_exec != NULL)
+		printf("EXEC: %i\n", programa->hilo_en_exec->tid);
+
+	imprimir_hilos_en_blocked();
+	imprimir_hilos_en_exit();
+}
+
+void imprimir_hilos_en_new() {
+	printf("NEW: ");
 
 	bool imprimir_tid(hilo_t* hilo) {
-		printf("hilo %i\n", hilo->tid);
+		printf("%i ", hilo->tid);
+	}
+
+	list_iterate(cola_new->elements, imprimir_tid);
+	printf("\n");
+}
+
+void imprimir_hilos_en_ready(programa_t* programa) {
+	printf("READY: ");
+
+	bool imprimir_tid(hilo_t* hilo) {
+		printf("%i ", hilo->tid);
 	}
 
 	list_iterate(programa->hilos_en_ready, imprimir_tid);
+	printf("\n");
 }
 
-void mostrar_hilos_en_exit() {
-	printf("hilos en exit: \n");
+void imprimir_hilos_en_blocked() {
+	printf("BLOCKED: ");
 
 	bool imprimir_tid(hilo_t* hilo) {
-		printf("hilo %i\n", hilo->tid);
+		printf("%i ", hilo->tid);
 	}
 
-	list_iterate(cola_exit->elements, imprimir_tid);
+	list_iterate(cola_blocked, imprimir_tid);
+	printf("\n");
+}
+
+bool esta_bloqueado(hilo_t* hilo) {
+
+	bool es_hilo_buscado(hilo_t* un_hilo) {
+		return hilo->tid == un_hilo->tid && hilo->pid == un_hilo->pid;
+	}
+
+	return list_any_satisfy(cola_blocked, es_hilo_buscado);
+}
+
+void imprimir_hilos_en_exit() {
+	printf("EXIT: ");
+
+	bool imprimir_tid(hilo_t* hilo) {
+		printf("%i ", hilo->tid);
+	}
+
+	list_iterate(cola_exit, imprimir_tid);
+	printf("\n");
+}
+
+bool esta_en_ready(programa_t* programa, hilo_t* hilo) {
+
+	bool hilo_encontrado(hilo_t* un_hilo) {
+		return hilo->tid = un_hilo->tid && hilo->pid == un_hilo->pid;
+	}
+
+	return list_any_satisfy(programa->hilos_en_ready, hilo_encontrado);
 }
 
 uint64_t tiempo_actual() {
@@ -86,6 +140,7 @@ void sacar_de_ready(programa_t* programa, hilo_t* hilo) {
 	}
 
 	list_remove_by_condition(programa->hilos_en_ready, es_hilo_buscado);
+	printf("SAQUE DE READY AL HILO %i\n", hilo->tid);
 }
 
 bool finalizado(hilo_t* hilo) {
@@ -94,7 +149,7 @@ bool finalizado(hilo_t* hilo) {
 		return hilo->tid == un_hilo->tid && hilo->pid == un_hilo->pid;
 	}
 
-	return list_any_satisfy(cola_exit->elements, es_hilo_buscado);
+	return list_any_satisfy(cola_exit, es_hilo_buscado);
 }
 
 void desbloquear_hilo(hilo_t* hilo) {
@@ -152,6 +207,7 @@ void atender_cliente(int cliente_fd) {
 			case INIT:
 				agregar_programa(pid);
 				log_info(logger, "Llegó el programa %i", pid);
+				//imprimir_estados(pid);
 				break;
 			case CREATE:
 				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
@@ -166,10 +222,12 @@ void atender_cliente(int cliente_fd) {
 					pthread_mutex_unlock(&mutex_multiprogramacion);
 				}
 
+				//imprimir_estados(pid);
 				break;
 			case SCHEDULE_NEXT:
-				//tomar el hilo en exec y mandarlo a READY. OK
+				//tomar el hilo en EXEC y mandarlo a READY. OK
 				programa = obtener_programa(pid);
+				hilo = crear_hilo(pid, tid);
 
 				if (programa->hilo_en_exec != NULL)
 					list_add(programa->hilos_en_ready, programa->hilo_en_exec);
@@ -183,6 +241,7 @@ void atender_cliente(int cliente_fd) {
 					log_info(logger, "El hilo %i del programa %i llegó a EXEC", tid_proximo_hilo, pid);
 
 				send(cliente_fd, &tid_proximo_hilo, sizeof(int), MSG_WAITALL);
+				//imprimir_estados(pid);
 				break;
 			case JOIN:
 				recv(cliente_fd, &tid_hilo_a_bloquear, sizeof(int), MSG_WAITALL);
@@ -192,19 +251,21 @@ void atender_cliente(int cliente_fd) {
 				hilo_a_esperar = crear_hilo(pid, tid_hilo_a_esperar);
 				programa = obtener_programa(pid);
 
-				if (!finalizado(hilo_a_esperar)) {
+				if (!esta_bloqueado(hilo_a_bloquear) && !finalizado(hilo_a_esperar)) {
 					sacar_de_ready(programa, hilo_a_bloquear);
 					bloquear_hilo(hilo_a_bloquear);
 				}
 
+				//imprimir_estados(pid);
 				break;
 			case CLOSE:
 				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
 				hilo = crear_hilo(pid, tid);
-				cerrar_hilo(hilo);
 				programa_t* programa = obtener_programa(pid);
+				cerrar_hilo(hilo);
 				hilo_esperando = crear_hilo(hilo->pid, hilo->tid_hilo_a_esperar);
 				desbloquear_hilo(hilo_esperando);
+				imprimir_estados(pid);
 				break;
 			case WAIT:
 				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
@@ -220,6 +281,7 @@ void atender_cliente(int cliente_fd) {
 				else
 					log_info(logger, "El hilo %i hizo un wait al semáforo %s (valor actual = %i)", tid, id_semaforo, valor_semaforo);
 
+				//imprimir_estados(pid);
 			break;
 			case SIGNAL:
 				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
@@ -228,6 +290,7 @@ void atender_cliente(int cliente_fd) {
 				valor_semaforo = semaforo_signal(id_semaforo);
 				log_info(logger, "El hilo %i hizo un signal al semáforo %s (valor actual = %i)", tid, id_semaforo, valor_semaforo);
 				hilo_a_desbloquear = crear_hilo(pid, tid);
+				//imprimir_estados(pid);
 			break;
 		}
 
@@ -283,6 +346,7 @@ void atender_nuevo_cliente(int cliente_fd) {
 }
 
 void encolar_hilo_en_new(hilo_t* hilo) {
+	programa_t* programa = obtener_programa(hilo->pid);
 	hilo->tiempo_creacion = tiempo_actual();
 	queue_push(cola_new, hilo);
 	log_info(logger, "El hilo %i del programa %i llegó a NEW", hilo->tid, hilo->pid);
@@ -291,7 +355,7 @@ void encolar_hilo_en_new(hilo_t* hilo) {
 void cerrar_hilo(hilo_t* hilo) {
 	programa_t* programa = obtener_programa(hilo->pid);
 	programa->hilo_en_exec = NULL;
-	queue_push(cola_exit, hilo);
+	list_add(cola_exit, hilo);
 	log_info(logger, "El hilo %i del programa %i llegó a EXIT", hilo->tid, hilo->pid);
 	pthread_mutex_lock(&mutex_multiprogramacion);
 	GRADO_MULTIPROGRAMACION--;
@@ -312,26 +376,21 @@ void encolar_hilo_en_ready(hilo_t* hilo) {
 	if (list_any_satisfy(cola_blocked, hilo_encontrado))
 		list_remove_by_condition(cola_blocked, hilo_encontrado);
 
-	list_add(programa->hilos_en_ready, hilo);
-	hilo->tiempo_ultima_llegada_a_ready = tiempo_actual();
-	log_info(logger, "El hilo %d del programa %d llegó a READY", hilo->tid, hilo->pid);
+	if (!finalizado(hilo)) {
+		list_add(programa->hilos_en_ready, hilo);
 
-	if (GRADO_MULTIPROGRAMACION == MAX_MULTIPROG)
-		log_warning(logger, "Se ha alcanzado el grado máximo de multiprogramación");
+		hilo->tiempo_ultima_llegada_a_ready = tiempo_actual();
+		log_info(logger, "El hilo %i del programa %i llegó a READY", hilo->tid, hilo->pid);
+
+		if (GRADO_MULTIPROGRAMACION == MAX_MULTIPROG)
+			log_warning(logger, "Se ha alcanzado el grado máximo de multiprogramación");
+	}
 
 }
 
 void bloquear_hilo(hilo_t* hilo) {
-
-	bool hilo_encontrado(hilo_t* un_hilo) {
-		return un_hilo->tid == hilo->tid && un_hilo->pid == hilo->pid;
-	}
-
 	programa_t* programa_del_hilo = obtener_programa(hilo->pid);
-
-	if (!list_is_empty(programa_del_hilo->hilos_en_ready))
-		list_remove_by_condition(programa_del_hilo->hilos_en_ready, hilo_encontrado);
-
+	programa_del_hilo->hilo_en_exec = NULL;
 	list_add(cola_blocked, hilo);
 	log_info(logger, "El hilo %i del programa %i llegó a BLOCKED", hilo->tid, hilo->pid);
 }
@@ -382,7 +441,7 @@ void liberar() {
 	list_destroy_and_destroy_elements(programas, liberar_programa);
 	list_destroy_and_destroy_elements(cola_new->elements, liberar_hilo);
 	list_destroy_and_destroy_elements(cola_blocked, liberar_hilo);
-	list_destroy_and_destroy_elements(cola_exit->elements, liberar_hilo);
+	list_destroy_and_destroy_elements(cola_exit, liberar_hilo);
 	dictionary_destroy(diccionario_semaforos);
 }
 

@@ -31,7 +31,7 @@ t_log* logger_metricas;
 t_list* programas;
 t_queue* cola_new;
 t_list* cola_blocked;
-t_queue* cola_exit;
+t_list* cola_exit;
 
 sem_t* sem_atender_clientes;
 sem_t* sem_metricas;
