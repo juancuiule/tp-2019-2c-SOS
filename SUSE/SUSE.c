@@ -98,12 +98,12 @@ bool esta_en_ready(programa_t* programa, hilo_t* hilo) {
 	return list_any_satisfy(programa->hilos_en_ready, hilo_encontrado);
 }
 
-uint64_t tiempo_actual() {
+unsigned long long tiempo_actual() {
 	struct timeval tv;
 	gettimeofday(&tv, NULL);
 	unsigned long long tiempo = (((unsigned long long )tv.tv_sec) * 1000 + ((unsigned long) tv.tv_usec) / 1000);
-	printf("tiempo actual: %ulld\n", tiempo);
-	return (uint64_t)tiempo;
+	printf("tiempo actual: %llu\n", tiempo);
+	return tiempo;
 }
 
 void inicializar_metricas_hilo(hilo_t* hilo) {

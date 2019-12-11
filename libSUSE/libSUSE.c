@@ -109,9 +109,11 @@ hilo_t* crear_nuevo_hilo(int tid, int pid) {
 	hilo_t* hilo = malloc(sizeof(hilo_t));
 	hilo->tid = tid;
 	hilo->pid = pid;
-	hilo->tiempo_ejecucion = 0;
+	hilo->tiempo_creacion = 0;
 	hilo->tiempo_espera = 0;
 	hilo->tiempo_cpu = 0;
+	hilo->tiempo_ultima_llegada_a_ready = 0;
+	hilo->tiempo_ultima_llegada_a_ready = 0;
 	hilo->estimacion_anterior = 0;
 	hilo->rafaga_anterior = 0;
 	hilo->tid_hilo_a_esperar = 0;

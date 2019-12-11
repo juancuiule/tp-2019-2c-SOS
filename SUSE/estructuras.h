@@ -15,13 +15,13 @@
 typedef struct {
 	int tid;
 	int pid;
-	long tiempo_espera;
-	long tiempo_cpu;
-	long tiempo_creacion;
-	long tiempo_ultima_llegada_a_ready;
-	long tiempo_ultima_llegada_a_exec;
-	long long estimacion_anterior;
-	long long rafaga_anterior;
+	unsigned long long tiempo_espera;
+	unsigned long long tiempo_cpu;
+	unsigned long long tiempo_creacion;
+	unsigned long long tiempo_ultima_llegada_a_ready;
+	unsigned long long tiempo_ultima_llegada_a_exec;
+	double estimacion_anterior;
+	double rafaga_anterior;
 	int tid_hilo_a_esperar;
 } __attribute__((packed)) hilo_t;
 
