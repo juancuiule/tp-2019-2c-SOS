@@ -11,5 +11,6 @@
 #include <stdio.h>
 
 void logear_metricas();
+void logear_metricas_timer();
 
 #endif /* LOGGING_H_ */

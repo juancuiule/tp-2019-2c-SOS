@@ -11,7 +11,7 @@ int main() {
 
 	servidor_fd = iniciar_servidor();
 
-	//pthread_create(&hilo_metricas, NULL, (void*)logear_metricas, NULL);
+	pthread_create(&hilo_metricas, NULL, (void*)logear_metricas_timer, NULL);
 
 	while(1) {
 		cliente_fd = esperar_cliente(servidor_fd);
@@ -19,7 +19,7 @@ int main() {
 		// TODO: ver porque se está cerrando SUSE. OK
 	}
 
-	//pthread_join(hilo_metricas, NULL);
+	pthread_join(hilo_metricas, NULL);
 	liberar();
 	return EXIT_SUCCESS;
 }
@@ -206,7 +206,7 @@ void atender_cliente(int cliente_fd) {
 			case INIT:
 				agregar_programa(pid);
 				log_info(logger, "Llegó el programa %i", pid);
-				imprimir_estados(pid);
+				//imprimir_estados(pid);
 				break;
 			case CREATE:
 				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
@@ -221,7 +221,7 @@ void atender_cliente(int cliente_fd) {
 					pthread_mutex_unlock(&mutex_multiprogramacion);
 				}
 
-				imprimir_estados(pid);
+				//imprimir_estados(pid);
 				break;
 			case SCHEDULE_NEXT:
 				//tomar el hilo en EXEC y mandarlo a READY. OK
@@ -239,7 +239,7 @@ void atender_cliente(int cliente_fd) {
 				if (!finalizado(proximo_hilo))
 					log_info(logger, "El hilo %i del programa %i llegó a EXEC", tid_proximo_hilo, pid);
 
-				imprimir_estados(pid);
+				//imprimir_estados(pid);
 				send(cliente_fd, &tid_proximo_hilo, sizeof(int), MSG_WAITALL);
 				break;
 			case JOIN:
@@ -255,7 +255,7 @@ void atender_cliente(int cliente_fd) {
 					bloquear_hilo(hilo_a_bloquear);
 				}
 
-				imprimir_estados(pid);
+				//imprimir_estados(pid);
 				break;
 			case CLOSE:
 				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
@@ -264,7 +264,7 @@ void atender_cliente(int cliente_fd) {
 				cerrar_hilo(hilo);
 				hilo_esperando = crear_hilo(hilo->pid, hilo->tid_hilo_a_esperar);
 				desbloquear_hilo(hilo_esperando);
-				imprimir_estados(pid);
+				//imprimir_estados(pid);
 				break;
 			case WAIT:
 				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
@@ -280,7 +280,7 @@ void atender_cliente(int cliente_fd) {
 				else
 					log_info(logger, "El hilo %i hizo un wait al semáforo %s (valor actual = %i)", tid, id_semaforo, valor_semaforo);
 
-				imprimir_estados(pid);
+				//imprimir_estados(pid);
 			break;
 			case SIGNAL:
 				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
@@ -293,7 +293,7 @@ void atender_cliente(int cliente_fd) {
 				if (esta_bloqueado(hilo))
 					desbloquear_hilo(hilo_a_desbloquear);
 
-				imprimir_estados(pid);
+				//imprimir_estados(pid);
 			break;
 		}
 
@@ -361,6 +361,7 @@ void cerrar_hilo(hilo_t* hilo) {
 	programa->hilo_en_exec = NULL;
 	list_add(cola_exit, hilo);
 	log_info(logger, "El hilo %i del programa %i llegó a EXIT", hilo->tid, hilo->pid);
+	logear_metricas();
 	pthread_mutex_lock(&mutex_multiprogramacion);
 	GRADO_MULTIPROGRAMACION--;
 	pthread_mutex_unlock(&mutex_multiprogramacion);

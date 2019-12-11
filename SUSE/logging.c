@@ -38,13 +38,17 @@ void logear_valor_semaforo(char* id, sem_value_t* sem_value) {
 }
 
 void logear_metricas() {
+	log_info(logger_metricas, "Grado de multiprogramación: %i", GRADO_MULTIPROGRAMACION);
+	list_iterate(cola_new->elements, (void*)logear_metricas_hilo);
+	list_iterate(cola_blocked, (void*)logear_metricas_hilo);
+	list_iterate(programas, (void*)logear_metricas_hilos_programa);
+	dictionary_iterator(diccionario_semaforos, logear_valor_semaforo);
+}
+
+void logear_metricas_timer() {
 
 	while (1) {
-		log_info(logger_metricas, "Grado de multiprogramación: %i", GRADO_MULTIPROGRAMACION);
-		list_iterate(cola_new->elements, (void*)logear_metricas_hilo);
-		list_iterate(cola_blocked, (void*)logear_metricas_hilo);
-		list_iterate(programas, (void*)logear_metricas_hilos_programa);
-		dictionary_iterator(diccionario_semaforos, logear_valor_semaforo);
+		logear_metricas();
 		sleep(METRICS_TIMER);
 	}
 }
