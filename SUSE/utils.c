@@ -25,6 +25,9 @@ int iniciar_servidor(void)
         if ((socket_servidor = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) == -1)
             continue;
 
+        int yes = 1;
+        setsockopt(socket_servidor, SOL_SOCKET, SO_REUSEPORT, &yes, sizeof(yes));
+
         if (bind(socket_servidor, p->ai_addr, p->ai_addrlen) == -1) {
         	printf("Falló el bind\n");
             close(socket_servidor);

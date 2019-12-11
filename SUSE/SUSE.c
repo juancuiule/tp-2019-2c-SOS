@@ -98,12 +98,17 @@ bool esta_en_ready(programa_t* programa, hilo_t* hilo) {
 	return list_any_satisfy(programa->hilos_en_ready, hilo_encontrado);
 }
 
-unsigned long long tiempo_actual() {
+unsigned long long _tiempo_actual() {
 	struct timeval tv;
 	gettimeofday(&tv, NULL);
 	unsigned long long tiempo = (((unsigned long long )tv.tv_sec) * 1000 + ((unsigned long) tv.tv_usec) / 1000);
-	printf("tiempo actual: %llu\n", tiempo);
 	return tiempo;
+}
+
+void _nueva_estimacion(hilo_t* hilo) {
+	unsigned long long actual = _tiempo_actual();
+	double rafaga = actual - hilo->tiempo_ultima_llegada_a_exec;
+	hilo->estimacion_anterior = (1 - ALPHA_SJF) * hilo->estimacion_anterior + ALPHA_SJF * hilo->rafaga_anterior;
 }
 
 void inicializar_metricas_hilo(hilo_t* hilo) {
@@ -126,13 +131,34 @@ hilo_t* crear_hilo(int pid, int tid) {
 	hilo->pid = pid;
 	hilo->tid = tid;
 	hilo->tiempo_cpu = 0;
-	hilo->tiempo_creacion = tiempo_actual();
+	hilo->tiempo_creacion = _tiempo_actual();
 	hilo->tiempo_espera = 0;
 	hilo->tiempo_ultima_llegada_a_ready = 0;
+	hilo->tiempo_ultima_llegada_a_exec = 0;
 	hilo->estimacion_anterior = 0;
 	hilo->rafaga_anterior = 0;
 	hilo->tid_hilo_a_esperar = 0;
 	return hilo;
+}
+
+void actualizar_tiempo_espera(hilo_t* hilo) {
+	long t_actual = _tiempo_actual();
+	long t_espera = 0;
+
+	if (hilo->tiempo_ultima_llegada_a_ready > 0)
+		t_espera = t_actual - hilo->tiempo_ultima_llegada_a_ready;
+
+	hilo->tiempo_espera += t_espera;
+}
+
+void actualizar_tiempo_cpu(hilo_t* hilo) {
+	long t_actual = _tiempo_actual();
+	long t_cpu = 0;
+
+	if (hilo->tiempo_ultima_llegada_a_exec > 0)
+		t_cpu = t_actual - hilo->tiempo_ultima_llegada_a_exec;
+
+	hilo->tiempo_cpu += t_cpu;
 }
 
 void sacar_de_ready(programa_t* programa, hilo_t* hilo) {
@@ -141,6 +167,7 @@ void sacar_de_ready(programa_t* programa, hilo_t* hilo) {
 	}
 
 	list_remove_by_condition(programa->hilos_en_ready, es_hilo_buscado);
+	actualizar_tiempo_espera(hilo);
 }
 
 bool finalizado(hilo_t* hilo) {
@@ -186,6 +213,7 @@ void atender_cliente(int cliente_fd) {
 	int tamanio;
 	int tamanio_id_semaforo;
 	int socket_esta_conectado;
+	long ultima_llegada_a_exec;
 	char* id_semaforo;
 	hilo_t* hilo = malloc(sizeof(hilo_t));
 	hilo_t* hilo_a_bloquear = malloc(sizeof(hilo_t));
@@ -229,12 +257,18 @@ void atender_cliente(int cliente_fd) {
 				programa = obtener_programa(pid);
 				hilo = crear_hilo(pid, tid);
 
-				if (programa->hilo_en_exec != NULL)
+				_nueva_estimacion(hilo);
+
+				if (programa->hilo_en_exec != NULL) {
 					list_add(programa->hilos_en_ready, programa->hilo_en_exec);
+					actualizar_tiempo_cpu(programa->hilo_en_exec);
+				}
 
 				proximo_hilo = siguiente_hilo_a_ejecutar(pid);
 				sacar_de_ready(programa, proximo_hilo);
 				programa->hilo_en_exec = proximo_hilo;
+				ultima_llegada_a_exec = _tiempo_actual();
+				proximo_hilo->tiempo_ultima_llegada_a_exec = ultima_llegada_a_exec;
 				tid_proximo_hilo = proximo_hilo->tid;
 
 				if (!finalizado(proximo_hilo))
@@ -334,8 +368,8 @@ void ejecutar_nuevo_hilo(hilo_t* hilo) {
 
 	sacar_de_ready(programa, hilo);
 	log_info(logger, "El hilo %i del programa %i llegó a EXEC.", siguiente_hilo->tid, siguiente_hilo->pid);
-	siguiente_hilo->tiempo_ultima_llegada_a_exec = tiempo_actual();
-	siguiente_hilo->tiempo_espera += tiempo_actual() - hilo->tiempo_ultima_llegada_a_ready;
+	siguiente_hilo->tiempo_ultima_llegada_a_exec = _tiempo_actual();
+	siguiente_hilo->tiempo_espera += _tiempo_actual() - hilo->tiempo_ultima_llegada_a_ready;
 	programa->hilo_en_exec = siguiente_hilo;
 	list_remove_by_condition(programa->hilos_en_ready, hilo_encontrado);
 }
@@ -355,7 +389,7 @@ void atender_nuevo_cliente(int cliente_fd) {
 
 void encolar_hilo_en_new(hilo_t* hilo) {
 	programa_t* programa = obtener_programa(hilo->pid);
-	hilo->tiempo_creacion = tiempo_actual();
+	hilo->tiempo_creacion = _tiempo_actual();
 	queue_push(cola_new, hilo);
 	log_info(logger, "El hilo %i del programa %i llegó a NEW", hilo->tid, hilo->pid);
 }
@@ -363,6 +397,7 @@ void encolar_hilo_en_new(hilo_t* hilo) {
 void cerrar_hilo(hilo_t* hilo) {
 	programa_t* programa = obtener_programa(hilo->pid);
 	programa->hilo_en_exec = NULL;
+	actualizar_tiempo_cpu(hilo);
 	list_add(cola_exit, hilo);
 	log_info(logger, "El hilo %i del programa %i llegó a EXIT", hilo->tid, hilo->pid);
 	logear_metricas();
@@ -387,7 +422,7 @@ void encolar_hilo_en_ready(hilo_t* hilo) {
 		if (!esta_en_ready(programa, hilo))
 			list_add(programa->hilos_en_ready, hilo);
 
-		hilo->tiempo_ultima_llegada_a_ready = tiempo_actual();
+		hilo->tiempo_ultima_llegada_a_ready = _tiempo_actual();
 		log_info(logger, "El hilo %i del programa %i llegó a READY", hilo->tid, hilo->pid);
 
 		if (GRADO_MULTIPROGRAMACION == MAX_MULTIPROG)
@@ -399,6 +434,7 @@ void encolar_hilo_en_ready(hilo_t* hilo) {
 void bloquear_hilo(hilo_t* hilo) {
 	programa_t* programa_del_hilo = obtener_programa(hilo->pid);
 	programa_del_hilo->hilo_en_exec = NULL;
+	actualizar_tiempo_cpu(hilo);
 	list_add(cola_blocked, hilo);
 	log_info(logger, "El hilo %i del programa %i llegó a BLOCKED", hilo->tid, hilo->pid);
 }
@@ -409,9 +445,9 @@ hilo_t* siguiente_hilo_a_ejecutar(int pid) {
 	programa_t* programa = obtener_programa(pid);
 	hilos = programa->hilos_en_ready;
 
-	long long estimacion(hilo_t* hilo) {
-		long long estimacion = (1 - ALPHA_SJF) * hilo->estimacion_anterior + ALPHA_SJF * hilo->rafaga_anterior;
-		return estimacion;
+	double estimacion(hilo_t* hilo) {
+		double est = ((1 - ALPHA_SJF) * hilo->estimacion_anterior) + (ALPHA_SJF * hilo->rafaga_anterior);
+		return est;
 	}
 
 	bool comparador(hilo_t* hilo1, hilo_t* hilo2) {
@@ -424,6 +460,7 @@ hilo_t* siguiente_hilo_a_ejecutar(int pid) {
 		siguiente = list_get(hilos, 0);
 		siguiente->estimacion_anterior = estimacion(siguiente);
 	}
+
 	return siguiente;
 }
 

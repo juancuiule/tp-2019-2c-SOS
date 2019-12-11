@@ -10,17 +10,26 @@
 #include "globales.h"
 #include "configuracion.h"
 
-long tiempo_de_ejecucion(hilo_t* hilo) {
-	return tiempo_actual() - hilo->tiempo_creacion;
+unsigned long long tiempo_actual() {
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
+	unsigned long long tiempo = (((unsigned long long )tv.tv_sec) * 1000 + ((unsigned long) tv.tv_usec) / 1000);
+	return tiempo;
+}
+
+int tiempo_de_ejecucion(hilo_t* hilo) {
+	unsigned long long actual = tiempo_actual();
+	int tiempo_ejecucion =  actual - hilo->tiempo_creacion;
+	return tiempo_ejecucion;
 }
 
 void logear_metricas_hilo(hilo_t* hilo) {
 	if (hilo != NULL) {
 		log_info(logger_metricas, "Métricas del hilo %i del programa %i: ", hilo->tid, hilo->pid);
-		long tiempo_ejecucion = tiempo_de_ejecucion(hilo);
-		log_info(logger_metricas, "\ttiempo de ejecución: %ld ms", tiempo_ejecucion);
-		log_info(logger_metricas, "\ttiempo de espera: %ld ms", hilo->tiempo_espera);
-		log_info(logger_metricas, "\ttiempo de uso de CPU: %ld ms", hilo->tiempo_cpu);
+		int tiempo_ejecucion = tiempo_de_ejecucion(hilo);
+		log_info(logger_metricas, "\tTiempo de ejecución: %i ms", tiempo_ejecucion);
+		log_info(logger_metricas, "\tTiempo de espera: %llu ms", hilo->tiempo_espera);
+		log_info(logger_metricas, "\tTiempo de uso de CPU: %llu ms", hilo->tiempo_cpu);
 	}
 }
 
