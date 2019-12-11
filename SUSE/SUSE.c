@@ -102,6 +102,7 @@ uint64_t tiempo_actual() {
 	struct timeval tv;
 	gettimeofday(&tv, NULL);
 	unsigned long long tiempo = (((unsigned long long )tv.tv_sec) * 1000 + ((unsigned long) tv.tv_usec) / 1000);
+	printf("tiempo actual: %ulld\n", tiempo);
 	return (uint64_t)tiempo;
 }
 
@@ -125,7 +126,7 @@ hilo_t* crear_hilo(int pid, int tid) {
 	hilo->pid = pid;
 	hilo->tid = tid;
 	hilo->tiempo_cpu = 0;
-	hilo->tiempo_creacion = 0;
+	hilo->tiempo_creacion = tiempo_actual();
 	hilo->tiempo_espera = 0;
 	hilo->tiempo_ultima_llegada_a_ready = 0;
 	hilo->estimacion_anterior = 0;
@@ -437,7 +438,7 @@ void liberar() {
 	}
 
 	void liberar_hilos_programa(programa_t* programa) {
-		list_destroy_and_(programa->hilos_en_ready);
+		list_destroy_and_destroy_elements(programa->hilos_en_ready, liberar_hilo);
 		free(programa->hilo_en_exec);
 	}
 
