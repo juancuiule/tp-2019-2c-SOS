@@ -42,6 +42,13 @@ typedef enum {
 } operacion;
 
 typedef struct {
+	char* id;
+	int valor_actual;
+	int valor_maximo;
+	t_list* hilos_bloqueados;
+} semaforo_t;
+
+typedef struct {
 	int tid;
 	int tamanio_id;
 	char* id_semaforo;
