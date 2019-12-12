@@ -7,6 +7,23 @@
 
 #include "inicializacion.h"
 #include "globales.h"
+#include "configuracion.h"
+#include "estructuras.h"
+
+void inicializar_semaforos() {
+	semaforos = list_create();
+	int i = 0;
+
+	while (SEM_IDS[i] != NULL) {
+		semaforo_t* semaforo = malloc(sizeof(semaforo_t));
+		semaforo->id = SEM_IDS[i];
+		semaforo->valor_actual = atoi(SEM_INIT[i]);
+		semaforo->valor_maximo = atoi(SEM_MAX[i]);
+		semaforo->hilos_bloqueados = list_create();
+		list_add(semaforos, semaforo);
+		i++;
+	}
+}
 
 void inicializar() {
 	PID = 0;
@@ -26,5 +43,5 @@ void inicializar() {
 
 	pthread_mutex_init(&mutex_multiprogramacion, NULL);
 
-	sem_value = malloc(sizeof(sem_value_t));
+	inicializar_semaforos();
 }

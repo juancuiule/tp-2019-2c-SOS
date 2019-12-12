@@ -30043,3 +30043,150 @@
 [INFO] 16:37:34:638 SUSE/(10281:10293): El hilo 1 hizo un wait al semáforo AAA (valor actual = 9)
 [INFO] 16:37:53:489 SUSE/(10281:10293): El hilo 2 del programa 10292 llegó a EXEC
 [INFO] 16:37:53:489 SUSE/(10281:10293): El hilo 2 hizo un wait al semáforo AAA (valor actual = 8)
+[INFO] 15:50:24:760 SUSE/(5638:5638): Se ha iniciado el servidor.
+[INFO] 15:50:32:881 SUSE/(5638:5653): Llegó el programa 5652
+[INFO] 15:50:32:881 SUSE/(5638:5653): El hilo 0 del programa 5652 llegó a NEW
+[INFO] 15:50:32:881 SUSE/(5638:5653): El hilo 0 del programa 5652 llegó a READY
+[INFO] 15:50:32:881 SUSE/(5638:5653): El hilo 1 del programa 5652 llegó a NEW
+[INFO] 15:50:32:881 SUSE/(5638:5653): El hilo 1 del programa 5652 llegó a READY
+[INFO] 15:50:32:881 SUSE/(5638:5653): El hilo 2 del programa 5652 llegó a NEW
+[INFO] 15:50:32:881 SUSE/(5638:5653): El hilo 2 del programa 5652 llegó a READY
+[INFO] 15:50:32:881 SUSE/(5638:5653): El hilo 0 del programa 5652 llegó a BLOCKED
+[INFO] 15:50:32:881 SUSE/(5638:5653): El hilo 1 del programa 5652 llegó a EXEC
+[INFO] 15:52:00:613 SUSE/(5691:5691): Se ha iniciado el servidor.
+[INFO] 15:52:03:432 SUSE/(5691:5703): Llegó el programa 5702
+[INFO] 15:52:03:432 SUSE/(5691:5703): El hilo 0 del programa 5702 llegó a NEW
+[INFO] 15:52:03:432 SUSE/(5691:5703): El hilo 0 del programa 5702 llegó a READY
+[INFO] 15:52:03:432 SUSE/(5691:5703): El hilo 1 del programa 5702 llegó a NEW
+[INFO] 15:52:03:432 SUSE/(5691:5703): El hilo 1 del programa 5702 llegó a READY
+[INFO] 15:52:03:432 SUSE/(5691:5703): El hilo 2 del programa 5702 llegó a NEW
+[INFO] 15:52:03:432 SUSE/(5691:5703): El hilo 2 del programa 5702 llegó a READY
+[INFO] 15:52:03:432 SUSE/(5691:5703): El hilo 0 del programa 5702 llegó a BLOCKED
+[INFO] 15:52:03:432 SUSE/(5691:5703): El hilo 1 del programa 5702 llegó a EXEC
+[INFO] 16:05:38:262 SUSE/(5691:6308): Llegó el programa 6095
+[INFO] 16:05:38:262 SUSE/(5691:6308): El hilo 0 del programa 6095 llegó a NEW
+[INFO] 16:05:38:262 SUSE/(5691:6308): El hilo 0 del programa 6095 llegó a READY
+[INFO] 16:05:38:262 SUSE/(5691:6308): El hilo 1 del programa 6095 llegó a NEW
+[INFO] 16:05:38:262 SUSE/(5691:6308): El hilo 1 del programa 6095 llegó a READY
+[INFO] 16:05:38:262 SUSE/(5691:6308): El hilo 2 del programa 6095 llegó a NEW
+[INFO] 16:05:38:262 SUSE/(5691:6308): El hilo 2 del programa 6095 llegó a READY
+[INFO] 16:05:38:262 SUSE/(5691:6308): El hilo 0 del programa 6095 llegó a BLOCKED
+[INFO] 16:05:38:262 SUSE/(5691:6308): El hilo 1 del programa 6095 llegó a EXEC
+[INFO] 18:12:26:790 SUSE/(10991:10991): Se ha iniciado el servidor.
+[INFO] 18:12:33:670 SUSE/(10991:11006): Llegó el programa 11005
+[INFO] 18:12:33:670 SUSE/(10991:11006): El hilo 0 del programa 11005 llegó a NEW
+[INFO] 18:12:33:670 SUSE/(10991:11006): El hilo 0 del programa 11005 llegó a READY
+[INFO] 18:12:33:670 SUSE/(10991:11006): El hilo 1 del programa 11005 llegó a NEW
+[INFO] 18:12:33:670 SUSE/(10991:11006): El hilo 1 del programa 11005 llegó a READY
+[INFO] 18:12:33:670 SUSE/(10991:11006): El hilo 0 del programa 11005 llegó a BLOCKED
+[INFO] 18:12:33:670 SUSE/(10991:11006): El hilo 1 del programa 11005 llegó a EXEC
+[INFO] 18:12:33:734 SUSE/(10991:11006): El hilo 1 del programa 11005 hizo un WAIT al semáforo solo_hiper_mega_piolaUSE/(10991:11006): El hilo 0 del programa 11005 llegó a BLOCKED
+[0m
+[INFO] 18:12:33:734 SUSE/(10991:11006): El hilo 1 del programa 11005 llegó a EXEC
+[INFO] 18:12:33:778 SUSE/(10991:11006): El hilo 1 del programa 11005 llegó a READY
+[INFO] 18:12:33:778 SUSE/(10991:11006): El hilo 1 fue desbloqueado por un signal al semáforo afinado
+[INFO] 18:12:33:778 SUSE/(10991:11006): El hilo 1 del programa 11005 hizo un SIGNAL al semáforo afinado
+[INFO] 18:12:33:778 SUSE/(10991:11006): El hilo 1 del programa 11005 llegó a EXEC
+[INFO] 18:12:33:822 SUSE/(10991:11006): El hilo 1 del programa 11005 llegó a EXEC
+[INFO] 18:12:33:868 SUSE/(10991:11006): El hilo 1 del programa 11005 hizo un WAIT al semáforo solo_hiper_mega_piola
+[INFO] 18:12:33:868 SUSE/(10991:11006): El hilo 1 del programa 11005 llegó a BLOCKED
+[INFO] 18:13:46:126 SUSE/(11050:11050): Se ha iniciado el servidor.
+[INFO] 18:13:49:256 SUSE/(11050:11068): Llegó el programa 11067
+[INFO] 18:13:49:256 SUSE/(11050:11068): El hilo 0 del programa 11067 llegó a NEW
+[INFO] 18:13:49:256 SUSE/(11050:11068): El hilo 0 del programa 11067 llegó a READY
+[INFO] 18:13:49:256 SUSE/(11050:11068): El hilo 1 del programa 11067 llegó a NEW
+[INFO] 18:13:49:256 SUSE/(11050:11068): El hilo 1 del programa 11067 llegó a READY
+[INFO] 18:13:49:256 SUSE/(11050:11068): El hilo 0 del programa 11067 llegó a BLOCKED
+[INFO] 18:13:49:256 SUSE/(11050:11068): El hilo 1 del programa 11067 llegó a EXEC
+[INFO] 18:13:49:322 SUSE/(11050:11068): El hilo 1 del programa 11067 hizo un WAIT al semáforo solo_hiper_mega_piolaUSE/(11050:11068): El hilo 0 del programa 11067 llegó a BLOCKED
+[0m
+[INFO] 18:13:49:322 SUSE/(11050:11068): El hilo 1 del programa 11067 llegó a EXEC
+[INFO] 18:13:49:367 SUSE/(11050:11068): El hilo 1 del programa 11067 llegó a READY
+[INFO] 18:13:49:367 SUSE/(11050:11068): El hilo 1 fue desbloqueado por un signal al semáforo afinado
+[INFO] 18:13:49:367 SUSE/(11050:11068): El hilo 1 del programa 11067 hizo un SIGNAL al semáforo afinado
+[INFO] 18:13:49:367 SUSE/(11050:11068): El hilo 1 del programa 11067 llegó a EXEC
+[INFO] 18:13:49:410 SUSE/(11050:11068): El hilo 1 del programa 11067 llegó a EXEC
+[INFO] 18:13:49:454 SUSE/(11050:11068): El hilo 1 del programa 11067 hizo un WAIT al semáforo solo_hiper_mega_piola
+[INFO] 18:13:49:454 SUSE/(11050:11068): El hilo 1 del programa 11067 llegó a BLOCKED
+[INFO] 18:16:27:55 SUSE/(11168:11168): Se ha iniciado el servidor.
+[INFO] 18:16:31:397 SUSE/(11168:11180): Llegó el programa 11179
+[INFO] 18:16:31:397 SUSE/(11168:11180): El hilo 0 del programa 11179 llegó a NEW
+[INFO] 18:16:31:397 SUSE/(11168:11180): El hilo 0 del programa 11179 llegó a READY
+[INFO] 18:16:31:397 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a NEW
+[INFO] 18:16:31:397 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a READY
+[INFO] 18:16:31:397 SUSE/(11168:11180): El hilo 0 del programa 11179 llegó a BLOCKED
+[INFO] 18:16:31:397 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a EXEC
+[INFO] 18:16:31:463 SUSE/(11168:11180): El hilo 1 del programa 11179 hizo un WAIT al semáforo solo_hiper_mega_piolaUSE/(11168:11180): El hilo 0 del programa 11179 llegó a BLOCKED
+[0m
+[INFO] 18:16:31:463 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a EXEC
+[INFO] 18:16:31:511 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a READY
+[INFO] 18:16:31:511 SUSE/(11168:11180): El hilo 1 fue desbloqueado por un signal al semáforo afinado
+[INFO] 18:16:31:511 SUSE/(11168:11180): El hilo 1 del programa 11179 hizo un SIGNAL al semáforo afinado
+[INFO] 18:16:31:511 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a EXEC
+[INFO] 18:16:31:554 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a EXEC
+[INFO] 18:16:31:598 SUSE/(11168:11180): El hilo 1 del programa 11179 hizo un WAIT al semáforo solo_hiper_mega_piola
+[INFO] 18:16:31:598 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a BLOCKED
+[INFO] 18:16:43:87 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a EXEC
+[INFO] 18:16:43:88 SUSE/(11168:11180): El hilo 1 del programa 11179 hizo un SIGNAL al semáforo afinado
+[INFO] 18:16:43:88 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a EXEC
+[INFO] 18:16:43:130 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a READY
+[INFO] 18:16:43:130 SUSE/(11168:11180): El hilo 1 fue desbloqueado por un signal al semáforo solo_hiper_mega_piola
+[INFO] 18:16:43:130 SUSE/(11168:11180): El hilo 1 del programa 11179 hizo un SIGNAL al semáforo solo_hiper_mega_piola
+[INFO] 18:16:43:130 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a EXEC
+[INFO] 18:16:43:174 SUSE/(11168:11180): El hilo 1 del programa 11179 hizo un WAIT al semáforo solo_hiper_mega_piolaUSE/(11168:11180): El hilo 1 del programa 11179 llegó a READY
+[0m
+[INFO] 18:16:43:174 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a EXEC
+[INFO] 18:16:43:218 SUSE/(11168:11180): El hilo 1 del programa 11179 hizo un SIGNAL al semáforo afinado
+[INFO] 18:16:43:218 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a EXEC
+[INFO] 18:16:43:262 SUSE/(11168:11180): El hilo 1 del programa 11179 hizo un SIGNAL al semáforo solo_hiper_mega_piola
+[INFO] 18:16:43:262 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a EXEC
+[INFO] 18:16:43:306 SUSE/(11168:11180): El hilo 1 del programa 11179 hizo un WAIT al semáforo solo_hiper_mega_piola
+[INFO] 18:16:44:110 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a EXEC
+[INFO] 18:16:44:110 SUSE/(11168:11180): El hilo 1 del programa 11179 hizo un SIGNAL al semáforo afinado
+[INFO] 18:16:44:110 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a EXEC
+[INFO] 18:16:44:154 SUSE/(11168:11180): El hilo 1 del programa 11179 hizo un SIGNAL al semáforo solo_hiper_mega_piola
+[INFO] 18:16:44:154 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a EXEC
+[INFO] 18:16:44:198 SUSE/(11168:11180): El hilo 1 del programa 11179 hizo un WAIT al semáforo solo_hiper_mega_piola
+[INFO] 18:16:44:807 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a EXEC
+[INFO] 18:16:44:807 SUSE/(11168:11180): El hilo 1 del programa 11179 hizo un SIGNAL al semáforo afinado
+[INFO] 18:16:44:807 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a EXEC
+[INFO] 18:16:44:850 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a EXEC
+[INFO] 18:16:44:894 SUSE/(11168:11180): El hilo 1 del programa 11179 hizo un WAIT al semáforo solo_hiper_mega_piolaUSE/(11168:11180): El hilo 1 del programa 11179 llegó a EXEC
+
+[INFO] 18:16:44:894 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a EXEC
+[INFO] 18:16:44:946 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a EXEC
+[INFO] 18:16:44:998 SUSE/(11168:11180): El hilo 1 del programa 11179 hizo un SIGNAL al semáforo solo_hiper_mega_piola
+[INFO] 18:16:44:998 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a EXEC
+[INFO] 18:16:45:51 SUSE/(11168:11180): El hilo 1 del programa 11179 hizo un WAIT al semáforo solo_hiper_mega_piolaa
+[0m
+[INFO] 18:16:45:51 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a EXEC
+[INFO] 18:16:45:95 SUSE/(11168:11180): El hilo 1 del programa 11179 hizo un SIGNAL al semáforo afinado
+[INFO] 18:16:45:95 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a EXEC
+[INFO] 18:16:45:138 SUSE/(11168:11180): El hilo 1 del programa 11179 hizo un SIGNAL al semáforo solo_hiper_mega_piola
+[INFO] 18:16:45:138 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a EXEC
+[INFO] 18:16:45:183 SUSE/(11168:11180): El hilo 1 del programa 11179 hizo un WAIT al semáforo solo_hiper_mega_piola
+[INFO] 18:16:46:710 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a EXEC
+[INFO] 18:16:46:710 SUSE/(11168:11180): El hilo 1 del programa 11179 hizo un SIGNAL al semáforo afinado
+[INFO] 18:16:46:710 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a EXEC
+[INFO] 18:16:46:754 SUSE/(11168:11180): El hilo 1 del programa 11179 hizo un SIGNAL al semáforo solo_hiper_mega_piola
+[INFO] 18:16:46:754 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a EXEC
+[INFO] 18:16:46:799 SUSE/(11168:11180): El hilo 1 del programa 11179 hizo un WAIT al semáforo solo_hiper_mega_piolaUSE/(11168:11180): El hilo 1 del programa 11179 hizo un SIGNAL al semáforo afinado
+[0m
+[INFO] 18:16:46:799 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a EXEC
+[INFO] 18:16:46:843 SUSE/(11168:11180): El hilo 1 del programa 11179 hizo un SIGNAL al semáforo afinado
+[INFO] 18:16:46:843 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a EXEC
+[INFO] 18:16:46:892 SUSE/(11168:11180): El hilo 1 del programa 11179 hizo un SIGNAL al semáforo solo_hiper_mega_piola
+[INFO] 18:16:46:892 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a EXEC
+[INFO] 18:16:46:938 SUSE/(11168:11180): El hilo 1 del programa 11179 hizo un WAIT al semáforo solo_hiper_mega_piolaUSE/(11168:11180): El hilo 1 del programa 11179 hizo un SIGNAL al semáforo afinado�
+[INFO] 18:16:46:938 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a EXEC
+[INFO] 18:16:46:985 SUSE/(11168:11180): El hilo 1 del programa 11179 hizo un SIGNAL al semáforo afinado
+[INFO] 18:16:46:985 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a EXEC
+[INFO] 18:16:47:27 SUSE/(11168:11180): El hilo 1 del programa 11179 hizo un SIGNAL al semáforo solo_hiper_mega_piola
+[INFO] 18:16:47:27 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a EXEC
+[INFO] 18:16:47:72 SUSE/(11168:11180): El hilo 1 del programa 11179 hizo un WAIT al semáforo solo_hiper_mega_piola
+[0m
+[INFO] 18:16:47:73 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a EXEC
+[INFO] 18:16:47:115 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a EXEC
+[INFO] 18:16:47:163 SUSE/(11168:11180): El hilo 1 del programa 11179 hizo un SIGNAL al semáforo solo_hiper_mega_piola
+[INFO] 18:16:47:163 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a EXEC
+[INFO] 18:16:47:206 SUSE/(11168:11180): El hilo 1 del programa 11179 hizo un WAIT al semáforo solo_hiper_mega_piola

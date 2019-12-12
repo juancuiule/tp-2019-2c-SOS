@@ -12,7 +12,6 @@
 #include <commons/log.h>
 #include <commons/collections/queue.h>
 #include <commons/collections/list.h>
-#include "semaforos.h"
 #include <pthread.h>
 
 int servidor_fd;
@@ -38,6 +37,6 @@ sem_t* sem_metricas;
 
 pthread_mutex_t mutex_multiprogramacion;
 
-sem_value_t* sem_value;
+t_list* semaforos;
 
 #endif /* GLOBALES_H_ */

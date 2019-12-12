@@ -9,7 +9,6 @@
 
 int iniciar_servidor(void)
 {
-	//printf("entro a iniciar_servidor\n");
 	int socket_servidor;
     struct addrinfo hints, *servinfo, *p;
 

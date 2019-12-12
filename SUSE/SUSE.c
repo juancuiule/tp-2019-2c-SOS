@@ -1,5 +1,6 @@
 #include "SUSE.h"
 #include "globales.h"
+#include "semaforos.h"
 
 int main() {
 	int cliente_fd;
@@ -7,7 +8,6 @@ int main() {
 
 	configurar();
 	inicializar();
-	inicializar_diccionario_semaforos();
 
 	servidor_fd = iniciar_servidor();
 
@@ -24,51 +24,6 @@ int main() {
 	return EXIT_SUCCESS;
 }
 
-void imprimir_estados(int pid) {
-	programa_t* programa = obtener_programa(pid);
-	imprimir_hilos_en_new();
-	imprimir_hilos_en_ready(programa);
-
-	if (programa->hilo_en_exec != NULL)
-		printf("EXEC: %i\n", programa->hilo_en_exec->tid);
-
-	imprimir_hilos_en_blocked();
-	imprimir_hilos_en_exit();
-}
-
-void imprimir_hilos_en_new() {
-	printf("NEW: ");
-
-	bool imprimir_tid(hilo_t* hilo) {
-		printf("%i ", hilo->tid);
-	}
-
-	list_iterate(cola_new->elements, imprimir_tid);
-	printf("\n");
-}
-
-void imprimir_hilos_en_ready(programa_t* programa) {
-	printf("READY: ");
-
-	bool imprimir_tid(hilo_t* hilo) {
-		printf("%i ", hilo->tid);
-	}
-
-	list_iterate(programa->hilos_en_ready, imprimir_tid);
-	printf("\n");
-}
-
-void imprimir_hilos_en_blocked() {
-	printf("BLOCKED: ");
-
-	bool imprimir_tid(hilo_t* hilo) {
-		printf("%i ", hilo->tid);
-	}
-
-	list_iterate(cola_blocked, imprimir_tid);
-	printf("\n");
-}
-
 bool esta_bloqueado(hilo_t* hilo) {
 
 	bool es_hilo_buscado(hilo_t* un_hilo) {
@@ -76,17 +31,6 @@ bool esta_bloqueado(hilo_t* hilo) {
 	}
 
 	return list_any_satisfy(cola_blocked, es_hilo_buscado);
-}
-
-void imprimir_hilos_en_exit() {
-	printf("EXIT: ");
-
-	bool imprimir_tid(hilo_t* hilo) {
-		printf("%i ", hilo->tid);
-	}
-
-	list_iterate(cola_exit, imprimir_tid);
-	printf("\n");
 }
 
 bool esta_en_ready(programa_t* programa, hilo_t* hilo) {
@@ -221,6 +165,9 @@ void atender_cliente(int cliente_fd) {
 	hilo_t* proximo_hilo = malloc(sizeof(hilo_t));
 	hilo_t* hilo_esperando = malloc(sizeof(hilo_t));
 	hilo_t* hilo_a_esperar = malloc(sizeof(hilo_t));
+	semaforo_t* semaforo = malloc(sizeof(semaforo_t));
+	semaforo->id = malloc(100);
+	semaforo->hilos_bloqueados = list_create();
 	programa_t* programa = malloc(sizeof(programa_t));
 	programa->hilo_en_exec = malloc(sizeof(hilo_t));
 	programa->hilos_en_ready = list_create();
@@ -229,7 +176,7 @@ void atender_cliente(int cliente_fd) {
 	recv(cliente_fd, &pid, sizeof(int), MSG_WAITALL);
 
 	while(socket_esta_conectado > 0) {
-		id_semaforo = string_new();
+		id_semaforo = malloc(100);
 		//TODO: salir del while al recibir close
 		switch (opcode) {
 			case INIT:
@@ -266,6 +213,13 @@ void atender_cliente(int cliente_fd) {
 
 				proximo_hilo = siguiente_hilo_a_ejecutar(pid);
 				sacar_de_ready(programa, proximo_hilo);
+/*
+				if (esta_bloqueado(proximo_hilo)) {
+					printf("el hilo está bloqueado\n");
+					desbloquear_hilo(proximo_hilo);
+				}
+
+*/
 				programa->hilo_en_exec = proximo_hilo;
 				ultima_llegada_a_exec = _tiempo_actual();
 				proximo_hilo->tiempo_ultima_llegada_a_exec = ultima_llegada_a_exec;
@@ -274,7 +228,7 @@ void atender_cliente(int cliente_fd) {
 				if (!finalizado(proximo_hilo))
 					log_info(logger, "El hilo %i del programa %i llegó a EXEC", tid_proximo_hilo, pid);
 
-				//imprimir_estados(pid);
+				imprimir_estados(pid);
 				send(cliente_fd, &tid_proximo_hilo, sizeof(int), MSG_WAITALL);
 				break;
 			case JOIN:
@@ -302,36 +256,55 @@ void atender_cliente(int cliente_fd) {
 				cerrar_hilo(hilo);
 				hilo_esperando = crear_hilo(hilo->pid, hilo->tid_hilo_a_esperar);
 				desbloquear_hilo(hilo_esperando);
+				encolar_hilo_en_ready(hilo_esperando);
 				//imprimir_estados(pid);
 				break;
 			case WAIT:
 				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
 				recv(cliente_fd, &tamanio_id_semaforo, sizeof(int), MSG_WAITALL);
-				recv(cliente_fd, id_semaforo, tamanio_id_semaforo, 0);
-				valor_semaforo = semaforo_wait(id_semaforo);
+				recv(cliente_fd, id_semaforo, tamanio_id_semaforo, MSG_WAITALL);
+				log_info(logger, "El hilo %i del programa %i hizo un WAIT al semáforo %s", tid, pid, id_semaforo);
+				hilo = crear_hilo(pid, tid);
+				semaforo = obtener_semaforo(id_semaforo);
 
-				if (valor_semaforo == 0) {
-					hilo_a_bloquear = crear_hilo(pid, tid);
-					log_info(logger, "El hilo %i hizo un wait al semáforo %s (valor actual = %i)", tid, id_semaforo, valor_semaforo);
-					bloquear_hilo(hilo_a_bloquear);
+				if (semaforo != NULL) {
+					semaforo->valor_actual--;
+
+
+					if (semaforo->valor_actual <= 0) {
+						bloquear_hilo(hilo);
+						list_add(semaforo->hilos_bloqueados, hilo);
+						//log_info(logger, "El hilo %i del programa se bloqueó esperando el semáforo %s", tid, pid, semaforo->id);
+
+					}
+
+					printf("valor del semáforo %s = %i\n", semaforo->id, semaforo->valor_actual);
 				}
-				else
-					log_info(logger, "El hilo %i hizo un wait al semáforo %s (valor actual = %i)", tid, id_semaforo, valor_semaforo);
 
-				//imprimir_estados(pid);
 			break;
 			case SIGNAL:
 				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
 				recv(cliente_fd, &tamanio_id_semaforo, sizeof(int), MSG_WAITALL);
 				recv(cliente_fd, id_semaforo, tamanio_id_semaforo, 0);
-				valor_semaforo = semaforo_signal(id_semaforo);
-				log_info(logger, "El hilo %i hizo un signal al semáforo %s (valor actual = %i)", tid, id_semaforo, valor_semaforo);
-				hilo_a_desbloquear = crear_hilo(pid, tid);
+				hilo = crear_hilo(pid, tid);
+				semaforo = obtener_semaforo(id_semaforo);
 
-				if (esta_bloqueado(hilo))
-					desbloquear_hilo(hilo_a_desbloquear);
+				if (semaforo != NULL) {
+					semaforo->valor_actual++;
 
-				//imprimir_estados(pid);
+
+					if (semaforo->valor_actual == 1) {
+						desbloquear_hilo(hilo);
+						log_info(logger, "El hilo %i fue desbloqueado por un signal al semáforo %s", tid, semaforo->id);
+					}
+
+					log_info(logger, "El hilo %i del programa %i hizo un SIGNAL al semáforo %s", tid, pid, semaforo->id);
+					printf("valor del semáforo %s = %i\n", semaforo->id, semaforo->valor_actual);
+				}
+
+
+
+
 			break;
 		}
 
@@ -491,7 +464,6 @@ void liberar() {
 	list_destroy_and_destroy_elements(cola_new->elements, liberar_hilo);
 	list_destroy_and_destroy_elements(cola_blocked, liberar_hilo);
 	list_destroy_and_destroy_elements(cola_exit, liberar_hilo);
-	dictionary_destroy_and_destroy_elements(diccionario_semaforos, liberar_diccionario);
 }
 
 
@@ -502,6 +474,68 @@ void liberar() {
 
 
 
+
+
+
+
+
+
+
+void imprimir_estados(int pid) {
+	programa_t* programa = obtener_programa(pid);
+	imprimir_hilos_en_new();
+	imprimir_hilos_en_ready(programa);
+
+	if (programa->hilo_en_exec != NULL)
+		printf("EXEC: %i\n", programa->hilo_en_exec->tid);
+
+	imprimir_hilos_en_blocked();
+	imprimir_hilos_en_exit();
+}
+
+void imprimir_hilos_en_new() {
+	printf("NEW: ");
+
+	bool imprimir_tid(hilo_t* hilo) {
+		printf("%i ", hilo->tid);
+	}
+
+	list_iterate(cola_new->elements, imprimir_tid);
+	printf("\n");
+}
+
+void imprimir_hilos_en_ready(programa_t* programa) {
+	printf("READY: ");
+
+	bool imprimir_tid(hilo_t* hilo) {
+		printf("%i ", hilo->tid);
+	}
+
+	list_iterate(programa->hilos_en_ready, imprimir_tid);
+	printf("\n");
+}
+
+void imprimir_hilos_en_blocked() {
+	printf("BLOCKED: ");
+
+	bool imprimir_tid(hilo_t* hilo) {
+		printf("%i ", hilo->tid);
+	}
+
+	list_iterate(cola_blocked, imprimir_tid);
+	printf("\n");
+}
+
+void imprimir_hilos_en_exit() {
+	printf("EXIT: ");
+
+	bool imprimir_tid(hilo_t* hilo) {
+		printf("%i ", hilo->tid);
+	}
+
+	list_iterate(cola_exit, imprimir_tid);
+	printf("\n");
+}
 
 
 

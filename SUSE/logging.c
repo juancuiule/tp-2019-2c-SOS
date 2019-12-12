@@ -42,10 +42,6 @@ void logear_metricas_hilos_programa(programa_t* programa) {
 	list_iterate(hilos_programa, (void*)logear_metricas_hilo);
 }
 
-void logear_valor_semaforo(char* id, sem_value_t* sem_value) {
-	log_info(logger_metricas, "%s = %i", id, sem_value->valor);
-}
-
 int cantidad_de_hilos_en_new_de_programa(programa_t* programa) {
 
 	bool es_de_programa(hilo_t* hilo) {
@@ -85,7 +81,6 @@ void logear_estados_programa(programa_t* programa) {
 void logear_metricas() {
 	log_info(logger, "Métricas del sistema:");
 	log_info(logger, "Grado de multiprogramación: %i", GRADO_MULTIPROGRAMACION);
-	dictionary_iterator(diccionario_semaforos, logear_valor_semaforo);
 	list_iterate(programas, logear_estados_programa);
 	list_iterate(cola_new->elements, (void*)logear_metricas_hilo);
 	list_iterate(cola_blocked, (void*)logear_metricas_hilo);

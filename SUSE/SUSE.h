@@ -10,7 +10,6 @@
 #include <sys/time.h>
 #include "estructuras.h"
 #include "logging.h"
-#include "semaforos.h"
 
 void inicializar();
 void atender_cliente(int);
@@ -25,3 +24,8 @@ hilo_t* siguiente_hilo_a_ejecutar(int);
 programa_t* obtener_programa(int);
 void ejecutar_nuevo_hilo(hilo_t*);
 void liberar();
+void imprimir_estados(int);
+void imprimir_hilos_en_new();
+void imprimir_hilos_en_ready(programa_t*);
+void imprimir_hilos_en_blocked();
+void imprimir_hilos_en_exit();

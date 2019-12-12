@@ -1,8 +1,7 @@
-semaforos.o: ../semaforos.c ../semaforos.h ../configuracion.h \
- ../globales.h
+semaforos.o: ../semaforos.c ../semaforos.h ../estructuras.h ../globales.h
 
 ../semaforos.h:
 
-../configuracion.h:
+../estructuras.h:
 
 ../globales.h:
