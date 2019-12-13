@@ -8,6 +8,7 @@ int main() {
 
 	configurar();
 	inicializar();
+	imprimir_semaforos();
 
 	servidor_fd = iniciar_servidor();
 
@@ -22,6 +23,15 @@ int main() {
 	//pthread_join(hilo_metricas, NULL);
 	liberar();
 	return EXIT_SUCCESS;
+}
+
+void imprimir_semaforos() {
+
+	void imprimir_semaforo(semaforo_t* semaforo) {
+		printf("semáforo %s = %i (valor máximo %i)\n", semaforo->id, semaforo->valor_actual, semaforo->valor_maximo);
+	}
+
+	list_iterate(semaforos, imprimir_semaforo);
 }
 
 bool esta_bloqueado(hilo_t* hilo) {
@@ -111,7 +121,7 @@ void sacar_de_ready(programa_t* programa, hilo_t* hilo) {
 	}
 
 	list_remove_by_condition(programa->hilos_en_ready, es_hilo_buscado);
-	actualizar_tiempo_espera(hilo);
+	//actualizar_tiempo_espera(hilo);
 }
 
 bool finalizado(hilo_t* hilo) {
@@ -130,7 +140,7 @@ void desbloquear_hilo(hilo_t* hilo) {
 	}
 
 	list_remove_by_condition(cola_blocked, es_hilo_buscado);
-	encolar_hilo_en_ready(hilo);
+	//encolar_hilo_en_ready(hilo);
 }
 
 hilo_t* obtener_hilo(t_list* lista_de_hilos, int pid, int tid) {
@@ -140,6 +150,24 @@ hilo_t* obtener_hilo(t_list* lista_de_hilos, int pid, int tid) {
 	}
 
 	return list_find(lista_de_hilos, es_hilo_buscado);
+}
+
+void sacar_hilo_de_bloqueados(semaforo_t* semaforo, hilo_t* hilo) {
+
+	bool es_hilo_buscado(hilo_t* un_hilo) {
+		return hilo->pid == un_hilo->pid && hilo->tid == un_hilo->tid;
+	}
+
+	list_remove_by_condition(semaforo->hilos_bloqueados, es_hilo_buscado);
+}
+
+hilo_t* obtener_hilo_bloqueado_esperando(hilo_t* hilo_terminado) {
+
+	bool es_hilo_buscado(hilo_t* un_hilo) {
+		return un_hilo->pid == hilo_terminado->pid && un_hilo->tid_hilo_a_esperar == hilo_terminado->tid;
+	}
+
+	return list_find(cola_blocked, es_hilo_buscado);
 }
 
 void atender_cliente(int cliente_fd) {
@@ -163,8 +191,9 @@ void atender_cliente(int cliente_fd) {
 	hilo_t* hilo_a_bloquear = malloc(sizeof(hilo_t));
 	hilo_t* hilo_a_desbloquear = malloc(sizeof(hilo_t));
 	hilo_t* proximo_hilo = malloc(sizeof(hilo_t));
-	hilo_t* hilo_esperando = malloc(sizeof(hilo_t));
 	hilo_t* hilo_a_esperar = malloc(sizeof(hilo_t));
+	hilo_t* hilo_esperando = malloc(sizeof(hilo_t));
+	hilo_t* hilo_finalizado = malloc(sizeof(hilo_t));
 	semaforo_t* semaforo = malloc(sizeof(semaforo_t));
 	semaforo->id = malloc(100);
 	semaforo->hilos_bloqueados = list_create();
@@ -182,7 +211,7 @@ void atender_cliente(int cliente_fd) {
 			case INIT:
 				agregar_programa(pid);
 				log_info(logger, "Llegó el programa %i", pid);
-				//imprimir_estados(pid);
+				imprimir_estados(pid);
 				break;
 			case CREATE:
 				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
@@ -197,39 +226,49 @@ void atender_cliente(int cliente_fd) {
 					pthread_mutex_unlock(&mutex_multiprogramacion);
 				}
 
-				//imprimir_estados(pid);
+				imprimir_estados(pid);
 				break;
 			case SCHEDULE_NEXT:
 				//tomar el hilo en EXEC y mandarlo a READY. OK
 				programa = obtener_programa(pid);
 				hilo = crear_hilo(pid, tid);
 
-				_nueva_estimacion(hilo);
+				//_nueva_estimacion(hilo);
 
 				if (programa->hilo_en_exec != NULL) {
 					list_add(programa->hilos_en_ready, programa->hilo_en_exec);
-					actualizar_tiempo_cpu(programa->hilo_en_exec);
+					//actualizar_tiempo_cpu(programa->hilo_en_exec);
 				}
 
 				proximo_hilo = siguiente_hilo_a_ejecutar(pid);
 				sacar_de_ready(programa, proximo_hilo);
-/*
+
 				if (esta_bloqueado(proximo_hilo)) {
-					printf("el hilo está bloqueado\n");
+					//printf("el hilo está bloqueado\n");
 					desbloquear_hilo(proximo_hilo);
 				}
 
-*/
+
 				programa->hilo_en_exec = proximo_hilo;
 				ultima_llegada_a_exec = _tiempo_actual();
 				proximo_hilo->tiempo_ultima_llegada_a_exec = ultima_llegada_a_exec;
 				tid_proximo_hilo = proximo_hilo->tid;
 
-				if (!finalizado(proximo_hilo))
+				if (!finalizado(proximo_hilo)) {
+					sem_wait(&sem_log);
 					log_info(logger, "El hilo %i del programa %i llegó a EXEC", tid_proximo_hilo, pid);
+					sem_post(&sem_log);
+				}
 
 				imprimir_estados(pid);
-				send(cliente_fd, &tid_proximo_hilo, sizeof(int), MSG_WAITALL);
+
+				if (!list_is_empty(programa->hilos_en_ready)) {
+					send(cliente_fd, &tid_proximo_hilo, sizeof(int), MSG_WAITALL);
+					break;
+				}
+
+
+
 				break;
 			case JOIN:
 				recv(cliente_fd, &tid_hilo_a_bloquear, sizeof(int), MSG_WAITALL);
@@ -239,43 +278,50 @@ void atender_cliente(int cliente_fd) {
 				hilo_a_esperar = crear_hilo(pid, tid_hilo_a_esperar);
 				programa = obtener_programa(pid);
 
-				if (!esta_bloqueado(hilo_a_bloquear) && !finalizado(hilo_a_esperar)) {
+				if (!finalizado(hilo_a_esperar)) {
 					sacar_de_ready(programa, hilo_a_bloquear);
 					bloquear_hilo(hilo_a_bloquear);
 				}
 
-				//imprimir_estados(pid);
+				imprimir_estados(pid);
 				break;
 			case CLOSE:
 				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
-				hilo = crear_hilo(pid, tid);
+				hilo_finalizado = crear_hilo(pid, tid);
 				programa_t* programa = obtener_programa(pid);
 				pthread_mutex_lock(&mutex_multiprogramacion);
 				GRADO_MULTIPROGRAMACION--;
 				pthread_mutex_unlock(&mutex_multiprogramacion);
-				cerrar_hilo(hilo);
-				hilo_esperando = crear_hilo(hilo->pid, hilo->tid_hilo_a_esperar);
-				desbloquear_hilo(hilo_esperando);
+				cerrar_hilo(hilo_finalizado);
+				hilo_esperando = obtener_hilo_bloqueado_esperando(hilo_finalizado);
+
+				if (hilo_esperando != NULL)
+					desbloquear_hilo(hilo_esperando);
+
 				encolar_hilo_en_ready(hilo_esperando);
-				//imprimir_estados(pid);
+				imprimir_estados(pid);
 				break;
 			case WAIT:
 				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
 				recv(cliente_fd, &tamanio_id_semaforo, sizeof(int), MSG_WAITALL);
 				recv(cliente_fd, id_semaforo, tamanio_id_semaforo, MSG_WAITALL);
+				sem_wait(&sem_log);
 				log_info(logger, "El hilo %i del programa %i hizo un WAIT al semáforo %s", tid, pid, id_semaforo);
+				sem_post(&sem_log);
 				hilo = crear_hilo(pid, tid);
+				sem_wait(&sem_lista_semaforos);
 				semaforo = obtener_semaforo(id_semaforo);
+				sem_post(&sem_lista_semaforos);
 
 				if (semaforo != NULL) {
 					semaforo->valor_actual--;
 
-
-					if (semaforo->valor_actual <= 0) {
+					if (semaforo->valor_actual < 0) {
 						bloquear_hilo(hilo);
+						sem_wait(&sem_lista_semaforos);
 						list_add(semaforo->hilos_bloqueados, hilo);
-						//log_info(logger, "El hilo %i del programa se bloqueó esperando el semáforo %s", tid, pid, semaforo->id);
-
+						sem_post(&sem_lista_semaforos);
+						log_info(logger, "El hilo %i del programa % i se bloqueó esperando el semáforo %s", tid, pid, semaforo->id);
 					}
 
 					printf("valor del semáforo %s = %i\n", semaforo->id, semaforo->valor_actual);
@@ -283,27 +329,37 @@ void atender_cliente(int cliente_fd) {
 
 			break;
 			case SIGNAL:
+				printf("recibí un signal\n");
 				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
 				recv(cliente_fd, &tamanio_id_semaforo, sizeof(int), MSG_WAITALL);
-				recv(cliente_fd, id_semaforo, tamanio_id_semaforo, 0);
+				id_semaforo = malloc(tamanio_id_semaforo);
+				recv(cliente_fd, id_semaforo, tamanio_id_semaforo, MSG_WAITALL);
 				hilo = crear_hilo(pid, tid);
+				sem_wait(&sem_lista_semaforos);
 				semaforo = obtener_semaforo(id_semaforo);
+				sem_post(&sem_lista_semaforos);
 
 				if (semaforo != NULL) {
-					semaforo->valor_actual++;
+
+					if (semaforo->valor_actual < semaforo->valor_maximo)
+						semaforo->valor_actual++;
 
 
 					if (semaforo->valor_actual == 1) {
 						desbloquear_hilo(hilo);
+						sem_wait(&sem_lista_semaforos);
+						sacar_hilo_de_bloqueados(semaforo, hilo);
+						sem_post(&sem_lista_semaforos);
+						sem_wait(&sem_log);
 						log_info(logger, "El hilo %i fue desbloqueado por un signal al semáforo %s", tid, semaforo->id);
+						sem_post(&sem_log);
 					}
 
+					sem_wait(&sem_log);
 					log_info(logger, "El hilo %i del programa %i hizo un SIGNAL al semáforo %s", tid, pid, semaforo->id);
+					sem_post(&sem_log);
 					printf("valor del semáforo %s = %i\n", semaforo->id, semaforo->valor_actual);
 				}
-
-
-
 
 			break;
 		}
@@ -364,7 +420,9 @@ void encolar_hilo_en_new(hilo_t* hilo) {
 	programa_t* programa = obtener_programa(hilo->pid);
 	hilo->tiempo_creacion = _tiempo_actual();
 	queue_push(cola_new, hilo);
+	sem_wait(&sem_log);
 	log_info(logger, "El hilo %i del programa %i llegó a NEW", hilo->tid, hilo->pid);
+	sem_post(&sem_log);
 }
 
 void cerrar_hilo(hilo_t* hilo) {
@@ -372,8 +430,10 @@ void cerrar_hilo(hilo_t* hilo) {
 	programa->hilo_en_exec = NULL;
 	actualizar_tiempo_cpu(hilo);
 	list_add(cola_exit, hilo);
+	sem_wait(&sem_log);
 	log_info(logger, "El hilo %i del programa %i llegó a EXIT", hilo->tid, hilo->pid);
-	logear_metricas();
+	sem_post(&sem_log);
+	//logear_metricas();
 }
 
 void encolar_hilo_en_ready(hilo_t* hilo) {
@@ -382,34 +442,43 @@ void encolar_hilo_en_ready(hilo_t* hilo) {
 		return un_hilo->tid == hilo->tid && un_hilo->pid == hilo->pid;
 	}
 
-	programa_t* programa = malloc(sizeof(programa_t));
-	programa->hilos_en_ready = list_create();
-	programa->hilo_en_exec = malloc(sizeof(hilo_t));
-	programa = obtener_programa(hilo->pid);
+	if (hilo != NULL) {
+		programa_t* programa = malloc(sizeof(programa_t));
+		programa->hilos_en_ready = list_create();
+		programa->hilo_en_exec = malloc(sizeof(hilo_t));
+		programa = obtener_programa(hilo->pid);
 
-	if (list_any_satisfy(cola_blocked, hilo_encontrado))
-		list_remove_by_condition(cola_blocked, hilo_encontrado);
+		if (list_any_satisfy(cola_blocked, hilo_encontrado))
+			list_remove_by_condition(cola_blocked, hilo_encontrado);
 
-	if (!finalizado(hilo)) {
+		if (!finalizado(hilo)) {
 
-		if (!esta_en_ready(programa, hilo))
-			list_add(programa->hilos_en_ready, hilo);
+			if (!esta_en_ready(programa, hilo))
+				list_add(programa->hilos_en_ready, hilo);
 
-		hilo->tiempo_ultima_llegada_a_ready = _tiempo_actual();
-		log_info(logger, "El hilo %i del programa %i llegó a READY", hilo->tid, hilo->pid);
+			hilo->tiempo_ultima_llegada_a_ready = _tiempo_actual();
+			sem_wait(&sem_log);
+			log_info(logger, "El hilo %i del programa %i llegó a READY", hilo->tid, hilo->pid);
+			sem_post(&sem_log);
 
-		if (GRADO_MULTIPROGRAMACION == MAX_MULTIPROG)
-			log_warning(logger, "Se ha alcanzado el grado máximo de multiprogramación");
+			if (GRADO_MULTIPROGRAMACION == MAX_MULTIPROG) {
+				sem_wait(&sem_log);
+				log_warning(logger, "Se ha alcanzado el grado máximo de multiprogramación");
+				sem_post(&sem_log);
+			}
+
+		}
 	}
-
 }
 
 void bloquear_hilo(hilo_t* hilo) {
 	programa_t* programa_del_hilo = obtener_programa(hilo->pid);
 	programa_del_hilo->hilo_en_exec = NULL;
-	actualizar_tiempo_cpu(hilo);
+	//actualizar_tiempo_cpu(hilo);
 	list_add(cola_blocked, hilo);
+	sem_wait(&sem_log);
 	log_info(logger, "El hilo %i del programa %i llegó a BLOCKED", hilo->tid, hilo->pid);
+	sem_post(&sem_log);
 }
 
 hilo_t* siguiente_hilo_a_ejecutar(int pid) {

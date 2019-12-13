@@ -30190,3 +30190,251 @@
 [INFO] 18:16:47:163 SUSE/(11168:11180): El hilo 1 del programa 11179 hizo un SIGNAL al semáforo solo_hiper_mega_piola
 [INFO] 18:16:47:163 SUSE/(11168:11180): El hilo 1 del programa 11179 llegó a EXEC
 [INFO] 18:16:47:206 SUSE/(11168:11180): El hilo 1 del programa 11179 hizo un WAIT al semáforo solo_hiper_mega_piola
+[INFO] 01:14:29:110 SUSE/(4750:4750): Se ha iniciado el servidor.
+[INFO] 01:14:38:156 SUSE/(4750:4764): Llegó el programa 4763
+[INFO] 01:14:38:156 SUSE/(4750:4764): El hilo 0 del programa 4763 llegó a NEW
+[INFO] 01:14:38:156 SUSE/(4750:4764): El hilo 0 del programa 4763 llegó a READY
+[INFO] 01:14:38:156 SUSE/(4750:4764): El hilo 1 del programa 4763 llegó a NEW
+[INFO] 01:14:38:156 SUSE/(4750:4764): El hilo 1 del programa 4763 llegó a READY
+[INFO] 01:14:38:156 SUSE/(4750:4764): El hilo 2 del programa 4763 llegó a NEW
+[INFO] 01:14:38:156 SUSE/(4750:4764): El hilo 2 del programa 4763 llegó a READY
+[INFO] 01:14:38:156 SUSE/(4750:4764): El hilo 0 del programa 4763 llegó a BLOCKED
+[INFO] 01:14:38:156 SUSE/(4750:4764): El hilo 1 del programa 4763 llegó a EXEC
+[INFO] 01:14:38:197 SUSE/(4750:4764): El hilo 1 del programa 4763 hizo un WAIT al semáforo AAA
+[INFO] 01:14:38:197 SUSE/(4750:4764): El hilo 2 del programa 4763 llegó a EXEC
+[INFO] 01:14:38:241 SUSE/(4750:4764): El hilo 2 del programa 4763 hizo un WAIT al semáforo AAA��
+[INFO] 01:14:38:241 SUSE/(4750:4764): El hilo 1 del programa 4763 llegó a EXEC
+[INFO] 01:14:38:285 SUSE/(4750:4764): El hilo 2 del programa 4763 llegó a EXEC
+[INFO] 01:14:38:329 SUSE/(4750:4764): El hilo 1 del programa 4763 llegó a EXEC
+[INFO] 01:14:38:329 SUSE/(4750:4764): El hilo 2 del programa 4763 llegó a EXEC
+[INFO] 01:14:38:329 SUSE/(4750:4764): El hilo 1 del programa 4763 llegó a EXEC
+[INFO] 01:14:38:373 SUSE/(4750:4764): El hilo 1 del programa 4763 hizo un WAIT al semáforo AAA
+[INFO] 01:14:38:373 SUSE/(4750:4764): El hilo 2 del programa 4763 llegó a EXEC
+[INFO] 01:14:38:417 SUSE/(4750:4764): El hilo 2 del programa 4763 hizo un WAIT al semáforo AAA��
+[INFO] 01:14:38:417 SUSE/(4750:4764): El hilo 1 del programa 4763 llegó a EXEC
+[INFO] 01:14:38:461 SUSE/(4750:4764): El hilo 2 del programa 4763 llegó a EXEC
+[INFO] 01:14:38:505 SUSE/(4750:4764): El hilo 1 del programa 4763 llegó a EXEC
+[INFO] 01:14:38:505 SUSE/(4750:4764): El hilo 2 del programa 4763 llegó a EXEC
+[INFO] 01:14:38:505 SUSE/(4750:4764): El hilo 1 del programa 4763 llegó a EXEC
+[INFO] 01:14:38:553 SUSE/(4750:4764): El hilo 1 del programa 4763 hizo un WAIT al semáforo AAA
+[INFO] 01:14:38:553 SUSE/(4750:4764): El hilo 2 del programa 4763 llegó a EXEC
+[INFO] 01:14:38:597 SUSE/(4750:4764): El hilo 2 del programa 4763 hizo un WAIT al semáforo AAA��
+[INFO] 01:14:38:597 SUSE/(4750:4764): El hilo 1 del programa 4763 llegó a EXEC
+[INFO] 01:14:38:640 SUSE/(4750:4764): El hilo 2 del programa 4763 llegó a EXEC
+[INFO] 01:14:38:685 SUSE/(4750:4764): El hilo 1 del programa 4763 llegó a EXEC
+[INFO] 01:14:38:685 SUSE/(4750:4764): El hilo 2 del programa 4763 llegó a EXEC
+[INFO] 01:14:38:685 SUSE/(4750:4764): El hilo 1 del programa 4763 llegó a EXEC
+[INFO] 01:14:38:729 SUSE/(4750:4764): El hilo 1 del programa 4763 hizo un WAIT al semáforo AAA
+[INFO] 01:14:38:729 SUSE/(4750:4764): El hilo 2 del programa 4763 llegó a EXEC
+[INFO] 01:14:38:774 SUSE/(4750:4764): El hilo 2 del programa 4763 hizo un WAIT al semáforo AAA��
+[INFO] 01:14:38:774 SUSE/(4750:4764): El hilo 1 del programa 4763 llegó a EXEC
+[INFO] 01:14:38:817 SUSE/(4750:4764): El hilo 2 del programa 4763 llegó a EXEC
+[INFO] 01:14:38:861 SUSE/(4750:4764): El hilo 1 del programa 4763 llegó a EXEC
+[INFO] 01:14:38:861 SUSE/(4750:4764): El hilo 2 del programa 4763 llegó a EXEC
+[INFO] 01:14:38:862 SUSE/(4750:4764): El hilo 1 del programa 4763 llegó a EXEC
+[INFO] 01:14:38:905 SUSE/(4750:4764): El hilo 1 del programa 4763 hizo un WAIT al semáforo AAA
+[INFO] 01:14:38:905 SUSE/(4750:4764): El hilo 2 del programa 4763 llegó a EXEC
+[INFO] 01:14:38:949 SUSE/(4750:4764): El hilo 2 del programa 4763 hizo un WAIT al semáforo AAA��
+[INFO] 01:14:38:949 SUSE/(4750:4764): El hilo 1 del programa 4763 llegó a EXEC
+[INFO] 01:14:38:993 SUSE/(4750:4764): El hilo 2 del programa 4763 llegó a EXEC
+[INFO] 01:14:39:37 SUSE/(4750:4764): El hilo 1 del programa 4763 llegó a EXEC
+[INFO] 01:14:39:37 SUSE/(4750:4764): El hilo 2 del programa 4763 llegó a EXEC
+[INFO] 01:14:39:37 SUSE/(4750:4764): El hilo 1 del programa 4763 llegó a EXEC
+[INFO] 01:14:39:85 SUSE/(4750:4764): El hilo 1 del programa 4763 hizo un WAIT al semáforo AAA
+[INFO] 01:14:39:85 SUSE/(4750:4764): El hilo 2 del programa 4763 llegó a EXEC
+[INFO] 01:14:39:133 SUSE/(4750:4764): El hilo 2 del programa 4763 hizo un WAIT al semáforo AAA��
+[INFO] 01:14:39:133 SUSE/(4750:4764): El hilo 1 del programa 4763 llegó a EXEC
+[INFO] 01:14:39:177 SUSE/(4750:4764): El hilo 2 del programa 4763 llegó a EXEC
+[INFO] 01:14:39:221 SUSE/(4750:4764): El hilo 1 del programa 4763 llegó a EXEC
+[INFO] 01:14:39:221 SUSE/(4750:4764): El hilo 2 del programa 4763 llegó a EXEC
+[INFO] 01:14:39:221 SUSE/(4750:4764): El hilo 1 del programa 4763 llegó a EXEC
+[INFO] 01:14:39:265 SUSE/(4750:4764): El hilo 1 del programa 4763 hizo un WAIT al semáforo AAA
+[INFO] 01:14:39:265 SUSE/(4750:4764): El hilo 2 del programa 4763 llegó a EXEC
+[INFO] 01:14:39:313 SUSE/(4750:4764): El hilo 2 del programa 4763 hizo un WAIT al semáforo AAA��
+[INFO] 01:14:39:313 SUSE/(4750:4764): El hilo 1 del programa 4763 llegó a EXEC
+[INFO] 01:14:39:357 SUSE/(4750:4764): El hilo 2 del programa 4763 llegó a EXEC
+[INFO] 01:14:39:405 SUSE/(4750:4764): El hilo 1 del programa 4763 llegó a EXEC
+[INFO] 01:14:39:405 SUSE/(4750:4764): El hilo 2 del programa 4763 llegó a EXEC
+[INFO] 01:14:39:406 SUSE/(4750:4764): El hilo 1 del programa 4763 llegó a EXEC
+[INFO] 01:14:39:451 SUSE/(4750:4764): El hilo 1 del programa 4763 hizo un WAIT al semáforo AAA
+[INFO] 01:14:39:451 SUSE/(4750:4764): El hilo 2 del programa 4763 llegó a EXEC
+[INFO] 01:14:39:493 SUSE/(4750:4764): El hilo 2 del programa 4763 hizo un WAIT al semáforo AAA��
+[INFO] 01:14:39:493 SUSE/(4750:4764): El hilo 1 del programa 4763 llegó a EXEC
+[INFO] 01:14:39:541 SUSE/(4750:4764): El hilo 2 del programa 4763 llegó a EXEC
+[INFO] 01:14:39:585 SUSE/(4750:4764): El hilo 1 del programa 4763 llegó a EXEC
+[INFO] 01:14:39:585 SUSE/(4750:4764): El hilo 2 del programa 4763 llegó a EXEC
+[INFO] 01:14:39:586 SUSE/(4750:4764): El hilo 1 del programa 4763 llegó a EXEC
+[INFO] 01:14:39:633 SUSE/(4750:4764): El hilo 1 del programa 4763 hizo un WAIT al semáforo AAA
+[INFO] 01:14:39:633 SUSE/(4750:4764): El hilo 2 del programa 4763 llegó a EXEC
+[INFO] 01:14:39:681 SUSE/(4750:4764): El hilo 2 del programa 4763 hizo un WAIT al semáforo AAA��
+[INFO] 01:14:39:681 SUSE/(4750:4764): El hilo 1 del programa 4763 llegó a EXEC
+[INFO] 01:14:39:724 SUSE/(4750:4764): El hilo 2 del programa 4763 llegó a EXEC
+[INFO] 01:14:39:769 SUSE/(4750:4764): El hilo 1 del programa 4763 llegó a EXEC
+[INFO] 01:14:39:769 SUSE/(4750:4764): El hilo 2 del programa 4763 llegó a EXEC
+[INFO] 01:14:39:769 SUSE/(4750:4764): El hilo 1 del programa 4763 llegó a EXEC
+[INFO] 01:14:39:813 SUSE/(4750:4764): El hilo 1 del programa 4763 hizo un WAIT al semáforo AAA
+[INFO] 01:14:39:813 SUSE/(4750:4764): El hilo 2 del programa 4763 llegó a EXEC
+[INFO] 01:14:39:880 SUSE/(4750:4764): El hilo 2 del programa 4763 hizo un WAIT al semáforo AAA��
+[INFO] 01:14:39:881 SUSE/(4750:4764): El hilo 1 del programa 4763 llegó a EXEC
+[INFO] 01:14:39:921 SUSE/(4750:4764): El hilo 2 del programa 4763 llegó a EXEC
+[INFO] 01:14:39:965 SUSE/(4750:4764): El hilo 1 del programa 4763 llegó a EXEC
+[INFO] 01:14:39:965 SUSE/(4750:4764): El hilo 2 del programa 4763 llegó a EXEC
+[INFO] 01:14:39:966 SUSE/(4750:4764): El hilo 1 del programa 4763 llegó a EXEC
+[INFO] 01:14:39:966 SUSE/(4750:4764): El hilo 1 del programa 4763 llegó a EXIT
+[INFO] 01:14:39:966 SUSE/(4750:4764): Métricas del sistema:
+[INFO] 01:14:39:966 SUSE/(4750:4764): Grado de multiprogramación: 2
+[INFO] 01:14:39:966 SUSE/(4750:4764): Programa 4763:
+[INFO] 01:14:39:966 SUSE/(4750:4764): 	Hilos en NEW: 0
+[INFO] 01:14:39:966 SUSE/(4750:4764): 	Hilos en READY: 1
+[INFO] 01:14:39:966 SUSE/(4750:4764): 	Hilos en EXEC: 0
+[INFO] 01:14:39:966 SUSE/(4750:4764): 	Hilos en BLOCKED: 1
+[INFO] 01:14:39:997 SUSE/(4750:4764): El hilo 0 del programa 4763 llegó a READY
+[INFO] 01:14:40:9 SUSE/(4750:4764): El hilo 2 del programa 4763 llegó a EXEC
+[INFO] 01:14:40:9 SUSE/(4750:4764): El hilo 2 del programa 4763 llegó a EXIT
+[INFO] 01:14:40:9 SUSE/(4750:4764): Métricas del sistema:
+[INFO] 01:14:40:9 SUSE/(4750:4764): Grado de multiprogramación: 1
+[INFO] 01:14:40:9 SUSE/(4750:4764): Programa 4763:
+[INFO] 01:14:40:9 SUSE/(4750:4764): 	Hilos en NEW: 0
+[INFO] 01:14:40:9 SUSE/(4750:4764): 	Hilos en READY: 1
+[INFO] 01:14:40:9 SUSE/(4750:4764): 	Hilos en EXEC: 0
+[INFO] 01:14:40:9 SUSE/(4750:4764): 	Hilos en BLOCKED: 0
+[INFO] 01:28:34:828 SUSE/(5576:5576): Se ha iniciado el servidor.
+[INFO] 01:30:31:636 SUSE/(5660:5660): Se ha iniciado el servidor.
+[INFO] 01:30:36:528 SUSE/(5660:5671): Llegó el programa 5670
+[INFO] 01:30:36:528 SUSE/(5660:5671): El hilo 0 del programa 5670 llegó a NEW
+[INFO] 01:30:36:528 SUSE/(5660:5671): El hilo 0 del programa 5670 llegó a READY
+[INFO] 01:30:36:528 SUSE/(5660:5671): El hilo 1 del programa 5670 llegó a NEW
+[INFO] 01:30:36:528 SUSE/(5660:5671): El hilo 1 del programa 5670 llegó a READY
+[INFO] 01:30:36:528 SUSE/(5660:5671): El hilo 2 del programa 5670 llegó a NEW
+[INFO] 01:30:36:528 SUSE/(5660:5671): El hilo 2 del programa 5670 llegó a READY
+[INFO] 01:30:36:528 SUSE/(5660:5671): El hilo 0 del programa 5670 llegó a BLOCKED
+[INFO] 01:30:36:528 SUSE/(5660:5671): El hilo 1 del programa 5670 llegó a EXEC
+[INFO] 01:30:36:569 SUSE/(5660:5671): El hilo 1 del programa 5670 hizo un WAIT al semáforo AAA
+[INFO] 01:30:36:569 SUSE/(5660:5671): El hilo 2 del programa 5670 llegó a EXEC
+[INFO] 01:30:36:613 SUSE/(5660:5671): El hilo 2 del programa 5670 hizo un WAIT al semáforo AAA��
+[INFO] 01:30:36:613 SUSE/(5660:5671): El hilo 1 del programa 5670 llegó a EXEC
+[INFO] 01:35:33:365 SUSE/(5820:5820): Se ha iniciado el servidor.
+[INFO] 01:35:38:197 SUSE/(5820:5834): Llegó el programa 5833
+[INFO] 01:35:38:197 SUSE/(5820:5834): El hilo 0 del programa 5833 llegó a NEW
+[INFO] 01:35:38:197 SUSE/(5820:5834): El hilo 0 del programa 5833 llegó a READY
+[INFO] 01:35:38:197 SUSE/(5820:5834): El hilo 1 del programa 5833 llegó a NEW
+[INFO] 01:35:38:197 SUSE/(5820:5834): El hilo 1 del programa 5833 llegó a READY
+[INFO] 01:35:38:197 SUSE/(5820:5834): El hilo 2 del programa 5833 llegó a NEW
+[INFO] 01:35:38:197 SUSE/(5820:5834): El hilo 2 del programa 5833 llegó a READY
+[INFO] 01:35:38:197 SUSE/(5820:5834): El hilo 0 del programa 5833 llegó a BLOCKED
+[INFO] 01:35:38:197 SUSE/(5820:5834): El hilo 1 del programa 5833 llegó a EXEC
+[INFO] 01:35:38:240 SUSE/(5820:5834): El hilo 1 del programa 5833 hizo un WAIT al semáforo AAA
+[INFO] 01:35:38:241 SUSE/(5820:5834): El hilo 2 del programa 5833 llegó a EXEC
+[INFO] 01:35:38:289 SUSE/(5820:5834): El hilo 2 del programa 5833 hizo un WAIT al semáforo AAA��
+[INFO] 01:35:38:289 SUSE/(5820:5834): El hilo 1 del programa 5833 llegó a EXEC
+[INFO] 01:37:43:67 SUSE/(5908:5908): Se ha iniciado el servidor.
+[INFO] 01:37:47:381 SUSE/(5908:5918): Llegó el programa 5917
+[INFO] 01:37:47:381 SUSE/(5908:5918): El hilo 0 del programa 5917 llegó a NEW
+[INFO] 01:37:47:382 SUSE/(5908:5918): El hilo 0 del programa 5917 llegó a READY
+[INFO] 01:37:47:382 SUSE/(5908:5918): El hilo 1 del programa 5917 llegó a NEW
+[INFO] 01:37:47:382 SUSE/(5908:5918): El hilo 1 del programa 5917 llegó a READY
+[INFO] 01:37:47:382 SUSE/(5908:5918): El hilo 2 del programa 5917 llegó a NEW
+[INFO] 01:37:47:382 SUSE/(5908:5918): El hilo 2 del programa 5917 llegó a READY
+[INFO] 01:37:47:382 SUSE/(5908:5918): El hilo 0 del programa 5917 llegó a BLOCKED
+[INFO] 01:37:47:382 SUSE/(5908:5918): El hilo 1 del programa 5917 llegó a EXEC
+[INFO] 01:37:47:425 SUSE/(5908:5918): El hilo 1 del programa 5917 hizo un WAIT al semáforo AAA
+[INFO] 01:37:47:425 SUSE/(5908:5918): El hilo 2 del programa 5917 llegó a EXEC
+[INFO] 01:37:47:472 SUSE/(5908:5918): El hilo 2 del programa 5917 hizo un WAIT al semáforo AAA��
+[INFO] 01:37:47:473 SUSE/(5908:5918): El hilo 1 del programa 5917 llegó a EXEC
+[INFO] 01:38:18:405 SUSE/(5908:5918): El hilo 2 del programa 5917 llegó a EXEC
+[INFO] 01:39:31:228 SUSE/(5908:5918): El hilo 1 del programa 5917 llegó a EXEC
+[INFO] 01:39:31:228 SUSE/(5908:5918): El hilo 2 del programa 5917 llegó a EXEC
+[INFO] 01:39:31:229 SUSE/(5908:5918): El hilo 1 del programa 5917 llegó a EXEC
+[INFO] 01:39:31:273 SUSE/(5908:5918): El hilo 1 del programa 5917 hizo un WAIT al semáforo AAA��
+[INFO] 01:39:31:273 SUSE/(5908:5918): El hilo 2 del programa 5917 llegó a EXEC
+[INFO] 01:39:31:317 SUSE/(5908:5918): El hilo 2 del programa 5917 hizo un WAIT al semáforo AAA��
+[INFO] 01:39:31:317 SUSE/(5908:5918): El hilo 1 del programa 5917 llegó a EXEC
+[INFO] 01:43:19:20 SUSE/(6045:6045): Se ha iniciado el servidor.
+[INFO] 01:43:23:658 SUSE/(6045:6059): Llegó el programa 6058
+[INFO] 01:43:23:658 SUSE/(6045:6059): El hilo 0 del programa 6058 llegó a NEW
+[INFO] 01:43:23:658 SUSE/(6045:6059): El hilo 0 del programa 6058 llegó a READY
+[INFO] 01:43:23:658 SUSE/(6045:6059): El hilo 1 del programa 6058 llegó a NEW
+[INFO] 01:43:23:658 SUSE/(6045:6059): El hilo 1 del programa 6058 llegó a READY
+[INFO] 01:43:23:658 SUSE/(6045:6059): El hilo 2 del programa 6058 llegó a NEW
+[INFO] 01:43:23:658 SUSE/(6045:6059): El hilo 2 del programa 6058 llegó a READY
+[INFO] 01:43:23:658 SUSE/(6045:6059): El hilo 0 del programa 6058 llegó a BLOCKED
+[INFO] 01:43:23:658 SUSE/(6045:6059): El hilo 1 del programa 6058 llegó a EXEC
+[INFO] 01:43:23:701 SUSE/(6045:6059): El hilo 1 del programa 6058 hizo un WAIT al semáforo AAA
+[INFO] 01:43:23:701 SUSE/(6045:6059): El hilo 2 del programa 6058 llegó a EXEC
+[INFO] 01:43:23:745 SUSE/(6045:6059): El hilo 2 del programa 6058 hizo un WAIT al semáforo AAA��
+[INFO] 01:43:23:745 SUSE/(6045:6059): El hilo 1 del programa 6058 llegó a EXEC
+[INFO] 01:44:05:524 SUSE/(6045:6059): El hilo 2 del programa 6058 llegó a EXEC
+[INFO] 01:45:06:939 SUSE/(6110:6110): Se ha iniciado el servidor.
+[INFO] 01:45:10:511 SUSE/(6110:6122): Llegó el programa 6121
+[INFO] 01:45:10:511 SUSE/(6110:6122): El hilo 0 del programa 6121 llegó a NEW
+[INFO] 01:45:10:511 SUSE/(6110:6122): El hilo 0 del programa 6121 llegó a READY
+[INFO] 01:45:10:511 SUSE/(6110:6122): El hilo 1 del programa 6121 llegó a NEW
+[INFO] 01:45:10:511 SUSE/(6110:6122): El hilo 1 del programa 6121 llegó a READY
+[INFO] 01:45:10:511 SUSE/(6110:6122): El hilo 2 del programa 6121 llegó a NEW
+[INFO] 01:45:10:511 SUSE/(6110:6122): El hilo 2 del programa 6121 llegó a READY
+[INFO] 01:45:10:511 SUSE/(6110:6122): El hilo 0 del programa 6121 llegó a BLOCKED
+[INFO] 01:45:10:511 SUSE/(6110:6122): El hilo 1 del programa 6121 llegó a EXEC
+[INFO] 01:45:10:556 SUSE/(6110:6122): El hilo 1 del programa 6121 hizo un WAIT al semáforo AAA
+[INFO] 01:46:05:234 SUSE/(6110:6122): El hilo 2 del programa 6121 llegó a EXEC
+[INFO] 01:46:05:234 SUSE/(6110:6122): El hilo 2 del programa 6121 hizo un WAIT al semáforo AAA��
+[INFO] 01:46:12:892 SUSE/(6110:6122): El hilo 1 del programa 6121 llegó a EXEC
+[INFO] 01:48:56:908 SUSE/(6110:6122): El hilo 2 del programa 6121 llegó a EXEC
+[INFO] 01:58:23:137 SUSE/(6810:6810): Se ha iniciado el servidor.
+[INFO] 01:58:37:451 SUSE/(6810:6821): Llegó el programa 6820
+[INFO] 01:58:37:451 SUSE/(6810:6821): El hilo 0 del programa 6820 llegó a NEW
+[INFO] 01:58:37:451 SUSE/(6810:6821): El hilo 0 del programa 6820 llegó a READY
+[INFO] 01:58:37:451 SUSE/(6810:6821): El hilo 1 del programa 6820 llegó a NEW
+[INFO] 01:58:37:451 SUSE/(6810:6821): El hilo 1 del programa 6820 llegó a READY
+[INFO] 01:58:37:451 SUSE/(6810:6821): El hilo 2 del programa 6820 llegó a NEW
+[INFO] 01:58:37:451 SUSE/(6810:6821): El hilo 2 del programa 6820 llegó a READY
+[INFO] 01:58:37:451 SUSE/(6810:6821): El hilo 0 del programa 6820 llegó a BLOCKED
+[INFO] 01:58:37:451 SUSE/(6810:6821): El hilo 1 del programa 6820 llegó a EXEC
+[INFO] 01:58:37:493 SUSE/(6810:6821): El hilo 1 del programa 6820 hizo un WAIT al semáforo AAA
+[INFO] 02:03:15:573 SUSE/(6948:6948): Se ha iniciado el servidor.
+[INFO] 02:03:19:430 SUSE/(6948:6961): Llegó el programa 6960
+[INFO] 02:03:19:430 SUSE/(6948:6961): El hilo 0 del programa 6960 llegó a NEW
+[INFO] 02:03:19:430 SUSE/(6948:6961): El hilo 0 del programa 6960 llegó a READY
+[INFO] 02:03:19:430 SUSE/(6948:6961): El hilo 1 del programa 6960 llegó a NEW
+[INFO] 02:03:19:430 SUSE/(6948:6961): El hilo 1 del programa 6960 llegó a READY
+[INFO] 02:03:19:430 SUSE/(6948:6961): El hilo 2 del programa 6960 llegó a NEW
+[INFO] 02:03:19:430 SUSE/(6948:6961): El hilo 2 del programa 6960 llegó a READY
+[INFO] 02:03:19:430 SUSE/(6948:6961): El hilo 0 del programa 6960 llegó a BLOCKED
+[INFO] 02:03:19:430 SUSE/(6948:6961): El hilo 1 del programa 6960 llegó a EXEC
+[INFO] 02:03:19:474 SUSE/(6948:6961): El hilo 1 del programa 6960 hizo un WAIT al semáforo AAA
+[INFO] 02:09:12:197 SUSE/(7171:7171): Se ha iniciado el servidor.
+[INFO] 02:09:32:597 SUSE/(7212:7212): Se ha iniciado el servidor.
+[INFO] 02:09:36:35 SUSE/(7212:7223): Llegó el programa 7222
+[INFO] 02:09:36:35 SUSE/(7212:7223): El hilo 0 del programa 7222 llegó a NEW
+[INFO] 02:09:36:36 SUSE/(7212:7223): El hilo 0 del programa 7222 llegó a READY
+[INFO] 02:09:36:36 SUSE/(7212:7223): El hilo 1 del programa 7222 llegó a NEW
+[INFO] 02:09:36:36 SUSE/(7212:7223): El hilo 1 del programa 7222 llegó a READY
+[INFO] 02:09:36:36 SUSE/(7212:7223): El hilo 2 del programa 7222 llegó a NEW
+[INFO] 02:09:36:36 SUSE/(7212:7223): El hilo 2 del programa 7222 llegó a READY
+[INFO] 02:09:36:36 SUSE/(7212:7223): El hilo 0 del programa 7222 llegó a BLOCKED
+[INFO] 02:09:36:36 SUSE/(7212:7223): El hilo 1 del programa 7222 llegó a EXEC
+[INFO] 02:09:36:77 SUSE/(7212:7223): El hilo 1 del programa 7222 hizo un WAIT al semáforo AAA
+[INFO] 02:09:50:462 SUSE/(7212:7223): El hilo 1 del programa 7222 llegó a BLOCKED
+[INFO] 02:09:50:462 SUSE/(7212:7223): El hilo 2 del programa 7222 llegó a EXEC
+[INFO] 02:09:50:462 SUSE/(7212:7223): El hilo 2 del programa 7222 hizo un WAIT al semáforo AAA��
+[INFO] 02:10:08:238 SUSE/(7212:7223): El hilo 2 del programa 7222 llegó a EXEC
+[INFO] 02:10:31:774 SUSE/(7212:7223): El hilo 2 fue desbloqueado por un signal al semáforo AAA
+[INFO] 02:10:31:774 SUSE/(7212:7223): El hilo 2 del programa 7222 hizo un SIGNAL al semáforo AAA
+[INFO] 02:10:31:774 SUSE/(7212:7223): El hilo 2 del programa 7222 llegó a EXEC
+[INFO] 02:10:31:774 SUSE/(7212:7223): El hilo 2 del programa 7222 llegó a EXEC
+[INFO] 02:10:31:816 SUSE/(7212:7223): El hilo 2 del programa 7222 hizo un WAIT al semáforo AAA��
+[INFO] 02:10:41:805 SUSE/(7212:7223): El hilo 2 del programa 7222 llegó a EXEC
+[INFO] 02:10:48:213 SUSE/(7212:7223): El hilo 2 del programa 7222 hizo un SIGNAL al semáforo AAA
+[INFO] 02:10:48:214 SUSE/(7212:7223): El hilo 2 del programa 7222 llegó a EXEC
+[INFO] 02:10:48:215 SUSE/(7212:7223): El hilo 2 del programa 7222 llegó a EXEC
+[INFO] 02:10:48:257 SUSE/(7212:7223): El hilo 2 del programa 7222 hizo un WAIT al semáforo AAA��
+[INFO] 02:10:52:324 SUSE/(7212:7223): El hilo 2 del programa 7222 llegó a EXEC
+[INFO] 02:10:59:285 SUSE/(7212:7223): El hilo 2 del programa 7222 hizo un SIGNAL al semáforo AAA
+[INFO] 02:10:59:285 SUSE/(7212:7223): El hilo 2 del programa 7222 llegó a EXEC
+[INFO] 02:10:59:285 SUSE/(7212:7223): El hilo 2 del programa 7222 llegó a EXEC
+[INFO] 02:10:59:329 SUSE/(7212:7223): El hilo 2 del programa 7222 hizo un WAIT al semáforo AAA��
+[INFO] 02:11:00:477 SUSE/(7212:7223): El hilo 2 del programa 7222 llegó a EXEC
+[INFO] 02:11:03:68 SUSE/(7212:7223): El hilo 2 del programa 7222 hizo un SIGNAL al semáforo AAA
+[INFO] 02:11:03:68 SUSE/(7212:7223): El hilo 2 del programa 7222 llegó a EXEC
+[INFO] 02:11:03:69 SUSE/(7212:7223): El hilo 2 del programa 7222 llegó a EXEC
+[INFO] 02:11:03:113 SUSE/(7212:7223): El hilo 2 del programa 7222 hizo un WAIT al semáforo AAA��
+[INFO] 02:11:04:885 SUSE/(7212:7223): El hilo 2 del programa 7222 llegó a EXEC

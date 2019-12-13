@@ -40,6 +40,8 @@ void inicializar() {
 
 	sem_init(&sem_atender_clientes, 0, 1);
 	sem_init(&sem_metricas, 0, 1);
+	sem_init(&sem_lista_semaforos, 0, 1);
+	sem_init(&sem_log, 0, 1);
 
 	pthread_mutex_init(&mutex_multiprogramacion, NULL);
 

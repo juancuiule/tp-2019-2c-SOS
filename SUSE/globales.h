@@ -34,6 +34,8 @@ t_list* cola_exit;
 
 sem_t* sem_atender_clientes;
 sem_t* sem_metricas;
+sem_t* sem_lista_semaforos;
+sem_t* sem_log;
 
 pthread_mutex_t mutex_multiprogramacion;
 

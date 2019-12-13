@@ -2616,3 +2616,15 @@
 [INFO] 16:13:52:831 SUSE/(8738:9121): I = 9
 [INFO] 16:13:52:831 SUSE/(8738:9121): AAA = 10
 [INFO] 16:13:52:831 SUSE/(8738:9121): EEE = 1
+[INFO] 01:14:39:966 SUSE/(4750:4764): Métricas del hilo 0 del programa 4763: 
+[INFO] 01:14:39:997 SUSE/(4750:4764): 	Tiempo de ejecución: 1842 ms
+[INFO] 01:14:39:997 SUSE/(4750:4764): 	Tiempo de espera: 0 ms
+[INFO] 01:14:39:997 SUSE/(4750:4764): 	Tiempo de uso de CPU: 0 ms
+[INFO] 01:14:39:997 SUSE/(4750:4764): Métricas del hilo 2 del programa 4763: 
+[INFO] 01:14:39:997 SUSE/(4750:4764): 	Tiempo de ejecución: 1842 ms
+[INFO] 01:14:39:997 SUSE/(4750:4764): 	Tiempo de espera: 27612 ms
+[INFO] 01:14:39:997 SUSE/(4750:4764): 	Tiempo de uso de CPU: 926 ms
+[INFO] 01:14:40:9 SUSE/(4750:4764): Métricas del hilo 0 del programa 4763: 
+[INFO] 01:14:40:9 SUSE/(4750:4764): 	Tiempo de ejecución: 1854 ms
+[INFO] 01:14:40:9 SUSE/(4750:4764): 	Tiempo de espera: 0 ms
+[INFO] 01:14:40:9 SUSE/(4750:4764): 	Tiempo de uso de CPU: 0 ms
