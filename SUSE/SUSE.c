@@ -352,22 +352,27 @@ void atender_cliente(int cliente_fd) {
 				pthread_mutex_unlock(&mutex_log);
 			//	imprimir_hilos_esperando_semaforo(id_semaforo);
 				hilo = crear_hilo(pid, tid);
-				sem_wait(&sem_lista_semaforos);
-				semaforo = obtener_semaforo(id_semaforo_wait);
-				sem_post(&sem_lista_semaforos);
+
+				pthread_mutex_lock(&mutex_semaforos);
+					semaforo = obtener_semaforo(id_semaforo_wait);
+				pthread_mutex_unlock(&mutex_semaforos);
+
 				wait = crear_wait(tid, id_semaforo_wait);
 
 				if (semaforo != NULL) {
-					//pthread_mutex_lock(&mutex_log);
-					semaforo->valor_actual--;
-					//pthread_mutex_unlock(&mutex_log);
+					pthread_mutex_lock(&mutex_log);
+						semaforo->valor_actual--;
+					pthread_mutex_unlock(&mutex_log);
 
-					if (semaforo->valor_actual < 0) {
-						//list_add(cola_blocked, hilo);
-						bloquear_hilo(hilo);
-						list_add(semaforo->hilos_bloqueados, hilo);
+					pthread_mutex_lock(&mutex_semaforos);
 
-					}
+						if (semaforo->valor_actual < 0) {
+							//list_add(cola_blocked, hilo);
+							bloquear_hilo(hilo);
+							list_add(semaforo->hilos_bloqueados, hilo);
+						}
+
+					pthread_mutex_unlock(&mutex_semaforos);
 
 					printf("valor del semáforo %s = %i\n", semaforo->id, semaforo->valor_actual);
 				}
@@ -387,25 +392,29 @@ void atender_cliente(int cliente_fd) {
 				id_semaforo_signal[tamanio_id_semaforo] = '\0';
 				hilo = crear_hilo(pid, tid);
 				log_info(logger, "El hilo %i del programa %i le hizo un SIGNAL al semáforo %s", tid, pid, id_semaforo_signal);
-				sem_wait(&sem_lista_semaforos);
-				semaforo = obtener_semaforo(id_semaforo_signal);
-				sem_post(&sem_lista_semaforos);
+
+				pthread_mutex_lock(&mutex_semaforos);
+					semaforo = obtener_semaforo(id_semaforo_signal);
+				pthread_mutex_unlock(&mutex_semaforos);
 
 				if (semaforo != NULL) {
 					if (semaforo->valor_actual < semaforo->valor_maximo) {
-						pthread_mutex_lock(&mutex_log);
-						semaforo->valor_actual++;
-						pthread_mutex_unlock(&mutex_log);
+						pthread_mutex_lock(&mutex_semaforos);
+							semaforo->valor_actual++;
+						pthread_mutex_unlock(&mutex_semaforos);
 					}
 
+					pthread_mutex_lock(&mutex_semaforos);
 
-					if (!list_is_empty(semaforo->hilos_bloqueados)) {
-						list_iterate(semaforo->hilos_bloqueados, desbloquear_hilo);
-						printf("DESBLOQUEÉ HILOS BLOQUEADOS POR EL SEMÁFORO %s\n", id_semaforo_signal);
-					}
-					else {
-						printf("NO EXISTEN HILOS BLOQUEADOS POR EL SEMÁFORO %s\n", id_semaforo_signal);
-					}
+						if (!list_is_empty(semaforo->hilos_bloqueados)) {
+							list_iterate(semaforo->hilos_bloqueados, desbloquear_hilo);
+							printf("DESBLOQUEÉ HILOS BLOQUEADOS POR EL SEMÁFORO %s\n", id_semaforo_signal);
+						}
+						else {
+							printf("NO EXISTEN HILOS BLOQUEADOS POR EL SEMÁFORO %s\n", id_semaforo_signal);
+						}
+
+					pthread_mutex_unlock(&mutex_semaforos);
 
 				}
 				else {

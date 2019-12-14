@@ -47,6 +47,7 @@ void inicializar() {
 	pthread_mutex_init(&mutex_cola_blocked, NULL);
 	pthread_mutex_init(&mutex_cola_exit, NULL);
 	pthread_mutex_init(&mutex_log, NULL);
+	pthread_mutex_init(&mutex_semaforos, NULL);
 
 	inicializar_semaforos();
 }

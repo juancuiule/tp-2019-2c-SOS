@@ -41,6 +41,7 @@ pthread_mutex_t mutex_cola_new;
 pthread_mutex_t mutex_cola_blocked;
 pthread_mutex_t mutex_cola_exit;
 pthread_mutex_t mutex_log;
+pthread_mutex_t mutex_semaforos;
 
 t_list* semaforos;
 
