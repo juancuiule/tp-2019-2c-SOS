@@ -474,7 +474,7 @@ void cerrar_hilo(hilo_t* hilo) {
 
 void encolar_hilo_en_ready(hilo_t* hilo) {
 
-	printf("me llego la petición de desbloquear el hilo %i del programa %i\n", hilo->tid, hilo->pid);
+	printf("me llegó la petición de desbloquear el hilo %i del programa %i\n", hilo->tid, hilo->pid);
 
 	bool hilo_encontrado(hilo_t* un_hilo) {
 		return un_hilo->tid == hilo->tid && un_hilo->pid == hilo->pid;

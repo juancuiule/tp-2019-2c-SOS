@@ -36,6 +36,9 @@ sem_t* sem_atender_clientes;
 sem_t* sem_metricas;
 sem_t* sem_lista_semaforos;
 sem_t* sem_log;
+sem_t* sem_cola_new;
+sem_t* sem_cola_blocked;
+sem_t* sem_cola_exit;
 
 pthread_mutex_t mutex_multiprogramacion;
 
