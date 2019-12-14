@@ -35,12 +35,12 @@ t_list* cola_exit;
 sem_t* sem_atender_clientes;
 sem_t* sem_metricas;
 sem_t* sem_lista_semaforos;
-sem_t* sem_log;
-sem_t* sem_cola_new;
-sem_t* sem_cola_blocked;
-sem_t* sem_cola_exit;
 
 pthread_mutex_t mutex_multiprogramacion;
+pthread_mutex_t mutex_cola_new;
+pthread_mutex_t mutex_cola_blocked;
+pthread_mutex_t mutex_cola_exit;
+pthread_mutex_t mutex_log;
 
 t_list* semaforos;
 

@@ -297,9 +297,9 @@ void atender_cliente(int cliente_fd) {
 						tid_proximo_hilo = proximo_hilo->tid;
 
 						if (!finalizado(proximo_hilo)) {
-							sem_wait(&sem_log);
+							pthread_mutex_lock(&mutex_log);
 							log_info(logger, "El hilo %i del programa %i llegó a EXEC", tid_proximo_hilo, pid);
-							sem_post(&sem_log);
+							pthread_mutex_unlock(&mutex_log);
 						}
 
 						imprimir_estados(pid);
@@ -344,9 +344,9 @@ void atender_cliente(int cliente_fd) {
 				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
 				recv(cliente_fd, &tamanio_id_semaforo, sizeof(int), MSG_WAITALL);
 				recv(cliente_fd, id_semaforo, tamanio_id_semaforo, MSG_WAITALL);
-				sem_wait(&sem_log);
+				pthread_mutex_lock(&mutex_log);
 				log_info(logger, "El hilo %i del programa %i hizo un WAIT al semáforo %s", tid, pid, id_semaforo);
-				sem_post(&sem_log);
+				pthread_mutex_unlock(&mutex_log);
 			//	imprimir_hilos_esperando_semaforo(id_semaforo);
 				hilo = crear_hilo(pid, tid);
 				sem_wait(&sem_lista_semaforos);
@@ -373,9 +373,9 @@ void atender_cliente(int cliente_fd) {
 				//id_semaforo = malloc(tamanio_id_semaforo);
 				recv(cliente_fd, id_semaforo, tamanio_id_semaforo, MSG_WAITALL);
 				hilo = crear_hilo(pid, tid);
-				sem_wait(&sem_log);
+				pthread_mutex_lock(&mutex_log);
 				log_info(logger, "El hilo %i del programa %i le hizo un SIGNAL al semáforo %s", tid, pid, id_semaforo);
-				sem_post(&sem_log);
+				pthread_mutex_unlock(&mutex_log);
 				sem_wait(&sem_lista_semaforos);
 				semaforo = obtener_semaforo(id_semaforo);
 				sem_post(&sem_lista_semaforos);
@@ -430,9 +430,9 @@ void ejecutar_nuevo_hilo(hilo_t* hilo) {
 	hilo_t* siguiente_hilo = siguiente_hilo_a_ejecutar(programa);
 
 	sacar_de_ready(programa, hilo);
-	sem_wait(&sem_log);
+	pthread_mutex_lock(&mutex_log);
 	log_info(logger, "El hilo %i del programa %i llegó a EXEC.", siguiente_hilo->tid, siguiente_hilo->pid);
-	sem_post(&sem_log);
+	pthread_mutex_unlock(&mutex_log);
 	siguiente_hilo->tiempo_ultima_llegada_a_exec = _tiempo_actual();
 	siguiente_hilo->tiempo_espera += _tiempo_actual() - hilo->tiempo_ultima_llegada_a_ready;
 	programa->hilo_en_exec = siguiente_hilo;
@@ -455,20 +455,24 @@ void atender_nuevo_cliente(int cliente_fd) {
 void encolar_hilo_en_new(hilo_t* hilo) {
 	programa_t* programa = obtener_programa(hilo->pid);
 	hilo->tiempo_creacion = _tiempo_actual();
+	pthread_mutex_lock(&mutex_cola_new);
 	queue_push(cola_new, hilo);
-	sem_wait(&sem_log);
+	pthread_mutex_unlock(&mutex_cola_new);
+	pthread_mutex_lock(&mutex_log);
 	log_info(logger, "El hilo %i del programa %i llegó a NEW", hilo->tid, hilo->pid);
-	sem_post(&sem_log);
+	pthread_mutex_unlock(&mutex_log);
 }
 
 void cerrar_hilo(hilo_t* hilo) {
 	programa_t* programa = obtener_programa(hilo->pid);
 	programa->hilo_en_exec = NULL;
 	actualizar_tiempo_cpu(hilo);
+	pthread_mutex_lock(&mutex_cola_exit);
 	list_add(cola_exit, hilo);
-	sem_wait(&sem_log);
+	pthread_mutex_unlock(&mutex_cola_exit);
+	pthread_mutex_lock(&mutex_log);
 	log_info(logger, "El hilo %i del programa %i llegó a EXIT", hilo->tid, hilo->pid);
-	sem_post(&sem_log);
+	pthread_mutex_unlock(&mutex_log);
 	//logear_metricas();
 }
 
@@ -492,14 +496,14 @@ void encolar_hilo_en_ready(hilo_t* hilo) {
 				list_add(programa->hilos_en_ready, hilo);
 
 			hilo->tiempo_ultima_llegada_a_ready = _tiempo_actual();
-			sem_wait(&sem_log);
+			pthread_mutex_lock(&mutex_log);
 			log_info(logger, "El hilo %i del programa %i llegó a READY", hilo->tid, hilo->pid);
-			sem_post(&sem_log);
+			pthread_mutex_unlock(&mutex_log);
 
 			if (GRADO_MULTIPROGRAMACION == MAX_MULTIPROG) {
-				sem_wait(&sem_log);
+				pthread_mutex_lock(&mutex_log);
 				log_warning(logger, "Se ha alcanzado el grado máximo de multiprogramación");
-				sem_post(&sem_log);
+				pthread_mutex_unlock(&mutex_log);
 			}
 
 		}
@@ -510,10 +514,12 @@ void bloquear_hilo(hilo_t* hilo) {
 	programa_t* programa_del_hilo = obtener_programa(hilo->pid);
 	programa_del_hilo->hilo_en_exec = NULL;
 	//actualizar_tiempo_cpu(hilo);
+	pthread_mutex_lock(&mutex_cola_blocked);
 	list_add(cola_blocked, hilo);
-	sem_wait(&sem_log);
+	pthread_mutex_unlock(&mutex_cola_blocked);
+	pthread_mutex_lock(&mutex_log);
 	log_info(logger, "El hilo %i del programa %i llegó a BLOCKED", hilo->tid, hilo->pid);
-	sem_post(&sem_log);
+	pthread_mutex_unlock(&mutex_log);
 }
 
 hilo_t* siguiente_hilo_a_ejecutar(int pid) {
@@ -545,11 +551,6 @@ hilo_t* siguiente_hilo_a_ejecutar(int pid) {
 
 		sleep(1);
 	}
-
-
-
-
-
 }
 
 void liberar() {
