@@ -179,22 +179,6 @@ hilo_t* obtener_hilo_bloqueado_esperando(hilo_t* hilo_terminado) {
 	return list_find(cola_blocked, es_hilo_buscado);
 }
 
-wait_t* crear_wait(int tid, char* semaforo) {
-	wait_t* wait = malloc(sizeof(wait_t));
-	wait->semaforo = string_new();
-	wait->tid = tid;
-	wait->semaforo = semaforo;
-	return wait;
-}
-
-signal_t* crear_signal(int tid, char* semaforo) {
-	signal_t* signal = malloc(sizeof(signal_t));
-	signal->semaforo = string_new();
-	signal->tid = tid;
-	signal->semaforo = semaforo;
-	return signal;
-}
-
 hilo_t* obtener_hilo_por_pid(t_list* lista_de_hilos, int pid) {
 
 	bool es_hilo_buscado(hilo_t* un_hilo) {
@@ -250,7 +234,6 @@ void atender_cliente(int cliente_fd) {
 			case INIT:
 				agregar_programa(pid);
 				log_info(logger, "Llegó el programa %i", pid);
-				imprimir_estados(pid);
 				break;
 			case CREATE:
 				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
@@ -265,7 +248,6 @@ void atender_cliente(int cliente_fd) {
 					pthread_mutex_unlock(&mutex_multiprogramacion);
 				}
 
-				imprimir_estados(pid);
 				break;
 			case SCHEDULE_NEXT:
 				//tomar el hilo en EXEC y mandarlo a READY. OK
@@ -278,7 +260,6 @@ void atender_cliente(int cliente_fd) {
 				if (list_is_empty(programa->hilos_en_ready) && programa->hilo_en_exec != NULL) {
 					proximo_hilo = programa->hilo_en_exec;
 					send(cliente_fd, &proximo_hilo->tid, sizeof(int), MSG_WAITALL);
-					imprimir_estados(pid);
 				}
 				else {
 
@@ -303,7 +284,6 @@ void atender_cliente(int cliente_fd) {
 							pthread_mutex_unlock(&mutex_log);
 						}
 
-						imprimir_estados(pid);
 						send(cliente_fd, &tid_proximo_hilo, sizeof(int), MSG_WAITALL);
 					}
 				}
@@ -322,7 +302,6 @@ void atender_cliente(int cliente_fd) {
 					bloquear_hilo(hilo_a_bloquear);
 				}
 
-				imprimir_estados(pid);
 				break;
 			case CLOSE:
 				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
@@ -339,7 +318,6 @@ void atender_cliente(int cliente_fd) {
 					//encolar_hilo_en_ready(hilo_esperando);
 				}
 
-				imprimir_estados(pid);
 				break;
 			case WAIT:
 				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
@@ -350,14 +328,11 @@ void atender_cliente(int cliente_fd) {
 				pthread_mutex_lock(&mutex_log);
 				log_info(logger, "El hilo %i del programa %i hizo un WAIT al semáforo %s", tid, pid, id_semaforo_wait);
 				pthread_mutex_unlock(&mutex_log);
-			//	imprimir_hilos_esperando_semaforo(id_semaforo);
 				hilo = crear_hilo(pid, tid);
 
 				pthread_mutex_lock(&mutex_semaforos);
 					semaforo = obtener_semaforo(id_semaforo_wait);
 				pthread_mutex_unlock(&mutex_semaforos);
-
-				wait = crear_wait(tid, id_semaforo_wait);
 
 				if (semaforo != NULL) {
 					pthread_mutex_lock(&mutex_log);
@@ -367,7 +342,6 @@ void atender_cliente(int cliente_fd) {
 					pthread_mutex_lock(&mutex_semaforos);
 
 						if (semaforo->valor_actual < 0) {
-							//list_add(cola_blocked, hilo);
 							bloquear_hilo(hilo);
 							list_add(semaforo->hilos_bloqueados, hilo);
 						}
@@ -379,7 +353,6 @@ void atender_cliente(int cliente_fd) {
 				else
 					exit(1);
 
-				imprimir_semaforos();
 				free(id_semaforo_wait);
 
 			break;
@@ -406,13 +379,8 @@ void atender_cliente(int cliente_fd) {
 
 					pthread_mutex_lock(&mutex_semaforos);
 
-						if (!list_is_empty(semaforo->hilos_bloqueados)) {
+						if (!list_is_empty(semaforo->hilos_bloqueados))
 							list_iterate(semaforo->hilos_bloqueados, desbloquear_hilo);
-							printf("DESBLOQUEÉ HILOS BLOQUEADOS POR EL SEMÁFORO %s\n", id_semaforo_signal);
-						}
-						else {
-							printf("NO EXISTEN HILOS BLOQUEADOS POR EL SEMÁFORO %s\n", id_semaforo_signal);
-						}
 
 					pthread_mutex_unlock(&mutex_semaforos);
 
@@ -420,9 +388,7 @@ void atender_cliente(int cliente_fd) {
 				else {
 					exit(1);
 				}
-					//printf("EL SEMÁFORO %s ES NULL\n", id_semaforo_signal);
 
-				imprimir_semaforos();
 				free(id_semaforo_signal);
 
 			break;
@@ -430,7 +396,6 @@ void atender_cliente(int cliente_fd) {
 
 		socket_esta_conectado = recv(cliente_fd, &opcode, sizeof(int), MSG_WAITALL);
 		recv(cliente_fd, &pid, sizeof(int), MSG_WAITALL);
-		tid_proximo_hilo = -1;
 	}
 }
 
