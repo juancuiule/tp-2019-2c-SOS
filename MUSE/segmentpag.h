@@ -19,7 +19,7 @@ int MEMORY_SIZE;
 int PAGE_SIZE;
 int SWAP_SIZE;
 FILE *swap_file;
-int metadata_size = sizeof(bool) + sizeof(uint32_t);
+int metadata_size;
 
 typedef enum {
 	HEAP = 0,
