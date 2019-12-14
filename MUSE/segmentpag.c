@@ -463,12 +463,58 @@ uint32_t alloc_in_segment(process_segment* segment, uint32_t process_dir, uint32
 	free_metadata_end_dir = set_metadata_in_segment(segment, allocated_end_dir, true, free_space_after);
 	log_debug(seg_logger, "free_metadata_end_dir: %i", free_metadata_end_dir);
 
-//	bool is_f;
-//	int s;
-//	get_metadata_from_segment(segment, dir, &is_f, &s);
-//	log_debug(seg_logger, "used, is_f: %i, s: %i", is_f, s);
-//	get_metadata_from_segment(segment, allocated_end_dir, &is_f, &s);
-//	log_debug(seg_logger, "free, is_f: %i, s: %i", is_f, s);
-
 	return segment->base + metadata_end_dir;
 }
+
+t_list* paginas_en_memoria() {
+	t_list* op(t_list* acum, process_table* process) {
+		t_list* paginas = list_create();
+		int i;
+		process_segment* segment = malloc(sizeof(process_segment));
+		t_page* pagina = malloc(sizeof(t_page));
+		for (i = 0; i < process->number_of_segments; ++i) {
+			memcpy(segment, process->segments + i * sizeof(process_segment), sizeof(process_segment));
+			int j;
+			for (j = 0; j < segment->size / PAGE_SIZE; j++) {
+				memcpy(pagina, segment->pages + i * sizeof(t_page), sizeof(t_page));
+				if (pagina->flag == true) {
+					list_add(paginas, pagina);
+				}
+			}
+		}
+		free(segment);
+		free(pagina);
+
+		list_add_all(acum, paginas);
+		return acum;
+	}
+	return list_fold(tables, list_create(), (void*) op);
+}
+
+void asignar_frame(t_page* pagina) {
+	int frame_number = find_free_frame(frame_usage_bitmap);
+	if (frame_number == -1) {
+		// no hay frame libre.. hay que hacer swap
+		t_list* paginas = paginas_en_memoria();
+		int i;
+		for(i = 0; i < paginas->elements_count; i++) {
+			t_page* pagina_en_memoria = list_get(paginas, i);
+			if (
+              pagina_en_memoria->in_use == false &&
+			  pagina_en_memoria->modified == false
+			) {
+				// pasarla a swap_file
+				pagina_en_memoria->flag = false;
+
+				// copiar en este frame lo que la pagina tenía en swap_file
+				pagina->frame_number = pagina_en_memoria->frame_number;
+				pagina->in_use = true;
+				pagina->flag = true;
+			}
+		}
+	} else {
+		pagina->frame_number = frame_number;
+		bitarray_set_bit(frame_usage_bitmap, frame_number);
+	}
+}
+
