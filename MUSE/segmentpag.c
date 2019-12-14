@@ -5,8 +5,6 @@ metadata_size = sizeof(bool) + sizeof(uint32_t);
 bool t = true;
 bool f = false;
 
-metadata_size = sizeof(bool) + sizeof(uint32_t);
-
 void init_structures(int m_size, int p_size) {
 	int frames = m_size / p_size;
 	tables = list_create();
@@ -23,10 +21,6 @@ void init_structures(int m_size, int p_size) {
 		void* new_frame = malloc(p_size);
 		memset(new_frame, 1, sizeof(bool));
 		memset(new_frame + sizeof(bool), NULL, p_size - sizeof(bool));
-//		bool is_free = true;
-//		uint32_t size = p_size - metadata_size;
-//		memcpy(new_frame, &is_free, sizeof(bool));
-//		memcpy(new_frame + sizeof(bool), &size, sizeof(uint32_t));
 		*(MEMORY + i) = new_frame;
 	}
 
