@@ -140,7 +140,16 @@ void desbloquear_hilo(hilo_t* hilo) {
 	}
 
 	list_remove_by_condition(cola_blocked, es_hilo_buscado);
-	//encolar_hilo_en_ready(hilo);
+	encolar_hilo_en_ready(hilo);
+}
+
+hilo_t* obtener_hilo_buscado(t_list* lista_de_hilos, hilo_t* hilo_buscado) {
+
+	bool es_hilo_buscado(hilo_t* un_hilo) {
+		return un_hilo->pid == hilo_buscado->pid && un_hilo->tid == hilo_buscado->pid;
+	}
+
+	return list_find(lista_de_hilos, es_hilo_buscado);
 }
 
 hilo_t* obtener_hilo(t_list* lista_de_hilos, int pid, int tid) {
@@ -168,6 +177,31 @@ hilo_t* obtener_hilo_bloqueado_esperando(hilo_t* hilo_terminado) {
 	}
 
 	return list_find(cola_blocked, es_hilo_buscado);
+}
+
+wait_t* crear_wait(int tid, char* semaforo) {
+	wait_t* wait = malloc(sizeof(wait_t));
+	wait->semaforo = string_new();
+	wait->tid = tid;
+	wait->semaforo = semaforo;
+	return wait;
+}
+
+signal_t* crear_signal(int tid, char* semaforo) {
+	signal_t* signal = malloc(sizeof(signal_t));
+	signal->semaforo = string_new();
+	signal->tid = tid;
+	signal->semaforo = semaforo;
+	return signal;
+}
+
+hilo_t* obtener_hilo_por_pid(t_list* lista_de_hilos, int pid) {
+
+	bool es_hilo_buscado(hilo_t* un_hilo) {
+		return un_hilo->pid == pid;
+	}
+
+	return list_find(lista_de_hilos, es_hilo_buscado);
 }
 
 void atender_cliente(int cliente_fd) {
@@ -200,6 +234,10 @@ void atender_cliente(int cliente_fd) {
 	programa_t* programa = malloc(sizeof(programa_t));
 	programa->hilo_en_exec = malloc(sizeof(hilo_t));
 	programa->hilos_en_ready = list_create();
+	wait_t* wait = malloc(sizeof(wait_t));
+	wait->semaforo = string_new();
+	signal_t* signal = malloc(sizeof(signal_t));
+	signal->semaforo = string_new();
 
 	socket_esta_conectado = recv(cliente_fd, &opcode, sizeof(int), MSG_WAITALL);
 	recv(cliente_fd, &pid, sizeof(int), MSG_WAITALL);
@@ -230,44 +268,44 @@ void atender_cliente(int cliente_fd) {
 				break;
 			case SCHEDULE_NEXT:
 				//tomar el hilo en EXEC y mandarlo a READY. OK
+				printf("Recibí un schedule_next del programa %i\n", pid);
 				programa = obtener_programa(pid);
 				hilo = crear_hilo(pid, tid);
 
 				//_nueva_estimacion(hilo);
 
-				if (programa->hilo_en_exec != NULL) {
-					list_add(programa->hilos_en_ready, programa->hilo_en_exec);
-					//actualizar_tiempo_cpu(programa->hilo_en_exec);
+				if (list_is_empty(programa->hilos_en_ready) && programa->hilo_en_exec != NULL) {
+					proximo_hilo = programa->hilo_en_exec;
+					send(cliente_fd, &proximo_hilo->tid, sizeof(int), MSG_WAITALL);
+					imprimir_estados(pid);
 				}
+				else {
 
-				proximo_hilo = siguiente_hilo_a_ejecutar(pid);
-				sacar_de_ready(programa, proximo_hilo);
+					if (programa->hilo_en_exec != NULL) {
+						list_add(programa->hilos_en_ready, programa->hilo_en_exec);
+						//actualizar_tiempo_cpu(programa->hilo_en_exec);
+					}
 
-				if (esta_bloqueado(proximo_hilo)) {
-					//printf("el hilo está bloqueado\n");
-					desbloquear_hilo(proximo_hilo);
+					proximo_hilo = siguiente_hilo_a_ejecutar(pid);
+
+					if (proximo_hilo != NULL) {
+						sacar_de_ready(programa, proximo_hilo);
+
+						programa->hilo_en_exec = proximo_hilo;
+						ultima_llegada_a_exec = _tiempo_actual();
+						proximo_hilo->tiempo_ultima_llegada_a_exec = ultima_llegada_a_exec;
+						tid_proximo_hilo = proximo_hilo->tid;
+
+						if (!finalizado(proximo_hilo)) {
+							sem_wait(&sem_log);
+							log_info(logger, "El hilo %i del programa %i llegó a EXEC", tid_proximo_hilo, pid);
+							sem_post(&sem_log);
+						}
+
+						imprimir_estados(pid);
+						send(cliente_fd, &tid_proximo_hilo, sizeof(int), MSG_WAITALL);
+					}
 				}
-
-
-				programa->hilo_en_exec = proximo_hilo;
-				ultima_llegada_a_exec = _tiempo_actual();
-				proximo_hilo->tiempo_ultima_llegada_a_exec = ultima_llegada_a_exec;
-				tid_proximo_hilo = proximo_hilo->tid;
-
-				if (!finalizado(proximo_hilo)) {
-					sem_wait(&sem_log);
-					log_info(logger, "El hilo %i del programa %i llegó a EXEC", tid_proximo_hilo, pid);
-					sem_post(&sem_log);
-				}
-
-				imprimir_estados(pid);
-
-				if (!list_is_empty(programa->hilos_en_ready)) {
-					send(cliente_fd, &tid_proximo_hilo, sizeof(int), MSG_WAITALL);
-					break;
-				}
-
-
 
 				break;
 			case JOIN:
@@ -295,10 +333,11 @@ void atender_cliente(int cliente_fd) {
 				cerrar_hilo(hilo_finalizado);
 				hilo_esperando = obtener_hilo_bloqueado_esperando(hilo_finalizado);
 
-				if (hilo_esperando != NULL)
+				if (hilo_esperando != NULL) {
 					desbloquear_hilo(hilo_esperando);
+					//encolar_hilo_en_ready(hilo_esperando);
+				}
 
-				encolar_hilo_en_ready(hilo_esperando);
 				imprimir_estados(pid);
 				break;
 			case WAIT:
@@ -308,20 +347,20 @@ void atender_cliente(int cliente_fd) {
 				sem_wait(&sem_log);
 				log_info(logger, "El hilo %i del programa %i hizo un WAIT al semáforo %s", tid, pid, id_semaforo);
 				sem_post(&sem_log);
+			//	imprimir_hilos_esperando_semaforo(id_semaforo);
 				hilo = crear_hilo(pid, tid);
 				sem_wait(&sem_lista_semaforos);
 				semaforo = obtener_semaforo(id_semaforo);
 				sem_post(&sem_lista_semaforos);
+				wait = crear_wait(tid, id_semaforo);
 
 				if (semaforo != NULL) {
-					semaforo->valor_actual--;
 
-					if (semaforo->valor_actual < 0) {
+					if (semaforo->valor_actual <= 0) {
+						//list_add(cola_blocked, hilo);
 						bloquear_hilo(hilo);
-						sem_wait(&sem_lista_semaforos);
 						list_add(semaforo->hilos_bloqueados, hilo);
-						sem_post(&sem_lista_semaforos);
-						log_info(logger, "El hilo %i del programa % i se bloqueó esperando el semáforo %s", tid, pid, semaforo->id);
+						semaforo->valor_actual--;
 					}
 
 					printf("valor del semáforo %s = %i\n", semaforo->id, semaforo->valor_actual);
@@ -329,36 +368,30 @@ void atender_cliente(int cliente_fd) {
 
 			break;
 			case SIGNAL:
-				printf("recibí un signal\n");
 				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
 				recv(cliente_fd, &tamanio_id_semaforo, sizeof(int), MSG_WAITALL);
-				id_semaforo = malloc(tamanio_id_semaforo);
+				//id_semaforo = malloc(tamanio_id_semaforo);
 				recv(cliente_fd, id_semaforo, tamanio_id_semaforo, MSG_WAITALL);
 				hilo = crear_hilo(pid, tid);
+				sem_wait(&sem_log);
+				log_info(logger, "El hilo %i del programa %i le hizo un SIGNAL al semáforo %s", tid, pid, id_semaforo);
+				sem_post(&sem_log);
 				sem_wait(&sem_lista_semaforos);
 				semaforo = obtener_semaforo(id_semaforo);
 				sem_post(&sem_lista_semaforos);
 
 				if (semaforo != NULL) {
-
 					if (semaforo->valor_actual < semaforo->valor_maximo)
 						semaforo->valor_actual++;
 
-
-					if (semaforo->valor_actual == 1) {
-						desbloquear_hilo(hilo);
-						sem_wait(&sem_lista_semaforos);
-						sacar_hilo_de_bloqueados(semaforo, hilo);
-						sem_post(&sem_lista_semaforos);
-						sem_wait(&sem_log);
-						log_info(logger, "El hilo %i fue desbloqueado por un signal al semáforo %s", tid, semaforo->id);
-						sem_post(&sem_log);
+					if (!list_is_empty(semaforo->hilos_bloqueados)) {
+						list_iterate(semaforo->hilos_bloqueados, desbloquear_hilo);
+						printf("DESBLOQUEÉ HILOS BLOQUEADOS POR EL SEMÁFORO %s\n", id_semaforo);
+					}
+					else {
+						printf("NO EXISTEN HILOS BLOQUEADOS POR EL SEMÁFORO %s\n", id_semaforo);
 					}
 
-					sem_wait(&sem_log);
-					log_info(logger, "El hilo %i del programa %i hizo un SIGNAL al semáforo %s", tid, pid, semaforo->id);
-					sem_post(&sem_log);
-					printf("valor del semáforo %s = %i\n", semaforo->id, semaforo->valor_actual);
 				}
 
 			break;
@@ -366,6 +399,7 @@ void atender_cliente(int cliente_fd) {
 
 		socket_esta_conectado = recv(cliente_fd, &opcode, sizeof(int), MSG_WAITALL);
 		recv(cliente_fd, &pid, sizeof(int), MSG_WAITALL);
+		tid_proximo_hilo = -1;
 	}
 }
 
@@ -396,7 +430,9 @@ void ejecutar_nuevo_hilo(hilo_t* hilo) {
 	hilo_t* siguiente_hilo = siguiente_hilo_a_ejecutar(programa);
 
 	sacar_de_ready(programa, hilo);
+	sem_wait(&sem_log);
 	log_info(logger, "El hilo %i del programa %i llegó a EXEC.", siguiente_hilo->tid, siguiente_hilo->pid);
+	sem_post(&sem_log);
 	siguiente_hilo->tiempo_ultima_llegada_a_exec = _tiempo_actual();
 	siguiente_hilo->tiempo_espera += _tiempo_actual() - hilo->tiempo_ultima_llegada_a_ready;
 	programa->hilo_en_exec = siguiente_hilo;
@@ -438,15 +474,14 @@ void cerrar_hilo(hilo_t* hilo) {
 
 void encolar_hilo_en_ready(hilo_t* hilo) {
 
+	printf("me llego la petición de desbloquear el hilo %i del programa %i\n", hilo->tid, hilo->pid);
+
 	bool hilo_encontrado(hilo_t* un_hilo) {
 		return un_hilo->tid == hilo->tid && un_hilo->pid == hilo->pid;
 	}
 
 	if (hilo != NULL) {
-		programa_t* programa = malloc(sizeof(programa_t));
-		programa->hilos_en_ready = list_create();
-		programa->hilo_en_exec = malloc(sizeof(hilo_t));
-		programa = obtener_programa(hilo->pid);
+		programa_t* programa = obtener_programa(hilo->pid);
 
 		if (list_any_satisfy(cola_blocked, hilo_encontrado))
 			list_remove_by_condition(cola_blocked, hilo_encontrado);
@@ -482,28 +517,39 @@ void bloquear_hilo(hilo_t* hilo) {
 }
 
 hilo_t* siguiente_hilo_a_ejecutar(int pid) {
-	hilo_t* siguiente = malloc(sizeof(hilo_t));
-	t_list* hilos = list_create();
-	programa_t* programa = obtener_programa(pid);
-	hilos = programa->hilos_en_ready;
 
 	double estimacion(hilo_t* hilo) {
-		double est = ((1 - ALPHA_SJF) * hilo->estimacion_anterior) + (ALPHA_SJF * hilo->rafaga_anterior);
-		return est;
+			double est = ((1 - ALPHA_SJF) * hilo->estimacion_anterior) + (ALPHA_SJF * hilo->rafaga_anterior);
+			return est;
+		}
+
+		bool comparador(hilo_t* hilo1, hilo_t* hilo2) {
+			return estimacion(hilo1) <= estimacion(hilo2);
+		}
+
+	while(1) {
+		hilo_t* siguiente = malloc(sizeof(hilo_t));
+		t_list* hilos = list_create();
+		programa_t* programa = obtener_programa(pid);
+		hilos = programa->hilos_en_ready;
+
+		list_sort(hilos, comparador);
+
+		if (!list_is_empty(hilos)) {
+			siguiente = list_get(hilos, 0);
+			siguiente->estimacion_anterior = estimacion(siguiente);
+		}
+
+		if (!list_is_empty(programa->hilos_en_ready))
+			return siguiente;
+
+		sleep(1);
 	}
 
-	bool comparador(hilo_t* hilo1, hilo_t* hilo2) {
-		return estimacion(hilo1) <= estimacion(hilo2);
-	}
 
-	list_sort(hilos, comparador);
 
-	if (!list_is_empty(hilos)) {
-		siguiente = list_get(hilos, 0);
-		siguiente->estimacion_anterior = estimacion(siguiente);
-	}
 
-	return siguiente;
+
 }
 
 void liberar() {

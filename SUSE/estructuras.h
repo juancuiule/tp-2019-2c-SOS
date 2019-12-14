@@ -48,4 +48,36 @@ typedef struct {
 	t_list* hilos_bloqueados;
 } semaforo_t;
 
+typedef struct {
+	int tid;
+	char* semaforo;
+} wait_t;
+
+typedef struct {
+	int tid;
+	char* semaforo;
+} signal_t;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #endif /* ESTRUCTURAS_H_ */
