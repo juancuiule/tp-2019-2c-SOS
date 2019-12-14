@@ -220,7 +220,8 @@ void atender_cliente(int cliente_fd) {
 	int tamanio_id_semaforo;
 	int socket_esta_conectado;
 	long ultima_llegada_a_exec;
-	char* id_semaforo;
+	char* id_semaforo_wait;
+	char* id_semaforo_signal;
 	hilo_t* hilo = malloc(sizeof(hilo_t));
 	hilo_t* hilo_a_bloquear = malloc(sizeof(hilo_t));
 	hilo_t* hilo_a_desbloquear = malloc(sizeof(hilo_t));
@@ -243,7 +244,7 @@ void atender_cliente(int cliente_fd) {
 	recv(cliente_fd, &pid, sizeof(int), MSG_WAITALL);
 
 	while(socket_esta_conectado > 0) {
-		id_semaforo = malloc(100);
+		//id_semaforo = malloc(100);
 		//TODO: salir del while al recibir close
 		switch (opcode) {
 			case INIT:
@@ -343,56 +344,77 @@ void atender_cliente(int cliente_fd) {
 			case WAIT:
 				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
 				recv(cliente_fd, &tamanio_id_semaforo, sizeof(int), MSG_WAITALL);
-				recv(cliente_fd, id_semaforo, tamanio_id_semaforo, MSG_WAITALL);
+				id_semaforo_wait = malloc(tamanio_id_semaforo + 1);
+				recv(cliente_fd, id_semaforo_wait, tamanio_id_semaforo, MSG_WAITALL);
+				id_semaforo_wait[tamanio_id_semaforo] = '\0';
 				pthread_mutex_lock(&mutex_log);
-				log_info(logger, "El hilo %i del programa %i hizo un WAIT al semáforo %s", tid, pid, id_semaforo);
+				log_info(logger, "El hilo %i del programa %i hizo un WAIT al semáforo %s", tid, pid, id_semaforo_wait);
 				pthread_mutex_unlock(&mutex_log);
 			//	imprimir_hilos_esperando_semaforo(id_semaforo);
 				hilo = crear_hilo(pid, tid);
 				sem_wait(&sem_lista_semaforos);
-				semaforo = obtener_semaforo(id_semaforo);
+				semaforo = obtener_semaforo(id_semaforo_wait);
 				sem_post(&sem_lista_semaforos);
-				wait = crear_wait(tid, id_semaforo);
+				wait = crear_wait(tid, id_semaforo_wait);
 
 				if (semaforo != NULL) {
+					//pthread_mutex_lock(&mutex_log);
+					semaforo->valor_actual--;
+					//pthread_mutex_unlock(&mutex_log);
 
-					if (semaforo->valor_actual <= 0) {
+					if (semaforo->valor_actual < 0) {
 						//list_add(cola_blocked, hilo);
 						bloquear_hilo(hilo);
 						list_add(semaforo->hilos_bloqueados, hilo);
-						semaforo->valor_actual--;
+
 					}
 
 					printf("valor del semáforo %s = %i\n", semaforo->id, semaforo->valor_actual);
 				}
+				else
+					exit(1);
+
+				imprimir_semaforos();
+				free(id_semaforo_wait);
 
 			break;
 			case SIGNAL:
 				recv(cliente_fd, &tid, sizeof(int), MSG_WAITALL);
 				recv(cliente_fd, &tamanio_id_semaforo, sizeof(int), MSG_WAITALL);
-				//id_semaforo = malloc(tamanio_id_semaforo);
-				recv(cliente_fd, id_semaforo, tamanio_id_semaforo, MSG_WAITALL);
+				printf("el tamaño es %i\n", tamanio_id_semaforo);
+				id_semaforo_signal = malloc(tamanio_id_semaforo + 1);
+				recv(cliente_fd, id_semaforo_signal, tamanio_id_semaforo, MSG_WAITALL);
+				id_semaforo_signal[tamanio_id_semaforo] = '\0';
 				hilo = crear_hilo(pid, tid);
-				pthread_mutex_lock(&mutex_log);
-				log_info(logger, "El hilo %i del programa %i le hizo un SIGNAL al semáforo %s", tid, pid, id_semaforo);
-				pthread_mutex_unlock(&mutex_log);
+				log_info(logger, "El hilo %i del programa %i le hizo un SIGNAL al semáforo %s", tid, pid, id_semaforo_signal);
 				sem_wait(&sem_lista_semaforos);
-				semaforo = obtener_semaforo(id_semaforo);
+				semaforo = obtener_semaforo(id_semaforo_signal);
 				sem_post(&sem_lista_semaforos);
 
 				if (semaforo != NULL) {
-					if (semaforo->valor_actual < semaforo->valor_maximo)
+					if (semaforo->valor_actual < semaforo->valor_maximo) {
+						pthread_mutex_lock(&mutex_log);
 						semaforo->valor_actual++;
+						pthread_mutex_unlock(&mutex_log);
+					}
+
 
 					if (!list_is_empty(semaforo->hilos_bloqueados)) {
 						list_iterate(semaforo->hilos_bloqueados, desbloquear_hilo);
-						printf("DESBLOQUEÉ HILOS BLOQUEADOS POR EL SEMÁFORO %s\n", id_semaforo);
+						printf("DESBLOQUEÉ HILOS BLOQUEADOS POR EL SEMÁFORO %s\n", id_semaforo_signal);
 					}
 					else {
-						printf("NO EXISTEN HILOS BLOQUEADOS POR EL SEMÁFORO %s\n", id_semaforo);
+						printf("NO EXISTEN HILOS BLOQUEADOS POR EL SEMÁFORO %s\n", id_semaforo_signal);
 					}
 
 				}
+				else {
+					exit(1);
+				}
+					//printf("EL SEMÁFORO %s ES NULL\n", id_semaforo_signal);
+
+				imprimir_semaforos();
+				free(id_semaforo_signal);
 
 			break;
 		}
