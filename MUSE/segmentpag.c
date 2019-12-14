@@ -1,5 +1,7 @@
 #include "segmentpag.h"
 
+metadata_size = sizeof(bool) + sizeof(uint32_t);
+
 bool t = true;
 bool f = false;
 
