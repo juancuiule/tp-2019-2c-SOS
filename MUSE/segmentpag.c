@@ -301,8 +301,8 @@ process_table* get_table_for_process(char* process) {
 	return list_find(tables, (void*) is_this);
 }
 
-int find_free_frame(t_bitarray* bitmap) {
-	for (int var = 0; var < (MEMORY_SIZE / PAGE_SIZE); ++var) {
+int find_free_bit(t_bitarray* bitmap, int limit) {
+	for (int var = 0; var < limit; ++var) {
 		bool is_used = bitarray_test_bit(bitmap, var);
 		if (!is_used) {
 			return var;
@@ -311,15 +311,12 @@ int find_free_frame(t_bitarray* bitmap) {
 	return -1;
 }
 
+int find_free_frame() {
+	return find_free_bit(frame_usage_bitmap, MEMORY_SIZE / PAGE_SIZE);
+}
+
 int find_free_swap() {
-	for (int var = 0; var < (SWAP_SIZE / PAGE_SIZE); ++var) {
-		bool is_used = bitarray_test_bit(swap_usage_bitmap, var);
-		log_debug(seg_logger, "swap_frame: %i, is_used: %i", var, is_used);
-		if (!is_used) {
-			return var;
-		}
-	}
-	return -1;
+	return find_free_bit(swap_usage_bitmap, SWAP_SIZE / PAGE_SIZE);
 }
 
 int min(int x, int y) {
@@ -521,7 +518,7 @@ t_page* victima_0_1() {
 
 void asignar_frame(t_page* pagina) {
 	log_debug(seg_logger, "pagina frame: %i", pagina->frame_number);
-	int frame_number = find_free_frame(frame_usage_bitmap);
+	int frame_number = find_free_frame();
 
 	if (frame_number == -1) {
 		// no hay frame libre.. hay que hacer swap
@@ -539,6 +536,7 @@ void asignar_frame(t_page* pagina) {
 
 		// pasarla a swap_file
 		int free_swap = find_free_swap();
+		log_debug(seg_logger, "free swap frame: %i, offset: %i", free_swap, free_swap * PAGE_SIZE);
 		fseek(swap_file, free_swap * PAGE_SIZE, SEEK_SET);
 		fwrite(MEMORY[victima->frame_number], sizeof(PAGE_SIZE), 1, swap_file);
 

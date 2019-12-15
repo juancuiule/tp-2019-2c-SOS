@@ -61,7 +61,7 @@ void create_process_table(char* process);
 process_table* get_table_for_process(char* process);
 void add_process_segment(char* process, process_segment* segment);
 void add_page_to_segment(process_segment* segment, t_page* page);
-int find_free_frame(t_bitarray* bitmap);
+int find_free_frame();
 process_segment* find_segment_with_space(process_table* table, int size);
 process_segment* segment_by_dir(process_table* table, int dir);
 process_segment* find_extensible_heap_segment(process_table* table);
