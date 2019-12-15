@@ -308,8 +308,8 @@ int respond_to_client(int cliente_fd) {
 }
 
 int main(void) {
-	logger = log_create("./logs/MUSE.log", "Servidor", 1, LOG_LEVEL_DEBUG);
-	config = config_create("./program.config");
+	logger = log_create("../src/logs/MUSE.log", "Servidor", 1, LOG_LEVEL_DEBUG);
+	config = config_create("../src/program.config");
 
 	IP = "127.0.0.1";
 	PORT = config_get_string_value(config, "LISTEN_PORT");
@@ -323,7 +323,7 @@ int main(void) {
 	log_info(logger, "Number of pages: %i", MEMORY_SIZE / PAGE_SIZE);
 
 	int server_fd = init_server(IP, PORT);
-	
+
 	if (server_fd == -1) {
 		return EXIT_FAILURE;
 	}
