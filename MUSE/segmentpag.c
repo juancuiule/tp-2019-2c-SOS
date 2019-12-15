@@ -5,22 +5,10 @@ metadata_size = sizeof(bool) + sizeof(uint32_t);
 bool t = true;
 bool f = false;
 
-int ceil(double d) {
-	if (d - (int) d != 0) {
-		return (int)d + 1;
-	} else {
-		return d;
-	}
-}
-
-int floor(double d) {
-	return (int) d;
-}
-
 void init_structures(int m_size, int p_size) {
 	int frames = m_size / p_size;
 	tables = list_create();
-	seg_logger = log_create("../src/logs/segmentpag.log", "segmentpag", 1, LOG_LEVEL_DEBUG);
+	seg_logger = log_create("./logs/segmentpag.log", "segmentpag", 1, LOG_LEVEL_DEBUG);
 	int bitmap_size_in_bytes = ceil((double) frames / 8);
 	bitmap_pointer = malloc(bitmap_size_in_bytes);
 	frame_usage_bitmap = bitarray_create_with_mode(bitmap_pointer, bitmap_size_in_bytes, LSB_FIRST);

@@ -7,9 +7,8 @@
 #include <commons/string.h>
 #include <commons/log.h>
 #include <commons/bitarray.h>
+#include <math.h>
 #include <stdint.h>
-#include "./utils.h"
-#include "./network.h"
 
 t_list *tables;
 t_log *seg_logger;

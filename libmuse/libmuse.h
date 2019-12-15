@@ -22,17 +22,9 @@
     #include <stddef.h>
 	#include <stdio.h>
 	#include <stdlib.h>
-	#include <pthread.h>
-	#include <string.h>
-	#include <sys/socket.h>
-	#include <unistd.h>
-
-	#include <commons/config.h>
 	#include <commons/string.h>
-
+	#include <pthread.h>
 	#include "utils.h"
-	#include "network.h"
-
 
     /**
      * Inicializa la biblioteca de MUSE.

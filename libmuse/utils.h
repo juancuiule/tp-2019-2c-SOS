@@ -8,11 +8,8 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <string.h>
-
 #include <commons/log.h>
 #include <commons/config.h>
-
-#include "network.h"
 
 typedef enum {
 	DISCONNECT_MUSE = -1,

@@ -1,6 +1,6 @@
 #include "network.h"
 
-int create_connection(char *IP, int PORT) {
+int create_connection(char *IP, char* PORT) {
 	struct addrinfo hints, *server_info;
 
 	memset(&hints, 0, sizeof(hints));
@@ -81,7 +81,7 @@ uint32_t recv_uint(int socket_cliente) {
 	return size;
 }
 
-int recv_int(int socket_cliente) {
+void* recv_int(int socket_cliente) {
 	int size;
 	recv(socket_cliente, &size, sizeof(int), MSG_WAITALL);
 	return size;
@@ -103,7 +103,11 @@ int recibir_cliente(int socket_servidor) {
 	struct sockaddr_in dir_cliente;
 	int tam_direccion = sizeof(struct sockaddr_in);
 
-	int socket_cliente = accept(socket_servidor, (void*) &dir_cliente, &tam_direccion);
+	int socket_cliente = accept(
+		socket_servidor,
+		(void*) &dir_cliente,
+		&tam_direccion
+	);
 
 	return socket_cliente;
 }

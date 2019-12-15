@@ -1,4 +1,6 @@
 #include "utils.h"
+#include "network.h"
+#include <netdb.h>
 
 muse_package* create_package(muse_header* header, muse_body* body) {
 	muse_package* package = malloc(sizeof(muse_package));
@@ -18,9 +20,9 @@ muse_header* create_header(muse_op_code code) {
 	char host_buffer[256];
 	char* ip_buffer;
 	struct hostent* host_entry;
-	// int hostname;
+	int hostname;
 
-	// hostname = gethostname(host_buffer, sizeof(host_buffer));
+	hostname = gethostname(host_buffer, sizeof(host_buffer));
 	host_entry = gethostbyname(host_buffer);
 	ip_buffer = inet_ntoa(*((struct in_addr*) host_entry->h_addr_list[0]));
 
@@ -71,7 +73,7 @@ void add_fixed_to_body(muse_body* body, int size, void* value) {
 
 muse_body* recv_body(int socket) {
 	muse_body* body = malloc(sizeof(muse_body));
-	body->content_size = (int) recv_int(socket);
+	body->content_size = recv_int(socket);
 	if (body->content_size > 0) {
 		body->content = malloc(body->content_size);
 		recv(socket, body->content, body->content_size, MSG_WAITALL);
