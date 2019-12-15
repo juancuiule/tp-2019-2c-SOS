@@ -1,6 +1,9 @@
 # Prerequisites
 *.d
 
+# Swap File
+MUSE/file.bin
+
 # Logs
 MUSE/logs/*.log
 libmuse/logs/*.log
