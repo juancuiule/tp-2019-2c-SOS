@@ -24,7 +24,7 @@ void init_structures(int m_size, int p_size) {
 		*(MEMORY + i) = new_frame;
 	}
 
-	swap_file = fopen("file.bin", "w+b");
+	swap_file = fopen("file.bin", "rw+b");
 
 	int swap_frames = SWAP_SIZE / p_size;
 	log_debug(seg_logger, "swap_frames: %i", swap_frames);
@@ -314,6 +314,7 @@ int find_free_frame(t_bitarray* bitmap) {
 int find_free_swap() {
 	for (int var = 0; var < (SWAP_SIZE / PAGE_SIZE); ++var) {
 		bool is_used = bitarray_test_bit(swap_usage_bitmap, var);
+		log_debug(seg_logger, "swap_frame: %i, is_used: %i", var, is_used);
 		if (!is_used) {
 			return var;
 		}
@@ -535,15 +536,15 @@ void asignar_frame(t_page* pagina) {
 		}
 
 		int frame_number_victima_pre_swap = victima->frame_number;
-		log_debug(seg_logger, "frame_number_victima_pre_swap: %i", frame_number_victima_pre_swap);
 
 		// pasarla a swap_file
-		victima->flag = false;
 		int free_swap = find_free_swap();
-		log_debug(seg_logger, "free_swap: %i", free_swap);
-		victima->frame_number = free_swap;
 		fseek(swap_file, free_swap * PAGE_SIZE, SEEK_SET);
-		fwrite(MEMORY[victima->frame_number], sizeof(PAGE_SIZE), 1,swap_file);
+		fwrite(MEMORY[victima->frame_number], sizeof(PAGE_SIZE), 1, swap_file);
+
+		victima->flag = false;
+		victima->frame_number = free_swap;
+
 		bitarray_set_bit(swap_usage_bitmap, free_swap);
 
 		// copiar en este frame lo que la pagina tenía en swap_file
