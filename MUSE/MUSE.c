@@ -43,8 +43,8 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 			segment = create_segment(HEAP, new_base);
 
 			for (int var = 0; var < pages_needed; var++) {
-				int frame_number = find_free_frame(frame_usage_bitmap);
-				t_page *new_page = create_page(frame_number);
+				t_page *new_page = create_page();
+				asignar_frame(new_page);
 				add_page_to_segment(segment, new_page);
 			}
 			dir = alloc_in_segment(segment, 0, tam_pedido);
@@ -82,12 +82,11 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 					int free_dir = find_free_dir(segment, free_space - metadata_size);
 
 					for (int var = 0; var < pages_needed; var++) {
-						int frame_number = find_free_frame(frame_usage_bitmap);
-						t_page *new_page = create_page(frame_number);
+						t_page *new_page = create_page();
+						asignar_frame(new_page);
 						add_page_to_segment(segment, new_page);
 					}
 					dir = alloc_in_segment(segment, free_dir, tam_pedido);
-					log_warning(logger, "dir: %i", dir);
 				} else {
 					pages_needed = ceil((double) (tam_pedido + metadata_size * 2) / PAGE_SIZE);
 					// log_warning(logger, "No se puede extender ninguno");
@@ -97,8 +96,8 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 					// log_info(logger, "Se crea uno con base %i y %i páginas para hacer un alloc de %i", new_base, pages_needed, tam_pedido);
 					segment = create_segment(HEAP, new_base);
 					for (int var = 0; var < pages_needed; var++) {
-						int frame_number = find_free_frame(frame_usage_bitmap);
-						t_page *new_page = create_page(frame_number);
+						t_page *new_page = create_page();
+						asignar_frame(new_page);
 						add_page_to_segment(segment, new_page);
 					}
 					int free_dir = find_free_dir(segment, tam_pedido);
@@ -230,8 +229,8 @@ void respond_map(muse_body* body, char* id, int socket_cliente) {
 		int new_base = last_position(id);
 		segment = create_segment(MMAP, new_base);
 		for (int var = 0; var < frames_to_ask; var++) {
-			int frame_number = find_free_frame(frame_usage_bitmap);
-			t_page *new_page = create_page(frame_number);
+			t_page *new_page = create_page();
+			asignar_frame(new_page);
 			add_page_to_segment(segment, new_page);
 		}
 		int free_dir = find_free_dir(segment, length);

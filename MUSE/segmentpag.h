@@ -21,6 +21,9 @@ int SWAP_SIZE;
 FILE *swap_file;
 int metadata_size;
 
+t_bitarray *swap_usage_bitmap;
+void* swap_bitmap_pointer;
+
 typedef enum {
 	HEAP = 0,
 	MMAP = 1
@@ -52,7 +55,7 @@ typedef struct {
 //} frame_metadata;
 
 void init_structures();
-t_page *create_page(int frame_number);
+t_page *create_page();
 process_segment *create_segment(segment_type type, uint32_t base);
 void create_process_table(char* process);
 process_table* get_table_for_process(char* process);
@@ -63,7 +66,7 @@ process_segment* find_segment_with_space(process_table* table, int size);
 process_segment* segment_by_dir(process_table* table, int dir);
 process_segment* find_extensible_heap_segment(process_table* table);
 int free_space_at_the_end(process_segment* segment);
-void clear_bitmap(int bits);
+void clear_bitmap(t_bitarray* bitmap, int bits);
 void cpy_to_dir(process_segment* segment, uint32_t dir, void* val, int size);
 void free_dir(process_segment* segment, uint32_t dir);
 
