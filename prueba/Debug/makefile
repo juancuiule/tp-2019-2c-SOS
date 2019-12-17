@@ -26,13 +26,13 @@ endif
 all: prueba
 
 dependents:
-	-cd /home/utnso/Documentos/tp-ordenado/libmuse/Debug && $(MAKE) all
+	-cd /home/utnso/Documentos/tp-2019-2c-SOS/libmuse/Debug && $(MAKE) clean all
 
 # Tool invocations
-prueba: $(OBJS) $(USER_OBJS) /home/utnso/Documentos/tp-ordenado/libmuse/Debug/liblibmuse.so
+prueba: $(OBJS) $(USER_OBJS) /home/utnso/Documentos/tp-2019-2c-SOS/libmuse/Debug/liblibmuse.so
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C Linker'
-	gcc -L"/home/utnso/Documentos/tp-ordenado/libmuse/Debug" -o "prueba" $(OBJS) $(USER_OBJS) $(LIBS)
+	gcc -L"/home/utnso/Documentos/tp-2019-2c-SOS/libmuse/Debug" -o "prueba" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -42,6 +42,6 @@ clean:
 	-@echo ' '
 
 .PHONY: all clean dependents
-/home/utnso/Documentos/tp-ordenado/libmuse/Debug/liblibmuse.so:
+/home/utnso/Documentos/tp-2019-2c-SOS/libmuse/Debug/liblibmuse.so:
 
 -include ../makefile.targets

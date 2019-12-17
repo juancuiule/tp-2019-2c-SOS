@@ -4,6 +4,13 @@
 # Swap File
 MUSE/file.bin
 
+# Debug
+MUSE/Debug/*.d
+MUSE/Debug/*.o
+libmuse/Debug/liblibmuse.so
+libmuse/Debug/libmuse/*.d
+libmuse/Debug/libmuse/*.o
+
 # Logs
 MUSE/logs/*.log
 libmuse/logs/*.log
@@ -42,8 +49,6 @@ libmuse/logs/*.log
 *.i*86
 *.x86_64
 *.hex
-MUSE/MUSE
-libmuse/client
 
 # Debug files
 *.dSYM/
