@@ -71,14 +71,12 @@ void add_page_to_segment(process_segment* segment, t_page* page) {
 	}
 
 	memcpy(segment->pages + offset, page, sizeof(t_page));
+
 	segment->size += PAGE_SIZE;
 
-	for (int var = 0; var < number_of_pages + 1; ++var) {
-		t_page* the_page = malloc(sizeof(t_page));
-		memcpy(the_page, segment->pages + var * sizeof(t_page), sizeof(t_page));
-	}
-
 	log_info(seg_logger, "Se agrego una página al segmento con base: %i, nuevo size: %i", segment->base, segment->size);
+
+	free(page);
 }
 
 void print_process(process_table* table) {
@@ -190,47 +188,39 @@ process_segment* find_segment_with_space(process_table* table , int size) {
 		return free_dir != -1;
 	}
 
-	process_segment* segment = malloc(sizeof(process_segment));
+	process_segment* segment;
 	void* segments = table->segments;
 	int i = 0;
 	while (i < table->number_of_segments) {
-		uint32_t seg_pointer = segments + i * sizeof(process_segment);
-		memcpy(segment, seg_pointer, sizeof(process_segment));
+		segment = segments + i * sizeof(process_segment);
 		if (is_heap(segment) && has_space(segment)) {
-			free(segment);
-			return seg_pointer;
+			return segment;
 		}
 		i++;
 	}
-	free(segment);
 	return NULL;
 }
 
 process_segment* segment_by_dir(process_table* table, int dir) {
-	process_segment* segment = malloc(sizeof(process_segment));
+	process_segment* segment;
 	void* segments = table->segments;
 	int i = 0;
 	while (i < table->number_of_segments) {
-		uint32_t seg_pointer = segments + i * sizeof(process_segment);
-		memcpy(segment, seg_pointer, sizeof(process_segment));
+		segment = segments + i * sizeof(process_segment);
 		if (segment->base < dir && (segment->base + segment->size) > dir) {
-			free(segment);
-			return seg_pointer;
+			return segment;
 		}
 		i++;
 	}
-	free(segment);
 	return NULL;
 }
 
 process_segment* find_extensible_heap_segment(process_table* table) {
-	process_segment* segment = malloc(sizeof(process_segment));
 	void* segments = table->segments;
 	int offset = (table->number_of_segments - 1) * sizeof(process_segment);
-	memcpy(segment, segments + offset, sizeof(process_segment));
+	process_segment* segment = segments + offset;
 	if (segment->type == HEAP) {
-		free(segment);
-		return segments + offset;
+		return segment;
 	} else {
 		return NULL;
 	}
@@ -241,13 +231,12 @@ int last_position(char* process) {
 	void* segments = process_table->segments;
 	int i = 0;
 	int last = 0;
-	process_segment* segment = malloc(sizeof(process_segment));
+	process_segment* segment;
 	while (i < process_table->number_of_segments) {
-		memcpy(segment, segments + i * sizeof(process_segment), sizeof(process_segment));
+		segment = segments + i * sizeof(process_segment);
 		last += segment->size;
 		i++;
 	}
-	free(segment);
 	return last;
 }
 
@@ -292,6 +281,7 @@ void add_process_segment(char* process, process_segment* segment) {
 	memcpy(process_table->segments + offset, segment, sizeof(process_segment));
 	process_table->number_of_segments += 1;
 	log_info(seg_logger, "Se agrego un segmento con base: %i y size: %i al process: %s", segment->base, segment->size, process);
+	free(segment);
 }
 
 process_table* get_table_for_process(char* process) {
@@ -352,12 +342,15 @@ void* clear_in_segment(process_segment* segment, uint32_t dir, uint32_t size) {
 	int offset = dir % PAGE_SIZE;
 	int page_number = (dir - offset) / PAGE_SIZE;
 
-	t_page* page = malloc(sizeof(t_page));
+	t_page* page;
 	void* frame;
 
 	int size_allocd = 0;
 	while (size_allocd < size) {
-		memcpy(page, segment->pages + page_number * sizeof(t_page), sizeof(t_page));
+		page = segment->pages + page_number * sizeof(t_page);
+		if (!page->flag) {
+			asignar_frame(page);
+		}
 		frame = MEMORY[page->frame_number];
 
 		int to_alloc = min(size - size_allocd, PAGE_SIZE - offset % PAGE_SIZE);
@@ -377,12 +370,15 @@ void* set_in_segment(process_segment* segment, uint32_t dir, uint32_t size, void
 	int offset = dir % PAGE_SIZE;
 	int page_number = (dir - offset) / PAGE_SIZE;
 
-	t_page* page = malloc(sizeof(t_page));
+	t_page* page;
 	void* frame;
 
 	int size_allocd = 0;
 	while (size_allocd < size) {
-		memcpy(page, segment->pages + page_number * sizeof(t_page), sizeof(t_page));
+		page = segment->pages + page_number * sizeof(t_page);
+		if (!page->flag) {
+			asignar_frame(page);
+		}
 		frame = MEMORY[page->frame_number];
 		int to_alloc = min(size - size_allocd, PAGE_SIZE - offset % PAGE_SIZE);
 		memcpy(frame + offset, value + size_allocd, to_alloc);
@@ -400,12 +396,15 @@ void* get_from_segment(process_segment* segment, uint32_t dir, uint32_t size, vo
 	int offset = dir % PAGE_SIZE;
 	int page_number = (dir - offset) / PAGE_SIZE;
 
-	t_page* page = malloc(sizeof(t_page));
+	t_page* page;
 	void* frame;
 
 	int copied = 0;
 	while (copied < size) {
-		memcpy(page, segment->pages + page_number * sizeof(t_page), sizeof(t_page));
+		page = segment->pages + page_number * sizeof(t_page);
+		if (!page->flag) {
+			asignar_frame(page);
+		}
 		frame = MEMORY[page->frame_number];
 		int to_copy = min(size - copied, PAGE_SIZE - offset % PAGE_SIZE);
 		memcpy(to + copied, frame + offset, to_copy);
@@ -465,20 +464,18 @@ t_list* paginas_en_memoria() {
 	t_list* op(t_list* acum, process_table* process) {
 		t_list* paginas = list_create();
 		int i;
-		process_segment* segment = malloc(sizeof(process_segment));
-		t_page* pagina = malloc(sizeof(t_page));
+		process_segment* segment;
+		t_page* pagina;
 		for (i = 0; i < process->number_of_segments; ++i) {
-			memcpy(segment, process->segments + i * sizeof(process_segment), sizeof(process_segment));
+			segment = process->segments + i * sizeof(process_segment);
 			int j;
 			for (j = 0; j < segment->size / PAGE_SIZE; j++) {
-				memcpy(pagina, segment->pages + j * sizeof(t_page), sizeof(t_page));
+				pagina = segment->pages + j * sizeof(t_page);
 				if (pagina->flag == true) {
 					list_add(paginas, segment->pages + j * sizeof(t_page));
 				}
 			}
 		}
-		free(segment);
-		free(pagina);
 
 		list_add_all(acum, paginas);
 		return acum;
@@ -536,30 +533,39 @@ void asignar_frame(t_page* pagina) {
 
 		// pasarla a swap_file
 		int free_swap = find_free_swap();
-		// log_debug(seg_logger, "free swap frame: %i, offset: %i", free_swap, free_swap * PAGE_SIZE);
-		fseek(swap_file, free_swap * PAGE_SIZE, SEEK_SET);
-		fwrite(MEMORY[victima->frame_number], sizeof(PAGE_SIZE), 1, swap_file);
 
-		victima->flag = false;
-		victima->frame_number = free_swap;
+		if (free_swap == -1) {
+			// no hay mas espacio en swap
+			log_error(seg_logger, "No hay mas espacio en swap");
+		} else {
+			log_debug(seg_logger, "free swap frame: %i, offset: %i", free_swap, free_swap * PAGE_SIZE);
+			fseek(swap_file, free_swap * PAGE_SIZE, SEEK_SET);
+			fwrite(MEMORY[victima->frame_number], sizeof(PAGE_SIZE), 1, swap_file);
 
-		bitarray_set_bit(swap_usage_bitmap, free_swap);
+			victima->flag = false;
+			victima->frame_number = free_swap;
 
-		// copiar en este frame lo que la pagina tenía en swap_file
-		if (pagina->frame_number != -1) {
-			fseek(swap_file, swap_file + pagina->frame_number * PAGE_SIZE, SEEK_SET);
-			fread(MEMORY[frame_number_victima_pre_swap], sizeof(PAGE_SIZE), 1, swap_file);
-			bitarray_clean_bit(swap_usage_bitmap, pagina->frame_number);
+			bitarray_set_bit(swap_usage_bitmap, free_swap);
+
+			// copiar en este frame lo que la pagina tenía en swap_file
+			if (pagina->frame_number != -1) {
+				fseek(swap_file, swap_file + pagina->frame_number * PAGE_SIZE, SEEK_SET);
+				fread(MEMORY[frame_number_victima_pre_swap], sizeof(PAGE_SIZE), 1, swap_file);
+				bitarray_clean_bit(swap_usage_bitmap, pagina->frame_number);
+			}
+			pagina->frame_number = frame_number_victima_pre_swap;
+			pagina->in_use = true;
+			pagina->flag = true;
+			pagina->modified = false;
+
+			log_debug(seg_logger, "Asigno el frame: %i que tenía otra página, esa página quedo en el frame %i del swap", frame_number_victima_pre_swap, free_swap);
 		}
-		pagina->frame_number = frame_number_victima_pre_swap;
-		pagina->in_use = true;
-		pagina->flag = true;
-		pagina->modified = false;
-
 	} else {
 		// hay frame libre
 		pagina->frame_number = frame_number;
 		bitarray_set_bit(frame_usage_bitmap, frame_number);
+
+		log_debug(seg_logger, "Asigno el frame: %i", frame_number);
 	}
 }
 
