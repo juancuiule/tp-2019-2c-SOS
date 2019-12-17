@@ -82,7 +82,6 @@ int suse_signal(int tid, char *sem_name){
 	memcpy(buffer + 12, &tamanio_id, sizeof(int));
 	send(conexion_con_suse, buffer, 4 * sizeof(int), MSG_WAITALL);
 	send(conexion_con_suse, sem_name, tamanio_id, MSG_WAITALL);
-	printf("mandé un signal\n");
 	return 0;
 }
 
