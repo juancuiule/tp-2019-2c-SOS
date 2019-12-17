@@ -517,7 +517,7 @@ t_page* victima_0_1() {
 }
 
 void asignar_frame(t_page* pagina) {
-	log_debug(seg_logger, "pagina frame: %i", pagina->frame_number);
+	//  log_debug(seg_logger, "pagina frame: %i", pagina->frame_number);
 	int frame_number = find_free_frame();
 
 	if (frame_number == -1) {
@@ -536,7 +536,7 @@ void asignar_frame(t_page* pagina) {
 
 		// pasarla a swap_file
 		int free_swap = find_free_swap();
-		log_debug(seg_logger, "free swap frame: %i, offset: %i", free_swap, free_swap * PAGE_SIZE);
+		// log_debug(seg_logger, "free swap frame: %i, offset: %i", free_swap, free_swap * PAGE_SIZE);
 		fseek(swap_file, free_swap * PAGE_SIZE, SEEK_SET);
 		fwrite(MEMORY[victima->frame_number], sizeof(PAGE_SIZE), 1, swap_file);
 
@@ -547,7 +547,8 @@ void asignar_frame(t_page* pagina) {
 
 		// copiar en este frame lo que la pagina tenía en swap_file
 		if (pagina->frame_number != -1) {
-			memcpy(MEMORY[frame_number_victima_pre_swap], swap_file + pagina->frame_number * PAGE_SIZE, sizeof(PAGE_SIZE));
+			fseek(swap_file, swap_file + pagina->frame_number * PAGE_SIZE, SEEK_SET);
+			fread(MEMORY[frame_number_victima_pre_swap], sizeof(PAGE_SIZE), 1, swap_file);
 			bitarray_clean_bit(swap_usage_bitmap, pagina->frame_number);
 		}
 		pagina->frame_number = frame_number_victima_pre_swap;
