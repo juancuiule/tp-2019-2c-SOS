@@ -26,7 +26,7 @@ endif
 all: prueba
 
 dependents:
-	-cd /home/utnso/Documentos/tp-2019-2c-SOS/libmuse/Debug && $(MAKE) clean all
+	-cd /home/utnso/Documentos/tp-2019-2c-SOS/libmuse/Debug && $(MAKE) all
 
 # Tool invocations
 prueba: $(OBJS) $(USER_OBJS) /home/utnso/Documentos/tp-2019-2c-SOS/libmuse/Debug/liblibmuse.so

@@ -153,7 +153,7 @@ void* get_from_dir(process_segment* segment, uint32_t dir, int size) {
 
 	uint32_t data_dir = get_metadata_from_segment(segment, metadata_dir, &is_free, &data_size);
 
-	void** data = malloc(size);
+	char* data = malloc(size);
 
 	if (is_free) {
 		log_error(seg_logger, "No hay un malloc hecho... se quieren traer datos de espacio no asignado");
@@ -162,7 +162,7 @@ void* get_from_dir(process_segment* segment, uint32_t dir, int size) {
 	} else {
 		get_from_segment(segment, data_dir, size, data);
 	}
-	return *data;
+	return data;
 }
 
 void cpy_to_dir(process_segment* segment, uint32_t dir, void* val, int size) {
@@ -180,7 +180,7 @@ void cpy_to_dir(process_segment* segment, uint32_t dir, void* val, int size) {
 	} else if (data_size < size) {
 		log_error(seg_logger, "No hay espacio suficiente...");
 	} else {
-		set_in_segment(segment, data_dir, size, &val);
+		set_in_segment(segment, data_dir, size, val);
 	}
 }
 
@@ -438,8 +438,6 @@ void* set_metadata_in_segment(process_segment* segment, uint32_t dir, bool is_fr
 	next_dir = set_in_segment(segment, next_dir, sizeof(uint32_t), &size);
 	return next_dir;
 }
-
-
 
 uint32_t alloc_in_segment(process_segment* segment, uint32_t process_dir, uint32_t size) {
 	uint32_t dir = process_dir - segment->base;

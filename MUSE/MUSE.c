@@ -117,7 +117,7 @@ void respond_get(muse_body* body, char* id, int socket_cliente) {
 		} else {
 			process_segment *segment = segment_by_dir(table, src);
 			val = get_from_dir(segment, src, size);
-			add_to_body(r_body, size, &val);
+			add_to_body(r_body, size, val);
 
 			response = create_response(SUCCESS, r_body);
 		}
@@ -126,7 +126,6 @@ void respond_get(muse_body* body, char* id, int socket_cliente) {
 		response = create_response(ERROR, r_body);
 	}
 	send_response(response, socket_cliente);
-	free(val);
 }
 
 void respond_free(muse_body* body, char* id, int socket_cliente) {
@@ -173,14 +172,13 @@ void respond_cpy(muse_body* body, char* id, int socket_cliente) {
 			segment = segment_by_dir(table, dst);
 			int dir_de_pagina = dst - segment->base;
 
-			cpy_to_dir(segment, dir_de_pagina, *val, size);
+			cpy_to_dir(segment, dir_de_pagina, val, size);
 			send_response_status(socket_cliente, SUCCESS);
 		}
 	} else {
 		log_error(logger, "El proceso %s no tiene tabla");
 		send_response_status(socket_cliente, ERROR);
 	}
-	free(val);
 }
 
 void respond_map(muse_body* body, char* id, int socket_cliente) {
