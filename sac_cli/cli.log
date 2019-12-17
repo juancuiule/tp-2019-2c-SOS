@@ -1,0 +1,309 @@
+[DEBUG] 00:56:17:337 SAC CLI/(7328:7328): Iniciando SAC Cli
+[DEBUG] 00:56:17:338 SAC CLI/(7328:7328): Socket [ -1 ] conectado a [ 127.0.0.5:8049  ]
+[ERROR] 00:56:17:339 SAC CLI/(7328:7328): Error al enviar bytes por socket [ -1 ]
+[ERROR] 00:56:17:340 SAC CLI/(7328:7328): Error al recibir bytes del socket [ -1 ]
+[ERROR] 00:56:17:340 SAC CLI/(7328:7328): Error, codigo de proceso no valido
+[ERROR] 00:56:17:341 SAC CLI/(7328:7328): Fuse main failure
+[DEBUG] 01:14:45:511 SAC CLI/(7536:7536): Iniciando SAC Cli
+[DEBUG] 01:14:45:528 SAC CLI/(7536:7536): Socket [ -1 ] conectado a [ 127.0.0.5:8049  ]
+[ERROR] 01:14:45:528 SAC CLI/(7536:7536): Error al enviar bytes por socket [ -1 ]
+[ERROR] 01:14:45:528 SAC CLI/(7536:7536): Error al recibir bytes del socket [ -1 ]
+[ERROR] 01:14:45:528 SAC CLI/(7536:7536): Error, codigo de proceso no valido
+[ERROR] 01:14:45:561 SAC CLI/(7536:7536): Fuse main failure
+[DEBUG] 01:16:05:312 SAC CLI/(9011:9011): Iniciando SAC Cli
+[DEBUG] 01:16:05:312 SAC CLI/(9011:9011): Socket [ -1 ] conectado a [ 127.0.0.5:8049  ]
+[ERROR] 01:16:05:312 SAC CLI/(9011:9011): Error al enviar bytes por socket [ -1 ]
+[ERROR] 01:16:05:312 SAC CLI/(9011:9011): Error al recibir bytes del socket [ -1 ]
+[ERROR] 01:16:05:312 SAC CLI/(9011:9011): Error, codigo de proceso no valido
+[DEBUG] 01:16:08:685 SAC CLI/(9011:9023): Operacion READDIR sobre path /
+[DEBUG] 01:16:08:685 SAC CLI/(9011:9023): Paquete enviar
+[DEBUG] 01:16:08:685 SAC CLI/(9011:9023): tam buffer [ 14 ]
+[ERROR] 01:16:08:685 SAC CLI/(9011:9023): Error al enviar bytes por socket [ -1 ]
+[DEBUG] 01:16:08:685 SAC CLI/(9011:9023): bytes enviados [ -1 ]
+[ERROR] 01:16:08:685 SAC CLI/(9011:9023): No se pudo enviar el paquete
+[DEBUG] 01:16:08:686 SAC CLI/(9011:9023): Operacion READDIR sobre path /
+[DEBUG] 01:16:08:686 SAC CLI/(9011:9023): Paquete enviar
+[DEBUG] 01:16:08:687 SAC CLI/(9011:9023): tam buffer [ 14 ]
+[ERROR] 01:16:08:687 SAC CLI/(9011:9023): Error al enviar bytes por socket [ -1 ]
+[DEBUG] 01:16:08:687 SAC CLI/(9011:9023): bytes enviados [ -1 ]
+[ERROR] 01:16:08:687 SAC CLI/(9011:9023): No se pudo enviar el paquete
+[DEBUG] 01:16:08:688 SAC CLI/(9011:9022): Operacion READDIR sobre path /
+[DEBUG] 01:16:08:688 SAC CLI/(9011:9022): Paquete enviar
+[DEBUG] 01:16:08:688 SAC CLI/(9011:9022): tam buffer [ 14 ]
+[ERROR] 01:16:08:688 SAC CLI/(9011:9022): Error al enviar bytes por socket [ -1 ]
+[DEBUG] 01:16:08:688 SAC CLI/(9011:9022): bytes enviados [ -1 ]
+[ERROR] 01:16:08:688 SAC CLI/(9011:9022): No se pudo enviar el paquete
+[DEBUG] 01:16:08:688 SAC CLI/(9011:9023): Operacion READDIR sobre path /
+[DEBUG] 01:16:08:689 SAC CLI/(9011:9023): Paquete enviar
+[DEBUG] 01:16:08:689 SAC CLI/(9011:9023): tam buffer [ 14 ]
+[ERROR] 01:16:08:689 SAC CLI/(9011:9023): Error al enviar bytes por socket [ -1 ]
+[DEBUG] 01:16:08:689 SAC CLI/(9011:9023): bytes enviados [ -1 ]
+[ERROR] 01:16:08:689 SAC CLI/(9011:9023): No se pudo enviar el paquete
+[DEBUG] 01:16:08:690 SAC CLI/(9011:9022): Operacion READDIR sobre path /
+[DEBUG] 01:16:08:690 SAC CLI/(9011:9022): Paquete enviar
+[DEBUG] 01:16:08:690 SAC CLI/(9011:9022): tam buffer [ 14 ]
+[ERROR] 01:16:08:690 SAC CLI/(9011:9022): Error al enviar bytes por socket [ -1 ]
+[DEBUG] 01:16:08:690 SAC CLI/(9011:9022): bytes enviados [ -1 ]
+[ERROR] 01:16:08:690 SAC CLI/(9011:9022): No se pudo enviar el paquete
+[DEBUG] 01:16:08:691 SAC CLI/(9011:9023): Operacion READDIR sobre path /
+[DEBUG] 01:16:08:691 SAC CLI/(9011:9023): Paquete enviar
+[DEBUG] 01:16:08:691 SAC CLI/(9011:9023): tam buffer [ 14 ]
+[ERROR] 01:16:08:691 SAC CLI/(9011:9023): Error al enviar bytes por socket [ -1 ]
+[DEBUG] 01:16:08:691 SAC CLI/(9011:9023): bytes enviados [ -1 ]
+[ERROR] 01:16:08:691 SAC CLI/(9011:9023): No se pudo enviar el paquete
+[DEBUG] 01:16:08:692 SAC CLI/(9011:9022): Operacion READDIR sobre path /
+[DEBUG] 01:16:08:692 SAC CLI/(9011:9022): Paquete enviar
+[DEBUG] 01:16:08:692 SAC CLI/(9011:9022): tam buffer [ 14 ]
+[ERROR] 01:16:08:692 SAC CLI/(9011:9022): Error al enviar bytes por socket [ -1 ]
+[DEBUG] 01:16:08:692 SAC CLI/(9011:9022): bytes enviados [ -1 ]
+[ERROR] 01:16:08:692 SAC CLI/(9011:9022): No se pudo enviar el paquete
+[DEBUG] 01:16:08:698 SAC CLI/(9011:9023): Operacion READDIR sobre path /
+[DEBUG] 01:16:08:699 SAC CLI/(9011:9023): Paquete enviar
+[DEBUG] 01:16:08:699 SAC CLI/(9011:9023): tam buffer [ 14 ]
+[ERROR] 01:16:08:699 SAC CLI/(9011:9023): Error al enviar bytes por socket [ -1 ]
+[DEBUG] 01:16:08:700 SAC CLI/(9011:9023): bytes enviados [ -1 ]
+[ERROR] 01:16:08:704 SAC CLI/(9011:9023): No se pudo enviar el paquete
+[DEBUG] 01:16:08:705 SAC CLI/(9011:9022): Operacion READDIR sobre path /
+[DEBUG] 01:16:08:705 SAC CLI/(9011:9022): Paquete enviar
+[DEBUG] 01:16:08:705 SAC CLI/(9011:9022): tam buffer [ 14 ]
+[ERROR] 01:16:08:705 SAC CLI/(9011:9022): Error al enviar bytes por socket [ -1 ]
+[DEBUG] 01:16:08:705 SAC CLI/(9011:9022): bytes enviados [ -1 ]
+[ERROR] 01:16:08:705 SAC CLI/(9011:9022): No se pudo enviar el paquete
+[DEBUG] 01:16:08:706 SAC CLI/(9011:9023): Operacion READDIR sobre path /
+[DEBUG] 01:16:08:706 SAC CLI/(9011:9023): Paquete enviar
+[DEBUG] 01:16:08:707 SAC CLI/(9011:9023): tam buffer [ 14 ]
+[ERROR] 01:16:08:710 SAC CLI/(9011:9023): Error al enviar bytes por socket [ -1 ]
+[DEBUG] 01:16:08:710 SAC CLI/(9011:9023): bytes enviados [ -1 ]
+[ERROR] 01:16:08:710 SAC CLI/(9011:9023): No se pudo enviar el paquete
+[DEBUG] 01:16:08:711 SAC CLI/(9011:9022): Operacion READDIR sobre path /
+[DEBUG] 01:16:08:711 SAC CLI/(9011:9022): Paquete enviar
+[DEBUG] 01:16:08:711 SAC CLI/(9011:9022): tam buffer [ 14 ]
+[ERROR] 01:16:08:711 SAC CLI/(9011:9022): Error al enviar bytes por socket [ -1 ]
+[DEBUG] 01:16:08:711 SAC CLI/(9011:9022): bytes enviados [ -1 ]
+[ERROR] 01:16:08:711 SAC CLI/(9011:9022): No se pudo enviar el paquete
+[DEBUG] 01:16:08:711 SAC CLI/(9011:9022): Operacion READDIR sobre path /
+[DEBUG] 01:16:08:711 SAC CLI/(9011:9022): Paquete enviar
+[DEBUG] 01:16:08:713 SAC CLI/(9011:9022): tam buffer [ 14 ]
+[ERROR] 01:16:08:713 SAC CLI/(9011:9022): Error al enviar bytes por socket [ -1 ]
+[DEBUG] 01:16:08:713 SAC CLI/(9011:9022): bytes enviados [ -1 ]
+[ERROR] 01:16:08:713 SAC CLI/(9011:9022): No se pudo enviar el paquete
+[DEBUG] 01:16:08:714 SAC CLI/(9011:9023): Operacion READDIR sobre path /
+[DEBUG] 01:16:08:714 SAC CLI/(9011:9023): Paquete enviar
+[DEBUG] 01:16:08:714 SAC CLI/(9011:9023): tam buffer [ 14 ]
+[ERROR] 01:16:08:714 SAC CLI/(9011:9023): Error al enviar bytes por socket [ -1 ]
+[DEBUG] 01:16:08:714 SAC CLI/(9011:9023): bytes enviados [ -1 ]
+[ERROR] 01:16:08:714 SAC CLI/(9011:9023): No se pudo enviar el paquete
+[DEBUG] 01:16:08:714 SAC CLI/(9011:9023): Operacion READDIR sobre path /
+[DEBUG] 01:16:08:714 SAC CLI/(9011:9023): Paquete enviar
+[DEBUG] 01:16:08:714 SAC CLI/(9011:9023): tam buffer [ 14 ]
+[ERROR] 01:16:08:714 SAC CLI/(9011:9023): Error al enviar bytes por socket [ -1 ]
+[DEBUG] 01:16:08:714 SAC CLI/(9011:9023): bytes enviados [ -1 ]
+[ERROR] 01:16:08:714 SAC CLI/(9011:9023): No se pudo enviar el paquete
+[DEBUG] 01:16:08:715 SAC CLI/(9011:9022): Operacion READDIR sobre path /
+[DEBUG] 01:16:08:715 SAC CLI/(9011:9022): Paquete enviar
+[DEBUG] 01:16:08:715 SAC CLI/(9011:9022): tam buffer [ 14 ]
+[ERROR] 01:16:08:715 SAC CLI/(9011:9022): Error al enviar bytes por socket [ -1 ]
+[DEBUG] 01:16:08:716 SAC CLI/(9011:9022): bytes enviados [ -1 ]
+[ERROR] 01:16:08:716 SAC CLI/(9011:9022): No se pudo enviar el paquete
+[DEBUG] 01:16:08:716 SAC CLI/(9011:9023): Operacion READDIR sobre path /
+[DEBUG] 01:16:08:716 SAC CLI/(9011:9023): Paquete enviar
+[DEBUG] 01:16:08:716 SAC CLI/(9011:9023): tam buffer [ 14 ]
+[ERROR] 01:16:08:716 SAC CLI/(9011:9023): Error al enviar bytes por socket [ -1 ]
+[DEBUG] 01:16:08:716 SAC CLI/(9011:9023): bytes enviados [ -1 ]
+[ERROR] 01:16:08:716 SAC CLI/(9011:9023): No se pudo enviar el paquete
+[DEBUG] 01:16:08:717 SAC CLI/(9011:9022): Operacion READDIR sobre path /
+[DEBUG] 01:16:08:717 SAC CLI/(9011:9022): Paquete enviar
+[DEBUG] 01:16:08:717 SAC CLI/(9011:9022): tam buffer [ 14 ]
+[ERROR] 01:16:08:717 SAC CLI/(9011:9022): Error al enviar bytes por socket [ -1 ]
+[DEBUG] 01:16:08:717 SAC CLI/(9011:9022): bytes enviados [ -1 ]
+[ERROR] 01:16:08:717 SAC CLI/(9011:9022): No se pudo enviar el paquete
+[DEBUG] 01:16:08:717 SAC CLI/(9011:9023): Operacion READDIR sobre path /
+[DEBUG] 01:16:08:717 SAC CLI/(9011:9023): Paquete enviar
+[DEBUG] 01:16:08:717 SAC CLI/(9011:9023): tam buffer [ 14 ]
+[ERROR] 01:16:08:717 SAC CLI/(9011:9023): Error al enviar bytes por socket [ -1 ]
+[DEBUG] 01:16:08:717 SAC CLI/(9011:9023): bytes enviados [ -1 ]
+[ERROR] 01:16:08:717 SAC CLI/(9011:9023): No se pudo enviar el paquete
+[DEBUG] 01:16:08:718 SAC CLI/(9011:9022): Operacion READDIR sobre path /
+[DEBUG] 01:16:08:718 SAC CLI/(9011:9022): Paquete enviar
+[DEBUG] 01:16:08:718 SAC CLI/(9011:9022): tam buffer [ 14 ]
+[ERROR] 01:16:08:718 SAC CLI/(9011:9022): Error al enviar bytes por socket [ -1 ]
+[DEBUG] 01:16:08:718 SAC CLI/(9011:9022): bytes enviados [ -1 ]
+[ERROR] 01:16:08:722 SAC CLI/(9011:9022): No se pudo enviar el paquete
+[DEBUG] 01:16:08:764 SAC CLI/(9011:9027): Operacion READDIR sobre path /
+[DEBUG] 01:16:08:764 SAC CLI/(9011:9027): Paquete enviar
+[DEBUG] 01:16:08:764 SAC CLI/(9011:9027): tam buffer [ 14 ]
+[ERROR] 01:16:08:764 SAC CLI/(9011:9027): Error al enviar bytes por socket [ -1 ]
+[DEBUG] 01:16:08:764 SAC CLI/(9011:9027): bytes enviados [ -1 ]
+[ERROR] 01:16:08:764 SAC CLI/(9011:9027): No se pudo enviar el paquete
+[DEBUG] 01:16:08:764 SAC CLI/(9011:9023): Operacion READDIR sobre path /
+[DEBUG] 01:16:08:764 SAC CLI/(9011:9023): Paquete enviar
+[DEBUG] 01:16:08:764 SAC CLI/(9011:9023): tam buffer [ 14 ]
+[ERROR] 01:16:08:764 SAC CLI/(9011:9023): Error al enviar bytes por socket [ -1 ]
+[DEBUG] 01:16:08:764 SAC CLI/(9011:9023): bytes enviados [ -1 ]
+[ERROR] 01:16:08:764 SAC CLI/(9011:9023): No se pudo enviar el paquete
+[DEBUG] 01:16:08:765 SAC CLI/(9011:9022): Operacion READDIR sobre path /
+[DEBUG] 01:16:08:765 SAC CLI/(9011:9022): Paquete enviar
+[DEBUG] 01:16:08:765 SAC CLI/(9011:9022): tam buffer [ 14 ]
+[ERROR] 01:16:08:765 SAC CLI/(9011:9022): Error al enviar bytes por socket [ -1 ]
+[DEBUG] 01:16:08:765 SAC CLI/(9011:9022): bytes enviados [ -1 ]
+[ERROR] 01:16:08:765 SAC CLI/(9011:9022): No se pudo enviar el paquete
+[DEBUG] 01:16:08:854 SAC CLI/(9011:9027): Operacion READDIR sobre path /
+[DEBUG] 01:16:08:854 SAC CLI/(9011:9027): Paquete enviar
+[DEBUG] 01:16:08:854 SAC CLI/(9011:9027): tam buffer [ 14 ]
+[ERROR] 01:16:08:854 SAC CLI/(9011:9027): Error al enviar bytes por socket [ -1 ]
+[DEBUG] 01:16:08:854 SAC CLI/(9011:9027): bytes enviados [ -1 ]
+[ERROR] 01:16:08:854 SAC CLI/(9011:9027): No se pudo enviar el paquete
+[DEBUG] 01:16:21:400 SAC CLI/(9011:9022): Operacion READDIR sobre path /
+[DEBUG] 01:16:21:400 SAC CLI/(9011:9022): Paquete enviar
+[DEBUG] 01:16:21:400 SAC CLI/(9011:9022): tam buffer [ 14 ]
+[ERROR] 01:16:21:400 SAC CLI/(9011:9022): Error al enviar bytes por socket [ -1 ]
+[DEBUG] 01:16:21:400 SAC CLI/(9011:9022): bytes enviados [ -1 ]
+[ERROR] 01:16:21:400 SAC CLI/(9011:9022): No se pudo enviar el paquete
+[DEBUG] 01:19:24:361 SAC CLI/(9011:9027): Operacion READDIR sobre path /
+[DEBUG] 01:19:24:368 SAC CLI/(9011:9027): Paquete enviar
+[DEBUG] 01:19:24:368 SAC CLI/(9011:9027): tam buffer [ 14 ]
+[ERROR] 01:19:24:368 SAC CLI/(9011:9027): Error al enviar bytes por socket [ -1 ]
+[DEBUG] 01:19:24:368 SAC CLI/(9011:9027): bytes enviados [ -1 ]
+[ERROR] 01:19:24:368 SAC CLI/(9011:9027): No se pudo enviar el paquete
+[DEBUG] 01:25:07:769 SAC CLI/(3826:3826): Iniciando SAC Cli
+[DEBUG] 01:25:07:770 SAC CLI/(3826:3826): Socket [ 4 ] conectado a [ 127.0.0.5:8048  ]
+[DEBUG] 01:25:07:770 SAC CLI/(3826:3826): Exito enviando bytes send bytes
+[DEBUG] 01:25:07:772 SAC CLI/(3826:3826): Conectado con SAC SERVER
+[DEBUG] 01:25:07:918 SAC CLI/(3826:4010): Operacion READDIR sobre path /
+[DEBUG] 01:25:07:918 SAC CLI/(3826:4010): Paquete enviar
+[DEBUG] 01:25:07:918 SAC CLI/(3826:4010): tam buffer [ 14 ]
+[DEBUG] 01:25:07:918 SAC CLI/(3826:4010): Exito enviando bytes send bytes
+[DEBUG] 01:25:07:918 SAC CLI/(3826:4010): bytes enviados [ 14 ]
+[DEBUG] 01:25:07:918 SAC CLI/(3826:4010): Se envio operacion readdir al server
+[DEBUG] 01:25:07:918 SAC CLI/(3826:4011): Operacion READDIR sobre path /
+[DEBUG] 01:25:07:918 SAC CLI/(3826:4011): Paquete enviar
+[DEBUG] 01:25:07:918 SAC CLI/(3826:4011): tam buffer [ 14 ]
+[DEBUG] 01:25:07:919 SAC CLI/(3826:4011): Exito enviando bytes send bytes
+[DEBUG] 01:25:07:919 SAC CLI/(3826:4011): bytes enviados [ 14 ]
+[DEBUG] 01:25:07:919 SAC CLI/(3826:4011): Se envio operacion readdir al server
+[DEBUG] 01:25:07:924 SAC CLI/(3826:4010): Operacion READDIR sobre path /
+[DEBUG] 01:25:07:924 SAC CLI/(3826:4010): Paquete enviar
+[DEBUG] 01:25:07:924 SAC CLI/(3826:4010): tam buffer [ 14 ]
+[DEBUG] 01:25:07:924 SAC CLI/(3826:4010): Exito enviando bytes send bytes
+[DEBUG] 01:25:07:924 SAC CLI/(3826:4010): bytes enviados [ 14 ]
+[DEBUG] 01:25:07:924 SAC CLI/(3826:4010): Se envio operacion readdir al server
+[DEBUG] 01:25:07:924 SAC CLI/(3826:4011): Operacion READDIR sobre path /
+[DEBUG] 01:25:07:924 SAC CLI/(3826:4011): Paquete enviar
+[DEBUG] 01:25:07:924 SAC CLI/(3826:4011): tam buffer [ 14 ]
+[DEBUG] 01:25:07:924 SAC CLI/(3826:4011): Exito enviando bytes send bytes
+[DEBUG] 01:25:07:924 SAC CLI/(3826:4011): bytes enviados [ 14 ]
+[DEBUG] 01:25:07:924 SAC CLI/(3826:4011): Se envio operacion readdir al server
+[DEBUG] 01:25:07:925 SAC CLI/(3826:4010): Operacion READDIR sobre path /
+[DEBUG] 01:25:07:925 SAC CLI/(3826:4010): Paquete enviar
+[DEBUG] 01:25:07:925 SAC CLI/(3826:4010): tam buffer [ 14 ]
+[DEBUG] 01:25:07:925 SAC CLI/(3826:4010): Exito enviando bytes send bytes
+[DEBUG] 01:25:07:925 SAC CLI/(3826:4010): bytes enviados [ 14 ]
+[DEBUG] 01:25:07:925 SAC CLI/(3826:4010): Se envio operacion readdir al server
+[DEBUG] 01:25:07:925 SAC CLI/(3826:4011): Operacion READDIR sobre path /
+[DEBUG] 01:25:07:925 SAC CLI/(3826:4011): Paquete enviar
+[DEBUG] 01:25:07:925 SAC CLI/(3826:4011): tam buffer [ 14 ]
+[DEBUG] 01:25:07:925 SAC CLI/(3826:4011): Exito enviando bytes send bytes
+[DEBUG] 01:25:07:925 SAC CLI/(3826:4011): bytes enviados [ 14 ]
+[DEBUG] 01:25:07:925 SAC CLI/(3826:4011): Se envio operacion readdir al server
+[DEBUG] 01:25:07:925 SAC CLI/(3826:4010): Operacion READDIR sobre path /
+[DEBUG] 01:25:07:925 SAC CLI/(3826:4010): Paquete enviar
+[DEBUG] 01:25:07:925 SAC CLI/(3826:4010): tam buffer [ 14 ]
+[DEBUG] 01:25:07:925 SAC CLI/(3826:4010): Exito enviando bytes send bytes
+[DEBUG] 01:25:07:926 SAC CLI/(3826:4010): bytes enviados [ 14 ]
+[DEBUG] 01:25:07:926 SAC CLI/(3826:4010): Se envio operacion readdir al server
+[DEBUG] 01:25:07:926 SAC CLI/(3826:4011): Operacion READDIR sobre path /
+[DEBUG] 01:25:07:926 SAC CLI/(3826:4011): Paquete enviar
+[DEBUG] 01:25:07:926 SAC CLI/(3826:4011): tam buffer [ 14 ]
+[DEBUG] 01:25:07:926 SAC CLI/(3826:4011): Exito enviando bytes send bytes
+[DEBUG] 01:25:07:926 SAC CLI/(3826:4011): bytes enviados [ 14 ]
+[DEBUG] 01:25:07:926 SAC CLI/(3826:4011): Se envio operacion readdir al server
+[DEBUG] 01:25:07:926 SAC CLI/(3826:4010): Operacion READDIR sobre path /
+[DEBUG] 01:25:07:926 SAC CLI/(3826:4010): Paquete enviar
+[DEBUG] 01:25:07:927 SAC CLI/(3826:4010): tam buffer [ 14 ]
+[DEBUG] 01:25:07:927 SAC CLI/(3826:4010): Exito enviando bytes send bytes
+[DEBUG] 01:25:07:927 SAC CLI/(3826:4010): bytes enviados [ 14 ]
+[DEBUG] 01:25:07:927 SAC CLI/(3826:4010): Se envio operacion readdir al server
+[DEBUG] 01:25:07:927 SAC CLI/(3826:4011): Operacion READDIR sobre path /
+[DEBUG] 01:25:07:927 SAC CLI/(3826:4011): Paquete enviar
+[DEBUG] 01:25:07:927 SAC CLI/(3826:4011): tam buffer [ 14 ]
+[DEBUG] 01:25:07:927 SAC CLI/(3826:4011): Exito enviando bytes send bytes
+[DEBUG] 01:25:07:927 SAC CLI/(3826:4011): bytes enviados [ 14 ]
+[DEBUG] 01:25:07:927 SAC CLI/(3826:4011): Se envio operacion readdir al server
+[DEBUG] 01:25:07:927 SAC CLI/(3826:4010): Operacion READDIR sobre path /
+[DEBUG] 01:25:07:927 SAC CLI/(3826:4010): Paquete enviar
+[DEBUG] 01:25:07:927 SAC CLI/(3826:4010): tam buffer [ 14 ]
+[DEBUG] 01:25:07:927 SAC CLI/(3826:4010): Exito enviando bytes send bytes
+[DEBUG] 01:25:07:927 SAC CLI/(3826:4010): bytes enviados [ 14 ]
+[DEBUG] 01:25:07:927 SAC CLI/(3826:4010): Se envio operacion readdir al server
+[DEBUG] 01:25:07:928 SAC CLI/(3826:4011): Operacion READDIR sobre path /
+[DEBUG] 01:25:07:928 SAC CLI/(3826:4011): Paquete enviar
+[DEBUG] 01:25:07:928 SAC CLI/(3826:4011): tam buffer [ 14 ]
+[DEBUG] 01:25:07:928 SAC CLI/(3826:4011): Exito enviando bytes send bytes
+[DEBUG] 01:25:07:928 SAC CLI/(3826:4011): bytes enviados [ 14 ]
+[DEBUG] 01:25:07:928 SAC CLI/(3826:4011): Se envio operacion readdir al server
+[DEBUG] 01:25:07:928 SAC CLI/(3826:4010): Operacion READDIR sobre path /
+[DEBUG] 01:25:07:928 SAC CLI/(3826:4010): Paquete enviar
+[DEBUG] 01:25:07:928 SAC CLI/(3826:4010): tam buffer [ 14 ]
+[DEBUG] 01:25:07:928 SAC CLI/(3826:4010): Exito enviando bytes send bytes
+[DEBUG] 01:25:07:928 SAC CLI/(3826:4010): bytes enviados [ 14 ]
+[DEBUG] 01:25:07:928 SAC CLI/(3826:4010): Se envio operacion readdir al server
+[DEBUG] 01:25:07:928 SAC CLI/(3826:4011): Operacion READDIR sobre path /
+[DEBUG] 01:25:07:930 SAC CLI/(3826:4011): Paquete enviar
+[DEBUG] 01:25:07:930 SAC CLI/(3826:4011): tam buffer [ 14 ]
+[DEBUG] 01:25:07:930 SAC CLI/(3826:4011): Exito enviando bytes send bytes
+[DEBUG] 01:25:07:930 SAC CLI/(3826:4011): bytes enviados [ 14 ]
+[DEBUG] 01:25:07:930 SAC CLI/(3826:4011): Se envio operacion readdir al server
+[DEBUG] 01:25:07:930 SAC CLI/(3826:4010): Operacion READDIR sobre path /
+[DEBUG] 01:25:07:930 SAC CLI/(3826:4010): Paquete enviar
+[DEBUG] 01:25:07:930 SAC CLI/(3826:4010): tam buffer [ 14 ]
+[DEBUG] 01:25:07:930 SAC CLI/(3826:4010): Exito enviando bytes send bytes
+[DEBUG] 01:25:07:930 SAC CLI/(3826:4010): bytes enviados [ 14 ]
+[DEBUG] 01:25:07:930 SAC CLI/(3826:4010): Se envio operacion readdir al server
+[DEBUG] 01:25:07:931 SAC CLI/(3826:4010): Operacion READDIR sobre path /
+[DEBUG] 01:25:07:931 SAC CLI/(3826:4010): Paquete enviar
+[DEBUG] 01:25:07:931 SAC CLI/(3826:4010): tam buffer [ 14 ]
+[DEBUG] 01:25:07:931 SAC CLI/(3826:4010): Exito enviando bytes send bytes
+[DEBUG] 01:25:07:931 SAC CLI/(3826:4010): bytes enviados [ 14 ]
+[DEBUG] 01:25:07:931 SAC CLI/(3826:4010): Se envio operacion readdir al server
+[DEBUG] 01:25:07:931 SAC CLI/(3826:4011): Operacion READDIR sobre path /
+[DEBUG] 01:25:07:931 SAC CLI/(3826:4011): Paquete enviar
+[DEBUG] 01:25:07:931 SAC CLI/(3826:4011): tam buffer [ 14 ]
+[DEBUG] 01:25:07:931 SAC CLI/(3826:4011): Exito enviando bytes send bytes
+[DEBUG] 01:25:07:931 SAC CLI/(3826:4011): bytes enviados [ 14 ]
+[DEBUG] 01:25:07:931 SAC CLI/(3826:4011): Se envio operacion readdir al server
+[DEBUG] 01:25:07:931 SAC CLI/(3826:4011): Operacion READDIR sobre path /
+[DEBUG] 01:25:07:931 SAC CLI/(3826:4011): Paquete enviar
+[DEBUG] 01:25:07:931 SAC CLI/(3826:4011): tam buffer [ 14 ]
+[DEBUG] 01:25:07:931 SAC CLI/(3826:4011): Exito enviando bytes send bytes
+[DEBUG] 01:25:07:931 SAC CLI/(3826:4011): bytes enviados [ 14 ]
+[DEBUG] 01:25:07:931 SAC CLI/(3826:4011): Se envio operacion readdir al server
+[DEBUG] 01:25:07:932 SAC CLI/(3826:4010): Operacion READDIR sobre path /
+[DEBUG] 01:25:07:932 SAC CLI/(3826:4010): Paquete enviar
+[DEBUG] 01:25:07:932 SAC CLI/(3826:4010): tam buffer [ 14 ]
+[DEBUG] 01:25:07:932 SAC CLI/(3826:4010): Exito enviando bytes send bytes
+[DEBUG] 01:25:07:932 SAC CLI/(3826:4010): bytes enviados [ 14 ]
+[DEBUG] 01:25:07:932 SAC CLI/(3826:4010): Se envio operacion readdir al server
+[DEBUG] 01:25:07:932 SAC CLI/(3826:4011): Operacion READDIR sobre path /
+[DEBUG] 01:25:07:932 SAC CLI/(3826:4011): Paquete enviar
+[DEBUG] 01:25:07:932 SAC CLI/(3826:4011): tam buffer [ 14 ]
+[DEBUG] 01:25:07:932 SAC CLI/(3826:4011): Exito enviando bytes send bytes
+[DEBUG] 01:25:07:932 SAC CLI/(3826:4011): bytes enviados [ 14 ]
+[DEBUG] 01:25:07:932 SAC CLI/(3826:4011): Se envio operacion readdir al server
+[DEBUG] 01:25:07:932 SAC CLI/(3826:4010): Operacion READDIR sobre path /
+[DEBUG] 01:25:07:932 SAC CLI/(3826:4010): Paquete enviar
+[DEBUG] 01:25:07:932 SAC CLI/(3826:4010): tam buffer [ 14 ]
+[DEBUG] 01:25:07:932 SAC CLI/(3826:4010): Exito enviando bytes send bytes
+[DEBUG] 01:25:07:932 SAC CLI/(3826:4010): bytes enviados [ 14 ]
+[DEBUG] 01:25:07:932 SAC CLI/(3826:4010): Se envio operacion readdir al server
+[DEBUG] 01:25:07:932 SAC CLI/(3826:4011): Operacion READDIR sobre path /
+[DEBUG] 01:25:07:932 SAC CLI/(3826:4011): Paquete enviar
+[DEBUG] 01:25:07:933 SAC CLI/(3826:4011): tam buffer [ 14 ]
+[DEBUG] 01:25:07:933 SAC CLI/(3826:4011): Exito enviando bytes send bytes
+[DEBUG] 01:25:07:933 SAC CLI/(3826:4011): bytes enviados [ 14 ]
+[DEBUG] 01:25:07:933 SAC CLI/(3826:4011): Se envio operacion readdir al server
+[DEBUG] 01:25:07:933 SAC CLI/(3826:4010): Operacion READDIR sobre path /
+[DEBUG] 01:25:07:933 SAC CLI/(3826:4010): Paquete enviar
+[DEBUG] 01:25:07:933 SAC CLI/(3826:4010): tam buffer [ 14 ]
+[DEBUG] 01:25:07:933 SAC CLI/(3826:4010): Exito enviando bytes send bytes
+[DEBUG] 01:25:07:933 SAC CLI/(3826:4010): bytes enviados [ 14 ]
+[DEBUG] 01:25:07:934 SAC CLI/(3826:4010): Se envio operacion readdir al server
