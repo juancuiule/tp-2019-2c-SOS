@@ -348,6 +348,8 @@ void* clear_in_segment(process_segment* segment, uint32_t dir, uint32_t size) {
 	int size_allocd = 0;
 	while (size_allocd < size) {
 		page = segment->pages + page_number * sizeof(t_page);
+		page->in_use = 0;
+		page->modified = 1;
 		if (!page->flag) {
 			asignar_frame(page);
 		}
@@ -380,8 +382,10 @@ void* set_in_segment(process_segment* segment, uint32_t dir, uint32_t size, void
 			asignar_frame(page);
 		}
 		frame = MEMORY[page->frame_number];
+
 		int to_alloc = min(size - size_allocd, PAGE_SIZE - offset % PAGE_SIZE);
 		memcpy(frame + offset, value + size_allocd, to_alloc);
+		page->modified = 1;
 		size_allocd += to_alloc;
 		offset += to_alloc;
 		page_number += offset / PAGE_SIZE;
@@ -402,6 +406,7 @@ void* get_from_segment(process_segment* segment, uint32_t dir, uint32_t size, vo
 	int copied = 0;
 	while (copied < size) {
 		page = segment->pages + page_number * sizeof(t_page);
+		page->in_use = 1;
 		if (!page->flag) {
 			asignar_frame(page);
 		}
