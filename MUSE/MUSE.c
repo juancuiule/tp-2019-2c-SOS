@@ -30,15 +30,8 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 	int pages_needed;
 
 	if (table != NULL) {
-		// log_info(logger, "El cliente con id: %s tiene tabla de proceso con %i segmentos", id, table->number_of_segments);
-
 		if (table->number_of_segments == 0) {
-			// tamaño pedido + metadata para ese tamaño + metadata para el espacio que queda...
 			pages_needed = ceil((double) (tam_pedido + metadata_size * 2) / PAGE_SIZE);
-
-			// log_info(logger, "No hay ningún segmento para el proceso: %s", id);
-			// log_info(logger, "Se crea uno con base 0 y %i páginas para hacer un alloc de %i", pages_needed, tam_pedido);
-
 			int new_base = last_position(id);
 			segment = create_segment(HEAP, new_base);
 
@@ -51,25 +44,16 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 
 			add_process_segment(id, segment);
 		} else {
-			// log_info(logger, "Hay segmentos para el proceso: %s", id);
-			// log_info(logger, "Se busca uno para hacer un alloc de %i", tam_pedido);
-
 			segment = find_segment_with_space(table, tam_pedido);
 
 			if (segment != NULL) {
-				// log_info(logger, "Hay uno con espacio, la base es: %i, size es: %i", segment->base, segment->size);
 				int free_dir = find_free_dir(segment, tam_pedido);
 				dir = alloc_in_segment(segment, free_dir, tam_pedido);
 
 			} else {
-				// log_warning(logger, "No hay uno con espacio");
-
-				// log_info(logger, "Busco si hay alguno extensible");
 				segment = find_extensible_heap_segment(table);
 
 				if (segment != NULL) {
-//					log_info(logger, "Se puede extender el que tiene como base: %i, y size: %i", segment->base, segment->size);
-
 					int free_space = free_space_at_the_end(segment);
 
 					// tamaño pedido - el espacio que hay + metadata para lo que queda
@@ -89,11 +73,9 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 					dir = alloc_in_segment(segment, free_dir, tam_pedido);
 				} else {
 					pages_needed = ceil((double) (tam_pedido + metadata_size * 2) / PAGE_SIZE);
-					// log_warning(logger, "No se puede extender ninguno");
 
 					int new_base = last_position(id);
 
-					// log_info(logger, "Se crea uno con base %i y %i páginas para hacer un alloc de %i", new_base, pages_needed, tam_pedido);
 					segment = create_segment(HEAP, new_base);
 					for (int var = 0; var < pages_needed; var++) {
 						t_page *new_page = create_page();
@@ -113,7 +95,6 @@ void respond_alloc(muse_body* body, char* id, int socket_cliente) {
 		response = create_response(ERROR, r_body);
 	}
 	send_response(response, socket_cliente);
-	print_process(table);
 }
 
 void respond_get(muse_body* body, char* id, int socket_cliente) {
@@ -145,6 +126,7 @@ void respond_get(muse_body* body, char* id, int socket_cliente) {
 		response = create_response(ERROR, r_body);
 	}
 	send_response(response, socket_cliente);
+	free(val);
 }
 
 void respond_free(muse_body* body, char* id, int socket_cliente) {
@@ -154,8 +136,6 @@ void respond_free(muse_body* body, char* id, int socket_cliente) {
 	log_debug(logger, "El cliente con id: %s hizo free a la dir: %u", id, dir_to_free);
 
 	process_table* table = get_table_for_process(id);
-	muse_body* r_body = create_body();
-	muse_response* response;
 
 	if (table != NULL) {
 		if (table->number_of_segments == 0) {
@@ -200,6 +180,7 @@ void respond_cpy(muse_body* body, char* id, int socket_cliente) {
 		log_error(logger, "El proceso %s no tiene tabla");
 		send_response_status(socket_cliente, ERROR);
 	}
+	free(val);
 }
 
 void respond_map(muse_body* body, char* id, int socket_cliente) {
@@ -218,7 +199,6 @@ void respond_map(muse_body* body, char* id, int socket_cliente) {
 	process_table* table = get_table_for_process(id);
 	muse_body* r_body = create_body();
 	muse_response* response;
-
 
 	void* dir;
 	// min amount of frames to ask for the segment
@@ -327,7 +307,7 @@ int main(void) {
 		return EXIT_FAILURE;
 	}
 
-	init_structures(MEMORY_SIZE, PAGE_SIZE);
+	init_structures();
 
 	pthread_t hilo;
 	int r1;

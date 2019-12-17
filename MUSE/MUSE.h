@@ -9,6 +9,7 @@
 #include <math.h>
 #include "segmentpag.h"
 #include "utils.h"
+#include "network.h"
 
 char* IP;
 char* PORT;

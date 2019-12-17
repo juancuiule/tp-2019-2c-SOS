@@ -6,14 +6,6 @@ metadata_size = sizeof(bool) + sizeof(uint32_t);
 bool t = true;
 bool f = false;
 
-void init_structures(int m_size, int p_size) {
-	init_log();
-	init_tables();
-	init_mutexs();
-	init_memoria();
-	init_virtual();
-}
-
 void init_log() {
 	seg_logger = log_create("../logs/segmentpag.log", "segmentpag", 1, LOG_LEVEL_DEBUG);
 }
@@ -58,6 +50,14 @@ void init_mutexs() {
 	pthread_mutex_init(&swap_frames_bitarray, NULL);
 	pthread_mutex_init(&mutex_paginas_en_memoria, NULL);
 	pthread_mutex_init(&mutex_asignar_pagina, NULL);
+}
+
+void init_structures() {
+	init_log();
+	init_tables();
+	init_mutexs();
+	init_memoria();
+	init_virtual();
 }
 
 void clear_bitmap(t_bitarray* bitmap, int bits) {
@@ -576,32 +576,4 @@ void asignar_frame(t_page* pagina) {
 		log_debug(seg_logger, "Asigno el frame: %i", frame_number);
 	}
 	pthread_mutex_unlock(&mutex_asignar_pagina);
-}
-
-void print_process(process_table* table) {
-//	log_info(seg_logger, "Proceso:");
-//	log_info(seg_logger, "cantidad de segmentos: %i", table->number_of_segments);
-//	log_info(seg_logger, "process id: %s", table->process);
-//	process_segment* seg = malloc(sizeof(process_segment));
-//	for (int var = 0; var < table->number_of_segments; ++var) {
-//		memcpy(seg, table->segments + var * sizeof(process_segment), sizeof(process_segment));
-//		print_segment(seg);
-//	}
-//	free(seg);
-}
-
-void print_segment(process_segment* segment) {
-//	log_info(seg_logger, "Segmento:");
-//	log_info(seg_logger, "base: %i", segment->base);
-//	log_info(seg_logger, "size: %i", segment->size);
-//	log_info(seg_logger, "type: %s", segment->type == HEAP ? "HEAP" : "MMAP");
-//
-//	int read = 0;
-//	while (read < segment->size) {
-//		bool is_free;
-//		uint32_t size;
-//		read = get_metadata_from_segment(segment, read, &is_free, &size);
-//		log_info(seg_logger, "dir: %i, is_free: %i, size: %i", read, is_free, size);
-//		read += size;
-//	}
 }

@@ -56,15 +56,12 @@ typedef struct {
 	bool flag; // bit de presencia
 } t_page;
 
-//typedef struct {
-//	uint32_t size;
-//	bool is_free;
-//} frame_metadata;
-
 void init_structures();
+
 t_page *create_page();
 process_segment *create_segment(segment_type type, uint32_t base);
 void create_process_table(char* process);
+
 process_table* get_table_for_process(char* process);
 void add_process_segment(char* process, process_segment* segment);
 void add_page_to_segment(process_segment* segment, t_page* page);
@@ -76,7 +73,6 @@ int free_space_at_the_end(process_segment* segment);
 void clear_bitmap(t_bitarray* bitmap, int bits);
 void cpy_to_dir(process_segment* segment, uint32_t dir, void* val, int size);
 void free_dir(process_segment* segment, uint32_t dir);
-
 
 void* get_from_dir(process_segment* segment, uint32_t dir, int size);
 
