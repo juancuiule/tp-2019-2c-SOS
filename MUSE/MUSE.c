@@ -307,8 +307,8 @@ int respond_to_client(int cliente_fd) {
 }
 
 int main(void) {
-	logger = log_create("./logs/MUSE.log", "Servidor", 1, LOG_LEVEL_DEBUG);
-	config = config_create("./program.config");
+	logger = log_create("../logs/MUSE.log", "Servidor", 1, LOG_LEVEL_DEBUG);
+	config = config_create("../program.config");
 
 	IP = "127.0.0.1";
 	PORT = config_get_string_value(config, "LISTEN_PORT");

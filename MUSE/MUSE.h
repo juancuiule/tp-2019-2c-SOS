@@ -6,8 +6,9 @@
 #include <commons/string.h>
 #include <pthread.h>
 
-#include "../libmuse/utils.h"
+#include <math.h>
 #include "segmentpag.h"
+#include "utils.h"
 
 char* IP;
 char* PORT;

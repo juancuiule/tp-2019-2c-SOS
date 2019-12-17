@@ -7,8 +7,15 @@
 #include <commons/string.h>
 #include <commons/log.h>
 #include <commons/bitarray.h>
-#include <math.h>
 #include <stdint.h>
+#include <pthread.h>
+
+// semáforos
+pthread_mutex_t memory_frames_bitarray;
+pthread_mutex_t swap_frames_bitarray;
+
+pthread_mutex_t mutex_paginas_en_memoria;
+pthread_mutex_t mutex_asignar_pagina;
 
 t_list *tables;
 t_log *seg_logger;

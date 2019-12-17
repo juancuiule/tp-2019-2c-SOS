@@ -1,4 +1,5 @@
 #include "segmentpag.h"
+#include <math.h>
 
 metadata_size = sizeof(bool) + sizeof(uint32_t);
 
@@ -6,32 +7,57 @@ bool t = true;
 bool f = false;
 
 void init_structures(int m_size, int p_size) {
-	int frames = m_size / p_size;
+	init_log();
+	init_tables();
+	init_mutexs();
+	init_memoria();
+	init_virtual();
+}
+
+void init_log() {
+	seg_logger = log_create("../logs/segmentpag.log", "segmentpag", 1, LOG_LEVEL_DEBUG);
+}
+
+void init_tables() {
 	tables = list_create();
-	seg_logger = log_create("./logs/segmentpag.log", "segmentpag", 1, LOG_LEVEL_DEBUG);
+}
+
+void init_memoria() {
+	// Memoria
+	int frames = MEMORY_SIZE / PAGE_SIZE;
 	int bitmap_size_in_bytes = ceil((double) frames / 8);
 	bitmap_pointer = malloc(bitmap_size_in_bytes);
 	frame_usage_bitmap = bitarray_create_with_mode(bitmap_pointer, bitmap_size_in_bytes, LSB_FIRST);
 
 	clear_bitmap(frame_usage_bitmap, frames);
 
-	MEMORY = calloc(frames, p_size);
+	MEMORY = calloc(frames, PAGE_SIZE);
 	int i;
 	for(i = 0; i < frames; i++) {
-		void* new_frame = malloc(p_size);
+		void* new_frame = malloc(PAGE_SIZE);
 		memset(new_frame, 1, sizeof(bool));
-		memset(new_frame + sizeof(bool), NULL, p_size - sizeof(bool));
+		memset(new_frame + sizeof(bool), NULL, PAGE_SIZE - sizeof(bool));
 		*(MEMORY + i) = new_frame;
 	}
+}
 
+void init_virtual() {
+	// Memoria Virtual
 	swap_file = fopen("file.bin", "rw+b");
 
-	int swap_frames = SWAP_SIZE / p_size;
-	log_debug(seg_logger, "swap_frames: %i", swap_frames);
+	int swap_frames = SWAP_SIZE / PAGE_SIZE;
 	int swap_bitmap_size_in_bytes = ceil((double) swap_frames / 8);
 	swap_bitmap_pointer = malloc(swap_bitmap_size_in_bytes);
 	swap_usage_bitmap = bitarray_create_with_mode(swap_bitmap_pointer, swap_bitmap_size_in_bytes, LSB_FIRST);
+
 	clear_bitmap(swap_usage_bitmap, swap_frames);
+}
+
+void init_mutexs() {
+	pthread_mutex_init(&memory_frames_bitarray, NULL);
+	pthread_mutex_init(&swap_frames_bitarray, NULL);
+	pthread_mutex_init(&mutex_paginas_en_memoria, NULL);
+	pthread_mutex_init(&mutex_asignar_pagina, NULL);
 }
 
 void clear_bitmap(t_bitarray* bitmap, int bits) {
@@ -40,6 +66,8 @@ void clear_bitmap(t_bitarray* bitmap, int bits) {
 	}
 }
 
+
+// Create
 t_page *create_page() {
 	t_page * page = malloc(sizeof(t_page));
 	page->flag = true;
@@ -57,6 +85,15 @@ process_segment *create_segment(segment_type type, uint32_t base) {
 	segment->pages= NULL;
 	log_info(seg_logger, "Nuevo segmento (%s) creado. base: %i, size: %i", type == HEAP ? "HEAP" : "MMAP", base, 0);
 	return segment;
+}
+
+void create_process_table(char* process) {
+	process_table* new_table = malloc(sizeof(process_table));
+	new_table->process = process;
+	new_table->segments = NULL;
+	new_table->number_of_segments = 0;
+	list_add(tables, new_table);
+	log_info(seg_logger, "Se creo una process_table para el proceso: %s", process);
 }
 
 void add_page_to_segment(process_segment* segment, t_page* page) {
@@ -79,41 +116,9 @@ void add_page_to_segment(process_segment* segment, t_page* page) {
 	free(page);
 }
 
-void print_process(process_table* table) {
-//	log_info(seg_logger, "Proceso:");
-//	log_info(seg_logger, "cantidad de segmentos: %i", table->number_of_segments);
-//	log_info(seg_logger, "process id: %s", table->process);
-//	process_segment* seg = malloc(sizeof(process_segment));
-//	for (int var = 0; var < table->number_of_segments; ++var) {
-//		memcpy(seg, table->segments + var * sizeof(process_segment), sizeof(process_segment));
-//		print_segment(seg);
-//	}
-//	free(seg);
-}
-
-void print_segment(process_segment* segment) {
-//	log_info(seg_logger, "Segmento:");
-//	log_info(seg_logger, "base: %i", segment->base);
-//	log_info(seg_logger, "size: %i", segment->size);
-//	log_info(seg_logger, "type: %s", segment->type == HEAP ? "HEAP" : "MMAP");
-//
-//	int read = 0;
-//	while (read < segment->size) {
-//		bool is_free;
-//		uint32_t size;
-//		read = get_metadata_from_segment(segment, read, &is_free, &size);
-//		log_info(seg_logger, "dir: %i, is_free: %i, size: %i", read, is_free, size);
-//		read += size;
-//	}
-}
-
 void free_dir(process_segment* segment, uint32_t dir) {
-	int number_of_pages = segment->size / PAGE_SIZE;
 	int page_dir = dir - segment->base;
 	int metadata_dir = page_dir - metadata_size;
-
-	int page_number = (int) floor((double) metadata_dir / PAGE_SIZE);
-	int offset_in_frame = metadata_dir - page_number * PAGE_SIZE;
 
 	bool is_free;
 	uint32_t data_size;
@@ -261,14 +266,7 @@ void* find_free_dir(process_segment* segment, int size) {
 	return -1;
 }
 
-void create_process_table(char* process) {
-	process_table* new_table = malloc(sizeof(process_table));
-	new_table->process = process;
-	new_table->segments = NULL;
-	new_table->number_of_segments = 0;
-	list_add(tables, new_table);
-	log_info(seg_logger, "Se creo una process_table para el proceso: %s", process);
-}
+
 
 void add_process_segment(char* process, process_segment* segment) {
 	process_table* process_table = get_table_for_process(process);
@@ -302,11 +300,17 @@ int find_free_bit(t_bitarray* bitmap, int limit) {
 }
 
 int find_free_frame() {
-	return find_free_bit(frame_usage_bitmap, MEMORY_SIZE / PAGE_SIZE);
+	pthread_mutex_lock(&memory_frames_bitarray);
+	int free_bit = find_free_bit(frame_usage_bitmap, MEMORY_SIZE / PAGE_SIZE);
+	pthread_mutex_unlock(&memory_frames_bitarray);
+	return free_bit;
 }
 
 int find_free_swap() {
-	return find_free_bit(swap_usage_bitmap, SWAP_SIZE / PAGE_SIZE);
+	pthread_mutex_lock(&swap_frames_bitarray);
+	int free_bit = find_free_bit(swap_usage_bitmap, SWAP_SIZE / PAGE_SIZE);
+	pthread_mutex_unlock(&swap_frames_bitarray);
+	return free_bit;
 }
 
 int min(int x, int y) {
@@ -439,16 +443,13 @@ void* set_metadata_in_segment(process_segment* segment, uint32_t dir, bool is_fr
 
 uint32_t alloc_in_segment(process_segment* segment, uint32_t process_dir, uint32_t size) {
 	uint32_t dir = process_dir - segment->base;
-//	log_info(seg_logger, "alloc_in_segment, size: %i, dir: %i", size, dir);
 	uint32_t metadata_end_dir;
 	uint32_t allocated_end_dir;
 	uint32_t free_metadata_end_dir;
 
 	metadata_end_dir = set_metadata_in_segment(segment, dir, false, size);
-//	log_info(seg_logger, "metadata_end_dir: %i", metadata_end_dir);
 
 	allocated_end_dir = clear_in_segment(segment, metadata_end_dir, size);
-//	log_info(seg_logger, "allocated_end_dir: %i", allocated_end_dir);
 
 	int last_space_used = (allocated_end_dir + metadata_size) % PAGE_SIZE;
 	int free_space_after = PAGE_SIZE - last_space_used;
@@ -457,10 +458,7 @@ uint32_t alloc_in_segment(process_segment* segment, uint32_t process_dir, uint32
 		free_space_after = 0;
 	}
 
-//	log_info(seg_logger, "free_space_after: %i", free_space_after);
-
 	free_metadata_end_dir = set_metadata_in_segment(segment, allocated_end_dir, true, free_space_after);
-//	log_info(seg_logger, "free_metadata_end_dir: %i", free_metadata_end_dir);
 
 	return segment->base + metadata_end_dir;
 }
@@ -485,7 +483,10 @@ t_list* paginas_en_memoria() {
 		list_add_all(acum, paginas);
 		return acum;
 	}
-	return list_fold(tables, list_create(), (void*) op);
+	pthread_mutex_lock(&mutex_paginas_en_memoria);
+	t_list* paginas = list_fold(tables, list_create(), (void*) op);
+	pthread_mutex_unlock(&mutex_paginas_en_memoria);
+	return paginas;
 }
 
 t_page* victima_0_0() {
@@ -519,6 +520,7 @@ t_page* victima_0_1() {
 }
 
 void asignar_frame(t_page* pagina) {
+	pthread_mutex_lock(&mutex_asignar_pagina);
 	//  log_debug(seg_logger, "pagina frame: %i", pagina->frame_number);
 	int frame_number = find_free_frame();
 
@@ -553,8 +555,9 @@ void asignar_frame(t_page* pagina) {
 			bitarray_set_bit(swap_usage_bitmap, free_swap);
 
 			// copiar en este frame lo que la pagina tenía en swap_file
-			if (pagina->frame_number != -1) {
-				fseek(swap_file, swap_file + pagina->frame_number * PAGE_SIZE, SEEK_SET);
+			if (pagina->frame_number != -1 && !pagina->flag) {
+				log_debug(seg_logger, "la pagina que pide frames tenía data en swap en la pagina: %i", pagina->frame_number);
+				fseek(swap_file, pagina->frame_number * PAGE_SIZE, SEEK_SET);
 				fread(MEMORY[frame_number_victima_pre_swap], sizeof(PAGE_SIZE), 1, swap_file);
 				bitarray_clean_bit(swap_usage_bitmap, pagina->frame_number);
 			}
@@ -572,5 +575,33 @@ void asignar_frame(t_page* pagina) {
 
 		log_debug(seg_logger, "Asigno el frame: %i", frame_number);
 	}
+	pthread_mutex_unlock(&mutex_asignar_pagina);
 }
 
+void print_process(process_table* table) {
+//	log_info(seg_logger, "Proceso:");
+//	log_info(seg_logger, "cantidad de segmentos: %i", table->number_of_segments);
+//	log_info(seg_logger, "process id: %s", table->process);
+//	process_segment* seg = malloc(sizeof(process_segment));
+//	for (int var = 0; var < table->number_of_segments; ++var) {
+//		memcpy(seg, table->segments + var * sizeof(process_segment), sizeof(process_segment));
+//		print_segment(seg);
+//	}
+//	free(seg);
+}
+
+void print_segment(process_segment* segment) {
+//	log_info(seg_logger, "Segmento:");
+//	log_info(seg_logger, "base: %i", segment->base);
+//	log_info(seg_logger, "size: %i", segment->size);
+//	log_info(seg_logger, "type: %s", segment->type == HEAP ? "HEAP" : "MMAP");
+//
+//	int read = 0;
+//	while (read < segment->size) {
+//		bool is_free;
+//		uint32_t size;
+//		read = get_metadata_from_segment(segment, read, &is_free, &size);
+//		log_info(seg_logger, "dir: %i, is_free: %i, size: %i", read, is_free, size);
+//		read += size;
+//	}
+}

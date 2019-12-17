@@ -24,7 +24,6 @@
 	#include <stdlib.h>
 	#include <commons/string.h>
 	#include <pthread.h>
-	#include "utils.h"
 
     /**
      * Inicializa la biblioteca de MUSE.
