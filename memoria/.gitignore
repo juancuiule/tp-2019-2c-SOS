@@ -70,4 +70,8 @@ dkms.conf
 /Default/
 /Debug/
 
+#Settings
+.settings
+
 *.project
+
