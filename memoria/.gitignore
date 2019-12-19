@@ -1,0 +1,73 @@
+# Prerequisites
+*.d
+
+# Swap File
+MUSE/file.bin
+
+# Debug
+MUSE/Debug/MUSE
+MUSE/Debug/*.d
+MUSE/Debug/*.o
+libmuse/Debug/liblibmuse.so
+libmuse/Debug/libmuse/*.d
+libmuse/Debug/libmuse/*.o
+
+prueba/Debug/prueba
+
+# Logs
+MUSE/logs/*.log
+libmuse/logs/*.log
+
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Linker output
+*.ilk
+*.map
+*.exp
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Kernel Module Compile Results
+*.mod*
+*.cmd
+.tmp_versions/
+modules.order
+Module.symvers
+Mkfile.old
+dkms.conf
+/Default/
+/Debug/
+
+*.project
