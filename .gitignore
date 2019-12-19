@@ -12,6 +12,8 @@ libmuse/Debug/liblibmuse.so
 libmuse/Debug/libmuse/*.d
 libmuse/Debug/libmuse/*.o
 
+prueba/Debug/prueba
+
 # Logs
 MUSE/logs/*.log
 libmuse/logs/*.log
