@@ -13,7 +13,7 @@
 
 t_log* logger;
 
-int create_connection(char *IP, char* PORT);
+int create_connection(char *IP, int INT_PORT);
 void free_connection(int socket_cliente);
 int init_server(char* IP, char* PORT);
 uint32_t recv_uint(int socket_cliente);

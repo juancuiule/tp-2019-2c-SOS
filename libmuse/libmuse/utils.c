@@ -192,7 +192,7 @@ char* recv_muse_id(int socket_cliente) {
 	int ip_size;
 
 	char* ip = recv_buffer(&ip_size, socket_cliente);
-		int ip_length = strlen(ip);
+	int ip_length = strlen(ip);
 
 	char* separador = "-";
 	int separador_length = strlen(separador);

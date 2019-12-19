@@ -1,12 +1,15 @@
 #include "network.h"
 
-int create_connection(char *IP, char* PORT) {
+int create_connection(char *IP, int INT_PORT) {
 	struct addrinfo hints, *server_info;
 
 	memset(&hints, 0, sizeof(hints));
 	hints.ai_family = PF_INET;
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_flags = AI_PASSIVE;
+
+	char PORT[5];
+	sprintf(PORT, "%i", INT_PORT);
 
 	getaddrinfo(IP, PORT, &hints, &server_info);
 
