@@ -12,6 +12,7 @@ void init_log() {
 
 void init_tables() {
 	tables = list_create();
+	maps = list_create();
 }
 
 void init_memoria() {
@@ -70,7 +71,7 @@ void clear_bitmap(t_bitarray* bitmap, int bits) {
 // Create
 t_page *create_page() {
 	t_page * page = malloc(sizeof(t_page));
-	page->flag = true;
+	page->flag = false;
 	page->frame_number = -1;
 	page->in_use = 1;
 	page->modified = 0;
@@ -83,6 +84,8 @@ process_segment *create_segment(segment_type type, uint32_t base) {
 	segment->base = base;
 	segment->size = 0;
 	segment->pages= NULL;
+	segment->shared = false;
+	segment->map_path = "";
 	log_info(seg_logger, "Nuevo segmento (%s) creado. base: %i, size: %i", type == HEAP ? "HEAP" : "MMAP", base, 0);
 	return segment;
 }
@@ -568,6 +571,7 @@ void asignar_frame(t_page* pagina) {
 		}
 	} else {
 		// hay frame libre
+		pagina->flag = true;
 		pagina->frame_number = frame_number;
 		bitarray_set_bit(frame_usage_bitmap, frame_number);
 
@@ -575,3 +579,42 @@ void asignar_frame(t_page* pagina) {
 	}
 	pthread_mutex_unlock(&mutex_asignar_pagina);
 }
+
+void* paginas_de_map_existente(char* path, int size) {
+	void* paginas = -1;
+
+	bool find(map_t* un_map) {
+		return string_equals_ignore_case(un_map->path, path) && un_map->size == size;
+	}
+
+	map_t* el_map = list_find(maps, (void*) find);
+
+	if (el_map != NULL) {
+		el_map->references++;
+		paginas = el_map->pages;
+	}
+
+	return paginas;
+}
+
+process_segment* segment_by_path(process_table* table, char* path) {
+	process_segment* segment;
+	void* segments = table->segments;
+	int i = 0;
+	while (i < table->number_of_segments) {
+		segment = segments + i * sizeof(process_segment);
+		if (string_equals_ignore_case(segment->map_path, path)) {
+			return segment;
+		}
+		i++;
+	}
+	return NULL;
+}
+
+
+
+
+
+
+
+
