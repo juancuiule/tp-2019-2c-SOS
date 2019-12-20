@@ -26,7 +26,7 @@ endif
 all: sac_server
 
 dependents:
-	-cd /home/utnso/workspace/tp-2019-2c-SOS/common/Debug && $(MAKE) clean all
+	-cd /home/utnso/workspace/tp-2019-2c-SOS/common/Debug && $(MAKE) all
 
 # Tool invocations
 sac_server: $(OBJS) $(USER_OBJS) /home/utnso/workspace/tp-2019-2c-SOS/common/Debug/libcommon.so
