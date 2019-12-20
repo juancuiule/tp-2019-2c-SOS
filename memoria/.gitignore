@@ -1,6 +1,23 @@
 # Prerequisites
 *.d
 
+# Swap File
+MUSE/file.bin
+
+# Debug
+MUSE/Debug/MUSE
+MUSE/Debug/*.d
+MUSE/Debug/*.o
+libmuse/Debug/liblibmuse.so
+libmuse/Debug/libmuse/*.d
+libmuse/Debug/libmuse/*.o
+
+prueba/Debug/prueba
+
+# Logs
+MUSE/logs/*.log
+libmuse/logs/*.log
+
 # Object files
 *.o
 *.ko
@@ -50,6 +67,8 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+/Default/
+/Debug/
 
 #Settings
 .settings

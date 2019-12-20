@@ -35,3 +35,6 @@ cd
 cd tp-2019-2c-SOS/memoria/libmuse/Debug
 sudo make
 sudo make install
+
+
+
