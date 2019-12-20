@@ -30,9 +30,6 @@ int muse_init(int id, char* ip, int puerto) {
 
 void muse_close() {
 	send_muse_op_code(conexion, DISCONNECT_MUSE);
-	if (config != NULL) {
-		config_destroy(config);
-	}
 	free_connection(conexion);
 }
 
@@ -84,6 +81,7 @@ int muse_get(void* dst, uint32_t src, size_t n) {
 	memcpy(&r_size, response_body->content, sizeof(size_t));
 
 	memcpy(dst, response_body->content + sizeof(size_t), r_size);
+
     return 0;
 }
 
@@ -136,6 +134,9 @@ int muse_sync(uint32_t addr, size_t len){
 	muse_package* package = create_package(header, body);
 	send_package(package, conexion);
 
+	int status = recv_response_status(conexion);
+	muse_body* response_body = recv_body(conexion);
+
     return 0;
 }
 
@@ -146,6 +147,11 @@ int muse_unmap(uint32_t dir){
 
 	muse_package* package = create_package(header, body);
 	send_package(package, conexion);
+
+	int status = recv_response_status(conexion);
+	muse_body* response_body = recv_body(conexion);
+
+	printf("Status: %i", status);
 
     return 0;
 }

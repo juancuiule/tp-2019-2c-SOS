@@ -168,9 +168,40 @@ void* get_from_dir(process_segment* segment, uint32_t dir, int size) {
 }
 
 void* get_from_map(process_segment* segment, uint32_t dir, int size) {
+	log_info(seg_logger, "get from map");
 	int dir_de_pagina = dir - segment->base;
 	void* data = malloc(size);
-	get_from_segment(segment, dir_de_pagina, size, data);
+
+	int offset = dir % PAGE_SIZE;
+	int page_number = (dir - offset) / PAGE_SIZE;
+
+	t_page* page;
+	void* frame;
+
+	FILE* file;
+	int copied = 0;
+	while (copied < size) {
+		page = segment->pages + page_number * sizeof(t_page);
+		page->in_use = 1;
+		log_info(seg_logger, "page flag: %i", page->flag);
+		if (!page->flag) {
+			file = fopen(segment->map_path, "r");
+			asignar_frame(page);
+			frame = MEMORY[page->frame_number];
+
+			fseek(file, page_number * PAGE_SIZE, SEEK_SET);
+			fread(frame, sizeof(PAGE_SIZE), 1, file);
+			fclose(file);
+		} else {
+			frame = MEMORY[page->frame_number];
+		}
+		int to_copy = min(size - copied, PAGE_SIZE - offset % PAGE_SIZE);
+		memcpy(data + copied, frame + offset, to_copy);
+		copied += to_copy;
+		offset += to_copy;
+		page_number += offset / PAGE_SIZE;
+		offset = offset % PAGE_SIZE;
+	}
 	return data;
 }
 
@@ -521,7 +552,6 @@ t_list* paginas_en_memoria() {
 
 t_page* victima_0_0() {
 	t_list* paginas = paginas_en_memoria();
-	log_debug(seg_logger, "victima_0_0, paginas: %i", paginas->elements_count);
 	for(int i = 0; i < paginas->elements_count; i++) {
 		t_page* pagina_en_memoria = list_get(paginas, i);
 		if (
@@ -529,8 +559,6 @@ t_page* victima_0_0() {
 		  pagina_en_memoria->modified == false
 		) {
 			return pagina_en_memoria;
-		} else {
-//			log_warning(seg_logger, "frame: %i, en uso (%i) o modificado (%i)", pagina_en_memoria->frame_number, pagina_en_memoria->in_use, pagina_en_memoria->modified);
 		}
 	}
 	return -1;

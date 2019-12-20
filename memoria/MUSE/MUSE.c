@@ -116,6 +116,10 @@ void respond_get(muse_body* body, char* id, int socket_cliente) {
 			response = create_response(ERROR, r_body);
 		} else {
 			process_segment *segment = segment_by_dir(table, src);
+			if (segment == NULL) {
+				log_error(logger, "Error, seg fault");
+				return;
+			}
 			if (segment->type == HEAP) {
 				val = get_from_dir(segment, src, size);
 			} else {
@@ -291,7 +295,10 @@ void respond_unmap(muse_body* body, char* id, int socket_cliente) {
 			send_response_status(socket_cliente, ERROR);
 		} else {
 			process_segment *segment = segment_by_dir(table, addr);
-
+			if (segment == NULL) {
+				send_response_status(socket_cliente, ERROR);
+				return;
+			}
 			if (segment->type == MMAP) {
 				int n_pages = segment->size / PAGE_SIZE;
 				for (int i = 0; i < n_pages; i++) {
@@ -306,6 +313,7 @@ void respond_unmap(muse_body* body, char* id, int socket_cliente) {
 				}
 				free(segment->pages);
 				send_response_status(socket_cliente, SUCCESS);
+				return;
 			}
 		}
 	} else {
