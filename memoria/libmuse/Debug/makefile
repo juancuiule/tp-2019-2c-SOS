@@ -41,3 +41,9 @@ clean:
 .PHONY: all clean dependents
 
 -include ../makefile.targets
+
+install:
+	mkdir -p $(USR_PATH)/include/libmuse/
+	cp ../libmuse/libmuse.h $(USR_PATH)/include/libmuse/libmuse.h
+	chmod 0755 $(USR_PATH)/include/libmuse/*
+	cp ./liblibmuse.so $(USR_PATH)/lib/liblibmuse.so
