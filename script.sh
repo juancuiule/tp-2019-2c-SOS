@@ -1,5 +1,7 @@
 cd
 
+export LD_LIBRARY_PATH=$HOME/tp-2019-2c-SOS/common/Debug
+
 git clone https://github.com/sisoputnfrba/hilolay
 git clone https://github.com/sisoputnfrba/linuse-tests-programs
 git clone https://github.com/sisoputnfrba/so-commons-library
@@ -15,25 +17,23 @@ cd linuse-tests-programs
 sudo make 
 sudo make entrega
 
-git clone https://github.com/sisoputnfrba/tp-2019-2c-SOS
-
 cd tp-2019-2c-SOS/SUSE/Debug
-make
+sudo make
 
 cd
 
 cd tp-2019-2c-SOS/libSUSE/Debug
-make
-sudo make install
+sudo make clean install
 
 cd
 
-cd tp-2019-2c-SOS/MUSE/Debug
-make
+cd tp-2019-2c-SOS/memoria/MUSE/Debug
+sudo make
 
 cd
 
-cd tp-2019-2c-SOS/libMUSE/Debug
-make
+cd tp-2019-2c-SOS/memoria/libmuse/Debug
+sudo make
 sudo make install
+
 
