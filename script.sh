@@ -1,6 +1,6 @@
 cd
 
-export LD_LIBRARY_PATH=$HOME/tp-2019-2c-SOS/common/Debug
+sudo echo "export LD_LIBRARY_PATH=$HOME/tp-2019-2c-SOS/common/Debug" >> .bashrc
 
 git clone https://github.com/sisoputnfrba/hilolay
 git clone https://github.com/sisoputnfrba/linuse-tests-programs
@@ -35,4 +35,3 @@ cd
 cd tp-2019-2c-SOS/memoria/libmuse/Debug
 sudo make
 sudo make install
-
