@@ -53,6 +53,10 @@ int init_server(char* IP, char* PORT) {
             continue;
 		}
 
+        int yes = 1;
+
+        setsockopt(socket_servidor, SOL_SOCKET, SO_REUSEPORT, &yes, sizeof(yes));
+
 		int bind_result = bind(
 			socket_servidor,
 			p->ai_addr,
