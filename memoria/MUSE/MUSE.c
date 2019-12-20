@@ -117,7 +117,9 @@ void respond_get(muse_body* body, char* id, int socket_cliente) {
 		} else {
 			process_segment *segment = segment_by_dir(table, src);
 			if (segment == NULL) {
-				log_error(logger, "Error, seg fault");
+				log_error(logger, "Error, SEGFAULT, no hay segmento en dir: %i", src);
+				free(val);
+				send_response_status(socket_cliente, SEGFAULT);
 				return;
 			}
 			if (segment->type == HEAP) {
@@ -261,7 +263,7 @@ void respond_sync(muse_body* body, char* id, int socket_cliente) {
 
 				log_info(logger, "post get datos, voy a abrir el archivo %s", segment->map_path);
 
-				FILE* file = fopen(segment->map_path, "w+b");
+				FILE* file = fopen(segment->map_path, "w+");
 
 				if (file != NULL) {
 					fseek(file, 0, SEEK_SET);
@@ -269,6 +271,7 @@ void respond_sync(muse_body* body, char* id, int socket_cliente) {
 					fclose(file);
 					send_response_status(socket_cliente, SUCCESS);
 				} else {
+					log_error(logger, "Error con el archivo map");
 					send_response_status(socket_cliente, ERROR);
 				}
 			}

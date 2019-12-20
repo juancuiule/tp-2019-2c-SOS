@@ -46,7 +46,8 @@ typedef struct {
 
 typedef enum {
 	SUCCESS,
-	ERROR
+	ERROR,
+	SEGFAULT
 } response_status;
 
 typedef struct {

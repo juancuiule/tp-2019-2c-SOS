@@ -75,6 +75,11 @@ int muse_get(void* dst, uint32_t src, size_t n) {
 
 	int status = recv_response_status(conexion);
 
+	if (status == SEGFAULT) {
+		muse_close();
+		return EXIT_FAILURE;
+	}
+
 	muse_body* response_body = recv_body(conexion);
 
 	size_t r_size;
@@ -150,8 +155,6 @@ int muse_unmap(uint32_t dir){
 
 	int status = recv_response_status(conexion);
 	muse_body* response_body = recv_body(conexion);
-
-	printf("Status: %i", status);
 
     return 0;
 }

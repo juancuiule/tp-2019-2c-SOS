@@ -168,7 +168,6 @@ void* get_from_dir(process_segment* segment, uint32_t dir, int size) {
 }
 
 void* get_from_map(process_segment* segment, uint32_t dir, int size) {
-	log_info(seg_logger, "get from map");
 	int dir_de_pagina = dir - segment->base;
 	void* data = malloc(size);
 
@@ -183,8 +182,7 @@ void* get_from_map(process_segment* segment, uint32_t dir, int size) {
 	while (copied < size) {
 		page = segment->pages + page_number * sizeof(t_page);
 		page->in_use = 1;
-		log_info(seg_logger, "page flag: %i", page->flag);
-		if (!page->flag) {
+		if (!page->flag && page->frame_number != -1) {
 			file = fopen(segment->map_path, "r");
 			asignar_frame(page);
 			frame = MEMORY[page->frame_number];
@@ -192,6 +190,9 @@ void* get_from_map(process_segment* segment, uint32_t dir, int size) {
 			fseek(file, page_number * PAGE_SIZE, SEEK_SET);
 			fread(frame, sizeof(PAGE_SIZE), 1, file);
 			fclose(file);
+		} else if (page->frame_number == -1) {
+			asignar_frame(page);
+			frame = MEMORY[page->frame_number];
 		} else {
 			frame = MEMORY[page->frame_number];
 		}
