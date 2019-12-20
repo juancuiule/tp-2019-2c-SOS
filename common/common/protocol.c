@@ -434,10 +434,10 @@ void dslz_cod_read(void *buffer, char **path, uint32_t *blk, size_t *size, off_t
 	*path = ruta;
 
 	memcpy(blk, buffer+offs, sizeof(uint32_t));
-	offs += sizeof(int);
+	offs += sizeof(uint32_t);
 
 	memcpy(size, buffer+offs, sizeof(size_t));
-	offs += sizeof(int);
+	offs += sizeof(size_t);
 
 	memcpy(offset, buffer+offs, sizeof(off_t));
 

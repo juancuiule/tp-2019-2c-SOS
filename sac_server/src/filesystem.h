@@ -98,7 +98,7 @@ int get_free_blk_data_dir();
 //desc: devuelve un bloque ind simple con su primer bloque de datos seteado o EDQUOT si no hay mas blks de datos
 int fs_get_blk_ind_with_data_blk();
 
-size_t fs_read_file(char *buf, size_t size, off_t offset, uint32_t node_blk);
+size_t fs_read_file(void *buf, size_t size, off_t offset, uint32_t node_blk);
 
 size_t fs_write_file(uint32_t node_blk, void *buffer, size_t size, off_t offset);
 
@@ -119,5 +119,9 @@ int fs_get_max_filesize();
 bool fs_is_empty_directory(int node);
 
 void fs_remove_all_blocks_of(int node);
+
+bool bk_is_tiene_bk_dato_asignado(int nro_blk_ind, int bk_data);
+bool nodo_tiene_bk_is_asignado(int node, int bk_is);
+bool es_valido_nro_bk_data(int nro_bk_data);
 
 #endif /* FILESYSTEM_H_ */
