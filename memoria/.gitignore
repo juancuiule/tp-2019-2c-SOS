@@ -5,6 +5,7 @@
 MUSE/file.bin
 
 # Debug
+MUSE/Debug/file.bin
 MUSE/Debug/MUSE
 MUSE/Debug/*.d
 MUSE/Debug/*.o
@@ -75,3 +76,4 @@ dkms.conf
 
 *.project
 
+/.metadata/

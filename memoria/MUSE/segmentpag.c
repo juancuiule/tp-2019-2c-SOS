@@ -36,7 +36,7 @@ void init_memoria() {
 
 void init_virtual() {
 	// Memoria Virtual
-	swap_file = fopen("file.bin", "rw+b");
+	swap_file = fopen("file.bin", "wb+");
 
 	int swap_frames = SWAP_SIZE / PAGE_SIZE;
 	int swap_bitmap_size_in_bytes = ceil((double) swap_frames / 8);
@@ -84,7 +84,6 @@ process_segment *create_segment(segment_type type, uint32_t base) {
 	segment->base = base;
 	segment->size = 0;
 	segment->pages= NULL;
-	segment->shared = false;
 	segment->map_path = "";
 	log_info(seg_logger, "Nuevo segmento (%s) creado. base: %i, size: %i", type == HEAP ? "HEAP" : "MMAP", base, 0);
 	return segment;
@@ -114,7 +113,7 @@ void add_page_to_segment(process_segment* segment, t_page* page) {
 
 	segment->size += PAGE_SIZE;
 
-	log_info(seg_logger, "Se agrego una página al segmento con base: %i, nuevo size: %i", segment->base, segment->size);
+//	log_info(seg_logger, "Se agrego una página al segmento con base: %i, nuevo size: %i", segment->base, segment->size);
 
 	free(page);
 }
@@ -156,7 +155,7 @@ void* get_from_dir(process_segment* segment, uint32_t dir, int size) {
 
 	uint32_t data_dir = get_metadata_from_segment(segment, metadata_dir, &is_free, &data_size);
 
-	char* data = malloc(size);
+	void* data = malloc(size);
 
 	if (is_free) {
 		log_error(seg_logger, "No hay un malloc hecho... se quieren traer datos de espacio no asignado");
@@ -167,6 +166,14 @@ void* get_from_dir(process_segment* segment, uint32_t dir, int size) {
 	}
 	return data;
 }
+
+void* get_from_map(process_segment* segment, uint32_t dir, int size) {
+	int dir_de_pagina = dir - segment->base;
+	void* data = malloc(size);
+	get_from_segment(segment, dir_de_pagina, size, data);
+	return data;
+}
+
 
 void cpy_to_dir(process_segment* segment, uint32_t dir, void* val, int size) {
 	// "retrocedo" para poder ver si esta libre y cuanto espacio tiene ese bloque
@@ -215,7 +222,7 @@ process_segment* segment_by_dir(process_table* table, int dir) {
 	int i = 0;
 	while (i < table->number_of_segments) {
 		segment = segments + i * sizeof(process_segment);
-		if (segment->base < dir && (segment->base + segment->size) > dir) {
+		if (segment->base <= dir && (segment->base + segment->size) > dir) {
 			return segment;
 		}
 		i++;
@@ -464,6 +471,28 @@ uint32_t alloc_in_segment(process_segment* segment, uint32_t process_dir, uint32
 	return segment->base + metadata_end_dir;
 }
 
+uint32_t alloc_in_map_segment(process_segment* segment, uint32_t size) {
+	uint32_t metadata_end_dir;
+	uint32_t allocated_end_dir;
+	uint32_t free_metadata_end_dir;
+
+	metadata_end_dir = set_metadata_in_segment(segment, 0, false, size);
+
+	allocated_end_dir = metadata_end_dir + size;
+
+	int last_space_used = (allocated_end_dir + metadata_size) % PAGE_SIZE;
+	int free_space_after = PAGE_SIZE - last_space_used;
+
+	if (last_space_used == 0) {
+		free_space_after = 0;
+	}
+
+	free_metadata_end_dir = set_metadata_in_segment(segment, allocated_end_dir, true, free_space_after);
+
+	return segment->base + metadata_end_dir;
+}
+
+
 t_list* paginas_en_memoria() {
 	t_list* op(t_list* acum, process_table* process) {
 		t_list* paginas = list_create();
@@ -492,6 +521,7 @@ t_list* paginas_en_memoria() {
 
 t_page* victima_0_0() {
 	t_list* paginas = paginas_en_memoria();
+	log_debug(seg_logger, "victima_0_0, paginas: %i", paginas->elements_count);
 	for(int i = 0; i < paginas->elements_count; i++) {
 		t_page* pagina_en_memoria = list_get(paginas, i);
 		if (
@@ -499,6 +529,8 @@ t_page* victima_0_0() {
 		  pagina_en_memoria->modified == false
 		) {
 			return pagina_en_memoria;
+		} else {
+//			log_warning(seg_logger, "frame: %i, en uso (%i) o modificado (%i)", pagina_en_memoria->frame_number, pagina_en_memoria->in_use, pagina_en_memoria->modified);
 		}
 	}
 	return -1;
@@ -509,8 +541,7 @@ t_page* victima_0_1() {
 	for(int i = 0; i < paginas->elements_count; i++) {
 		t_page* pagina_en_memoria = list_get(paginas, i);
 		if (
-		  pagina_en_memoria->in_use == false &&
-		  pagina_en_memoria->modified == true
+		  pagina_en_memoria->in_use == false && pagina_en_memoria->modified == true
 		) {
 			return pagina_en_memoria;
 		} else {
@@ -522,18 +553,19 @@ t_page* victima_0_1() {
 
 void asignar_frame(t_page* pagina) {
 	pthread_mutex_lock(&mutex_asignar_pagina);
-	//  log_debug(seg_logger, "pagina frame: %i", pagina->frame_number);
 	int frame_number = find_free_frame();
 
 	if (frame_number == -1) {
-		// no hay frame libre.. hay que hacer swap
-		// Busco (0, 0)
+		log_info(seg_logger, "no hay frame libre.. hay que hacer swap");
 		t_page* victima = victima_0_0();
 
 		if (victima == -1) {
 			victima = victima_0_1();
 			if (victima == -1) {
 				victima = victima_0_0();
+				if (victima == -1) {
+					victima = victima_0_1();
+				}
 			}
 		}
 
@@ -543,10 +575,8 @@ void asignar_frame(t_page* pagina) {
 		int free_swap = find_free_swap();
 
 		if (free_swap == -1) {
-			// no hay mas espacio en swap
 			log_error(seg_logger, "No hay mas espacio en swap");
 		} else {
-			log_debug(seg_logger, "free swap frame: %i, offset: %i", free_swap, free_swap * PAGE_SIZE);
 			fseek(swap_file, free_swap * PAGE_SIZE, SEEK_SET);
 			fwrite(MEMORY[victima->frame_number], sizeof(PAGE_SIZE), 1, swap_file);
 
@@ -557,7 +587,6 @@ void asignar_frame(t_page* pagina) {
 
 			// copiar en este frame lo que la pagina tenía en swap_file
 			if (pagina->frame_number != -1 && !pagina->flag) {
-				log_debug(seg_logger, "la pagina que pide frames tenía data en swap en la pagina: %i", pagina->frame_number);
 				fseek(swap_file, pagina->frame_number * PAGE_SIZE, SEEK_SET);
 				fread(MEMORY[frame_number_victima_pre_swap], sizeof(PAGE_SIZE), 1, swap_file);
 				bitarray_clean_bit(swap_usage_bitmap, pagina->frame_number);
@@ -575,26 +604,9 @@ void asignar_frame(t_page* pagina) {
 		pagina->frame_number = frame_number;
 		bitarray_set_bit(frame_usage_bitmap, frame_number);
 
-		log_debug(seg_logger, "Asigno el frame: %i", frame_number);
+//		log_debug(seg_logger, "Asigno el frame: %i", frame_number);
 	}
 	pthread_mutex_unlock(&mutex_asignar_pagina);
-}
-
-void* paginas_de_map_existente(char* path, int size) {
-	void* paginas = -1;
-
-	bool find(map_t* un_map) {
-		return string_equals_ignore_case(un_map->path, path) && un_map->size == size;
-	}
-
-	map_t* el_map = list_find(maps, (void*) find);
-
-	if (el_map != NULL) {
-		el_map->references++;
-		paginas = el_map->pages;
-	}
-
-	return paginas;
 }
 
 process_segment* segment_by_path(process_table* table, char* path) {

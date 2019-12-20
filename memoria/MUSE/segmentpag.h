@@ -20,14 +20,6 @@ pthread_mutex_t mutex_asignar_pagina;
 t_list *tables;
 t_list *maps;
 
-typedef struct {
-	uint32_t base;
-	char* path;
-	void* pages;
-	int references;
-	uint32_t size;
-} map_t;
-
 t_log *seg_logger;
 t_bitarray *frame_usage_bitmap;
 void* bitmap_pointer;
@@ -54,11 +46,10 @@ typedef struct {
 
 typedef struct {
 	segment_type type; // segmento de heap o mmap
-	bool shared;
-	char* map_path;
 	uint32_t base; // base
 	uint32_t size; // tamaño
 	void *pages; // paginas
+	char* map_path;
 } process_segment;
 
 typedef struct {
@@ -97,7 +88,7 @@ void* get_from_segment(process_segment* segment, uint32_t dir, uint32_t size, vo
 
 void* set_metadata_in_segment(process_segment* segment, uint32_t dir, bool is_free, uint32_t size);
 
-void* paginas_de_map_existente(char* path, int size);
 process_segment* segment_by_path(process_table* table, char* path);
-
+uint32_t alloc_in_map_segment(process_segment* segment, uint32_t size);
+void* get_from_map(process_segment* segment, uint32_t dir, int size);
 #endif

@@ -118,12 +118,11 @@ void respond_get(muse_body* body, char* id, int socket_cliente) {
 			process_segment *segment = segment_by_dir(table, src);
 			if (segment->type == HEAP) {
 				val = get_from_dir(segment, src, size);
-				add_to_body(r_body, size, val);
-
-				response = create_response(SUCCESS, r_body);
 			} else {
-				log_info(logger, "Tengo que hacer un ger de un segmento de map");
+				val = get_from_map(segment, src, size);
 			}
+			add_to_body(r_body, size, val);
+			response = create_response(SUCCESS, r_body);
 		}
 	} else {
 		log_error(logger, "El proceso %s no tiene tabla");
@@ -161,7 +160,7 @@ void respond_cpy(muse_body* body, char* id, int socket_cliente) {
 	memcpy(&dst, body->content, sizeof(uint32_t));	
 	int size;
 	memcpy(&size, body->content + sizeof(uint32_t), sizeof(int));
-	void** val = malloc(size);
+	void* val = malloc(size);
 	memcpy(val, body->content + sizeof(uint32_t) + sizeof(int), size);
 
 	log_debug(logger, "El cliente con id: %s hizo cpy a dst: %u, %i bytes", id, dst, size);
@@ -174,10 +173,15 @@ void respond_cpy(muse_body* body, char* id, int socket_cliente) {
 			log_error(logger, "El proceso %s no tiene segmentos");
 		} else {
 			segment = segment_by_dir(table, dst);
-			int dir_de_pagina = dst - segment->base;
+			if (segment->type == HEAP) {
+				int dir_de_pagina = dst - segment->base;
 
-			cpy_to_dir(segment, dir_de_pagina, val, size);
-			send_response_status(socket_cliente, SUCCESS);
+				cpy_to_dir(segment, dir_de_pagina, val, size);
+				send_response_status(socket_cliente, SUCCESS);
+			} else {
+				set_in_segment(segment, dst - segment->base, size, val);
+				send_response_status(socket_cliente, SUCCESS);
+			}
 		}
 	} else {
 		log_error(logger, "El proceso %s no tiene tabla");
@@ -207,50 +211,15 @@ void respond_map(muse_body* body, char* id, int socket_cliente) {
 	process_segment *segment;
 	if (table != NULL) {
 		int new_base = last_position(id);
+		log_info(logger, "new_base: %i", new_base);
 		segment = create_segment(MMAP, new_base);
 
 		segment->map_path = string_duplicate(path);
-
-		log_info(logger, "map_path: %s, size: %i", string_duplicate(path), segment->size);
-
-	    if (flags == MAP_SHARED) {
-	    	log_info(logger, "es shared");
-	    	// bucsar si existe segmento map
-	    	segment->shared = true;
-
-	    	void* paginas = paginas_de_map_existente(path, length);
-
-	    	if (paginas != -1) {
-	    		segment->pages = paginas;
-	    		segment->size = frames_to_ask * PAGE_SIZE;
-
-	    		add_process_segment(id, segment);
-
-	    		add_fixed_to_body(r_body, sizeof(uint32_t), segment->base);
-	    		response = create_response(SUCCESS, r_body);
-	    		send_response(response, socket_cliente);
-	    		return;
-	    	}
-	    }
-
-	    log_info(logger, "tuvo que crear un nuevo map");
-
-	    map_t* nuevo_map = malloc(sizeof(map_t));
-	    nuevo_map->pages = malloc(PAGE_SIZE * frames_to_ask);
-	    nuevo_map->path = string_duplicate(path);
-	    nuevo_map->references = 1;
 
 		for (int var = 0; var < frames_to_ask; var++) {
 			t_page *new_page = create_page();
 			add_page_to_segment(segment, new_page);
 		}
-
-		// lo pongo abajo porque el add_page le va a poner el tamaño de frames * cant frames
-		nuevo_map->size = length;
-
-		list_add(maps, nuevo_map);
-
-		memcpy(nuevo_map->pages, segment->pages, segment->size);
 
 		add_process_segment(id, segment);
 
@@ -262,7 +231,6 @@ void respond_map(muse_body* body, char* id, int socket_cliente) {
 		log_info(logger, "El proceso %s no tiene tabla, falto hacer init?");
 		send_response_status(socket_cliente, ERROR);
 	}
-	return;
 }
 
 void respond_sync(muse_body* body, char* id, int socket_cliente) {
@@ -271,7 +239,7 @@ void respond_sync(muse_body* body, char* id, int socket_cliente) {
 	size_t len;
 	memcpy(&len, body->content + sizeof(uint32_t), sizeof(size_t));
 
-	// log_info(logger, "El cliente con id: %s hizo sync a la addr: %u de %i bytes", id, addr, len);
+	log_debug(logger, "El cliente con id: %s hizo sync a la addr: %u de %i bytes", id, addr, len);
 	process_table* table = get_table_for_process(id);
 	muse_response* response;
 
@@ -285,21 +253,19 @@ void respond_sync(muse_body* body, char* id, int socket_cliente) {
 
 			if (segment->type == MMAP) {
 				void* datos = malloc(len);
-				datos = get_from_dir(segment, addr, len);
-				int dir_en_segmento = (addr - segment->base);
+				datos = get_from_map(segment, addr, len);
 
-				int first = dir_en_segmento / PAGE_SIZE;
-				int last = ceil((double) (dir_en_segmento + len) / PAGE_SIZE);
-				int pages = last - first + 1;
+				log_info(logger, "post get datos, voy a abrir el archivo %s", segment->map_path);
 
-				FILE* file = fopen(segment->map_path, "r+");
+				FILE* file = fopen(segment->map_path, "w+b");
+
 				if (file != NULL) {
-					if (!fseek(file, dir_en_segmento, SEEK_SET)) {
-						fwrite(datos, PAGE_SIZE * pages, 1, file);
-						free(datos);
-						fclose(file);
-						send_response_status(socket_cliente, SUCCESS);
-					}
+					fseek(file, 0, SEEK_SET);
+					fwrite(datos, len, 1, file);
+					fclose(file);
+					send_response_status(socket_cliente, SUCCESS);
+				} else {
+					send_response_status(socket_cliente, ERROR);
 				}
 			}
 		}
@@ -307,17 +273,45 @@ void respond_sync(muse_body* body, char* id, int socket_cliente) {
 		log_info(logger, "El proceso %s no tiene tabla, falto hacer init?");
 		send_response_status(socket_cliente, ERROR);
 	}
-
-	return;
 }
 
 void respond_unmap(muse_body* body, char* id, int socket_cliente) {
 	uint32_t addr;
 	memcpy(&addr, body->content, sizeof(uint32_t));
 
-	// log_info(logger, "El cliente con id: %s hizo unmap a la addr: %u", id, addr);
+	log_debug(logger, "El cliente con id: %s hizo unmap a la addr: %u", id, addr);
 
-	return;
+	process_table* table = get_table_for_process(id);
+	muse_response* response;
+
+	process_segment *segment;
+	if (table != NULL) {
+		if (table->number_of_segments == 0) {
+			log_error(logger, "El proceso %s no tiene segmentos");
+			send_response_status(socket_cliente, ERROR);
+		} else {
+			process_segment *segment = segment_by_dir(table, addr);
+
+			if (segment->type == MMAP) {
+				int n_pages = segment->size / PAGE_SIZE;
+				for (int i = 0; i < n_pages; i++) {
+					t_page* page = segment->pages + i * sizeof(t_page);
+					if (page->frame_number != -1) {
+						if (page->flag) {
+							bitarray_clean_bit(frame_usage_bitmap, page->frame_number);
+						} else {
+							bitarray_clean_bit(swap_usage_bitmap, page->frame_number);
+						}
+					}
+				}
+				free(segment->pages);
+				send_response_status(socket_cliente, SUCCESS);
+			}
+		}
+	} else {
+		log_info(logger, "El proceso %s no tiene tabla, falto hacer init?");
+		send_response_status(socket_cliente, ERROR);
+	}
 }
 
 int respond_to_client(int cliente_fd) {

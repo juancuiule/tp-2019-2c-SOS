@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include "utils.h"
 #include "network.h"
+#include "stdio.h"
 
 int conexion;
 
