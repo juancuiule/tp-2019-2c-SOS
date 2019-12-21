@@ -21,3 +21,9 @@ common/Debug/common/log.d
 common/Debug/common/protocol.d
 common/Debug/common/socket.d
 common/Debug/libcommon.so
+
+libSUSE/Debug/libSUSE.o
+libSUSE/Debug/utils.o
+libSUSE/Debug/libSUSE.d
+libSUSE/Debug/utils.d
+libSUSE/Debug/liblibSUSE.so
