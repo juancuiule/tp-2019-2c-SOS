@@ -326,37 +326,55 @@ void respond_unmap(muse_body* body, char* id, int socket_cliente) {
 }
 
 int respond_to_client(int cliente_fd) {
+	int cod_op;
+	char* id;
+	muse_body* body;
 	while(1) {
-		int cod_op = recv_muse_op_code(cliente_fd);
-		char* id = recv_muse_id(cliente_fd);
-		muse_body* body = recv_body(cliente_fd);
+		cod_op = recv_muse_op_code(cliente_fd);
 		switch(cod_op) {
 			case INIT_MUSE:
+				id = recv_muse_id(cliente_fd);
+				body = recv_body(cliente_fd);
 				respond_init(body, id, cliente_fd);
 				break;
 			case ALLOC:
+				id = recv_muse_id(cliente_fd);
+				body = recv_body(cliente_fd);
 				respond_alloc(body, id, cliente_fd);
 				break;
 			case FREE:
+				id = recv_muse_id(cliente_fd);
+				body = recv_body(cliente_fd);
 				respond_free(body, id, cliente_fd);
 				break;
 			case GET:
+				id = recv_muse_id(cliente_fd);
+				body = recv_body(cliente_fd);
 				respond_get(body, id, cliente_fd);
 				break;
 			case CPY:
+				id = recv_muse_id(cliente_fd);
+				body = recv_body(cliente_fd);
 				respond_cpy(body, id, cliente_fd);
 				break;
 			case MAP:
+				id = recv_muse_id(cliente_fd);
+				body = recv_body(cliente_fd);
 				respond_map(body, id, cliente_fd);
 				break;
 			case SYNC:
+				id = recv_muse_id(cliente_fd);
+				body = recv_body(cliente_fd);
 				respond_sync(body, id, cliente_fd);
 				break;
 			case UNMAP:
+				id = recv_muse_id(cliente_fd);
+				body = recv_body(cliente_fd);
 				respond_unmap(body, id, cliente_fd);
 				break;
 			case DISCONNECT_MUSE:
-				return EXIT_FAILURE;
+				log_debug(logger, "Se desconecto %s", id);
+				return 1;
 				break;
 			default:
 				break;
