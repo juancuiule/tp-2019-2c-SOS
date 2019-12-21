@@ -13,3 +13,11 @@ memoria/libmuse/Debug/libmuse/*.o
 # Logs
 memoria/MUSE/logs/*.log
 memoria/libmuse/logs/*.log
+
+common/Debug/common/log.o
+common/Debug/common/protocol.o
+common/Debug/common/socket.o
+common/Debug/common/log.d
+common/Debug/common/protocol.d
+common/Debug/common/socket.d
+common/Debug/libcommon.so
