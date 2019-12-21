@@ -1,0 +1,15 @@
+# Swap File
+memoria/MUSE/file.bin
+
+# Debug
+memoria/MUSE/Debug/file.bin
+memoria/MUSE/Debug/MUSE
+memoria/MUSE/Debug/*.d
+memoria/MUSE/Debug/*.o
+memoria/libmuse/Debug/liblibmuse.so
+memoria/libmuse/Debug/libmuse/*.d
+memoria/libmuse/Debug/libmuse/*.o
+
+# Logs
+memoria/MUSE/logs/*.log
+memoria/libmuse/logs/*.log

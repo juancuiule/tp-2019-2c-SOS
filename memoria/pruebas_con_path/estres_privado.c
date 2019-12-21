@@ -5,7 +5,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#define RUTA_ARCHIVO "./prueba"
+#define RUTA_ARCHIVO "/home/utnso/tp-2019-2c-SOS/sac_cli/Debug/tmp/map_privado"
 #define MAP_PRIVATE 1
 
 struct hilolay_sem_t *presion_emitida;
@@ -21,7 +21,7 @@ void grabar_archivo(uint32_t arch, char* palabra)
 	muse_cpy(arch + offset, palabra, tam);
 	offset += tam;
 	muse_cpy(arch, &offset, sizeof(uint32_t));
-	// sleep(1);
+	sleep(1);
 }
 
 void *presionar()

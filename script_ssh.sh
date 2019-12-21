@@ -1,7 +1,6 @@
 cd
 
-# Agregar shared libs paths
-sudo echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/tp-2019-2c-SOS/common/Debug" >> .bashrc
+./scripts/cargar_ld.sh
 
 # Clonar repos
 git clone git@github.com:sisoputnfrba/linuse-tests-programs.git
@@ -45,5 +44,25 @@ cd tp-2019-2c-SOS/scripts
 ./build_muse.sh
 ./install_libmuse.sh
 
+cd $HOME
 
+cd tp-2019-2c-SOS/common/Debug
+sudo make clean
+sudo make
 
+cd $HOME
+
+cd tp-2019-2c-SOS/sac_server/Debug
+sudo make clean
+sudo make
+dd if=/dev/urandom of=disk.bin bs=1024 count=512000
+./sac-format disk.bin
+
+cd $HOME
+
+cd tp-2019-2c-SOS/sac_cli/Debug
+sudo make clean
+sudo make
+mkdir tmp
+
+cd $HOME
