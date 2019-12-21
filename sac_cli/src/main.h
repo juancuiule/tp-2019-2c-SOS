@@ -7,7 +7,7 @@
 #include "confg.h"
 #include <common/protocol.h>
 
-#define CONFIG_PATH "/home/utnso/workspace/tp-2019-2c-SOS/sac_cli/cli.config"
+#define CONFIG_PATH "/home/utnso/tp-2019-2c-SOS/sac_cli/cli.config"
 #define COD_PROCESO 'C'
 
 #endif /* MAIN_H_ */
