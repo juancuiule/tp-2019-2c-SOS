@@ -6,6 +6,8 @@ git clone https://github.com/sisoputnfrba/hilolay
 git clone https://github.com/sisoputnfrba/linuse-tests-programs
 git clone https://github.com/sisoputnfrba/so-commons-library
 
+sudo cp $HOME/tp-2019-2c-SOS/makefile-pruebas $HOME/linuse-tests-programs/Makefile
+
 cd so-commons-library
 sudo make install
 cd ..

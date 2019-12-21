@@ -280,7 +280,7 @@ int fs_get_blk_ind_with_data_blk()
 }
 
 
-size_t fs_read_file(char *buf, size_t size, off_t offset, uint32_t node_blk)
+size_t fs_read_file(void *buf, size_t size, off_t offset, uint32_t node_blk)
 {
 	log_msje_info("Preparando para leer blk de datos");
 	log_msje_info("Cantidad de bytes por leer [ %d ]", size);
@@ -340,10 +340,10 @@ size_t fs_read_file(char *buf, size_t size, off_t offset, uint32_t node_blk)
 			size_to_read = left_space_in_blk;
 		}
 
-		memcpy(buf + buf_offs, (char *)blk_addr + offs, size_to_read);
+		memcpy(buf + buf_offs, (void*)blk_addr + offs, size_to_read);
 
-		leido += size;
-		buf_offs += leido;
+		leido += size_to_read;
+		buf_offs += size_to_read;
 	}
 
 	log_msje_info("Lei [ %d ] bytes, falto leer [ %d ] bytes", leido, size-leido);
@@ -366,22 +366,20 @@ size_t fs_write_file(uint32_t node_blk, void *buffer, size_t size, off_t offset)
 	int bk_is = (int) bk /GFILEBYTABLE;
 	int bk_data = bk - (bk_is * GFILEBYTABLE); //bk data dentro bk ind simple
 
-	if(!node_has_blk_ind_assigned(node_blk, bk_is))
+	if(!nodo_tiene_bk_is_asignado(node_blk, bk_is))
 	{
-		int new_bk_data = get_free_blk_data_dir(); //new blk data
-		int blk_index = fs_get_next_index_blk_indsimple_to_assign(node_blk);
-		file_node->blk_indirect[blk_index] = new_bk_data;
+		int new_bk_data = get_free_blk_data_dir();
+		file_node->blk_indirect[bk_is] = new_bk_data;
 	}
 
 	//Cargo el blk ind simple correspondiente
 	int nro_blk_ind = file_node->blk_indirect[bk_is];
 	GBlock_IndSimple * blk_indsimple = (GBlock_IndSimple *) disk_blk_pointer + nro_blk_ind;
 
-	if (!node_has_blk_assigned(node_blk, bk))
+	if (!bk_is_tiene_bk_dato_asignado(nro_blk_ind, bk_data))
 	{
-		int new_bk_data = get_free_blk_data_dir(); //new blk data
-		int blk_index = fs_get_next_index_blk_data_to_assign(nro_blk_ind);
-		blk_indsimple->blk_datos[blk_index] = new_bk_data;
+		int new_bk_data = get_free_blk_data_dir();
+		blk_indsimple->blk_datos[bk_data] = new_bk_data;
 	}
 
 	/*
@@ -404,12 +402,15 @@ size_t fs_write_file(uint32_t node_blk, void *buffer, size_t size, off_t offset)
 			free_space_in_blk = BLOCKSIZE;
 			size_to_write = size_missing;
 			offs = 0;
+
+			//el indice dentro de bloque de datos del blk ind simple
+			bk_data = blk_index;
 		}
 
 		//Cargo el blk dato correspondiente
 		int nro_blk_data = blk_indsimple->blk_datos[bk_data];
 
-		GBlock* blk_addr = disk_blk_pointer +nro_blk_data;
+		void* blk_addr = (void*)(disk_blk_pointer +nro_blk_data);
 
 		if(size_to_write > free_space_in_blk)
 		{
@@ -543,13 +544,11 @@ int fs_get_cant_blks_datos_asignados(int node)
 	{
 		GBlock_IndSimple * blk_is = (GBlock_IndSimple *)(disk_blk_pointer + blk_ind);
 
-		int j=0;
-		int blk = blk_is->blk_datos[j];
-		while( blk >= first_data_blk && blk <= sac_blocks)
+		for(int j=0 ; j<1024 ;j++)
 		{
-			cont++;
-			j++;
-			blk = blk_is->blk_datos[j];
+			int blk = blk_is->blk_datos[j];
+			if(es_valido_nro_bk_data(blk))
+				cont++;
 		}
 
 		i++;
@@ -557,11 +556,37 @@ int fs_get_cant_blks_datos_asignados(int node)
 	return cont;
 }
 
+
+
+//***************************
+
+bool es_valido_nro_bk_data(int nro_bk_data)
+{
+	//valido si esta dentro de mis bloques de datos libres
+	return (nro_bk_data > first_data_blk  && nro_bk_data < sac_blocks);
+}
+
+bool nodo_tiene_bk_is_asignado(int node, int bk_is)
+{
+	int nro_bk_ind_simple = sac_nodetable[node].blk_indirect[bk_is];
+	return es_valido_nro_bk_data(nro_bk_ind_simple);
+
+}
+
+bool bk_is_tiene_bk_dato_asignado(int nro_blk_ind, int bk_data)
+{
+	GBlock_IndSimple * blk_indsimple = (GBlock_IndSimple *) disk_blk_pointer + nro_blk_ind;
+	int nro_bk_data = blk_indsimple->blk_datos[bk_data];
+	return es_valido_nro_bk_data(nro_bk_data);
+
+}
+//***************************
+
 //Dado un node file, dice si el nro blk dado esta dentro de sus bloques asignados
 bool node_has_blk_assigned(int node, int blk_data)
 {
 	int cantidad = fs_get_cant_blks_datos_asignados(node);
-	return (blk_data >= 0 && blk_data < cantidad);
+	return (blk_data > 0  && blk_data < cantidad);
 }
 
 static int fs_get_cant_blks_indsimples_asignados(int node)

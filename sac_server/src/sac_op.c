@@ -199,8 +199,7 @@ void sac_read(char *path, uint32_t blk, size_t size, off_t offset, int cliente_f
 	package_t paquete;
 
 	int error;
-	GFile *file_node = (GFile *)disk_blk_pointer + blk;
-	if(offset > file_node->file_size)
+	if(offset > sac_nodetable[blk].file_size)
 	{
 		error = EFAULT;
 		log_msje_error("read: [ %s ]", strerror(error));
@@ -208,6 +207,9 @@ void sac_read(char *path, uint32_t blk, size_t size, off_t offset, int cliente_f
 		paquete_enviar(cliente_fd, paquete);
 		return;
 	}
+
+	//Si quiere leer mas de lo que puede, restringo el size, a lo que puede leer
+	if(offset + size > sac_nodetable[blk].file_size) size = sac_nodetable[blk].file_size - offset;
 
 	int leido;
 	char * buffer = malloc(size);
