@@ -1,13 +1,13 @@
 #include "libmuse.h"
 
-#include <commons/config.h>
-#include <commons/log.h>
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
 #include "utils.h"
 #include "network.h"
-#include "stdio.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
 
 int conexion;
 
@@ -24,6 +24,7 @@ int muse_init(int id, char* ip, int puerto) {
 			return -1;
 		}
 	} else {
+		printf("Hubo un error al conectarse con el server");
 		return -1;
 	}
 }

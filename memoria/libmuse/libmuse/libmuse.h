@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2019 Sistemas Operativos - UTN FRBA. All rights reserved.
  *
@@ -20,10 +19,6 @@
 
     #include <stdint.h>
     #include <stddef.h>
-	#include <stdio.h>
-	#include <stdlib.h>
-	#include <commons/string.h>
-	#include <pthread.h>
 
     /**
      * Inicializa la biblioteca de MUSE.
