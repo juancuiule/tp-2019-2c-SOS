@@ -3,4 +3,4 @@ sudo make clean
 sudo make
 sudo make install
 
-cd /home/utnso/Documentos/tp-2019-2c-SOS
+cd $HOME/tp-2019-2c-SOS
