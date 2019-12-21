@@ -364,9 +364,17 @@ int respond_to_client(int cliente_fd) {
 	}
 }
 
-int main(void) {
+int main(int arg_count, char* args[]) {
+
+	if (args[1] == NULL) {
+		config = config_create("../program.config");
+	} else {
+		char* config_path = malloc(strlen(args[1]) + 1);
+		sprintf(config_path, "%s", args[1]);
+		config = config_create(config_path);
+	}
+
 	logger = log_create("../logs/MUSE.log", "Servidor", 1, LOG_LEVEL_DEBUG);
-	config = config_create("../program.config");
 
 	IP = "127.0.0.1";
 	PORT = config_get_string_value(config, "LISTEN_PORT");
