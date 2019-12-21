@@ -2,11 +2,17 @@
 #include "globales.h"
 #include "semaforos.h"
 
-int main() {
+int main(int arg_count, char* args[]) {
+
+	if (args[1] == NULL)
+		configurar("../SUSE.config");
+	else {
+		configurar(args[1]);
+	}
+
 	int cliente_fd;
 	pthread_t hilo_clientes, hilo_metricas;
 
-	configurar();
 	inicializar();
 	imprimir_semaforos();
 
