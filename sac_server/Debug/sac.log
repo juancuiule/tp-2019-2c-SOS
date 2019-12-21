@@ -1,0 +1,41 @@
+[DEBUG] 22:57:22:909 SAC SERVER/(9780:9780): Iniciando SAC Server
+[ERROR] 22:57:22:910 SAC SERVER/(9780:9780): Debe ingresar el disco
+[DEBUG] 23:04:48:102 SAC SERVER/(9919:9919): Iniciando SAC Server
+[DEBUG] 23:04:48:102 SAC SERVER/(9919:9919): disk name : [ disco.bin ]
+[DEBUG] 23:04:48:102 SAC SERVER/(9919:9919): open: [ Success ]
+[DEBUG] 23:04:48:102 SAC SERVER/(9919:9919): mmap disk: [ Success ]
+[DEBUG] 23:04:48:102 SAC SERVER/(9919:9919): Seteo estructuras del filesystem
+[DEBUG] 23:04:48:103 SAC SERVER/(9919:9919): Name : [ SAC ]
+[DEBUG] 23:04:48:103 SAC SERVER/(9919:9919): Version : [ 1 ]
+[DEBUG] 23:04:48:103 SAC SERVER/(9919:9919): Bloque de bitmap: [ 1 ]
+[DEBUG] 23:04:48:103 SAC SERVER/(9919:9919): Bitmap bloques : [ 1 ]
+[DEBUG] 23:04:48:103 SAC SERVER/(9919:9919): Bitmap size in bytes is [ 320 ]
+[DEBUG] 23:04:48:103 SAC SERVER/(9919:9919): Nodetable seteado
+[DEBUG] 23:04:48:103 SAC SERVER/(9919:9919): Escuchando nuevas conexiones
+[DEBUG] 23:04:48:104 SAC SERVER/(9919:9919): Se creo el socket servidor [ 5 ] en el puerto [ 8002 ]
+[DEBUG] 23:22:26:591 SAC SERVER/(11178:11178): Iniciando SAC Server
+[DEBUG] 23:22:26:591 SAC SERVER/(11178:11178): disk name : [ disco.bin ]
+[DEBUG] 23:22:26:592 SAC SERVER/(11178:11178): open: [ Success ]
+[DEBUG] 23:22:26:592 SAC SERVER/(11178:11178): mmap disk: [ Success ]
+[DEBUG] 23:22:26:592 SAC SERVER/(11178:11178): Seteo estructuras del filesystem
+[DEBUG] 23:22:26:592 SAC SERVER/(11178:11178): Name : [ SAC ]
+[DEBUG] 23:22:26:592 SAC SERVER/(11178:11178): Version : [ 1 ]
+[DEBUG] 23:22:26:592 SAC SERVER/(11178:11178): Bloque de bitmap: [ 1 ]
+[DEBUG] 23:22:26:592 SAC SERVER/(11178:11178): Bitmap bloques : [ 1 ]
+[DEBUG] 23:22:26:593 SAC SERVER/(11178:11178): Bitmap size in bytes is [ 320 ]
+[DEBUG] 23:22:26:593 SAC SERVER/(11178:11178): Nodetable seteado
+[DEBUG] 23:22:26:593 SAC SERVER/(11178:11178): Escuchando nuevas conexiones
+[DEBUG] 23:22:26:593 SAC SERVER/(11178:11178): Se creo el socket servidor [ 5 ] en el puerto [ 8002 ]
+[DEBUG] 23:34:40:127 SAC SERVER/(11782:11782): Iniciando SAC Server
+[DEBUG] 23:34:40:127 SAC SERVER/(11782:11782): disk name : [ disco.bin ]
+[DEBUG] 23:34:40:127 SAC SERVER/(11782:11782): open: [ Success ]
+[DEBUG] 23:34:40:128 SAC SERVER/(11782:11782): mmap disk: [ Success ]
+[DEBUG] 23:34:40:128 SAC SERVER/(11782:11782): Seteo estructuras del filesystem
+[DEBUG] 23:34:40:128 SAC SERVER/(11782:11782): Name : [ SAC ]
+[DEBUG] 23:34:40:128 SAC SERVER/(11782:11782): Version : [ 1 ]
+[DEBUG] 23:34:40:128 SAC SERVER/(11782:11782): Bloque de bitmap: [ 1 ]
+[DEBUG] 23:34:40:129 SAC SERVER/(11782:11782): Bitmap bloques : [ 1 ]
+[DEBUG] 23:34:40:129 SAC SERVER/(11782:11782): Bitmap size in bytes is [ 320 ]
+[DEBUG] 23:34:40:129 SAC SERVER/(11782:11782): Nodetable seteado
+[DEBUG] 23:34:40:129 SAC SERVER/(11782:11782): Escuchando nuevas conexiones
+[DEBUG] 23:34:40:129 SAC SERVER/(11782:11782): Se creo el socket servidor [ 5 ] en el puerto [ 8002 ]
