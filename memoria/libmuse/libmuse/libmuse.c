@@ -77,11 +77,16 @@ int muse_get(void* dst, uint32_t src, size_t n) {
 	int status = recv_response_status(conexion);
 
 	if (status == SEGFAULT) {
+		printf("Segmentation fault");
 		muse_close();
 		return EXIT_FAILURE;
 	}
 
 	muse_body* response_body = recv_body(conexion);
+
+	if (status == ERROR) {
+		return -1;
+	}
 
 	size_t r_size;
 	memcpy(&r_size, response_body->content, sizeof(size_t));
@@ -106,10 +111,12 @@ int muse_cpy(uint32_t dst, void* src, int n) {
 	int status = recv_response_status(conexion);
 	muse_body* response_body = recv_body(conexion);
 
-	// chequear resultado...
-
 	free(value);
-    return 0;
+	if (status == ERROR) {
+		return -1
+	} else {
+    	return 0;
+	}
 }
 
 uint32_t muse_map(char *path, size_t length, int flags) {
@@ -143,7 +150,11 @@ int muse_sync(uint32_t addr, size_t len){
 	int status = recv_response_status(conexion);
 	muse_body* response_body = recv_body(conexion);
 
-    return 0;
+	if (status == ERROR) {
+		return -1;
+	} else {
+    	return 0;
+	}
 }
 
 int muse_unmap(uint32_t dir){
@@ -157,5 +168,9 @@ int muse_unmap(uint32_t dir){
 	int status = recv_response_status(conexion);
 	muse_body* response_body = recv_body(conexion);
 
-    return 0;
+	if (status == ERROR) {
+		return -1;
+	} else {
+    	return 0;
+	}
 }
