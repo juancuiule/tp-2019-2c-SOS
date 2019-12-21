@@ -11,8 +11,8 @@ git clone git@github.com:sisoputnfrba/so-commons-library.git
 # Cambiar makefile para que usen -llibmuse
 sudo cp $HOME/tp-2019-2c-SOS/makefile-pruebas $HOME/linuse-tests-programs/Makefile
 sudo cp $HOME/tp-2019-2c-SOS/memoria/libmuse/libmuse/libmuse.h $HOME/linuse-tests-programs/libmuse.h
-sudo cp $HOME/tp-2019-2c-SOS/memoria/pruebas_con_path/estres_privado.c $HOME/linuse-tests-programs/estres_privado.c
-sudo cp $HOME/tp-2019-2c-SOS/memoria/pruebas_con_path/revolucion_privada.c $HOME/linuse-tests-programs/revolucion_privada.c
+sudo cp $HOME/tp-2019-2c-SOS/memoria/pruebas_con_path_en_sac/estres_privado.c $HOME/linuse-tests-programs/estres_privado.c
+sudo cp $HOME/tp-2019-2c-SOS/memoria/pruebas_con_path_en_sac/revolucion_privada.c $HOME/linuse-tests-programs/revolucion_privada.c
 
 cd so-commons-library
 sudo make install

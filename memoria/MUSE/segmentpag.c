@@ -36,7 +36,8 @@ void init_memoria() {
 
 void init_virtual() {
 	// Memoria Virtual
-	swap_file = fopen("file.bin", "wb+");
+	swap_file = fopen(SWAP_FILE, "wb+");
+	// swap_file = fopen("swap.bin", "wb+");
 
 	int swap_frames = SWAP_SIZE / PAGE_SIZE;
 	int swap_bitmap_size_in_bytes = ceil((double) swap_frames / 8);

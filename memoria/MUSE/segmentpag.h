@@ -27,6 +27,7 @@ void** MEMORY;
 int MEMORY_SIZE;
 int PAGE_SIZE;
 int SWAP_SIZE;
+char* SWAP_FILE;
 FILE *swap_file;
 int metadata_size;
 

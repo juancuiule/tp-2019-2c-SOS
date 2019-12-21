@@ -415,6 +415,7 @@ int main(int arg_count, char* args[]) {
 	MEMORY_SIZE = config_get_int_value(config, "MEMORY_SIZE");
 	PAGE_SIZE = config_get_int_value(config, "PAGE_SIZE");
 	SWAP_SIZE = config_get_int_value(config, "SWAP_SIZE");
+	SWAP_FILE = config_get_string_value(config, "SWAP_FILE");
 
 	log_info(logger, "Port: %s", PORT);
 	log_info(logger, "Memory size: %i", MEMORY_SIZE);
