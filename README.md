@@ -1,10 +1,10 @@
-# Instrucciones
+# Setup Inicial
 
 ### Pasos
 
 Clonar el repo
 
-```
+```bash
 git clone https://github.com/sisoputnfrba/tp-2019-2c-SOS.git
 ```
 
@@ -19,3 +19,21 @@ Esto va a:
 - Buildear SUSE, MUSE, common (de sac), sac server, sac cli
 - Crea un disk.bin
 - Formatea el disk.bin con sac-format
+
+# Pruebas
+
+## Memoria
+
+Levantar SUSE para prueba de memoria:
+```bash
+cd ./scripts
+./run_SUSE_memoria.sh
+```
+
+Levantar MUSE para prueba de memoria:
+```bash
+cd ./scripts
+./run_muse_prueba_recursiva_swap.sh
+```
+
+Correr los tres procesos recursiva.c y despues archivo_de_swap_supermasivo.c
