@@ -26,13 +26,13 @@ endif
 all: sac_server
 
 dependents:
-	-cd /home/utnso/workspace/tp-2019-2c-SOS/common/Debug && $(MAKE) all
+	-cd /home/utnso/tp-2019-2c-SOS/common/Debug && $(MAKE)clean all
 
 # Tool invocations
-sac_server: $(OBJS) $(USER_OBJS) /home/utnso/workspace/tp-2019-2c-SOS/common/Debug/libcommon.so
+sac_server: $(OBJS) $(USER_OBJS) /home/utnso/tp-2019-2c-SOS/common/Debug/libcommon.so
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C Linker'
-	gcc -L"/home/utnso/workspace/tp-2019-2c-SOS/common/Debug" -o "sac_server" $(OBJS) $(USER_OBJS) $(LIBS)
+	gcc -L"/home/utnso/tp-2019-2c-SOS/common/Debug" -o "sac_server" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -42,6 +42,6 @@ clean:
 	-@echo ' '
 
 .PHONY: all clean dependents
-/home/utnso/workspace/tp-2019-2c-SOS/common/Debug/libcommon.so:
+/home/utnso/tp-2019-2c-SOS/common/Debug/libcommon.so:
 
 -include ../makefile.targets
