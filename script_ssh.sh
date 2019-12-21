@@ -5,7 +5,7 @@ cd
 # Clonar repos
 git clone git@github.com:sisoputnfrba/linuse-tests-programs.git
 git clone git@github.com:sisoputnfrba/hilolay.git
-git clone git@github.com:sisoputnfrba/tp-2019-2c-SOS.git
+# git clone git@github.com:sisoputnfrba/tp-2019-2c-SOS.git
 git clone git@github.com:sisoputnfrba/so-commons-library.git
 
 # Cambiar makefile para que usen -llibmuse
