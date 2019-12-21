@@ -38,19 +38,6 @@ sac_cli/Debug/src/utils.d
 sac_cli/Debug/src/utils.o
 sac_cli/Debug/sac_cli
 
-sac_server/Debug/src/filesystem.o
-sac_server/Debug/src/main.o
-sac_server/Debug/src/sac_op.o
-sac_server/Debug/src/server.o
-sac_server/Debug/src/utils.o 
-sac_server/Debug/src/filesystem.d
-sac_server/Debug/src/main.d
-sac_server/Debug/src/sac_op.d
-sac_server/Debug/src/server.d
-sac_server/Debug/src/utils.d 
-sac_server/Debug/sac_server
-sac_server/Debug/*.bin
-
 SUSE/Debug/SUSE.o
 SUSE/Debug/configuracion.o
 SUSE/Debug/inicializacion.o
@@ -64,3 +51,5 @@ SUSE/Debug/logging.d
 SUSE/Debug/semaforos.d
 SUSE/Debug/utils.d
 SUSE/Debug/SUSE
+
+sac_server/Debug/disk.bin
