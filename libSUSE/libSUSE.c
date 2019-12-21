@@ -6,6 +6,9 @@
 #include "libSUSE.h"
 #include "utils.h"
 
+#define IP "127.0.0.1"
+#define PUERTO 8007
+
 int max_tid = 0;
 int conexion_con_suse;
 
@@ -165,7 +168,7 @@ int ejecutar_operacion_semaforo(int tid, char* sem_name, int operacion) {
 int conectarse_a_suse() {
 	struct sockaddr_in cliente;
 	struct hostent *servidor;
-	servidor = gethostbyname("127.0.0.1");
+	servidor = gethostbyname(IP);
 
 	if(servidor == NULL)
 	{
@@ -178,7 +181,7 @@ int conectarse_a_suse() {
 	bzero((char *)&cliente, sizeof((char *)&cliente));
 
 	cliente.sin_family = AF_INET;
-	cliente.sin_port = htons(5003);
+	cliente.sin_port = htons(PUERTO);
 	bcopy((char *)servidor->h_addr, (char *)&cliente.sin_addr.s_addr, sizeof(servidor->h_length));
 
 	if(connect(conexion,(struct sockaddr *)&cliente, sizeof(cliente)) < 0)
