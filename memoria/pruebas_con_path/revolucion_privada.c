@@ -4,7 +4,7 @@
 #include <hilolay/hilolay.h>
 #include <string.h>
 
-#define RUTA_ARCHIVO "/home/utnso/tp-2019-2c-SOS/sac_cli/Debug/tmp/map_privado"
+#define RUTA_ARCHIVO "map_privado"
 #define MAP_PRIVATE 1
 
 struct hilolay_sem_t* presion_emitida;
