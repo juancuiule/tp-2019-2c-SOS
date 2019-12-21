@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
+#include <signal.h>
 
 int conexion;
 
@@ -21,6 +22,7 @@ int muse_init(int id, char* ip, int puerto) {
 		if (status == SUCCESS) {
 			return 0;
 		} else {
+			// ya estaba hecho muse_init
 			return -1;
 		}
 	} else {
@@ -45,6 +47,11 @@ uint32_t muse_alloc(uint32_t tam) {
 	int status = recv_response_status(conexion);
 	muse_body* response_body = recv_body(conexion);
 
+	if (status == ERROR) {
+		printf("El proceso no tiene tabla, falta hacer muse_init");
+		return EXIT_FAILURE;
+	}
+
 	uint32_t dir;
 	memcpy(&dir, response_body->content, sizeof(uint32_t));
 
@@ -60,7 +67,12 @@ void muse_free(uint32_t dir) {
 	send_package(package, conexion);
 
 	int status = recv_response_status(conexion);
-	muse_body* response_body = recv_body(conexion);	
+	muse_body* response_body = recv_body(conexion);
+
+	if (status == SEGFAULT) {
+		muse_close();
+		raise(SIGSEGV);
+	}
 
 	return;
 }
@@ -77,14 +89,14 @@ int muse_get(void* dst, uint32_t src, size_t n) {
 	int status = recv_response_status(conexion);
 
 	if (status == SEGFAULT) {
-		printf("Segmentation fault");
 		muse_close();
-		return EXIT_FAILURE;
+		raise(SIGSEGV);
 	}
 
 	muse_body* response_body = recv_body(conexion);
 
 	if (status == ERROR) {
+		printf("El proceso no tiene tabla, falta hacer muse_init");
 		return -1;
 	}
 
@@ -112,8 +124,12 @@ int muse_cpy(uint32_t dst, void* src, int n) {
 	muse_body* response_body = recv_body(conexion);
 
 	free(value);
-	if (status == ERROR) {
-		return -1
+	if (status == SEGFAULT) {
+		muse_close();
+		raise(SIGSEGV);
+	} else if (status == ERROR) {
+		printf("El proceso no tiene tabla, falta hacer muse_init");
+		return -1;
 	} else {
     	return 0;
 	}
@@ -150,10 +166,14 @@ int muse_sync(uint32_t addr, size_t len){
 	int status = recv_response_status(conexion);
 	muse_body* response_body = recv_body(conexion);
 
-	if (status == ERROR) {
+	if (status == SEGFAULT) {
+		muse_close();
+		raise(SIGSEGV);
+	} else if (status == ERROR) {
+		printf("El proceso no tiene tabla, falta hacer muse_init");
 		return -1;
 	} else {
-    	return 0;
+		return 0;
 	}
 }
 
@@ -168,9 +188,13 @@ int muse_unmap(uint32_t dir){
 	int status = recv_response_status(conexion);
 	muse_body* response_body = recv_body(conexion);
 
-	if (status == ERROR) {
+	if (status == SEGFAULT) {
+		muse_close();
+		raise(SIGSEGV);
+	} else if (status == ERROR) {
+		printf("El proceso no tiene tabla, falta hacer muse_init");
 		return -1;
 	} else {
-    	return 0;
+		return 0;
 	}
 }

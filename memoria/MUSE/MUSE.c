@@ -113,7 +113,9 @@ void respond_get(muse_body* body, char* id, int socket_cliente) {
 	if (table != NULL) {
 		if (table->number_of_segments == 0) {
 			log_error(logger, "El proceso %s no tiene segmentos");
-			response = create_response(ERROR, r_body);
+			free(val);
+			send_response_status(socket_cliente, SEGFAULT);
+			return;
 		} else {
 			process_segment *segment = segment_by_dir(table, src);
 			if (segment == NULL) {
@@ -131,6 +133,7 @@ void respond_get(muse_body* body, char* id, int socket_cliente) {
 			response = create_response(SUCCESS, r_body);
 		}
 	} else {
+		free(val);
 		log_error(logger, "El proceso %s no tiene tabla");
 		response = create_response(ERROR, r_body);
 	}
@@ -148,9 +151,14 @@ void respond_free(muse_body* body, char* id, int socket_cliente) {
 	if (table != NULL) {
 		if (table->number_of_segments == 0) {
 			log_error(logger, "El proceso %s no tiene segmentos");
-			send_response_status(socket_cliente, ERROR);
+			send_response_status(socket_cliente, SEGFAULT);
+			return;
 		} else {
 			process_segment *segment = segment_by_dir(table, dir_to_free);
+			if (segment == NULL) {
+				send_response_status(socket_cliente, SEGFAULT);
+				return;
+			}
 			free_dir(segment, dir_to_free);
 
 			send_response_status(socket_cliente, SUCCESS);
@@ -175,10 +183,18 @@ void respond_cpy(muse_body* body, char* id, int socket_cliente) {
 	if (table != NULL) {
 		process_segment *segment;
 		if (table->number_of_segments == 0) {
-			send_response_status(socket_cliente, ERROR);
 			log_error(logger, "El proceso %s no tiene segmentos");
+			send_response_status(socket_cliente, SEGFAULT);
 		} else {
 			segment = segment_by_dir(table, dst);
+
+			if (segment == NULL) {
+				log_error(logger, "Error, SEGFAULT, no hay segmento en dir: %i", dst);
+				free(val);
+				send_response_status(socket_cliente, SEGFAULT);
+				return;
+			}
+
 			if (segment->type == HEAP) {
 				int dir_de_pagina = dst - segment->base;
 
@@ -191,6 +207,7 @@ void respond_cpy(muse_body* body, char* id, int socket_cliente) {
 		}
 	} else {
 		log_error(logger, "El proceso %s no tiene tabla");
+		free(val);
 		send_response_status(socket_cliente, ERROR);
 	}
 }
@@ -212,12 +229,10 @@ void respond_map(muse_body* body, char* id, int socket_cliente) {
 	muse_body* r_body = create_body();
 	muse_response* response;
 
-	// min amount of frames to ask for the segment
-	int frames_to_ask = ceil((double) (length + metadata_size * 2) / PAGE_SIZE);
+	int frames_to_ask = ceil((double) (length) / PAGE_SIZE);
 	process_segment *segment;
 	if (table != NULL) {
 		int new_base = last_position(id);
-		log_info(logger, "new_base: %i", new_base);
 		segment = create_segment(MMAP, new_base);
 
 		segment->map_path = string_duplicate(path);
@@ -253,7 +268,8 @@ void respond_sync(muse_body* body, char* id, int socket_cliente) {
 	if (table != NULL) {
 		if (table->number_of_segments == 0) {
 			log_error(logger, "El proceso %s no tiene segmentos");
-			send_response_status(socket_cliente, ERROR);
+			send_response_status(socket_cliente, SEGFAULT);
+			return;
 		} else {
 			process_segment *segment = segment_by_dir(table, addr);
 
@@ -295,11 +311,11 @@ void respond_unmap(muse_body* body, char* id, int socket_cliente) {
 	if (table != NULL) {
 		if (table->number_of_segments == 0) {
 			log_error(logger, "El proceso %s no tiene segmentos");
-			send_response_status(socket_cliente, ERROR);
+			send_response_status(socket_cliente, SEGFAULT);
 		} else {
 			process_segment *segment = segment_by_dir(table, addr);
 			if (segment == NULL) {
-				send_response_status(socket_cliente, ERROR);
+				send_response_status(socket_cliente, SEGFAULT);
 				return;
 			}
 			if (segment->type == MMAP) {
