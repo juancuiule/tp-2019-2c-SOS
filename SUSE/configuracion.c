@@ -7,8 +7,8 @@
 
 #include "configuracion.h"
 
-void configurar() {
-	config = config_create("../SUSE.config");
+void configurar(char* path_config) {
+	config = config_create(path_config);
 	LISTEN_IP = config_get_string_value(config, "LISTEN_IP");
 	LISTEN_PORT = config_get_string_value(config, "LISTEN_PORT");
 	METRICS_TIMER = config_get_int_value(config, "METRICS_TIMER");
