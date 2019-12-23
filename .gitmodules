@@ -1,3 +1,9 @@
-[submodule "linuse-test-programs"]
-	path = linuse-test-programs
+[submodule "so-commons-library"]
+	path = so-commons-library
+	url = https://github.com/sisoputnfrba/so-commons-library.git
+[submodule "linuse-tests-programs"]
+	path = linuse-tests-programs
 	url = https://github.com/sisoputnfrba/linuse-tests-programs
+[submodule "hilolay"]
+	path = hilolay
+	url = https://github.com/sisoputnfrba/hilolay
