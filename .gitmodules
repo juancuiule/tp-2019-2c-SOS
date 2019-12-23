@@ -1,0 +1,3 @@
+[submodule "linuse-test-programs"]
+	path = linuse-test-programs
+	url = https://github.com/sisoputnfrba/linuse-tests-programs
